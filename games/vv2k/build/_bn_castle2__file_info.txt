@@ -1,0 +1,3 @@
+graphics/castle2.bmp
+66614
+1627868906.5

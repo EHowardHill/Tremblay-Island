@@ -1,0 +1,3 @@
+graphics/variable_8x16_font_yellow.bmp
+182
+1627715203.75
