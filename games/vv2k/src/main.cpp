@@ -17,6 +17,7 @@
 
 #include "bn_sprite_items_enoki.h"
 #include "bn_regular_bg_items_mountain.h"
+#include "bn_regular_bg_items_ocean.h"
 #include "bn_sprite_items_variable_8x16_font_yellow.h"
 
 #include "bn_music_items_info.h"
@@ -34,46 +35,109 @@
 #include <cstring>
 #include <sstream>
 
-#include "Dialogue.h"
+#include "objects.h"
+#include "scenes.h"
 
 // Custom variables
 
 namespace
 {
-    const Dialogue::line scene01[3] = {
-        {true, true, 0, "Haw haw"},
-        {true, true, 0, "Yee yee"},
-        {true, true, 0, "Yeah"}
-    };
-
     const int TEXT_X = -108;
     const int TEXT_Y = 24;
     const int TEXT_MAX_CHARS = 33;
     
-    static bn::vector<bn::sprite_ptr, 32> txt_spr;
-    static bn::sprite_text_generator txt_gen(common::variable_8x16_sprite_font);
+    static bn::vector<bn::sprite_ptr, 32> text_sprite01;
+    static bn::vector<bn::sprite_ptr, 32> text_sprite02;
+    static bn::vector<bn::sprite_ptr, 32> text_sprite03;
+    static bn::vector<bn::sprite_ptr, 32> text_sprite04;
+    static bn::vector<bn::sprite_ptr, 32> text_sprite05;
+    static bn::vector<bn::sprite_ptr, 32> text_sprite06;
+    static bn::sprite_text_generator text_line01(common::variable_8x16_sprite_font);
+    static bn::sprite_text_generator text_line02(common::variable_8x16_sprite_font);
+    static bn::sprite_text_generator text_line03(common::variable_8x16_sprite_font);
+    static bn::sprite_text_generator text_line04(common::variable_8x16_sprite_font);
+    static bn::sprite_text_generator text_line05(common::variable_8x16_sprite_font);
+    static bn::sprite_text_generator text_line06(common::variable_8x16_sprite_font);
 
     void second_draw(const char* txt) {
-        txt_spr.clear();
-        txt_gen.generate(-108, 24, txt, txt_spr);
+        char line1[33], line2[33], line3[33], line4[33], line5[33], line6[33];
+        strncpy(line1, txt + (33 * 0), 33);
+        strncpy(line2, txt + (33 * 1), 33);
+        strncpy(line3, txt + (33 * 2), 33);
+        strncpy(line4, txt + (33 * 3), 33);
+        strncpy(line5, txt + (33 * 4), 33);
+        strncpy(line6, txt + (33 * 5), 33);
+
+        text_sprite01.clear();
+        text_line01.generate(-108, 24, line1, text_sprite01);
+        text_sprite02.clear();
+        text_line02.generate(-108, 32, line2, text_sprite02);
+        text_sprite03.clear();
+        text_line03.generate(-108, 40, line3, text_sprite03);
+        text_sprite04.clear();
+        text_line04.generate(-108, 48, line4, text_sprite04);
+        text_sprite05.clear();
+        text_line05.generate(-108, 56, line5, text_sprite05);
+        text_sprite06.clear();
+        text_line06.generate(-108, 62, line6, text_sprite06);
     }
 
-    void dialogue_page(bn::sprite_ptr& chari)
+    void dialogue_page()
     {   
-        chari.set_scale(1.25);
+        //bn::regular_bg_ptr castle_bg = bn::regular_bg_items::castle.create_bg(0, 0);
+        static bn::sprite_ptr chari_l = bn::sprite_items::enoki.create_sprite(-90, -25);
+        static bn::sprite_ptr chari_r = bn::sprite_items::enoki.create_sprite(90, -25);
+        static bn::regular_bg_ptr primary_bg = bn::regular_bg_items::ocean.create_bg(0, 0);
+        chari_l.set_scale(1.25);
+        chari_l.set_visible(false);
+        chari_r.set_scale(1.25);
+        chari_r.set_visible(false);
 
         int pos = 0;
         while(true) {
-            second_draw(scene01[pos].text.c_str());
-            bn::core::update();
 
-            while(!bn::keypad::a_pressed()) {
-                if (chari.x().integer() < -80) {
-                    chari.set_x(chari.x() + 1);
+            // Set backgrounds
+            if (strcmp(scenes::n1[pos].text, "BG: Ocean") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::ocean);
+            } else if (strcmp(scenes::n1[pos].text, "BG: Forest") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::mountain);
+
+            // Handle sprite/dialogue
+            } else {
+
+                switch(scenes::n1[pos].img) {
+                    case 1:
+                        if (!chari_l.visible()) {
+                            chari_l.set_blending_enabled(true);
+                            bn::blending::set_transparency_alpha(0);
+                            chari_l.set_x(-90);
+                            chari_l.set_visible(true);
+                        }
+                        chari_l.set_item(bn::sprite_items::enoki);
+                        break;
+                    default:
+                        break;
                 }
 
+                second_draw(scenes::n1[pos].text);
                 bn::core::update();
+
+                while(!bn::keypad::a_pressed()) {
+                    if (chari_l.x().integer() < -80) {
+                        chari_l.set_x(chari_l.x() + 1);
+                    }
+
+                    if (bn::blending::transparency_alpha().to_double() + 0.1 <= 1) {
+                        bn::blending::set_transparency_alpha(bn::blending::transparency_alpha().to_double() + 0.1);
+                    } else {
+                        bn::blending::set_transparency_alpha(1);
+                        chari_l.set_blending_enabled(false);
+                    }
+
+                    bn::core::update();
+                }
             }
+
             pos++;
         }
     }
@@ -87,13 +151,9 @@ int main()
     int music_volume = 0;
     bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
 
-    bn::regular_bg_ptr mountain_bg = bn::regular_bg_items::mountain.create_bg(0, 0);
-    //bn::regular_bg_ptr castle_bg = bn::regular_bg_items::castle.create_bg(0, 0);
-    bn::sprite_ptr enoki = bn::sprite_items::enoki.create_sprite(-90, -25);
-
     while(true)
     {
-        dialogue_page(enoki);
+        dialogue_page();
         bn::core::update();
     }
 }

@@ -66,6 +66,7 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_point.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_cell.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_tiles_item.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_variable_8x16_font_yellow.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_music_items_info.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span.h \
@@ -80,7 +81,8 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_common_variable_8x16_font.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_sprite_text.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h \
- /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/Dialogue.h
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scenes.h
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -148,6 +150,7 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_point.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_cell.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_tiles_item.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_variable_8x16_font_yellow.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_music_items_info.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span.h:
@@ -162,4 +165,5 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_common_variable_8x16_font.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_sprite_text.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h:
-/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/Dialogue.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scenes.h:
