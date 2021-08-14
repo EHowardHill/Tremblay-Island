@@ -7777,7 +7777,7 @@ Linker script and memory map
  .fini          0x000000000801b384        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/crtn.o
                 0x000000000801b38c                . = ALIGN (0x4)
 
-.rodata         0x000000000801b38c   0x15f3a8
+.rodata         0x000000000801b38c   0x12f2ec
  *(.rodata)
  .rodata        0x000000000801b38c      0x820 a_button_bn_graphics.o
                 0x000000000801b38c                a_button_bn_graphicsTiles
@@ -7817,861 +7817,861 @@ Linker script and memory map
  *(.roda)
  *(.rodata.*)
  .rodata._bn_audio_soundbank_bin
-                0x000000000803d534   0x137f6c _bn_audio_soundbank.bin.o
+                0x000000000803d534   0x107eb0 _bn_audio_soundbank.bin.o
                 0x000000000803d534                _bn_audio_soundbank_bin
-                0x00000000081754a0                _bn_audio_soundbank_bin_end
+                0x00000000081453e4                _bn_audio_soundbank_bin_end
  .rodata.main.str1.4
-                0x00000000081754a0       0x27 main.o
- *fill*         0x00000000081754c7        0x1 ff
+                0x00000000081453e4       0x27 main.o
+ *fill*         0x000000000814540b        0x1 ff
  .rodata._ZN2bn16regular_bg_items5s0102E
-                0x00000000081754c8       0x28 main.o
-                0x00000000081754c8                bn::regular_bg_items::s0102
+                0x000000000814540c       0x28 main.o
+                0x000000000814540c                bn::regular_bg_items::s0102
  .rodata._ZN2bn16regular_bg_items5s0101E
-                0x00000000081754f0       0x28 main.o
-                0x00000000081754f0                bn::regular_bg_items::s0101
+                0x0000000008145434       0x28 main.o
+                0x0000000008145434                bn::regular_bg_items::s0101
  .rodata.str1.4
-                0x0000000008175518       0x56 main.o
- *fill*         0x000000000817556e        0x2 ff
+                0x000000000814545c       0x56 main.o
+ *fill*         0x00000000081454b2        0x2 ff
  .rodata._ZN2bn16music_items_info5arrayE
-                0x0000000008175570       0x30 main.o
-                0x0000000008175570                bn::music_items_info::array
+                0x00000000081454b4       0x30 main.o
+                0x00000000081454b4                bn::music_items_info::array
  .rodata._ZN2bn16regular_bg_items5oceanE
-                0x00000000081755a0       0x28 main.o
-                0x00000000081755a0                bn::regular_bg_items::ocean
+                0x00000000081454e4       0x28 main.o
+                0x00000000081454e4                bn::regular_bg_items::ocean
  .rodata._ZN2bn16regular_bg_items8mountainE
-                0x00000000081755c8       0x28 main.o
-                0x00000000081755c8                bn::regular_bg_items::mountain
+                0x000000000814550c       0x28 main.o
+                0x000000000814550c                bn::regular_bg_items::mountain
  .rodata._ZN2bn12sprite_items8a_buttonE
-                0x00000000081755f0       0x24 main.o
-                0x00000000081755f0                bn::sprite_items::a_button
+                0x0000000008145534       0x24 main.o
+                0x0000000008145534                bn::sprite_items::a_button
  .rodata._ZN2bn12sprite_items5enokiE
-                0x0000000008175614       0x24 main.o
-                0x0000000008175614                bn::sprite_items::enoki
+                0x0000000008145558       0x24 main.o
+                0x0000000008145558                bn::sprite_items::enoki
  .rodata._ZN6commonL25variable_8x16_sprite_fontE
-                0x0000000008175638       0x38 main.o
+                0x000000000814557c       0x38 main.o
  .rodata._ZN6commonL41variable_8x16_sprite_font_utf8_charactersE
-                0x0000000008175670       0x80 main.o
+                0x00000000081455b4       0x80 main.o
  .rodata._ZN6commonL42variable_8x16_sprite_font_character_widthsE
-                0x00000000081756f0       0x6f main.o
- *fill*         0x000000000817575f        0x1 ff
+                0x0000000008145634       0x6f main.o
+ *fill*         0x00000000081456a3        0x1 ff
  .rodata._ZN6scenesL2n1E
-                0x0000000008175760      0x680 main.o
+                0x00000000081456a4      0x680 main.o
  .rodata._ZN2bn13audio_manager6commitEv.str1.4
-                0x0000000008175de0       0x5f bn_audio_manager.o
+                0x0000000008145d24       0x5f bn_audio_manager.o
                                          0x63 (size before relaxing)
- *fill*         0x0000000008175e3f        0x1 ff
+ *fill*         0x0000000008145d83        0x1 ff
  .rodata._ZN2bn13audio_manager6commitEv
-                0x0000000008175e40       0x24 bn_audio_manager.o
+                0x0000000008145d84       0x24 bn_audio_manager.o
  .rodata._ZN2bn5music8positionEv.str1.4
-                0x0000000008175e64       0x3d bn_audio_manager.o
- *fill*         0x0000000008175ea1        0x3 ff
+                0x0000000008145da8       0x3d bn_audio_manager.o
+ *fill*         0x0000000008145de5        0x3 ff
  .rodata._ZN2bn13audio_manager11pause_musicEv.str1.4
-                0x0000000008175ea4       0x75 bn_audio_manager.o
- *fill*         0x0000000008175f19        0x3 ff
+                0x0000000008145de8       0x75 bn_audio_manager.o
+ *fill*         0x0000000008145e5d        0x3 ff
  .rodata._ZN2bn13audio_manager15stop_all_soundsEv.str1.4
-                0x0000000008175f1c       0x10 bn_audio_manager.o
+                0x0000000008145e60       0x10 bn_audio_manager.o
  .rodata._ZN2bn13audio_manager10play_musicENS_10music_itemENS_7fixed_tILi12EEEb.str1.4
-                0x0000000008175f2c        0xb bn_audio_manager.o
- *fill*         0x0000000008175f37        0x1 ff
+                0x0000000008145e70        0xb bn_audio_manager.o
+ *fill*         0x0000000008145e7b        0x1 ff
  .rodata._ZN2bn5music12set_positionEi.str1.4
-                0x0000000008175f38       0x73 bn_audio_manager.o
- *fill*         0x0000000008175fab        0x1 ff
+                0x0000000008145e7c       0x73 bn_audio_manager.o
+ *fill*         0x0000000008145eef        0x1 ff
  .rodata._ZN2bn13audio_manager10stop_musicEv.str1.4
-                0x0000000008175fac        0xb bn_audio_manager.o
- *fill*         0x0000000008175fb7        0x1 ff
+                0x0000000008145ef0        0xb bn_audio_manager.o
+ *fill*         0x0000000008145efb        0x1 ff
  .rodata._ZN2bn5music4playENS_10music_itemENS_7fixed_tILi12EEE.str1.4
-                0x0000000008175fb8       0x3d bn_audio_manager.o
- *fill*         0x0000000008175ff5        0x3 ff
+                0x0000000008145efc       0x3d bn_audio_manager.o
+ *fill*         0x0000000008145f39        0x3 ff
  .rodata._ZN2bn17bg_blocks_manager10log_statusEv.str1.4
-                0x0000000008175ff8       0xf1 bn_bg_blocks_manager.o
+                0x0000000008145f3c       0xf1 bn_bg_blocks_manager.o
                                         0x109 (size before relaxing)
- *fill*         0x00000000081760e9        0x3 ff
+ *fill*         0x000000000814602d        0x3 ff
  .rodata._ZN2bn2hw9bg_blocks6commitEPKtNS_16compression_typeEiPt.part.0.str1.4
-                0x00000000081760ec       0x73 bn_bg_blocks_manager.o
+                0x0000000008146030       0x73 bn_bg_blocks_manager.o
                                          0x77 (size before relaxing)
- *fill*         0x000000000817615f        0x1 ff
+ *fill*         0x00000000081460a3        0x1 ff
  .rodata._ZN2bn17bg_blocks_manager16affine_map_tilesEi.str1.4
-                0x0000000008176160       0x6e bn_bg_blocks_manager.o
- *fill*         0x00000000081761ce        0x2 ff
+                0x00000000081460a4       0x6e bn_bg_blocks_manager.o
+ *fill*         0x0000000008146112        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager14palette_offsetEi.str1.4
-                0x00000000081761d0        0xb bn_bg_blocks_manager.o
- *fill*         0x00000000081761db        0x1 ff
+                0x0000000008146114        0xb bn_bg_blocks_manager.o
+ *fill*         0x000000000814611f        0x1 ff
  .rodata._ZN2bn17bg_blocks_manager21set_regular_map_tilesEiONS_20regular_bg_tiles_ptrE.str1.4
-                0x00000000081761dc       0xd2 bn_bg_blocks_manager.o
- *fill*         0x00000000081762ae        0x2 ff
+                0x0000000008146120       0xd2 bn_bg_blocks_manager.o
+ *fill*         0x00000000081461f2        0x2 ff
  .rodata._ZN3_bn6assert9show_argsIJA37_cbA4_cbEEEvPKcS5_S5_iDpRKT_.str1.4
-                0x00000000081762b0        0xe bn_bg_blocks_manager.o
- *fill*         0x00000000081762be        0x2 ff
+                0x00000000081461f4        0xe bn_bg_blocks_manager.o
+ *fill*         0x0000000008146202        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager12_GLOBAL__N_116_find_tiles_implEPKtNS_16compression_typeEib.str1.4
-                0x00000000081762c0      0x172 bn_bg_blocks_manager.o
- *fill*         0x0000000008176432        0x2 ff
+                0x0000000008146204      0x172 bn_bg_blocks_manager.o
+ *fill*         0x0000000008146376        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager12_GLOBAL__N_122_find_regular_map_implERKNS_19regular_bg_map_itemERKNS_20regular_bg_tiles_ptrERKNS_14bg_palette_ptrE.str1.4
-                0x0000000008176434      0x24d bn_bg_blocks_manager.o
- *fill*         0x0000000008176681        0x3 ff
+                0x0000000008146378      0x24d bn_bg_blocks_manager.o
+ *fill*         0x00000000081465c5        0x3 ff
  .rodata._ZN2bn17bg_blocks_manager12_GLOBAL__N_110items_list12insert_afterEiRKNS1_9item_typeE.constprop.0.str1.4
-                0x0000000008176684       0x60 bn_bg_blocks_manager.o
+                0x00000000081465c8       0x60 bn_bg_blocks_manager.o
  .rodata._ZN2bn17bg_blocks_manager4initEv.str1.4
-                0x00000000081766e4       0x74 bn_bg_blocks_manager.o
+                0x0000000008146628       0x74 bn_bg_blocks_manager.o
  .rodata._ZN2bn14iunordered_mapIPKviNS_4hashIS2_EENS_8equal_toIS2_EEE5eraseERKNS7_14const_iteratorE.isra.0.str1.4
-                0x0000000008176758       0xbe bn_bg_blocks_manager.o
- *fill*         0x0000000008176816        0x2 ff
+                0x000000000814669c       0xbe bn_bg_blocks_manager.o
+ *fill*         0x000000000814675a        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager12_GLOBAL__N_112_create_itemEiibONS1_11create_dataE.str1.4
-                0x0000000008176818       0x3a bn_bg_blocks_manager.o
- *fill*         0x0000000008176852        0x2 ff
+                0x000000000814675c       0x3a bn_bg_blocks_manager.o
+ *fill*         0x0000000008146796        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager20allocate_regular_mapERKNS_4sizeEONS_20regular_bg_tiles_ptrEONS_14bg_palette_ptrEb.str1.4
-                0x0000000008176854      0x143 bn_bg_blocks_manager.o
- *fill*         0x0000000008176997        0x1 ff
+                0x0000000008146798      0x143 bn_bg_blocks_manager.o
+ *fill*         0x00000000081468db        0x1 ff
  .rodata._ZN2bn17bg_blocks_manager21set_regular_tiles_refEiRKNS_21regular_bg_tiles_itemE.str1.4
-                0x0000000008176998       0xa7 bn_bg_blocks_manager.o
- *fill*         0x0000000008176a3f        0x1 ff
+                0x00000000081468dc       0xa7 bn_bg_blocks_manager.o
+ *fill*         0x0000000008146983        0x1 ff
  .rodata._ZN2bn17bg_blocks_manager25set_regular_map_cells_refEiRKNS_19regular_bg_map_itemE.str1.4
-                0x0000000008176a40       0xfa bn_bg_blocks_manager.o
- *fill*         0x0000000008176b3a        0x2 ff
+                0x0000000008146984       0xfa bn_bg_blocks_manager.o
+ *fill*         0x0000000008146a7e        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager6updateEv.part.0.str1.4
-                0x0000000008176b3c       0x27 bn_bg_blocks_manager.o
- *fill*         0x0000000008176b63        0x1 ff
+                0x0000000008146a80       0x27 bn_bg_blocks_manager.o
+ *fill*         0x0000000008146aa7        0x1 ff
  .rodata._ZN2bn17bg_blocks_manager18create_regular_mapERKNS_19regular_bg_map_itemEONS_20regular_bg_tiles_ptrEONS_14bg_palette_ptrEb.str1.4
-                0x0000000008176b64       0xaa bn_bg_blocks_manager.o
- *fill*         0x0000000008176c0e        0x2 ff
+                0x0000000008146aa8       0xaa bn_bg_blocks_manager.o
+ *fill*         0x0000000008146b52        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager22create_new_regular_mapERKNS_19regular_bg_map_itemEONS_20regular_bg_tiles_ptrEONS_14bg_palette_ptrEb.str1.4
-                0x0000000008176c10       0x3a bn_bg_blocks_manager.o
- *fill*         0x0000000008176c4a        0x2 ff
+                0x0000000008146b54       0x3a bn_bg_blocks_manager.o
+ *fill*         0x0000000008146b8e        0x2 ff
  .rodata._ZN2bn17bg_blocks_manager23create_new_affine_tilesERKNS_20affine_bg_tiles_itemEb.str1.4
-                0x0000000008176c4c       0x5b bn_bg_blocks_manager.o
- *fill*         0x0000000008176ca7        0x1 ff
+                0x0000000008146b90       0x5b bn_bg_blocks_manager.o
+ *fill*         0x0000000008146beb        0x1 ff
  .rodata._ZN2bn17bg_blocks_manager20create_regular_tilesERKNS_21regular_bg_tiles_itemEb.str1.4
-                0x0000000008176ca8       0x38 bn_bg_blocks_manager.o
+                0x0000000008146bec       0x38 bn_bg_blocks_manager.o
  .rodata.str1.4
-                0x0000000008176ce0       0x2b bn_bg_blocks_manager.o
- *fill*         0x0000000008176d0b        0x1 ff
+                0x0000000008146c24       0x2b bn_bg_blocks_manager.o
+ *fill*         0x0000000008146c4f        0x1 ff
  .rodata._ZN2bn17bg_blocks_manager12_GLOBAL__N_1L19_status_log_messageE
-                0x0000000008176d0c        0x8 bn_bg_blocks_manager.o
+                0x0000000008146c50        0x8 bn_bg_blocks_manager.o
  .rodata._ZN2bn18regular_bg_builder11set_z_orderEi.str1.4
-                0x0000000008176d14       0x4c bn_bgs_manager.o
+                0x0000000008146c58       0x4c bn_bgs_manager.o
  .rodata._ZN2bn11bgs_manager10dimensionsEPv.str1.4
-                0x0000000008176d60       0x79 bn_bgs_manager.o
+                0x0000000008146ca4       0x79 bn_bgs_manager.o
                                          0x81 (size before relaxing)
  .rodata._ZN2bn11bgs_manager9put_belowEPv.str1.4
-                0x0000000008176dd9       0x7c bn_bgs_manager.o
- *fill*         0x0000000008176dd9        0x3 ff
+                0x0000000008146d1d       0x7c bn_bgs_manager.o
+ *fill*         0x0000000008146d1d        0x3 ff
  .rodata._ZNK2bn17affine_bg_builder3mapEv.str1.4
-                0x0000000008176ddc       0x1e bn_bgs_manager.o
+                0x0000000008146d20       0x1e bn_bgs_manager.o
                                          0x2a (size before relaxing)
- *fill*         0x0000000008176dfa        0x2 ff
+ *fill*         0x0000000008146d3e        0x2 ff
  .rodata._ZN2bn17affine_bg_builder11release_mapEv.str1.4
-                0x0000000008176dfc        0xc bn_bgs_manager.o
+                0x0000000008146d40        0xc bn_bgs_manager.o
  .rodata._ZN2bn11bgs_manager28update_regular_map_tiles_cbbEii.str1.4
-                0x0000000008176e08       0x6e bn_bgs_manager.o
+                0x0000000008146d4c       0x6e bn_bgs_manager.o
  .rodata._ZN2bn11bgs_manager10affine_mapEPv.str1.4
-                0x0000000008176e08        0xa bn_bgs_manager.o
+                0x0000000008146d4c        0xa bn_bgs_manager.o
  .rodata._ZN2bn11bgs_manager13set_regular_xEPvNS_7fixed_tILi12EEE.str1.4
-                0x0000000008176e08       0xd4 bn_bgs_manager.o
+                0x0000000008146d4c       0xd4 bn_bgs_manager.o
  .rodata._ZN2bn11bgs_manager13set_regular_yEPvNS_7fixed_tILi12EEE.str1.4
-                0x0000000008176edc       0x92 bn_bgs_manager.o
- *fill*         0x0000000008176f6e        0x2 ff
+                0x0000000008146e20       0x92 bn_bgs_manager.o
+ *fill*         0x0000000008146eb2        0x2 ff
  .rodata._ZN2bn11bgs_manager12_GLOBAL__N_19item_type18update_affine_hw_xEv.str1.4
-                0x0000000008176f70       0xc7 bn_bgs_manager.o
- *fill*         0x0000000008177037        0x1 ff
+                0x0000000008146eb4       0xc7 bn_bgs_manager.o
+ *fill*         0x0000000008146f7b        0x1 ff
  .rodata._ZN2bn11bgs_manager12_GLOBAL__N_19item_type18update_affine_hw_yEv.str1.4
-                0x0000000008177038       0xc5 bn_bgs_manager.o
- *fill*         0x00000000081770fd        0x3 ff
+                0x0000000008146f7c       0xc5 bn_bgs_manager.o
+ *fill*         0x0000000008147041        0x3 ff
  .rodata._ZN2bn11bgs_manager15set_regular_mapEPvRKNS_18regular_bg_map_ptrE.str1.4
-                0x0000000008177100       0x66 bn_bgs_manager.o
- *fill*         0x0000000008177166        0x2 ff
+                0x0000000008147044       0x66 bn_bgs_manager.o
+ *fill*         0x00000000081470aa        0x2 ff
  .rodata._ZN2bn11bgs_manager37fill_hblank_effect_regular_attributesEPvPKNS_21regular_bg_attributesEPt.str1.4
-                0x0000000008177168       0x74 bn_bgs_manager.o
+                0x00000000081470ac       0x74 bn_bgs_manager.o
  .rodata._ZN2bn11bgs_manager36fill_hblank_effect_affine_attributesEPvPKNS_20affine_bg_attributesEPt.str1.4
-                0x00000000081771dc       0x25 bn_bgs_manager.o
- *fill*         0x0000000008177201        0x3 ff
+                0x0000000008147120       0x25 bn_bgs_manager.o
+ *fill*         0x0000000008147145        0x3 ff
  .rodata._ZN2bn11bgs_manager6updateEv.str1.4
-                0x0000000008177204       0x83 bn_bgs_manager.o
- *fill*         0x0000000008177287        0x1 ff
+                0x0000000008147148       0x83 bn_bgs_manager.o
+ *fill*         0x00000000081471cb        0x1 ff
  .rodata._ZN2bn11bgs_manager12_GLOBAL__N_112_insert_itemERNS1_9item_typeE.str1.4
-                0x0000000008177288       0x45 bn_bgs_manager.o
+                0x00000000081471cc       0x45 bn_bgs_manager.o
                                          0x6e (size before relaxing)
- *fill*         0x00000000081772cd        0x3 ff
+ *fill*         0x0000000008147211        0x3 ff
  .rodata._ZN2bn11bgs_manager15create_optionalEONS_18regular_bg_builderE.str1.4
-                0x00000000081772d0       0xa0 bn_bgs_manager.o
+                0x0000000008147214       0xa0 bn_bgs_manager.o
  .rodata._ZN2bn11bgs_manager6createEONS_18regular_bg_builderE.str1.4
-                0x0000000008177370       0x32 bn_bgs_manager.o
- *fill*         0x00000000081773a2        0x2 ff
+                0x00000000081472b4       0x32 bn_bgs_manager.o
+ *fill*         0x00000000081472e6        0x2 ff
  .rodata._ZN2bn5eraseERNS_7ivectorIPNS_11bgs_manager12_GLOBAL__N_19item_typeEEERKS4_.constprop.0.isra.0.str1.4
-                0x00000000081773a4       0x67 bn_bgs_manager.o
+                0x00000000081472e8       0x67 bn_bgs_manager.o
                                          0x6f (size before relaxing)
- *fill*         0x000000000817740b        0x1 ff
+ *fill*         0x000000000814734f        0x1 ff
  .rodata._ZN2bn11bgs_manager15decrease_usagesEPv.str1.4
-                0x000000000817740c       0x39 bn_bgs_manager.o
+                0x0000000008147350       0x39 bn_bgs_manager.o
                                          0x59 (size before relaxing)
- *fill*         0x0000000008177445        0x3 ff
+ *fill*         0x0000000008147389        0x3 ff
  .rodata._GLOBAL__sub_D__ZN2bn3bgs16used_items_countEv.str1.4
-                0x0000000008177448       0x72 bn_bgs_manager.o
+                0x000000000814738c       0x72 bn_bgs_manager.o
  .rodata._ZN2bn15cameras_manager4initEv.str1.4
-                0x00000000081774ba       0x67 bn_cameras_manager.o
- *fill*         0x00000000081774ba        0x2 ff
+                0x00000000081473fe       0x67 bn_cameras_manager.o
+ *fill*         0x00000000081473fe        0x2 ff
  .rodata._ZN2bn15display_manager21set_show_bg_in_windowEiPvb.str1.4
-                0x00000000081774bc       0x28 bn_display_manager.o
+                0x0000000008147400       0x28 bn_display_manager.o
                                          0xc1 (size before relaxing)
  .rodata._ZN2bn11rect_window14set_boundariesERKNS_11fixed_pointES3_.str1.4
-                0x00000000081774e4       0xd0 bn_display_manager.o
+                0x0000000008147428       0xd0 bn_display_manager.o
                                          0xd4 (size before relaxing)
  .rodata._ZN2bn8blending27set_transparency_attributesENS_32blending_transparency_attributesE.str1.4
-                0x00000000081775b4      0x1a5 bn_display_manager.o
- *fill*         0x0000000008177759        0x3 ff
+                0x00000000081474f8      0x1a5 bn_display_manager.o
+ *fill*         0x000000000814769d        0x3 ff
  .rodata._ZN2bn8blending23transparency_attributesEv.str1.4
-                0x000000000817775c       0xd1 bn_display_manager.o
- *fill*         0x000000000817782d        0x3 ff
+                0x00000000081476a0       0xd1 bn_display_manager.o
+ *fill*         0x0000000008147771        0x3 ff
  .rodata._ZN2bn8blending22set_transparency_alphaENS_7fixed_tILi12EEE.str1.4
-                0x0000000008177830       0x5e bn_display_manager.o
+                0x0000000008147774       0x5e bn_display_manager.o
  .rodata._ZN2bn8optionalINS_29affine_bg_pa_register_hbe_ptrEEdeEv.part.0.str1.4
-                0x000000000817788e       0x6e bn_hblank_effects_manager.o
- *fill*         0x000000000817788e        0x2 ff
+                0x00000000081477d2       0x6e bn_hblank_effects_manager.o
+ *fill*         0x00000000081477d2        0x2 ff
  .rodata._ZN2bn22hblank_effects_manager12_GLOBAL__N_110_is_uint32ENS0_12handler_typeE.part.0.str1.4
-                0x0000000008177890       0x6e bn_hblank_effects_manager.o
+                0x00000000081477d4       0x6e bn_hblank_effects_manager.o
                                          0x72 (size before relaxing)
- *fill*         0x00000000081778fe        0x2 ff
+ *fill*         0x0000000008147842        0x2 ff
  .rodata._ZN2bn22hblank_effects_manager12_GLOBAL__N_19item_type18_check_update_implINS_32affine_bg_attributes_hbe_handlerEEEbv.str1.4
-                0x0000000008177900       0x77 bn_hblank_effects_manager.o
- *fill*         0x0000000008177977        0x1 ff
+                0x0000000008147844       0x77 bn_hblank_effects_manager.o
+ *fill*         0x00000000081478bb        0x1 ff
  .rodata._ZN2bn22hblank_effects_manager12_GLOBAL__N_19item_type12check_updateEv.str1.4
-                0x0000000008177978      0x36d bn_hblank_effects_manager.o
- *fill*         0x0000000008177ce5        0x3 ff
+                0x00000000081478bc      0x36d bn_hblank_effects_manager.o
+ *fill*         0x0000000008147c29        0x3 ff
  .rodata._ZN2bn22hblank_effects_manager12_GLOBAL__N_19item_type12check_updateEv
-                0x0000000008177ce8       0xa4 bn_hblank_effects_manager.o
+                0x0000000008147c2c       0xa4 bn_hblank_effects_manager.o
  .rodata._ZN2bn22hblank_effects_manager6updateEv.str1.4
-                0x0000000008177d8c       0x5d bn_hblank_effects_manager.o
+                0x0000000008147cd0       0x5d bn_hblank_effects_manager.o
  .rodata._ZN2bn22hblank_effects_manager4initEv.str1.4
-                0x0000000008177de9       0x67 bn_hblank_effects_manager.o
- *fill*         0x0000000008177de9        0x3 ff
+                0x0000000008147d2d       0x67 bn_hblank_effects_manager.o
+ *fill*         0x0000000008147d2d        0x3 ff
  .rodata.CSWTCH.1466
-                0x0000000008177dec       0x29 bn_hblank_effects_manager.o
- *fill*         0x0000000008177e15        0x3 ff
+                0x0000000008147d30       0x29 bn_hblank_effects_manager.o
+ *fill*         0x0000000008147d59        0x3 ff
  .rodata._ZN2bn14keypad_manager6updateEv.str1.4
-                0x0000000008177e18       0x6b bn_keypad_manager.o
+                0x0000000008147d5c       0x6b bn_keypad_manager.o
                                          0x8f (size before relaxing)
- *fill*         0x0000000008177e83        0x1 ff
+ *fill*         0x0000000008147dc7        0x1 ff
  .rodata._ZN2bn14keypad_manager4initERKNS_11string_viewE.str1.4
-                0x0000000008177e84       0x84 bn_keypad_manager.o
+                0x0000000008147dc8       0x84 bn_keypad_manager.o
  .rodata._ZN2bn6memory9set_bytesEhiPv.str1.4
-                0x0000000008177f08       0x8c bn_memory_manager.o
+                0x0000000008147e4c       0x8c bn_memory_manager.o
  .rodata._ZN2bn14memory_manager12_GLOBAL__N_117_insert_free_itemENS_5ilistINS1_9item_typeEE8iteratorEPS5_.str1.4
-                0x0000000008177f94       0xa3 bn_memory_manager.o
+                0x0000000008147ed8       0xa3 bn_memory_manager.o
  .rodata._ZN2bn14memory_manager12_GLOBAL__N_116_erase_free_itemENS_5ilistINS1_9item_typeEE8iteratorE.str1.4
-                0x0000000008177f94       0x48 bn_memory_manager.o
+                0x0000000008147ed8       0x48 bn_memory_manager.o
  .rodata._ZN2bn14memory_manager11ewram_allocEi.str1.4
-                0x0000000008177f94       0x52 bn_memory_manager.o
- *fill*         0x0000000008177fe6        0x2 ff
+                0x0000000008147ed8       0x52 bn_memory_manager.o
+ *fill*         0x0000000008147f2a        0x2 ff
  .rodata._ZN2bn14memory_manager4initEv.str1.4
-                0x0000000008177fe8       0x59 bn_memory_manager.o
+                0x0000000008147f2c       0x59 bn_memory_manager.o
                                          0x66 (size before relaxing)
- *fill*         0x0000000008178041        0x3 ff
+ *fill*         0x0000000008147f85        0x3 ff
  .rodata._ZN2bn14memory_manager10ewram_freeEPv.str1.4
-                0x0000000008178044       0x1a bn_memory_manager.o
+                0x0000000008147f88       0x1a bn_memory_manager.o
                                          0x95 (size before relaxing)
  .rodata._GLOBAL__sub_D__Znwj.str1.4
-                0x000000000817805e       0x72 bn_memory_manager.o
- *fill*         0x000000000817805e        0x2 ff
+                0x0000000008147fa2       0x72 bn_memory_manager.o
+ *fill*         0x0000000008147fa2        0x2 ff
  .rodata._ZNK2bn13palettes_bank10log_statusEv.str1.4
-                0x0000000008178060       0x42 bn_palettes_manager.o
+                0x0000000008147fa4       0x42 bn_palettes_manager.o
                                          0x50 (size before relaxing)
- *fill*         0x00000000081780a2        0x2 ff
+ *fill*         0x0000000008147fe6        0x2 ff
  .rodata._ZNK2bn14bg_palette_ptr6colorsEv.str1.4
-                0x00000000081780a4       0x67 bn_palettes_manager.o
- *fill*         0x000000000817810b        0x1 ff
+                0x0000000008147fe8       0x67 bn_palettes_manager.o
+ *fill*         0x000000000814804f        0x1 ff
  .rodata._ZN2bn13palettes_bank12create_bpp_8ERKNS_4spanIKNS_5colorEEENS_16compression_typeEb.str1.4
-                0x000000000817810c       0xaf bn_palettes_manager.o
+                0x0000000008148050       0xaf bn_palettes_manager.o
                                          0xfb (size before relaxing)
- *fill*         0x00000000081781bb        0x1 ff
+ *fill*         0x00000000081480ff        0x1 ff
  .rodata._ZN2bn13palettes_bank16set_rotate_countEii.str1.4
-                0x00000000081781bc       0x36 bn_palettes_manager.o
+                0x0000000008148100       0x36 bn_palettes_manager.o
                                          0x4c (size before relaxing)
- *fill*         0x00000000081781f2        0x2 ff
+ *fill*         0x0000000008148136        0x2 ff
  .rodata._ZNK2bn15bg_palette_item10uncompressENS_4spanINS_5colorEEE.str1.4
-                0x00000000081781f4      0x103 bn_palettes_manager.o
- *fill*         0x00000000081782f7        0x1 ff
+                0x0000000008148138      0x103 bn_palettes_manager.o
+ *fill*         0x000000000814823b        0x1 ff
  .rodata._ZNK2bn19sprite_palette_item10uncompressENS_4spanINS_5colorEEE.str1.4
-                0x00000000081782f8       0x4d bn_palettes_manager.o
- *fill*         0x0000000008178345        0x3 ff
+                0x000000000814823c       0x4d bn_palettes_manager.o
+ *fill*         0x0000000008148289        0x3 ff
  .rodata._ZN2bn13palettes_bank12create_bpp_4ERKNS_4spanIKNS_5colorEEEtb.str1.4
-                0x0000000008178348       0x73 bn_palettes_manager.o
+                0x000000000814828c       0x73 bn_palettes_manager.o
                                          0xfb (size before relaxing)
  .rodata._ZN2bn14iunordered_mapItsNS_13palettes_bank15identity_hasherENS_8equal_toItEEE5eraseERKNS5_14const_iteratorE.isra.0.str1.4
-                0x00000000081783bb       0x35 bn_palettes_manager.o
- *fill*         0x00000000081783bb        0x1 ff
+                0x00000000081482ff       0x35 bn_palettes_manager.o
+ *fill*         0x00000000081482ff        0x1 ff
  .rodata._ZN2bn12_GLOBAL__N_1L19reciprocal_lut_implE
-                0x00000000081783bc     0x1004 bn_reciprocal_lut.o
+                0x0000000008148300     0x1004 bn_reciprocal_lut.o
  .rodata._ZN2bn14reciprocal_lutE
-                0x00000000081793c0        0x4 bn_reciprocal_lut.o
-                0x00000000081793c0                bn::reciprocal_lut
+                0x0000000008149304        0x4 bn_reciprocal_lut.o
+                0x0000000008149304                bn::reciprocal_lut
  .rodata._ZN2bn26sprite_affine_mats_manager12_GLOBAL__N_17_createERKNS_21affine_mat_attributesE.str1.4
-                0x00000000081793c4       0x60 bn_sprite_affine_mats_manager.o
+                0x0000000008149308       0x60 bn_sprite_affine_mats_manager.o
  .rodata._ZN2bn26sprite_affine_mats_manager6createERKNS_21affine_mat_attributesE.str1.4
-                0x00000000081793c4       0x9d bn_sprite_affine_mats_manager.o
+                0x0000000008149308       0x9d bn_sprite_affine_mats_manager.o
                                          0xa5 (size before relaxing)
  .rodata._ZN2bn26sprite_affine_mats_manager15decrease_usagesEi.part.0.str1.4
-                0x0000000008179461       0x27 bn_sprite_affine_mats_manager.o
- *fill*         0x0000000008179461        0x3 ff
+                0x00000000081493a5       0x27 bn_sprite_affine_mats_manager.o
+ *fill*         0x00000000081493a5        0x3 ff
  .rodata._ZN2bn26sprite_affine_mats_manager14dettach_spriteEiRNS_24intrusive_list_node_typeE.str1.4
-                0x0000000008179464       0x48 bn_sprite_affine_mats_manager.o
+                0x00000000081493a8       0x48 bn_sprite_affine_mats_manager.o
                                          0x6a (size before relaxing)
  .rodata._ZN2bn26sprite_affine_mats_manager9set_scaleEiNS_7fixed_tILi12EEE.str1.4
-                0x00000000081794ac       0x78 bn_sprite_affine_mats_manager.o
+                0x00000000081493f0       0x78 bn_sprite_affine_mats_manager.o
  .rodata._ZN2bn14utf8_characterC2ERKc.str1.4
-                0x0000000008179524       0x84 bn_sprite_text_generator.o
+                0x0000000008149468       0x84 bn_sprite_text_generator.o
                                          0x85 (size before relaxing)
  .rodata._ZN2bn21sprite_text_generator16set_palette_itemERKNS_19sprite_palette_itemE.str1.4
-                0x00000000081795a8       0xa5 bn_sprite_text_generator.o
- *fill*         0x000000000817964d        0x3 ff
+                0x00000000081494ec       0xa5 bn_sprite_text_generator.o
+ *fill*         0x0000000008149591        0x3 ff
  .rodata._ZNK2bn21sprite_text_generator5widthERKNS_11string_viewE.str1.4
-                0x0000000008179650       0x64 bn_sprite_text_generator.o
+                0x0000000008149594       0x64 bn_sprite_text_generator.o
                                          0x68 (size before relaxing)
  .rodata._ZN2bn21sprite_text_generator5_initEv.str1.4
-                0x00000000081796b4       0x80 bn_sprite_text_generator.o
+                0x00000000081495f8       0x80 bn_sprite_text_generator.o
                                         0x118 (size before relaxing)
  .rodata._ZN2bn12_GLOBAL__N_113_build_spriteILNS_11sprite_sizeE2ELb0EEEPNS_4tileERKNS_21sprite_text_generatorERKNS_18sprite_palette_ptrERKNS_11fixed_pointERNS_7ivectorINS_10sprite_ptrEEE.str1.4
-                0x0000000008179734       0x5f bn_sprite_text_generator.o
+                0x0000000008149678       0x5f bn_sprite_text_generator.o
                                         0x143 (size before relaxing)
- *fill*         0x0000000008179793        0x1 ff
+ *fill*         0x00000000081496d7        0x1 ff
  .rodata._ZN2bn12_GLOBAL__N_19_generateILb0EEEbRKNS_21sprite_text_generatorERKNS_11fixed_pointERKNS_11string_viewERKNS_14iunordered_mapIiiNS_4hashIiEENS_8equal_toIiEEEEiibRNS_7ivectorINS_10sprite_ptrEEE.isra.0.str1.4
-                0x0000000008179794      0x175 bn_sprite_text_generator.o
+                0x00000000081496d8      0x175 bn_sprite_text_generator.o
                                         0x20b (size before relaxing)
- *fill*         0x0000000008179909        0x3 ff
+ *fill*         0x000000000814984d        0x3 ff
  .rodata.CSWTCH.1213
-                0x000000000817990c       0x10 bn_sprite_text_generator.o
+                0x0000000008149850       0x10 bn_sprite_text_generator.o
  .rodata.CSWTCH.1214
-                0x000000000817991c       0x10 bn_sprite_text_generator.o
+                0x0000000008149860       0x10 bn_sprite_text_generator.o
  .rodata.CSWTCH.1215
-                0x000000000817992c       0x10 bn_sprite_text_generator.o
+                0x0000000008149870       0x10 bn_sprite_text_generator.o
  .rodata._ZN2bn20sprite_tiles_manager10log_statusEv.str1.4
-                0x000000000817993c       0x50 bn_sprite_tiles_manager.o
+                0x0000000008149880       0x50 bn_sprite_tiles_manager.o
                                          0x94 (size before relaxing)
  .rodata._ZN2bn2hw12sprite_tiles6commitEPKNS_4tileENS_16compression_typeEii.part.0.str1.4
-                0x000000000817998c       0x53 bn_sprite_tiles_manager.o
+                0x00000000081498d0       0x53 bn_sprite_tiles_manager.o
                                          0x7b (size before relaxing)
- *fill*         0x00000000081799df        0x1 ff
+ *fill*         0x0000000008149923        0x1 ff
  .rodata._ZN2bn20sprite_tiles_manager16reload_tiles_refEi.str1.4
-                0x00000000081799e0       0x7d bn_sprite_tiles_manager.o
+                0x0000000008149924       0x7d bn_sprite_tiles_manager.o
  .rodata._ZN2bn20sprite_tiles_manager12_GLOBAL__N_116_erase_free_itemEi.str1.4
-                0x0000000008179a5d       0x99 bn_sprite_tiles_manager.o
+                0x00000000081499a1       0x99 bn_sprite_tiles_manager.o
  .rodata._ZN2bn20sprite_tiles_manager15decrease_usagesEi.part.0.str1.4
-                0x0000000008179a5d       0x4f bn_sprite_tiles_manager.o
+                0x00000000081499a1       0x4f bn_sprite_tiles_manager.o
  .rodata._ZN2bn14iunordered_mapIPKNS_4tileEiNS_4hashIS3_EENS_8equal_toIS3_EEE5eraseERKNS8_14const_iteratorE.isra.0.str1.4
-                0x0000000008179a5d       0xb6 bn_sprite_tiles_manager.o
+                0x00000000081499a1       0xb6 bn_sprite_tiles_manager.o
  .rodata._ZN2bn20sprite_tiles_manager12_GLOBAL__N_112_create_itemEiPKNS_4tileENS_16compression_typeEib.str1.4
-                0x0000000008179a5d       0x66 bn_sprite_tiles_manager.o
+                0x00000000081499a1       0x66 bn_sprite_tiles_manager.o
  .rodata._ZN2bn20sprite_tiles_manager6updateEv.part.0.str1.4
-                0x0000000008179a5d        0xa bn_sprite_tiles_manager.o
- *fill*         0x0000000008179a5d        0x3 ff
+                0x00000000081499a1        0xa bn_sprite_tiles_manager.o
+ *fill*         0x00000000081499a1        0x3 ff
  .rodata._ZN2bn20sprite_tiles_manager10create_newERKNS_4spanIKNS_4tileEEENS_16compression_typeE.str1.4
-                0x0000000008179a60       0x9c bn_sprite_tiles_manager.o
+                0x00000000081499a4       0x9c bn_sprite_tiles_manager.o
                                          0xe8 (size before relaxing)
  .rodata._ZNK2bn17sprite_tiles_item16create_new_tilesEv.str1.4
-                0x0000000008179afc      0x17b bn_sprite_tiles_manager.o
+                0x0000000008149a40      0x17b bn_sprite_tiles_manager.o
  .rodata._ZN2bn20sprite_tiles_manager13set_tiles_refEiRKNS_4spanIKNS_4tileEEENS_16compression_typeE.str1.4
-                0x0000000008179afc       0x78 bn_sprite_tiles_manager.o
+                0x0000000008149a40       0x78 bn_sprite_tiles_manager.o
                                          0xa8 (size before relaxing)
  .rodata._ZN2bn20sprite_tiles_manager17allocate_optionalEiNS_8bpp_modeE.str1.4
-                0x0000000008179b74       0x4b bn_sprite_tiles_manager.o
+                0x0000000008149ab8       0x4b bn_sprite_tiles_manager.o
                                          0x62 (size before relaxing)
- *fill*         0x0000000008179bbf        0x1 ff
+ *fill*         0x0000000008149b03        0x1 ff
  .rodata._ZN2bn20sprite_tiles_manager8allocateEiNS_8bpp_modeE.str1.4
-                0x0000000008179bc0       0x38 bn_sprite_tiles_manager.o
+                0x0000000008149b04       0x38 bn_sprite_tiles_manager.o
  .rodata._ZN2bn20sprite_tiles_manager4initEv.str1.4
-                0x0000000008179bf8       0x3c bn_sprite_tiles_manager.o
+                0x0000000008149b3c       0x3c bn_sprite_tiles_manager.o
  .rodata._ZN2bn20sprite_tiles_manager12_GLOBAL__N_110_find_implEPKNS_4tileENS_16compression_typeEi.str1.4
-                0x0000000008179bf8       0x2c bn_sprite_tiles_manager.o
+                0x0000000008149b3c       0x2c bn_sprite_tiles_manager.o
                                          0xd0 (size before relaxing)
  .rodata._ZN2bn20sprite_tiles_manager6createERKNS_4spanIKNS_4tileEEENS_16compression_typeE.str1.4
-                0x0000000008179c24       0x1c bn_sprite_tiles_manager.o
+                0x0000000008149b68       0x1c bn_sprite_tiles_manager.o
                                          0x24 (size before relaxing)
  .rodata._ZN2bn16sprite_tiles_ptr4findERKNS_17sprite_tiles_itemEi.str1.4
-                0x0000000008179c40       0x51 bn_sprite_tiles_manager.o
+                0x0000000008149b84       0x51 bn_sprite_tiles_manager.o
  .rodata.str1.4
-                0x0000000008179c40       0x2e bn_sprite_tiles_manager.o
- *fill*         0x0000000008179c6e        0x2 ff
+                0x0000000008149b84       0x2e bn_sprite_tiles_manager.o
+ *fill*         0x0000000008149bb2        0x2 ff
  .rodata._ZN2bn20sprite_tiles_manager12_GLOBAL__N_1L19_status_log_messageE
-                0x0000000008179c70        0x8 bn_sprite_tiles_manager.o
+                0x0000000008149bb4        0x8 bn_sprite_tiles_manager.o
  .rodata._ZN2bn14sprite_builder20set_blending_enabledEb.str1.4
-                0x0000000008179c78       0xbe bn_sprites_manager.o
- *fill*         0x0000000008179d36        0x2 ff
+                0x0000000008149bbc       0xbe bn_sprites_manager.o
+ *fill*         0x0000000008149c7a        0x2 ff
  .rodata._ZN2bn15sprites_manager20set_blending_enabledEPvb.str1.4
-                0x0000000008179d38       0x84 bn_sprites_manager.o
+                0x0000000008149c7c       0x84 bn_sprites_manager.o
  .rodata._ZNK2bn17sprite_shape_size11tiles_countENS_8bpp_modeE.str1.4
-                0x0000000008179dbc       0x78 bn_sprites_manager.o
+                0x0000000008149d00       0x78 bn_sprites_manager.o
  .rodata._ZN2bn14sprite_builderC2ERKNS_11sprite_itemEi.str1.4
-                0x0000000008179dbc       0x44 bn_sprites_manager.o
+                0x0000000008149d00       0x44 bn_sprites_manager.o
                                          0x78 (size before relaxing)
  .rodata._ZN2bn15sprites_manager5tilesEPv.str1.4
-                0x0000000008179e00       0x6e bn_sprites_manager.o
+                0x0000000008149d44       0x6e bn_sprites_manager.o
  .rodata._ZNK2bn20sprites_manager_item15new_double_sizeEv.part.0.str1.4
-                0x0000000008179e00       0x77 bn_sprites_manager.o
+                0x0000000008149d44       0x77 bn_sprites_manager.o
  .rodata._ZN2bn20sprites_manager_itemC2EONS_14sprite_builderEONS_16sprite_tiles_ptrEONS_18sprite_palette_ptrE.str1.4
-                0x0000000008179e77        0xb bn_sprites_manager.o
- *fill*         0x0000000008179e77        0x1 ff
+                0x0000000008149dbb        0xb bn_sprites_manager.o
+ *fill*         0x0000000008149dbb        0x1 ff
  .rodata._ZN2bn14sprite_builder11set_z_orderEi.str1.4
-                0x0000000008179e78       0x66 bn_sprites_manager.o
- *fill*         0x0000000008179ede        0x2 ff
+                0x0000000008149dbc       0x66 bn_sprites_manager.o
+ *fill*         0x0000000008149e22        0x2 ff
  .rodata._ZN2bn14sprite_builderC2ERKNS_17sprite_shape_sizeENS_16sprite_tiles_ptrENS_18sprite_palette_ptrE.str1.4
-                0x0000000008179ee0       0x42 bn_sprites_manager.o
+                0x0000000008149e24       0x42 bn_sprites_manager.o
                                          0x5a (size before relaxing)
- *fill*         0x0000000008179f22        0x2 ff
+ *fill*         0x0000000008149e66        0x2 ff
  .rodata._ZN2bn14sprite_builder15set_bg_priorityEi.str1.4
-                0x0000000008179f24       0x66 bn_sprites_manager.o
- *fill*         0x0000000008179f8a        0x2 ff
+                0x0000000008149e68       0x66 bn_sprites_manager.o
+ *fill*         0x0000000008149ece        0x2 ff
  .rodata._ZNK2bn14sprite_builder5tilesEv.str1.4
-                0x0000000008179f8c       0x21 bn_sprites_manager.o
+                0x0000000008149ed0       0x21 bn_sprites_manager.o
                                          0x31 (size before relaxing)
- *fill*         0x0000000008179fad        0x3 ff
+ *fill*         0x0000000008149ef1        0x3 ff
  .rodata._ZN2bn14sprite_builder13release_tilesEv.str1.4
-                0x0000000008179fb0        0xe bn_sprites_manager.o
- *fill*         0x0000000008179fbe        0x2 ff
+                0x0000000008149ef4        0xe bn_sprites_manager.o
+ *fill*         0x0000000008149f02        0x2 ff
  .rodata._ZNK2bn14sprite_builder7paletteEv.str1.4
-                0x0000000008179fc0       0x2e bn_sprites_manager.o
+                0x0000000008149f04       0x2e bn_sprites_manager.o
                                          0x36 (size before relaxing)
- *fill*         0x0000000008179fee        0x2 ff
+ *fill*         0x0000000008149f32        0x2 ff
  .rodata._ZN2bn14sprite_builder15release_paletteEv.str1.4
-                0x0000000008179ff0       0x10 bn_sprites_manager.o
+                0x0000000008149f34       0x10 bn_sprites_manager.o
  .rodata._ZN2bn15sprites_manager21set_tiles_and_paletteEPvRKNS_17sprite_shape_sizeEONS_16sprite_tiles_ptrEONS_18sprite_palette_ptrE.str1.4
-                0x000000000817a000       0x73 bn_sprites_manager.o
- *fill*         0x000000000817a073        0x1 ff
+                0x0000000008149f44       0x73 bn_sprites_manager.o
+ *fill*         0x0000000008149fb7        0x1 ff
  .rodata._ZN2bn15sprites_manager35fill_hblank_effect_third_attributesENS_17sprite_shape_sizeEPKNS_23sprite_third_attributesEPt.str1.4
-                0x000000000817a074       0x7f bn_sprites_manager.o
- *fill*         0x000000000817a0f3        0x1 ff
+                0x0000000008149fb8       0x7f bn_sprites_manager.o
+ *fill*         0x000000000814a037        0x1 ff
  .rodata._ZN2bn14sorted_sprites6sorter6insertERNS_20sprites_manager_itemE.str1.4
-                0x000000000817a0f4       0x81 bn_sprites_manager.o
+                0x000000000814a038       0x81 bn_sprites_manager.o
                                          0x89 (size before relaxing)
- *fill*         0x000000000817a175        0x3 ff
+ *fill*         0x000000000814a0b9        0x3 ff
  .rodata._ZN2bn15sprites_manager6createERKNS_11fixed_pointERKNS_17sprite_shape_sizeEONS_16sprite_tiles_ptrEONS_18sprite_palette_ptrE.str1.4
-                0x000000000817a178       0x3b bn_sprites_manager.o
+                0x000000000814a0bc       0x3b bn_sprites_manager.o
                                          0x43 (size before relaxing)
  .rodata._ZN2bn15sprites_manager6createEONS_14sprite_builderE.str1.4
-                0x000000000817a1b3       0x61 bn_sprites_manager.o
+                0x000000000814a0f7       0x61 bn_sprites_manager.o
  .rodata._ZN2bn15sprites_manager9put_aboveEPv.str1.4
-                0x000000000817a1b3       0x3b bn_sprites_manager.o
+                0x000000000814a0f7       0x3b bn_sprites_manager.o
                                          0x6a (size before relaxing)
  .rodata._ZN2bn15sprites_manager15set_bg_priorityEPvi.str1.4
-                0x000000000817a1b3       0x41 bn_sprites_manager.o
+                0x000000000814a0f7       0x41 bn_sprites_manager.o
  .rodata._ZN2bn14sprite_builder9set_scaleENS_7fixed_tILi12EEE.str1.4
-                0x000000000817a1b3       0x78 bn_sprites_manager.o
+                0x000000000814a0f7       0x78 bn_sprites_manager.o
  .rodata._GLOBAL__sub_D__ZN2bn7sprites16used_items_countEv.str1.4
-                0x000000000817a1b3       0x72 bn_sprites_manager.o
- *fill*         0x000000000817a1b3        0x1 ff
+                0x000000000814a0f7       0x72 bn_sprites_manager.o
+ *fill*         0x000000000814a0f7        0x1 ff
  .rodata.CSWTCH.1034
-                0x000000000817a1b4       0x10 bn_sprites_manager.o
+                0x000000000814a0f8       0x10 bn_sprites_manager.o
  .rodata.CSWTCH.1035
-                0x000000000817a1c4       0x10 bn_sprites_manager.o
+                0x000000000814a108       0x10 bn_sprites_manager.o
  .rodata.CSWTCH.1036
-                0x000000000817a1d4       0x10 bn_sprites_manager.o
+                0x000000000814a118       0x10 bn_sprites_manager.o
  .rodata._ZN3_bn6assert9show_argsIJA26_ciEEEvPKcS4_S4_iDpRKT_.str1.4
-                0x000000000817a1e4       0x9d bn_sstream.o
+                0x000000000814a128       0x9d bn_sstream.o
                                          0xa1 (size before relaxing)
- *fill*         0x000000000817a281        0x3 ff
+ *fill*         0x000000000814a1c5        0x3 ff
  .rodata._ZN2bn13ostringstream6appendEi.str1.4
-                0x000000000817a284       0x3e bn_sstream.o
+                0x000000000814a1c8       0x3e bn_sstream.o
                                          0x86 (size before relaxing)
- *fill*         0x000000000817a2c2        0x2 ff
+ *fill*         0x000000000814a206        0x2 ff
  .rodata._ZN2bn13ostringstream6appendEPKv.str1.4
-                0x000000000817a2c4        0x8 bn_sstream.o
+                0x000000000814a208        0x8 bn_sstream.o
  .rodata._ZN2bn13ostringstream6appendEc.str1.4
-                0x000000000817a2cc        0xf bn_sstream.o
+                0x000000000814a210        0xf bn_sstream.o
                                          0x27 (size before relaxing)
- *fill*         0x000000000817a2db        0x1 ff
+ *fill*         0x000000000814a21f        0x1 ff
  .rodata._ZN2bn2hw5audio12_GLOBAL__N_119_add_sound_to_queueEit.str1.4
-                0x000000000817a2dc       0x56 bn_hw_audio.o
+                0x000000000814a220       0x56 bn_hw_audio.o
                                          0x71 (size before relaxing)
  .rodata._ZN2bn2hw5audio15stop_all_soundsEv.str1.4
-                0x000000000817a332       0x79 bn_hw_audio.o
- *fill*         0x000000000817a332        0x2 ff
+                0x000000000814a276       0x79 bn_hw_audio.o
+ *fill*         0x000000000814a276        0x2 ff
  .rodata._ZN2bn2hw5audio12_GLOBAL__N_119_check_sounds_queueEv.part.0.str1.4
-                0x000000000817a334        0xa bn_hw_audio.o
+                0x000000000814a278        0xa bn_hw_audio.o
                                          0x2e (size before relaxing)
- *fill*         0x000000000817a33e        0x2 ff
+ *fill*         0x000000000814a282        0x2 ff
  .rodata._ZN2bn2hw5audio6commitEv.str1.4
-                0x000000000817a340        0xc bn_hw_audio.o
+                0x000000000814a284        0xc bn_hw_audio.o
  .rodata._GLOBAL__sub_D__ZN2bn2hw5audio4initEPFvvES3_.str1.4
-                0x000000000817a34c       0x72 bn_hw_audio.o
+                0x000000000814a290       0x72 bn_hw_audio.o
  .rodata.__cxa_pure_virtual.str1.4
-                0x000000000817a34c       0x7f bn_hw_common.bn_noflto.o
+                0x000000000814a290       0x7f bn_hw_common.bn_noflto.o
                                          0x83 (size before relaxing)
- *fill*         0x000000000817a3cb        0x1 ff
+ *fill*         0x000000000814a30f        0x1 ff
  .rodata.__aeabi_idiv0.str1.4
-                0x000000000817a3cc       0x38 bn_hw_common.bn_noflto.o
+                0x000000000814a310       0x38 bn_hw_common.bn_noflto.o
  .rodata._ZN2bn2hw4link12_serial_intrEv.str1.4
-                0x000000000817a404       0x5e bn_hw_link.o
+                0x000000000814a348       0x5e bn_hw_link.o
                                          0x8a (size before relaxing)
- *fill*         0x000000000817a462        0x2 ff
+ *fill*         0x000000000814a3a6        0x2 ff
  .rodata._ZN2bn2hw4show5errorERKNS_11string_viewES4_S4_iS4_.str1.4
-                0x000000000817a464       0x33 bn_hw_show.o
+                0x000000000814a3a8       0x33 bn_hw_show.o
                                         0x15e (size before relaxing)
- *fill*         0x000000000817a497        0x1 ff
+ *fill*         0x000000000814a3db        0x1 ff
  .rodata._ZN2bn2hw4text5parseEiRNS_5arrayIcLi32EEE.str1.4
-                0x000000000817a498        0x7 bn_hw_text.o
- *fill*         0x000000000817a49f        0x1 ff
+                0x000000000814a3dc        0x7 bn_hw_text.o
+ *fill*         0x000000000814a3e3        0x1 ff
  .rodata._ZN2bn2hw4text5parseEPKvRNS_5arrayIcLi32EEE.str1.4
-                0x000000000817a4a0        0x5 bn_hw_text.o
- *fill*         0x000000000817a4a5        0x3 ff
+                0x000000000814a3e4        0x5 bn_hw_text.o
+ *fill*         0x000000000814a3e9        0x3 ff
  .rodata.oam_sizes
-                0x000000000817a4a8       0x18 tonc_core.o
-                0x000000000817a4a8                oam_sizes
+                0x000000000814a3ec       0x18 tonc_core.o
+                0x000000000814a3ec                oam_sizes
  .rodata.__irq_senders
-                0x000000000817a4c0       0x38 tonc_irq.o
+                0x000000000814a404       0x38 tonc_irq.o
  .rodata.m3_surface
-                0x000000000817a4f8       0x14 tonc_sbmp16.o
-                0x000000000817a4f8                m3_surface
- .rodata.srf.0  0x000000000817a50c       0x14 tte_main.o
+                0x000000000814a43c       0x14 tonc_sbmp16.o
+                0x000000000814a43c                m3_surface
+ .rodata.srf.0  0x000000000814a450       0x14 tte_main.o
  .rodata._ZTIN9__gnu_cxx20recursive_init_errorE
-                0x000000000817a520        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
-                0x000000000817a520                typeinfo for __gnu_cxx::recursive_init_error
+                0x000000000814a464        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
+                0x000000000814a464                typeinfo for __gnu_cxx::recursive_init_error
  .rodata._ZTSN9__gnu_cxx20recursive_init_errorE
-                0x000000000817a52c       0x23 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
-                0x000000000817a52c                typeinfo name for __gnu_cxx::recursive_init_error
- *fill*         0x000000000817a54f        0x1 ff
+                0x000000000814a470       0x23 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
+                0x000000000814a470                typeinfo name for __gnu_cxx::recursive_init_error
+ *fill*         0x000000000814a493        0x1 ff
  .rodata._ZTVN9__gnu_cxx20recursive_init_errorE
-                0x000000000817a550       0x14 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
-                0x000000000817a550                vtable for __gnu_cxx::recursive_init_error
+                0x000000000814a494       0x14 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
+                0x000000000814a494                vtable for __gnu_cxx::recursive_init_error
  .rodata._ZTIN10__cxxabiv120__si_class_type_infoE
-                0x000000000817a564        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
-                0x000000000817a564                typeinfo for __cxxabiv1::__si_class_type_info
+                0x000000000814a4a8        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a4a8                typeinfo for __cxxabiv1::__si_class_type_info
  .rodata._ZTSN10__cxxabiv120__si_class_type_infoE
-                0x000000000817a570       0x25 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
-                0x000000000817a570                typeinfo name for __cxxabiv1::__si_class_type_info
- *fill*         0x000000000817a595        0x3 ff
+                0x000000000814a4b4       0x25 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a4b4                typeinfo name for __cxxabiv1::__si_class_type_info
+ *fill*         0x000000000814a4d9        0x3 ff
  .rodata._ZTVN10__cxxabiv120__si_class_type_infoE
-                0x000000000817a598       0x2c /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
-                0x000000000817a598                vtable for __cxxabiv1::__si_class_type_info
+                0x000000000814a4dc       0x2c /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a4dc                vtable for __cxxabiv1::__si_class_type_info
  .rodata._ZTISt9type_info
-                0x000000000817a5c4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
-                0x000000000817a5c4                typeinfo for std::type_info
+                0x000000000814a508        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
+                0x000000000814a508                typeinfo for std::type_info
  .rodata._ZTSSt9type_info
-                0x000000000817a5cc        0xd /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
-                0x000000000817a5cc                typeinfo name for std::type_info
- *fill*         0x000000000817a5d9        0x3 ff
+                0x000000000814a510        0xd /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
+                0x000000000814a510                typeinfo name for std::type_info
+ *fill*         0x000000000814a51d        0x3 ff
  .rodata._ZTIN10__cxxabiv117__class_type_infoE
-                0x000000000817a5dc        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
-                0x000000000817a5dc                typeinfo for __cxxabiv1::__class_type_info
+                0x000000000814a520        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a520                typeinfo for __cxxabiv1::__class_type_info
  .rodata._ZTSN10__cxxabiv117__class_type_infoE
-                0x000000000817a5e8       0x22 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
-                0x000000000817a5e8                typeinfo name for __cxxabiv1::__class_type_info
- *fill*         0x000000000817a60a        0x2 ff
+                0x000000000814a52c       0x22 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a52c                typeinfo name for __cxxabiv1::__class_type_info
+ *fill*         0x000000000814a54e        0x2 ff
  .rodata._ZTVN10__cxxabiv117__class_type_infoE
-                0x000000000817a60c       0x2c /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
-                0x000000000817a60c                vtable for __cxxabiv1::__class_type_info
+                0x000000000814a550       0x2c /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a550                vtable for __cxxabiv1::__class_type_info
  .rodata._ZNKSt9exception4whatEv.str1.4
-                0x000000000817a638        0xf /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
- *fill*         0x000000000817a647        0x1 ff
+                0x000000000814a57c        0xf /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+ *fill*         0x000000000814a58b        0x1 ff
  .rodata._ZNKSt13bad_exception4whatEv.str1.4
-                0x000000000817a648       0x13 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
- *fill*         0x000000000817a65b        0x1 ff
+                0x000000000814a58c       0x13 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+ *fill*         0x000000000814a59f        0x1 ff
  .rodata._ZTIN10__cxxabiv115__forced_unwindE
-                0x000000000817a65c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a65c                typeinfo for __cxxabiv1::__forced_unwind
+                0x000000000814a5a0        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a5a0                typeinfo for __cxxabiv1::__forced_unwind
  .rodata._ZTIN10__cxxabiv119__foreign_exceptionE
-                0x000000000817a664        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a664                typeinfo for __cxxabiv1::__foreign_exception
+                0x000000000814a5a8        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a5a8                typeinfo for __cxxabiv1::__foreign_exception
  .rodata._ZTISt13bad_exception
-                0x000000000817a66c        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a66c                typeinfo for std::bad_exception
+                0x000000000814a5b0        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a5b0                typeinfo for std::bad_exception
  .rodata._ZTISt9exception
-                0x000000000817a678        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a678                typeinfo for std::exception
+                0x000000000814a5bc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a5bc                typeinfo for std::exception
  .rodata._ZTSN10__cxxabiv115__forced_unwindE
-                0x000000000817a680       0x20 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a680                typeinfo name for __cxxabiv1::__forced_unwind
+                0x000000000814a5c4       0x20 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a5c4                typeinfo name for __cxxabiv1::__forced_unwind
  .rodata._ZTSN10__cxxabiv119__foreign_exceptionE
-                0x000000000817a6a0       0x24 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a6a0                typeinfo name for __cxxabiv1::__foreign_exception
+                0x000000000814a5e4       0x24 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a5e4                typeinfo name for __cxxabiv1::__foreign_exception
  .rodata._ZTSSt13bad_exception
-                0x000000000817a6c4       0x12 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a6c4                typeinfo name for std::bad_exception
- *fill*         0x000000000817a6d6        0x2 ff
+                0x000000000814a608       0x12 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a608                typeinfo name for std::bad_exception
+ *fill*         0x000000000814a61a        0x2 ff
  .rodata._ZTSSt9exception
-                0x000000000817a6d8        0xd /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a6d8                typeinfo name for std::exception
- *fill*         0x000000000817a6e5        0x3 ff
+                0x000000000814a61c        0xd /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a61c                typeinfo name for std::exception
+ *fill*         0x000000000814a629        0x3 ff
  .rodata._ZTVSt13bad_exception
-                0x000000000817a6e8       0x14 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
-                0x000000000817a6e8                vtable for std::bad_exception
+                0x000000000814a62c       0x14 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a62c                vtable for std::bad_exception
  .rodata._ZL28read_encoded_value_with_basehjPKhPj
-                0x000000000817a6fc       0x34 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
+                0x000000000814a640       0x34 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
  .rodata._global_impure_ptr
-                0x000000000817a730        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-impure.o)
-                0x000000000817a730                _global_impure_ptr
+                0x000000000814a674        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-impure.o)
+                0x000000000814a674                _global_impure_ptr
  *(.gnu.linkonce.r*)
-                0x000000000817a734                . = ALIGN (0x4)
+                0x000000000814a678                . = ALIGN (0x4)
 
-.ARM.extab      0x000000000817a734       0xc4
+.ARM.extab      0x000000000814a678       0xc4
  *(.ARM.extab* .gnu.linkonce.armextab.*)
  .ARM.extab.text._ZNK10__cxxabiv120__si_class_type_info12__do_dyncastEiNS_17__class_type_info10__sub_kindEPKS1_PKvS4_S6_RNS1_16__dyncast_resultE
-                0x000000000817a734        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a678        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
  .ARM.extab.text._ZN10__cxxabiv111__terminateEPFvvE
-                0x000000000817a740       0x18 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
+                0x000000000814a684       0x18 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
  .ARM.extab.text.__cxa_begin_catch
-                0x000000000817a758        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_catch.o)
+                0x000000000814a69c        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_catch.o)
  .ARM.extab.text._ZL28read_encoded_value_with_basehjPKhPj
-                0x000000000817a764        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
+                0x000000000814a6a8        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
  .ARM.extab.text.__gxx_personality_v0
-                0x000000000817a770       0x24 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
+                0x000000000814a6b4       0x24 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
  .ARM.extab.text.__cxa_type_match
-                0x000000000817a794        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
+                0x000000000814a6d8        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
  .ARM.extab.text.unlikely.__cxa_call_unexpected
-                0x000000000817a7a0       0x28 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
+                0x000000000814a6e4       0x28 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
  .ARM.extab.text.unwind_phase2_forced
-                0x000000000817a7c8        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a70c        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.extab.text.__gnu_unwind_pr_common
-                0x000000000817a7d4        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a718        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.extab.text._Unwind_VRS_Pop
-                0x000000000817a7e0        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a724        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.extab.text.__gnu_unwind_execute
-                0x000000000817a7ec        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
-                0x000000000817a7f8                __exidx_start = .
+                0x000000000814a730        0xc /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a73c                __exidx_start = .
 
-.ARM.exidx      0x000000000817a7f8      0x1a8
+.ARM.exidx      0x000000000814a73c      0x1a8
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
  .ARM.exidx.text.__cxa_guard_acquire
-                0x000000000817a7f8        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard.o)
+                0x000000000814a73c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard.o)
  .ARM.exidx.text.__cxa_guard_release
-                0x000000000817a800        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard.o)
+                0x000000000814a744        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard.o)
  .ARM.exidx.text._ZN9__gnu_cxx20recursive_init_errorD2Ev
-                0x000000000817a808        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
+                0x000000000814a74c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZN9__gnu_cxx20recursive_init_errorD0Ev
-                0x000000000817a808        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
+                0x000000000814a74c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZN9__gnu_cxx20recursive_init_errorC2Ev
-                0x000000000817a808        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
+                0x000000000814a74c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(guard_error.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZN10__cxxabiv120__si_class_type_infoD2Ev
-                0x000000000817a808        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a74c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZN10__cxxabiv120__si_class_type_infoD0Ev
-                0x000000000817a808        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a74c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNK10__cxxabiv120__si_class_type_info20__do_find_public_srcEiPKvPKNS_17__class_type_infoES2_
-                0x000000000817a808        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a74c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
  .ARM.exidx.text._ZNK10__cxxabiv120__si_class_type_info12__do_dyncastEiNS_17__class_type_info10__sub_kindEPKS1_PKvS4_S6_RNS1_16__dyncast_resultE
-                0x000000000817a810        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a754        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
  .ARM.exidx.text._ZNK10__cxxabiv120__si_class_type_info11__do_upcastEPKNS_17__class_type_infoEPKvRNS1_15__upcast_resultE
-                0x000000000817a818        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
+                0x000000000814a75c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(si_class_type_info.o)
  .ARM.exidx.text._ZNSt9type_infoD2Ev
-                0x000000000817a820        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
+                0x000000000814a764        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
  .ARM.exidx.text._ZNKSt9type_info14__is_pointer_pEv
-                0x000000000817a828        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
+                0x000000000814a76c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNKSt9type_infoeqERKS_
-                0x000000000817a828        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
+                0x000000000814a76c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(tinfo.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNK10__cxxabiv117__class_type_info11__do_upcastEPKS0_PPv
-                0x000000000817a828        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a76c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
  .ARM.exidx.text._ZNK10__cxxabiv117__class_type_info20__do_find_public_srcEiPKvPKS0_S2_
-                0x000000000817a830        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a774        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
  .ARM.exidx.text._ZN10__cxxabiv117__class_type_infoD2Ev
-                0x000000000817a838        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a77c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZN10__cxxabiv117__class_type_infoD0Ev
-                0x000000000817a838        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a77c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNK10__cxxabiv117__class_type_info12__do_dyncastEiNS0_10__sub_kindEPKS0_PKvS3_S5_RNS0_16__dyncast_resultE
-                0x000000000817a838        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a77c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNK10__cxxabiv117__class_type_info11__do_upcastEPKS0_PKvRNS0_15__upcast_resultE
-                0x000000000817a838        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a77c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNK10__cxxabiv117__class_type_info10__do_catchEPKSt9type_infoPPvj
-                0x000000000817a838        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
+                0x000000000814a77c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(class_type_info.o)
  .ARM.exidx.text._ZN12_GLOBAL__N_14pool4freeEPv.constprop.0
-                0x000000000817a840        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
+                0x000000000814a784        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
  .ARM.exidx.text._ZN12_GLOBAL__N_14pool8allocateEj.constprop.0
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.__cxa_allocate_exception
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.__cxa_free_exception
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.startup._GLOBAL__sub_I__ZN9__gnu_cxx9__freeresEv
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNSt9exceptionD2Ev
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNSt13bad_exceptionD2Ev
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNKSt9exception4whatEv
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNKSt13bad_exception4whatEv
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZNSt13bad_exceptionD0Ev
-                0x000000000817a848        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
+                0x000000000814a78c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_exception.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZN10__cxxabiv111__terminateEPFvvE
-                0x000000000817a848        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
+                0x000000000814a78c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
  .ARM.exidx.text._ZSt9terminatev
-                0x000000000817a850        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
+                0x000000000814a794        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
  .ARM.exidx.text._ZN10__cxxabiv112__unexpectedEPFvvE
-                0x000000000817a858        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
+                0x000000000814a79c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
  .ARM.exidx.text._ZSt10unexpectedv
-                0x000000000817a860        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
+                0x000000000814a7a4        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZSt13get_terminatev
-                0x000000000817a860        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
+                0x000000000814a7a4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
  .ARM.exidx.text._ZSt14get_unexpectedv
-                0x000000000817a868        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
+                0x000000000814a7ac        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_terminate.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZL23__gxx_exception_cleanup19_Unwind_Reason_CodeP21_Unwind_Control_Block
-                0x000000000817a868        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
+                0x000000000814a7ac        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
  .ARM.exidx.text.__cxa_init_primary_exception
-                0x000000000817a870        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
+                0x000000000814a7b4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
  .ARM.exidx.text.__cxa_throw
-                0x000000000817a878        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
+                0x000000000814a7bc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
  .ARM.exidx.text.__cxa_rethrow
-                0x000000000817a880        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
+                0x000000000814a7c4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_throw.o)
  .ARM.exidx.text.__cxa_begin_catch
-                0x000000000817a888        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_catch.o)
+                0x000000000814a7cc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_catch.o)
  .ARM.exidx.text.__cxa_end_catch
-                0x000000000817a890        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_catch.o)
+                0x000000000814a7d4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_catch.o)
  .ARM.exidx.text.__cxa_get_globals_fast
-                0x000000000817a898        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_globals.o)
+                0x000000000814a7dc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_globals.o)
  .ARM.exidx.text.__cxa_get_globals
-                0x000000000817a8a0        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_globals.o)
+                0x000000000814a7e4        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_globals.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZL28read_encoded_value_with_basehjPKhPj
-                0x000000000817a8a0        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
+                0x000000000814a7e4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
  .ARM.exidx.text._ZL21base_of_encoded_valuehP15_Unwind_Context
-                0x000000000817a8a8        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
+                0x000000000814a7ec        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
  .ARM.exidx.text._ZL17parse_lsda_headerP15_Unwind_ContextPKhP16lsda_header_info
-                0x000000000817a8b0        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
+                0x000000000814a7f4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
  .ARM.exidx.text.__gxx_personality_v0
-                0x000000000817a8b8       0x10 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
+                0x000000000814a7fc       0x10 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_personality.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.__cxa_type_match
-                0x000000000817a8c8        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
+                0x000000000814a80c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
  .ARM.exidx.text.__cxa_begin_cleanup
-                0x000000000817a8d0        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
+                0x000000000814a814        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
  .ARM.exidx.text.__gnu_end_cleanup
-                0x000000000817a8d8        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
+                0x000000000814a81c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._ZN10__cxxabiv1L24__is_gxx_exception_classEPc
-                0x000000000817a8d8        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
+                0x000000000814a81c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.__cxa_call_terminate
-                0x000000000817a8d8        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
+                0x000000000814a81c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.unlikely.__cxa_call_unexpected
-                0x000000000817a8d8       0x10 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
+                0x000000000814a81c       0x10 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_call.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.selfrel_offset31
-                0x000000000817a8e8        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a82c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.search_EIT_table
-                0x000000000817a8e8        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a82c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.__gnu_unwind_get_pr_addr
-                0x000000000817a8e8        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a82c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.get_eit_entry
-                0x000000000817a8e8        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a82c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.restore_non_core_regs
-                0x000000000817a8f0        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a834        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text._Unwind_decode_typeinfo_ptr.constprop.0
-                0x000000000817a8f8        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a83c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text._Unwind_DebugHook
-                0x000000000817a900        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a844        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.unwind_phase2
-                0x000000000817a900        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a844        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.unwind_phase2_forced
-                0x000000000817a908        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a84c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.__gnu_Unwind_RaiseException
-                0x000000000817a910        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a854        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.__gnu_Unwind_ForcedUnwind
-                0x000000000817a918        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a85c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.__gnu_Unwind_Resume
-                0x000000000817a920        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a864        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.__gnu_Unwind_Resume_or_Rethrow
-                0x000000000817a928        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a86c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text._Unwind_Complete
-                0x000000000817a930        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a874        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text._Unwind_DeleteException
-                0x000000000817a938        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a87c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text._Unwind_VRS_Get
-                0x000000000817a940        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a884        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text._Unwind_GetGR
-                0x000000000817a948        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a88c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._Unwind_VRS_Set
-                0x000000000817a948        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a88c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._Unwind_SetGR
-                0x000000000817a948        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a88c        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.__gnu_Unwind_Backtrace
-                0x000000000817a948        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a88c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.__gnu_unwind_pr_common
-                0x000000000817a950        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a894        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.__aeabi_unwind_cpp_pr0
-                0x000000000817a958        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a89c        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
  .ARM.exidx.text.__aeabi_unwind_cpp_pr1
-                0x000000000817a960        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a8a4        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.__aeabi_unwind_cpp_pr2
-                0x000000000817a960        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a8a4        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._Unwind_VRS_Pop
-                0x000000000817a960       0x10 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
+                0x000000000814a8a4       0x10 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(unwind-arm.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.next_unwind_byte
-                0x000000000817a970        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8b4        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text._Unwind_GetGR.constprop.0
-                0x000000000817a970        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8b4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
  .ARM.exidx.text.unwind_UCB_from_context
-                0x000000000817a978        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8bc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
  .ARM.exidx.text.__gnu_unwind_execute
-                0x000000000817a980        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8c4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
  .ARM.exidx.text.__gnu_unwind_frame
-                0x000000000817a988        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8cc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
  .ARM.exidx.text._Unwind_GetRegionStart
-                0x000000000817a990        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8d4        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
  .ARM.exidx.text._Unwind_GetLanguageSpecificData
-                0x000000000817a998        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8dc        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
                                           0x8 (size before relaxing)
  .ARM.exidx.text.unlikely._Unwind_GetDataRelBase
-                0x000000000817a998        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8dc        0x8 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
  .ARM.exidx.text.unlikely._Unwind_GetTextRelBase
-                0x000000000817a9a0        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
+                0x000000000814a8e4        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/libgcc.a(pr-support.o)
                                           0x8 (size before relaxing)
-                0x000000000817a9a0                __exidx_end = .
+                0x000000000814a8e4                __exidx_end = .
 
-.ctors          0x000000000817a9a0        0x0
+.ctors          0x000000000814a8e4        0x0
  *crtbegin.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o) .ctors)
  *(SORT_BY_NAME(.ctors.*))
  *(.ctors)
-                0x000000000817a9a0                . = ALIGN (0x4)
+                0x000000000814a8e4                . = ALIGN (0x4)
 
-.dtors          0x000000000817a9a0        0x0
+.dtors          0x000000000814a8e4        0x0
  *crtbegin.o(.dtors)
  *(EXCLUDE_FILE(*crtend.o) .dtors)
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
-                0x000000000817a9a0                . = ALIGN (0x4)
+                0x000000000814a8e4                . = ALIGN (0x4)
 
-.eh_frame       0x000000000817a9a0        0x4
+.eh_frame       0x000000000814a8e4        0x4
  *(.eh_frame)
- .eh_frame      0x000000000817a9a0        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/crtbegin.o
- .eh_frame      0x000000000817a9a0        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/crtend.o
-                0x000000000817a9a4                . = ALIGN (0x4)
+ .eh_frame      0x000000000814a8e4        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/crtbegin.o
+ .eh_frame      0x000000000814a8e4        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/thumb/crtend.o
+                0x000000000814a8e8                . = ALIGN (0x4)
 
 .gcc_except_table
-                0x000000000817a9a4        0x0
+                0x000000000814a8e8        0x0
  *(.gcc_except_table)
-                0x000000000817a9a4                . = ALIGN (0x4)
-                0x000000000817a9a4                __iwram_lma = .
+                0x000000000814a8e8                . = ALIGN (0x4)
+                0x000000000814a8e8                __iwram_lma = .
 
-.iwram          0x0000000003000000     0x1d28 load address 0x000000000817a9a4
+.iwram          0x0000000003000000     0x1d28 load address 0x000000000814a8e8
                 0x0000000003000000                __iwram_start__ = ABSOLUTE (.)
  *(.iwram .iwram*)
  .iwram         0x0000000003000000       0xb4 bn_sprites_manager_assert.bn_iwram.o
@@ -8729,9 +8729,9 @@ Linker script and memory map
  *iwram.*(.text* .data*)
                 0x0000000003001d20                . = ALIGN (0x4)
                 0x0000000003001d28                __iwram_end__ = ABSOLUTE (.)
-                0x000000000817c6cc                __data_lma = (__iwram_lma + SIZEOF (.iwram))
+                0x000000000814c610                __data_lma = (__iwram_lma + SIZEOF (.iwram))
 
-.rel.dyn        0x0000000003001d28        0x0 load address 0x000000000817c6cc
+.rel.dyn        0x0000000003001d28        0x0 load address 0x000000000814c610
  .rel.iplt      0x0000000003001d28        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
 
 .bss            0x0000000003001d28     0x1c64
@@ -8840,7 +8840,7 @@ Linker script and memory map
                 0x000000000300398c                . = ALIGN (0x4)
                 0x000000000300398c                __bss_end__ = ABSOLUTE (.)
 
-.data           0x000000000300398c      0x47c load address 0x000000000817c6cc
+.data           0x000000000300398c      0x47c load address 0x000000000814c610
                 0x000000000300398c                __data_start__ = ABSOLUTE (.)
  *(.data*)
  .data._ZN10__cxxabiv120__unexpected_handlerE
@@ -8860,18 +8860,18 @@ Linker script and memory map
                 0x00000000030039a8      0x460 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libg.a(lib_a-impure.o)
  *(.gnu.linkonce.d*)
                 0x0000000003003e08                . = ALIGN (0x4)
-                0x000000000817cb48                __preinit_lma = (__data_lma + SIZEOF (.data))
+                0x000000000814ca8c                __preinit_lma = (__data_lma + SIZEOF (.data))
 
-.igot.plt       0x0000000003003e08        0x0 load address 0x000000000817cb48
+.igot.plt       0x0000000003003e08        0x0 load address 0x000000000814ca8c
  .igot.plt      0x0000000003003e08        0x0 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/gba_crt0.o
 
-.preinit_array  0x0000000003003e08        0x0 load address 0x000000000817cb48
+.preinit_array  0x0000000003003e08        0x0 load address 0x000000000814ca8c
                 0x0000000003003e08                __preinit_array_start = ABSOLUTE (.)
  *(.preinit_array)
                 0x0000000003003e08                __preinit_array_end = ABSOLUTE (.)
-                0x000000000817cb48                __init_lma = (__preinit_lma + SIZEOF (.preinit_array))
+                0x000000000814ca8c                __init_lma = (__preinit_lma + SIZEOF (.preinit_array))
 
-.init_array     0x0000000003003e08       0x48 load address 0x000000000817cb48
+.init_array     0x0000000003003e08       0x48 load address 0x000000000814ca8c
                 0x0000000003003e08                __init_array_start = ABSOLUTE (.)
  *(SORT_BY_NAME(.init_array.*))
  *(.init_array)
@@ -8894,9 +8894,9 @@ Linker script and memory map
  .init_array    0x0000000003003e48        0x4 bn_hw_audio.o
  .init_array    0x0000000003003e4c        0x4 /opt/devkitpro/devkitARM/bin/../lib/gcc/arm-none-eabi/11.1.0/../../../../arm-none-eabi/lib/thumb/libstdc++.a(eh_alloc.o)
                 0x0000000003003e50                __init_array_end = ABSOLUTE (.)
-                0x000000000817cb90                __fini_lma = (__init_lma + SIZEOF (.init_array))
+                0x000000000814cad4                __fini_lma = (__init_lma + SIZEOF (.init_array))
 
-.fini_array     0x0000000003003e50       0x28 load address 0x000000000817cb90
+.fini_array     0x0000000003003e50       0x28 load address 0x000000000814cad4
                 0x0000000003003e50                __fini_array_start = ABSOLUTE (.)
  *(SORT_BY_NAME(.fini_array.*))
  *(.fini_array)
@@ -8911,19 +8911,19 @@ Linker script and memory map
  .fini_array    0x0000000003003e70        0x4 bn_sprites_manager.o
  .fini_array    0x0000000003003e74        0x4 bn_hw_audio.o
                 0x0000000003003e78                __fini_array_end = ABSOLUTE (.)
-                0x000000000817cbb8                __jcr_lma = (__fini_lma + SIZEOF (.fini_array))
+                0x000000000814cafc                __jcr_lma = (__fini_lma + SIZEOF (.fini_array))
 
-.jcr            0x0000000003003e78        0x0 load address 0x000000000817cbb8
+.jcr            0x0000000003003e78        0x0 load address 0x000000000814cafc
  *(.jcr)
                 0x0000000003003e78                __data_end__ = ABSOLUTE (.)
-                0x000000000817cbb8                __iwram_overlay_lma = (__jcr_lma + SIZEOF (.jcr))
+                0x000000000814cafc                __iwram_overlay_lma = (__jcr_lma + SIZEOF (.jcr))
                 0x0000000003003e78                __iwram_overlay_start = .
 
-.iwram0         0x0000000003003e78        0x0 load address 0x000000000817cbb8
+.iwram0         0x0000000003003e78        0x0 load address 0x000000000814cafc
  *(.iwram0)
                 0x0000000003003e78                . = ALIGN (0x4)
-                0x000000000817cbb8                PROVIDE (__load_start_iwram0 = LOADADDR (.iwram0))
-                0x000000000817cbb8                PROVIDE (__load_stop_iwram0 = (LOADADDR (.iwram0) + SIZEOF (.iwram0)))
+                0x000000000814cafc                PROVIDE (__load_start_iwram0 = LOADADDR (.iwram0))
+                0x000000000814cafc                PROVIDE (__load_stop_iwram0 = (LOADADDR (.iwram0) + SIZEOF (.iwram0)))
 
 .iwram1         0x0000000003003e78        0x0
  *(.iwram1)
@@ -8979,11 +8979,11 @@ Linker script and memory map
                 [!provide]                        PROVIDE (__load_start_iwram9 = LOADADDR (.iwram9))
                 [!provide]                        PROVIDE (__load_stop_iwram9 = (LOADADDR (.iwram9) + SIZEOF (.iwram9)))
                 0x0000000003003e78                __iwram_overlay_end = .
-                0x000000000817cbb8                __ewram_lma = (__iwram_overlay_lma + (__iwram_overlay_end - __iwram_overlay_start))
+                0x000000000814cafc                __ewram_lma = (__iwram_overlay_lma + (__iwram_overlay_end - __iwram_overlay_start))
                 0x0000000003003e78                __iheap_start = .
                 0x0000000002000000                __ewram_start = ORIGIN (ewram)
 
-.ewram          0x0000000002000000     0x80dc load address 0x000000000817cbb8
+.ewram          0x0000000002000000     0x80dc load address 0x000000000814cafc
  *(.ewram*)
  .ewram         0x0000000002000000       0xa8 bn_audio_manager.o
  .ewram         0x00000000020000a8      0x2f8 bn_bg_blocks_manager.o
@@ -9012,7 +9012,7 @@ Linker script and memory map
                 0x00000000020080d8                gp_tte_context
                 0x00000000020080dc                . = ALIGN (0x4)
                 0x00000000020080dc                __ewram_end = ABSOLUTE (.)
-                0x0000000008184c94                __pad_lma = (__ewram_lma + SIZEOF (.ewram))
+                0x0000000008154bd8                __pad_lma = (__ewram_lma + SIZEOF (.ewram))
 
 .sbss           0x00000000020080dc        0x0
                 0x00000000020080dc                __sbss_start__ = ABSOLUTE (.)
@@ -9022,11 +9022,11 @@ Linker script and memory map
                 0x00000000020080dc                __end__ = ABSOLUTE (.)
                 0x00000000020080dc                __eheap_start = ABSOLUTE (.)
 
-.pad            0x00000000020080dc        0x8 load address 0x0000000008184c94
+.pad            0x00000000020080dc        0x8 load address 0x0000000008154bd8
                 0x00000000020080dc        0x4 LONG 0x52416b64
                 0x00000000020080e0        0x4 LONG 0x4d
                 0x00000000020080e4                . = ALIGN (0x4)
-                0x0000000008184c9c                __rom_end__ = (__pad_lma + SIZEOF (.pad))
+                0x0000000008154be0                __rom_end__ = (__pad_lma + SIZEOF (.pad))
 
 .stab
  *(.stab)
