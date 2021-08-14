@@ -69,6 +69,8 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_tiles_item.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_variable_8x16_font_yellow.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sound_items.h \
+ /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sound_item.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_music_items_info.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_music_item.h \
@@ -85,7 +87,9 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scenes.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0101.h \
- /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0103.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0104.h
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -156,6 +160,8 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_tiles_item.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_variable_8x16_font_yellow.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sound_items.h:
+/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sound_item.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_music_items_info.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_music_item.h:
@@ -173,3 +179,5 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scenes.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0101.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0103.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0104.h:

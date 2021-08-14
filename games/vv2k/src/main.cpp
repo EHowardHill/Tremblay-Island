@@ -22,6 +22,7 @@
 #include "bn_regular_bg_items_ocean.h"
 #include "bn_sprite_items_variable_8x16_font_yellow.h"
 
+#include "bn_sound_items.h"
 #include "bn_music_items_info.h"
 
 #include "common_info.h"
@@ -47,6 +48,7 @@ namespace
     const int TEXT_X = -108;
     const int TEXT_Y = 24;
     const int TEXT_MAX_CHARS = 33;
+    const int WAITFOR = 100000;
     
     static bn::vector<bn::sprite_ptr, 32> text_sprite01;
     static bn::vector<bn::sprite_ptr, 32> text_sprite02;
@@ -62,6 +64,8 @@ namespace
     static bn::sprite_text_generator text_line06(common::variable_8x16_sprite_font);
 
     void second_draw(const char* txt) {
+        bn::sound_items::pop.play(0.5);
+
         char line1[33], line2[33], line3[33], line4[33], line5[33], line6[33];
         strncpy(line1, txt + (33 * 0), 33);
         strncpy(line2, txt + (33 * 1), 33);
@@ -72,14 +76,41 @@ namespace
 
         text_sprite01.clear();
         text_line01.generate(-108, 22, line1, text_sprite01);
+        int x = 0;
+
+        for (int t = 0; t < WAITFOR; t += 1) {
+            x += 1;
+        }
+        x = 0;
+
         text_sprite02.clear();
         text_line02.generate(-108, 32, line2, text_sprite02);
+
+        for (int t = 0; t < WAITFOR; t += 1) {
+            
+        }
+
         text_sprite03.clear();
         text_line03.generate(-108, 42, line3, text_sprite03);
+
+        for (int t = 0; t < WAITFOR; t += 1) {
+            
+        }
+
         text_sprite04.clear();
         text_line04.generate(-108, 52, line4, text_sprite04);
+
+        for (int t = 0; t < WAITFOR; t += 1) {
+            
+        }
+
         text_sprite05.clear();
         text_line05.generate(-108, 62, line5, text_sprite05);
+
+        for (int t = 0; t < WAITFOR; t += 1) {
+            
+        }
+
         text_sprite06.clear();
         text_line06.generate(-108, 72, line6, text_sprite06);
     }
@@ -109,6 +140,10 @@ namespace
                 primary_bg.set_item(bn::regular_bg_items::s0101);
             } else if (strcmp(scenes::n1[pos].text, "S01:02") == 0) {
                 primary_bg.set_item(bn::regular_bg_items::s0102);
+            } else if (strcmp(scenes::n1[pos].text, "S01:03") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0103);
+            } else if (strcmp(scenes::n1[pos].text, "S01:04") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0104);
             // Handle sprite/dialogue
             } else {
 
@@ -155,7 +190,7 @@ int main()
     bn::core::init();
     
     int music_item_index = 0;
-    int music_volume = 100;
+    int music_volume = 15;
     bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
 
     while(true)
