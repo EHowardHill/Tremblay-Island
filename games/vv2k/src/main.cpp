@@ -155,7 +155,7 @@ int main()
     bn::core::init();
     
     int music_item_index = 0;
-    int music_volume = 5;
+    int music_volume = 100;
     bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
 
     while(true)
