@@ -58,6 +58,7 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_transparency_attributes_hbe_ptr.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_item.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_bg_palette_item.h \
@@ -82,7 +83,9 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_sprite_text.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h \
- /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scenes.h
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scenes.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0101.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -142,6 +145,7 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_transparency_attributes_hbe_ptr.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_item.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_bg_palette_item.h:
@@ -167,3 +171,5 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scenes.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0101.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h:

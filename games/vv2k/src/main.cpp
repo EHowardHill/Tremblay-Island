@@ -16,6 +16,8 @@
 #include "bn_blending_transparency_attributes_hbe_ptr.h"
 
 #include "bn_sprite_items_enoki.h"
+#include "bn_sprite_items_a_button.h"
+
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
 #include "bn_sprite_items_variable_8x16_font_yellow.h"
@@ -69,21 +71,23 @@ namespace
         strncpy(line6, txt + (33 * 5), 33);
 
         text_sprite01.clear();
-        text_line01.generate(-108, 24, line1, text_sprite01);
+        text_line01.generate(-108, 22, line1, text_sprite01);
         text_sprite02.clear();
         text_line02.generate(-108, 32, line2, text_sprite02);
         text_sprite03.clear();
-        text_line03.generate(-108, 40, line3, text_sprite03);
+        text_line03.generate(-108, 42, line3, text_sprite03);
         text_sprite04.clear();
-        text_line04.generate(-108, 48, line4, text_sprite04);
+        text_line04.generate(-108, 52, line4, text_sprite04);
         text_sprite05.clear();
-        text_line05.generate(-108, 56, line5, text_sprite05);
+        text_line05.generate(-108, 62, line5, text_sprite05);
         text_sprite06.clear();
-        text_line06.generate(-108, 62, line6, text_sprite06);
+        text_line06.generate(-108, 72, line6, text_sprite06);
     }
 
     void dialogue_page()
     {   
+        static bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
+
         //bn::regular_bg_ptr castle_bg = bn::regular_bg_items::castle.create_bg(0, 0);
         static bn::sprite_ptr chari_l = bn::sprite_items::enoki.create_sprite(-90, -25);
         static bn::sprite_ptr chari_r = bn::sprite_items::enoki.create_sprite(90, -25);
@@ -101,7 +105,10 @@ namespace
                 primary_bg.set_item(bn::regular_bg_items::ocean);
             } else if (strcmp(scenes::n1[pos].text, "BG: Forest") == 0) {
                 primary_bg.set_item(bn::regular_bg_items::mountain);
-
+            } else if (strcmp(scenes::n1[pos].text, "S01:01") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0101);
+            } else if (strcmp(scenes::n1[pos].text, "S01:02") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0102);
             // Handle sprite/dialogue
             } else {
 
@@ -148,7 +155,7 @@ int main()
     bn::core::init();
     
     int music_item_index = 0;
-    int music_volume = 0;
+    int music_volume = 5;
     bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
 
     while(true)

@@ -5,11 +5,11 @@
 
 namespace bn::sound_items
 {
-    constexpr inline sound_item heymaple(17);
-    constexpr inline sound_item shortclip(18);
-    constexpr inline sound_item ui_sfx01(19);
-    constexpr inline sound_item ui_sfx02(20);
-    constexpr inline sound_item ui_sfx03(21);
+    constexpr inline sound_item heymaple(3);
+    constexpr inline sound_item shortclip(4);
+    constexpr inline sound_item ui_sfx01(5);
+    constexpr inline sound_item ui_sfx02(6);
+    constexpr inline sound_item ui_sfx03(7);
 }
 
 #endif
