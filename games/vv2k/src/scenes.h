@@ -10,7 +10,7 @@
 
                         ///////////////////////////////// //////////////////////////////// //////////////////////////////// //////////////////////////////// //////////////////////////////// //////////////////////////////// 
 namespace scenes {
-    const Concepts::line n1[19] = {
+    const Concepts::line n1[20] = {
         {true, true, 0, "BG: 0"},
         {true, true, 0, "S01:01"},
         {true, true, 0, ""},
@@ -26,6 +26,7 @@ namespace scenes {
         {true, true, 0, "S01:06"},
         {true, true, 0, "                                                                  .....Oh."},
         {true, true, 0, "                                                                  I.. can't decide if I'm relieved or disappointed."},
+        {true, true, 0, "BG: fadeout"},
         {true, true, 0, "S01:07"},
         {true, true, 0, "*Knock*                          *knock*                          *knock*"},
         {true, true, 0, "S01:08"},

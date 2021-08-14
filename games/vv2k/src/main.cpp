@@ -138,7 +138,7 @@ namespace
                 bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
 
             } else if (strcmp(scenes::n1[pos].text, "BG: fadeout") == 0) {
-                bn::music::stop;
+                bn::music::set_volume(0);
 
             // Set backgrounds
             } else if (strcmp(scenes::n1[pos].text, "BG: Ocean") == 0) {
