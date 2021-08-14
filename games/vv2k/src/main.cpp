@@ -131,8 +131,17 @@ namespace
         int pos = 0;
         while(true) {
 
+            // Set music
+            if (strcmp(scenes::n1[pos].text, "BG: 0") == 0) {
+                int music_item_index = 0;
+                int music_volume = 15;
+                bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
+
+            } else if (strcmp(scenes::n1[pos].text, "BG: fadeout") == 0) {
+                bn::music::stop;
+
             // Set backgrounds
-            if (strcmp(scenes::n1[pos].text, "BG: Ocean") == 0) {
+            } else if (strcmp(scenes::n1[pos].text, "BG: Ocean") == 0) {
                 primary_bg.set_item(bn::regular_bg_items::ocean);
             } else if (strcmp(scenes::n1[pos].text, "BG: Forest") == 0) {
                 primary_bg.set_item(bn::regular_bg_items::mountain);
@@ -144,6 +153,14 @@ namespace
                 primary_bg.set_item(bn::regular_bg_items::s0103);
             } else if (strcmp(scenes::n1[pos].text, "S01:04") == 0) {
                 primary_bg.set_item(bn::regular_bg_items::s0104);
+            } else if (strcmp(scenes::n1[pos].text, "S01:05") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0105);
+            } else if (strcmp(scenes::n1[pos].text, "S01:06") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0106);
+            } else if (strcmp(scenes::n1[pos].text, "S01:07") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0107);
+            } else if (strcmp(scenes::n1[pos].text, "S01:08") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::s0108);
             // Handle sprite/dialogue
             } else {
 
@@ -189,10 +206,6 @@ int main()
 {
     bn::core::init();
     
-    int music_item_index = 0;
-    int music_volume = 15;
-    bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
-
     while(true)
     {
         dialogue_page();

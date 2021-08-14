@@ -89,7 +89,11 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0101.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0103.h \
- /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0104.h
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0104.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0105.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0106.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0107.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0108.h
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -181,3 +185,7 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0103.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0104.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0105.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0106.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0107.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0108.h:
