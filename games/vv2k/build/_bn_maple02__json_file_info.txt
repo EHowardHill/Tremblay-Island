@@ -1,0 +1,3 @@
+graphics/maple02.json
+40
+1627711511.2

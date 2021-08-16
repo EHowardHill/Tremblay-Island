@@ -1,0 +1,3 @@
+graphics/maple03.bmp
+2130
+1629081250.84

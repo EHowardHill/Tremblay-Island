@@ -56,9 +56,8 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_hbe_ptr.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_transparency_attributes.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_transparency_attributes_hbe_ptr.h \
- /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki.h \
- /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button.h \
+ /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_item.h \
  /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_bg_palette_item.h \
@@ -93,7 +92,17 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0105.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0106.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0107.h \
- /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0108.h
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0108.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0109.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple01.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple02.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple03.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple04.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple05.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki01.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki02.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki03.h
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -151,9 +160,8 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_hbe_ptr.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_transparency_attributes.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_transparency_attributes_hbe_ptr.h:
-/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki.h:
-/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button.h:
+/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_item.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_bg_palette_item.h:
@@ -189,3 +197,13 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0106.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0107.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0108.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0109.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple01.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple02.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple03.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple04.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_maple05.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki01.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki02.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_enoki03.h:
