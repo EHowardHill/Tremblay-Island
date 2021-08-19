@@ -1,0 +1,3 @@
+graphics/maple_walking.json
+40
+1629266824.78

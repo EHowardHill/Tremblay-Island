@@ -1,0 +1,3 @@
+graphics/enoki04.json
+40
+1627711511.2

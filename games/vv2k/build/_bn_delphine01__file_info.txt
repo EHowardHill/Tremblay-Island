@@ -1,0 +1,3 @@
+graphics/delphine01.bmp
+2138
+1629191963.77
