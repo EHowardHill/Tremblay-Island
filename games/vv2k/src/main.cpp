@@ -445,6 +445,33 @@ namespace
                     dialogue_page(lc);
                 break;
             };
+
+            case 3: {
+                Concepts::line lc[32] = {
+                    {true, true, 0, "BG: 0"},
+                    {true, true, 0, "MAPLE                                                             Wow.. It's sort of chilly in     here, isn't it?"},
+                    {true, true, 0, "ENOKI                                                             Well silly, why'd ya wear a tank top and shorts in the middle of  December? Can't ya just light a  fire?"},
+                    {true, true, 0, "BG: 2"},
+                    {true, true, 0, "MAPLE                                                             So how long are you two going to stay here? You can't just stay   thirty miles from civilization   without electricity forever."},
+                    {true, true, 0, "ENOKI                                                             We're happy, so we think a long time."},
+                    {true, true, 0, "MAPLE                                                             I mean, what does Aaron think of all this? The Aaron I remember   growing up would be a little more...responsible."},
+                    {true, true, 0, "ENOKI                                                             Didn't you two grow up in a car?"},
+                    {true, true, 0, "MAPLE                                                             It just seems.. rash. I don't    meanto take the fun out of it,   but I can't help but think this  was a really, really bad idea."},
+                    {true, true, 0, "ENOKI                                                             Coming from the girl who got     embarrased of her grades freshmanyear and decided to just up and  run away from college."},
+                    {true, true, 0, "MAPLE                                                             Oh come on, that was your idea   first."},
+                    {true, true, 0, "ENOKI                                                             Hey, I'll take it!! '97... Yeah, that was one of the best years   of my life, easy."},
+                    {true, true, 0, "ENOKI                                                             So, after college, you got any   plans for where you wanna live?"},
+                    {true, true, 0, "MAPLE                                                             I'll figure something out."},
+                    {true, true, 0, "ENOKI                                                             Aaron and I were chatting and,   y'know, there's a school not too far off, maybe you could..       y'know.."},
+                    {true, true, 0, "MAPLE                                                             Absolutely NOT. I'll make sure   to get myself a real adult       apartment."},
+                    {true, true, 0, "MAPLE                                                             When you get tired of this place,maybe you can move in with me."},
+                    {true, true, 0, "ENOKI                                                             The kinda things you choose to befunny about Maple, it'll never   cease to amaze me."},
+                    {true, true, 0, "ENOKI                                                             Hey- I'm feeling down and that's stupid! You wanna go on another  Maple and Enoki adventure like old times??"},
+                    {true, true, 0, "ENOKI                                                             Let's go explore the castle!!"},
+                    {true, true, 0, "MAPLE                                                             Hold up, you bought this castle  and hadn't funny explored it     all?"},
+                    {true, true, 0, "ENOKI                                                             Well duh, I'm taking my sweet   time with it -- it's a castle!    C'mon, let's explore!"}
+                }
+            };
         }
     }
 }
@@ -454,6 +481,7 @@ int main()
     bn::core::init();
     exec_dialogue(0);
     exec_dialogue(1);
+    exec_dialogue(2);
     bn::core::update();
 
     dungeon();
