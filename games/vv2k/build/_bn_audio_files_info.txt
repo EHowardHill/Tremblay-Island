@@ -7,6 +7,9 @@ audio/fruit.mod
 audio/heymaple.wav
 145252
 1628662007.28
+audio/new_castle.xm
+463860
+1629362830.24
 audio/pop.wav
 1178
 1628922125.37
