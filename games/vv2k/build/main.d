@@ -117,7 +117,10 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron01.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron02.h \
  /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine01.h \
- /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine02.h
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine02.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle01.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle02.h \
+ /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle03.h
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -237,3 +240,6 @@ main.o: /Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron02.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine01.h:
 /Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine02.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle01.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle02.h:
+/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle03.h:

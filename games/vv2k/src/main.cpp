@@ -68,6 +68,10 @@
 #include "bn_sprite_items_delphine01.h"
 #include "bn_sprite_items_delphine02.h"
 
+#include "bn_regular_bg_items_castle01.h"
+#include "bn_regular_bg_items_castle02.h"
+#include "bn_regular_bg_items_castle03.h"
+
 // Custom variables
 
 namespace
@@ -170,7 +174,9 @@ namespace
                 bn::music_items_info::span[music_item_index].first.play(bn::fixed(music_volume) / 100);
 
             } else if (strcmp(n[pos].text, "BG: fadeout") == 0) {
-                bn::music::set_volume(0);
+                if (bn::music::playing()) {
+                    bn::music::set_volume(0);
+                }
 
             // Set backgrounds
             } else if (strcmp(n[pos].text, "BG: Ocean") == 0) {
@@ -195,6 +201,12 @@ namespace
                 primary_bg.set_item(bn::regular_bg_items::s0108);
             } else if (strcmp(n[pos].text, "S01:09") == 0) {
                 primary_bg.set_item(bn::regular_bg_items::s0109);
+            } else if (strcmp(n[pos].text, "S01:10") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::castle01);
+            } else if (strcmp(n[pos].text, "S01:11") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::castle02);
+            } else if (strcmp(n[pos].text, "S01:12") == 0) {
+                primary_bg.set_item(bn::regular_bg_items::castle03);
 
             } else if (strcmp(n[pos].text, "COM: Endscene") == 0) {
                 cont = false;
@@ -454,10 +466,13 @@ namespace
             case 2: {
                 Concepts::line lc[32] = {
                     {true, true, 0, "BG: fadeout"},
+                    {true, true, 0, "S01:11"},
                     {true, true, 0, "MAPLE                                                             Wow.. It's sort of chilly in     here, isn't it?"},
                     {true, true, 0, "ENOKI                                                             Well silly, why'd ya wear a tank top and shorts in the middle of  December? Can't ya just light a  fire?"},
                     {true, true, 0, "BG: 2"},
-                    {true, true, 0, "MAPLE                                                             So how long are you two going to stay here? You can't just stay   thirty miles from civilization   without electricity forever."},
+                    {true, true, 0, "S01:10"},
+                    {true, true, 0, "MAPLE                                                             So, how long are you two going tostay here? You can't just stay   thirty miles from civilization   without electricity forever."},
+                    {true, true, 0, "S01:11"},
                     {true, true, 0, "ENOKI                                                             We're happy, so we think a long  time."},
                     {true, true, 0, "MAPLE                                                             I mean, what does Aaron think of all this? The Aaron I remember   growing up would be a little more...responsible."},
                     {true, true, 0, "ENOKI                                                             I don't wanna sound rude but...  Aren't you guys used to growing  up in places like, er, in a car?"},
@@ -465,14 +480,18 @@ namespace
                     {true, true, 0, "ENOKI                                                             But didn't you literally grow up in a car? I mean, compared to    that, a castle is pretty nice,   right?"},
                     {true, true, 0, "MAPLE                                                             It just seems.. rash. I don't    meanto take the fun out of it,   but I can't help but think this  was a really, really bad idea."},
                     {true, true, 0, "ENOKI                                                             Coming from the girl who got     embarrased of her grades freshmanyear and decided to just up and  run away from college."},
+                    {true, true, 0, "S01:10"},
                     {true, true, 0, "MAPLE                                                             Oh come on, that was your idea   first."},
+                    {true, true, 0, "S01:11"},
                     {true, true, 0, "ENOKI                                                             Hey, I'll take it!! '97... Yeah, that was one of the best years   of my life, easy."},
                     {true, true, 0, "ENOKI                                                             So, after college, you got any   plans for where you wanna live?"},
                     {true, true, 0, "MAPLE                                                             I'll figure something out."},
                     {true, true, 0, "ENOKI                                                             Aaron and I were chatting and,   y'know, there's a school not too far off you could teach at,      maybe you could.. y'know.."},
                     {true, true, 0, "MAPLE                                                             Absolutely NOT. I'll make sure   to get myself a real adult       apartment."},
                     {true, true, 0, "MAPLE                                                             When you get tired of this place,maybe you can move in with me."},
+                    {true, true, 0, "S01:12"},
                     {true, true, 0, "ENOKI                                                             The kinda things you choose to befunny about Maple, it'll never   cease to amaze me."},
+                    {true, true, 0, "S01:11"},
                     {true, true, 0, "ENOKI                                                             Hey- I'm feeling down and that's stupid! You wanna go on another  Maple and Enoki adventure like   old times??"},
                     {true, true, 0, "ENOKI                                                             Let's go explore the castle!!"},
                     {true, true, 0, "MAPLE                                                             Hold up, you bought this castle  and hadn't explored it all first?"},
@@ -489,8 +508,8 @@ namespace
 int main()
 {
     bn::core::init();
-    exec_dialogue(0);
-    exec_dialogue(1);
+    //exec_dialogue(0);
+    //exec_dialogue(1);
     exec_dialogue(2);
     //bn::core::update();
 
