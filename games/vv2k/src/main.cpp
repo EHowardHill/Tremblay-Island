@@ -516,8 +516,6 @@ namespace
                 world[close[1] + 1 + (close[3] * width)]
             };
 
-            BN_LOG(col[0],col[1],col[2],col[3]);
-
             // Key controls
             if (bn::keypad::left_held()) {
                 if (!col[0]) {//(world[loc] == 0) {
