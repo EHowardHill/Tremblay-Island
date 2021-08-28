@@ -1,0 +1,1 @@
+enoki_walking_pj_bn_graphics.o: enoki_walking_pj_bn_graphics.s

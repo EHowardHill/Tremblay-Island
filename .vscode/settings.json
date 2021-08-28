@@ -21,6 +21,7 @@
         "vector": "cpp",
         "string": "cpp",
         "unordered_map": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "fstream": "cpp"
     }
 }

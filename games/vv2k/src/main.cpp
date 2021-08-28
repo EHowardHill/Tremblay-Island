@@ -1,9 +1,5 @@
-/*
- * Copyright (c) 2020-2021 Gustavo Valiente gustavo.valiente@protonmail.com
- * zlib License, see LICENSE file.
- */
-
 #include "bn_core.h"
+
 #include "bn_music.h"
 #include "bn_keypad.h"
 #include "bn_display.h"
@@ -38,10 +34,12 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
+#include <list>
 
 #include "objects.h"
 
 #include "bn_sprite_items_maple_walking.h"
+#include "bn_sprite_items_enoki_walking_pj.h"
 
 #include "bn_regular_bg_items_s0101.h"
 #include "bn_regular_bg_items_s0102.h"
@@ -52,6 +50,11 @@
 #include "bn_regular_bg_items_s0107.h"
 #include "bn_regular_bg_items_s0108.h"
 #include "bn_regular_bg_items_s0109.h"
+
+#include "bn_sprite_items_environment_stone.h"
+#include "bn_regular_bg_items_castle_floor.h"
+
+#include "bn_regular_bg_items_cinemint_studios.h"
 
 #include "bn_sprite_items_enoki.h"
 #include "bn_sprite_items_maple01.h"
@@ -71,6 +74,8 @@
 #include "bn_regular_bg_items_castle01.h"
 #include "bn_regular_bg_items_castle02.h"
 #include "bn_regular_bg_items_castle03.h"
+
+#include "bn_log.h"
 
 // Custom variables
 
@@ -93,6 +98,7 @@ namespace
     static bn::sprite_text_generator text_line04(common::variable_8x16_sprite_font);
     static bn::sprite_text_generator text_line05(common::variable_8x16_sprite_font);
     static bn::sprite_text_generator text_line06(common::variable_8x16_sprite_font);
+
 
     void set_sprite(bn::sprite_ptr chari, int value) {
         switch(value) {
@@ -308,29 +314,146 @@ namespace
         }
     }
 
+    class stone {
+        public:
+            bn::sprite_ptr entity = bn::sprite_items::environment_stone.create_sprite(240,160);
+            void set(bn::sprite_item item, int x, int y) {
+                entity.set_x(x);
+                entity.set_y(y);
+                entity.set_item(item);
+            };
+            void set(int x, int y) {
+                entity.set_x(x);
+                entity.set_y(y);
+                //entity.set_camera(camera);
+            };
+    };
+
+    // Function to calculate the smallest multiple
+    int closestMultiple(int n, int x)
+    {  
+        if(x>n)
+        return x;
+    
+        n = n + x/2;
+        n = n - (n%x);
+        return n;
+    };
+
     void dungeon() {
+
+        const int w_size = 112;
+        stone local_walls[w_size];
+        int local_walls_p = 0;
+        int width = 9;
+        int height = 5;
+        int start_x = 4;
+        int start_y = 2;
+
+        bn::camera_ptr camera = bn::camera_ptr::create(start_x * 32, start_y * 32);
+        bn::regular_bg_ptr primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
+        primary_bg.set_camera(camera);
+
+        int world[height] = {
+            1,1,1,1,1,1,1,1,1,
+            1,0,0,0,0,0,0,0,1,
+            1,0,0,0,0,0,0,0,1,
+            1,1,0,0,0,0,0,0,1,
+            1,1,1,0,0,1,1,1,1
+            };
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (local_walls_p < w_size && world[(y*width)+x] > 0) {
+                    local_walls[local_walls_p].set(x * 32, y * 32);
+                    local_walls[local_walls_p].entity.set_camera(camera);
+                    local_walls_p++;
+                }
+            }
+        }
+
         bn::sprite_item maple = bn::sprite_items::maple_walking;
         bn::sprite_builder builder(maple);
-        builder.set_position(0, 0);
-        bn::sprite_cached_animate_action maple_anim  = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 0, 1, 0, 2);
+        builder.set_camera(camera);
+        builder.set_position(start_x * 32, start_y * 32);
+        bn::sprite_cached_animate_action maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 0, 1, 0, 2);
+
+        bn::sprite_item enoki = bn::sprite_items::enoki_walking_pj;
+        bn::sprite_builder e_builder(enoki);
+        e_builder.set_camera(camera);
+        e_builder.set_position((start_x * 32) - 15, (start_y * 32) - 15);
+        bn::sprite_cached_animate_action enoki_anim = bn::create_sprite_cached_animate_action_forever(e_builder.release_build(), 8, enoki.tiles_item(), 0, 1, 0, 2);
 
         bn::sprite_ptr maple_ptr = maple_anim.sprite();
+        bn::sprite_ptr enoki_ptr = enoki_anim.sprite();
+        maple_ptr.set_camera(camera);
+        enoki_ptr.set_camera(camera);
 
         int dir = 0;
-        int last_dir = 1;
+        int e_dir = 0;
+        int last_dir = -1;
+        int last_e_dir = -1;
         bool done = false;
+        bool e_done = false;
+        bool e_is_walking = false;
 
-        std::stringstream st;
+        char top_x[6];
+        char bot_y[6];
+
+        int loc;
 
         while(true) {
-            if (bn::keypad::down_pressed()) {
-                dir = 0;
-            } else if (bn::keypad::right_pressed()) {
-                dir = 1;
-            } else if (bn::keypad::left_pressed()) {
-                dir = 2;
-            } else if (bn::keypad::up_pressed()) {
-                dir = 3;
+
+            //camera.set_x(camera.x() + 1);
+
+            loc = (
+                ((maple_ptr.x().round_integer() / 32) + 5) +
+                (((maple_ptr.y().round_integer() / 32) + 1) * 8) + 5
+            );
+
+            e_done = true;
+            e_is_walking = false;
+            if (maple_ptr.y() > enoki_ptr.y() + 24) {
+                enoki_ptr.set_y(enoki_ptr.y() + 1);
+                e_dir = 0;
+                if (last_e_dir != e_dir) e_done = false;
+                last_e_dir = e_dir;
+                e_is_walking = true;
+            } else if (maple_ptr.y() < enoki_ptr.y() - 24) {
+                enoki_ptr.set_y(enoki_ptr.y() - 1);
+                e_dir = 3;
+                if (last_e_dir != e_dir) e_done = false;
+                last_e_dir = e_dir;
+                e_is_walking = true;
+            }
+
+            if (maple_ptr.x() > enoki_ptr.x() + 24) {
+                enoki_ptr.set_x(enoki_ptr.x() + 1);
+                e_dir = 1;
+                if (last_e_dir != e_dir) e_done = false;
+                last_e_dir = e_dir;
+                e_is_walking = true;
+            } else if (maple_ptr.x() < enoki_ptr.x() - 24) {
+                enoki_ptr.set_x(enoki_ptr.x() - 1);
+                e_dir = 2;
+                if (last_e_dir != e_dir) e_done = false;
+                last_e_dir = e_dir;
+                e_is_walking = true;
+            }
+
+            e_builder.set_x(enoki_ptr.x());
+            e_builder.set_y(enoki_ptr.y());
+
+            if (true) {
+                if (bn::keypad::down_pressed()) {
+                    dir = 0;
+                } else if (bn::keypad::right_pressed()) {
+                    dir = 1;
+                } else if (bn::keypad::left_pressed()) {
+                    dir = 2;
+                } else if (bn::keypad::up_pressed()) {
+                    dir = 3;
+                }
             }
 
             if (last_dir != dir) {
@@ -338,48 +461,114 @@ namespace
                 last_dir = dir;
             }
 
+            // Control directional animation
             if (!done) {
-            switch(dir) {
-                case 0:
-                    maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 1, 0, 2, 0);
-                    break;
-                case 1:
-                    maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 4, 3, 5, 3);
-                    break;
-                case 2:
-                    maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 7, 6, 8, 6);
-                    break;
-                case 3:
-                    maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 10, 9, 11, 9);
-                    break;
+                switch(dir) {
+                    case 0:
+                        maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 1, 0, 2, 0);
+                        break;
+                    case 1:
+                        maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 4, 3, 5, 3);
+                        break;
+                    case 2:
+                        maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 7, 6, 8, 6);
+                        break;
+                    case 3:
+                        maple_anim = bn::create_sprite_cached_animate_action_forever(builder.release_build(), 8, maple.tiles_item(), 10, 9, 11, 9);
+                        break;
+                }
+                done = true;
             }
-            done = true;
+            if (!e_done) {
+                switch(e_dir) {
+                    case 0:
+                        enoki_anim = bn::create_sprite_cached_animate_action_forever(e_builder.release_build(), 8, enoki.tiles_item(), 1, 0, 2, 0);
+                        break;
+                    case 1:
+                        enoki_anim = bn::create_sprite_cached_animate_action_forever(e_builder.release_build(), 8, enoki.tiles_item(), 4, 3, 5, 3);
+                        break;
+                    case 2:
+                        enoki_anim = bn::create_sprite_cached_animate_action_forever(e_builder.release_build(), 8, enoki.tiles_item(), 7, 6, 8, 6);
+                        break;
+                    case 3:
+                        enoki_anim = bn::create_sprite_cached_animate_action_forever(e_builder.release_build(), 8, enoki.tiles_item(), 10, 9, 11, 9);
+                        break;
+                }
             }
-
             maple_ptr = maple_anim.sprite();
+            enoki_ptr = enoki_anim.sprite();
+            maple_ptr.set_camera(camera);
+            enoki_ptr.set_camera(camera);
 
+            // Collision detection
+            int x_int = maple_ptr.x().integer();
+            int y_int = maple_ptr.y().integer();
+            int close[4] {
+                ((x_int + 31) & (-32)) / 32,
+                x_int / 32,
+                ((y_int + 31) & (-32)) / 32,
+                y_int / 32
+            };
+            int col[4] = {
+                world[close[0] - 1 + (close[2] * width)],
+                world[close[0] - 1 + (close[3] * width)],
+                world[close[1] + 1 + (close[2] * width)],
+                world[close[1] + 1 + (close[3] * width)]
+            };
+
+            BN_LOG(col[0],col[1],col[2],col[3]);
+
+            // Key controls
             if (bn::keypad::left_held()) {
-                maple_ptr.set_x(maple_ptr.x() - 1);
-                builder.set_x(maple_ptr.x() - 1);
+                if (!col[0]) {//(world[loc] == 0) {
+                    maple_ptr.set_x(maple_ptr.x() - 1);
+                }
             }
-
             if (bn::keypad::right_held()) {
-                maple_ptr.set_x(maple_ptr.x() + 1);
-                builder.set_x(maple_ptr.x() + 1);
+                if (!col[2]) {//(world[loc + 1] == 0) {
+                    maple_ptr.set_x(maple_ptr.x() + 1);
+                }
             }
-
             if (bn::keypad::up_held()) {
-                maple_ptr.set_y(maple_ptr.y() - 1);
-                builder.set_y(maple_ptr.y() - 1);
-            }
+                if (!col[1]) {//(world[loc - 8] == 0) {
+                    maple_ptr.set_y(maple_ptr.y() - 1);
 
+                }
+            }
             if (bn::keypad::down_held()) {
-                maple_ptr.set_y(maple_ptr.y() + 1);
-                builder.set_y(maple_ptr.y() + 1);
+                if (!col[0]) {//(world[loc + 8] == 0) {
+                    maple_ptr.set_y(maple_ptr.y() + 1);
+                }
             }
 
+            // Animate appropriate people
             if ((bn::keypad::down_held() || bn::keypad::up_held() || bn::keypad::left_held() || bn::keypad::right_held()) || (maple_anim.current_index() % 2 == 1)) {
                 maple_anim.update();
+            }
+            if (e_is_walking || (enoki_anim.current_index() % 2 == 1)) {
+                enoki_anim.update();
+            }
+
+            builder.set_x(maple_ptr.x());
+            builder.set_y(maple_ptr.y());
+
+            // Z-Order followers
+            if (maple_ptr.y() > enoki_ptr.y()) {
+                maple_ptr.put_above();
+            } else {
+                enoki_ptr.put_above();
+            }
+
+            // Camera follows primary player
+            if (camera.x() > maple_ptr.x() + 30) {
+                camera.set_x(camera.x() - 1);
+            } else if (camera.x() < maple_ptr.x() - 30) {
+                camera.set_x(camera.x() + 1);
+            }
+            if (camera.y() > maple_ptr.y() + 30) {
+                camera.set_y(camera.y() - 1);
+            } else if (camera.y() < maple_ptr.y() - 30) {
+                camera.set_y(camera.y() + 1);
             }
             
             bn::core::update();
@@ -510,9 +699,8 @@ int main()
     bn::core::init();
     //exec_dialogue(0);
     //exec_dialogue(1);
-    exec_dialogue(2);
+    //exec_dialogue(2);
     //bn::core::update();
 
     dungeon();
-    bn::core::update();
 }

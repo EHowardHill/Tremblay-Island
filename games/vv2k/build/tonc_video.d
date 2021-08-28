@@ -1,16 +1,16 @@
 tonc_video.o: \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/src/tonc_video.c \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_memmap.h \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_types.h \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_core.h \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_memmap.h \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_memdef.h \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_video.h \
- /Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_core.h
-/Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_memmap.h:
-/Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_types.h:
-/Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_core.h:
-/Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_memmap.h:
-/Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_memdef.h:
-/Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_video.h:
-/Users/ethan/Documents/GitHub/butano/butano/hw/3rd_party/libtonc/include/tonc_core.h:
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/src/tonc_video.c \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memmap.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_types.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_core.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memmap.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memdef.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_video.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_core.h
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memmap.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_types.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_core.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memmap.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memdef.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_video.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_core.h:
