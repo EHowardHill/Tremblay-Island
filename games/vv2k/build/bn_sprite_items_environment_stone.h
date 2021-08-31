@@ -7,12 +7,12 @@
 
 //======================================================================
 //
-//	environment_stone_bn_graphics, 32x256@4, 
+//	environment_stone_bn_graphics, 32x576@4, 
 //	+ palette 16 entries, not compressed
-//	+ 128 tiles not compressed
-//	Total size: 32 + 4096 = 4128
+//	+ 288 tiles not compressed
+//	Total size: 32 + 9216 = 9248
 //
-//	Time-stamp: 2021-08-30, 03:02:50
+//	Time-stamp: 2021-08-30, 20:40:06
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -21,8 +21,8 @@
 #ifndef GRIT_ENVIRONMENT_STONE_BN_GRAPHICS_H
 #define GRIT_ENVIRONMENT_STONE_BN_GRAPHICS_H
 
-#define environment_stone_bn_graphicsTilesLen 4096
-extern const bn::tile environment_stone_bn_graphicsTiles[bn::max(1024 / 8, 1)];
+#define environment_stone_bn_graphicsTilesLen 9216
+extern const bn::tile environment_stone_bn_graphicsTiles[bn::max(2304 / 8, 1)];
 
 #define environment_stone_bn_graphicsPalLen 32
 extern const bn::color environment_stone_bn_graphicsPal[16];
@@ -34,7 +34,7 @@ extern const bn::color environment_stone_bn_graphicsPal[16];
 namespace bn::sprite_items
 {
     constexpr inline sprite_item environment_stone(sprite_shape_size(sprite_shape::SQUARE, sprite_size::BIG), 
-            sprite_tiles_item(span<const tile>(environment_stone_bn_graphicsTiles, 128), bpp_mode::BPP_4, compression_type::NONE, 8), 
+            sprite_tiles_item(span<const tile>(environment_stone_bn_graphicsTiles, 288), bpp_mode::BPP_4, compression_type::NONE, 18), 
             sprite_palette_item(span<const color>(environment_stone_bn_graphicsPal, 16), bpp_mode::BPP_4, compression_type::NONE));
 }
 

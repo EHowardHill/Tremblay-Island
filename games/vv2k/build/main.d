@@ -69,6 +69,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_double_size_mode.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button_2.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_item.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_bg_palette_item.h \
@@ -198,6 +199,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_double_size_mode.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_item.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_a_button_2.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_item.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_bg_palette_item.h:

@@ -1,3 +1,3 @@
 graphics/environment_stone.bmp
-4214
-1630310565.38
+9334
+1630373495.73
