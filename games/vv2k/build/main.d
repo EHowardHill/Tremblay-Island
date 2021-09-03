@@ -39,6 +39,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_ptr.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_optional_fwd.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/save.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/dialogue.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_actions.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed.h \
@@ -171,6 +172,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_ptr.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_optional_fwd.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/save.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/dialogue.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_blending_actions.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed.h:

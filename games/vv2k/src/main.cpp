@@ -17,6 +17,7 @@
 #include "common_info.h"
 
 #include "objects.h"
+#include "save.h"
 #include "dialogue.h"
 #include "scripts.h"
 #include "wander.h"
@@ -29,6 +30,9 @@ int main()
     //exec_dialogue(2);
 
     dungeon_return dt(0,0,0);
+    dt.spawn_x = 0;
+    dt.spawn_y = 0;
+    dt.world_index = 0;
     while(true) {
         dungeon_return dt = dungeon(dt);
     }

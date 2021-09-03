@@ -22,10 +22,12 @@ class stone {
 // Handles pairs of tile/action pairs
 class action {
     public:
-        int tile = 0;
+        int x = 0;
+        int y = 0;
         int action = 0;
-        void set(int t, int a) {
-            tile = t;
+        void set(int xx, int yy, int a) {
+            x = xx;
+            y = yy;
             action = a;
         }
 };
@@ -306,7 +308,10 @@ dungeon_return do_action(int act) {
             dt.spawn_y = 1;
             dt.world_index = 1;
             break;
-        case 2:
+        case 2: // Go to Aaron's castle room
+            dt.spawn_x = 9;
+            dt.spawn_y = 6;
+            dt.world_index = 2;
             break;
         case 3: // Takin' a look out Enoki's window
             exec_dialogue(5);
@@ -317,11 +322,39 @@ dungeon_return do_action(int act) {
         case 5: // Observing le fine pot
             exec_dialogue(6);
             break;
+
+        case 6: // Lamp talk
+            exec_dialogue(7);
+            break;
+        case 7:
+            exec_dialogue(8); // sees Del
+            break;
+        case 8: // Go to castle chamber from Aaron's room
+            dt.spawn_x = 3;
+            dt.spawn_y = 1;
+            dt.world_index = 1;
+            break;
+        case 9: // Go to guest room
+            dt.spawn_x = 1;
+            dt.spawn_y = 4;
+            dt.world_index = 0;
+            break;
+        case 10: // go to guest room from chamber
+            dt.spawn_x = 8;
+            dt.spawn_y = 4;
+            dt.world_index = 0;
+            break;
+        case 11: // go to aaron's room from chamber
+            dt.spawn_x = 3;
+            dt.spawn_y = 6;
+            dt.world_index = 2;
+            break;
     };
     return dt;
 }
 
 dungeon_return dungeon(dungeon_return dt) {
+    BN_LOG(dt.spawn_x, ", ", dt.spawn_y, ", ", dt.world_index);
     const int w_size = 104;
     stone local_walls[w_size];
     int local_walls_p = 0;
@@ -335,21 +368,21 @@ dungeon_return dungeon(dungeon_return dt) {
     // World generation
     switch(dt.world_index) {
         case 0: {
-            current_room.init(11, 6, 8, 3);
+            current_room.init(12, 6, 8, 3);
             int local[406] = {
-                    4,3,8,11,13,3,3,3,8,3,5,
-                    2,18,1,1,1,18,2,9,1,9,2,
-                    2,1,1,1,1,1,2,10,1,10,2,
-                    2,3,3,2,1,1,2,1,1,1,2,
-                    17,1,1,1,1,1,1,1,1,18,2,
-                    7,3,3,3,3,3,3,3,16,3,6
+                4,3,8,11,13,3,3,3,8,3,5,0,
+                2,18,0,0,0,18,2,9,0,9,2,0,
+                2,0,0,0,0,0,2,10,0,10,2,0,
+                2,3,3,2,0,0,2,0,0,0,2,0,
+                17,0,0,0,0,0,0,0,0,18,2,0,
+                7,3,3,3,3,3,3,3,16,3,6,0
                 };
-            current_room.actions[1].set(52,1);  // door 1
-            current_room.actions[2].set(44,2);  // door 2
-            current_room.actions[3].set(13,3);  // night sky
-            current_room.actions[4].set(14,4);  // painting
-            current_room.actions[5].set(42,5);  // pot
-            current_room.actions[6].set(15,5);  // pot
+            current_room.actions[1].set(8,4,1);  // door 1
+            current_room.actions[2].set(1,4,2);  // door 2
+            current_room.actions[3].set(2,1,3);  // night sky
+            current_room.actions[4].set(3,1,4);  // painting
+            current_room.actions[5].set(4,1,5);  // pot
+            current_room.actions[6].set(1,2,5);  // pot
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
@@ -358,33 +391,54 @@ dungeon_return dungeon(dungeon_return dt) {
         case 1: {
             current_room.init(21,12,18,1);
             int local[406] = {
-                4,3,16,3,12,3,13,12,3,8,12,8,3,12,3,3,12,13,16,3,5,
-                2,18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,2,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,17,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,17,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-                2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,
-                2,18,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,18,2,
-                7,3,3,3,12,3,3,12,3,3,12,3,13,12,3,3,12,3,12,13,6
+                4,3,3,16,12,3,13,12,3,8,12,8,3,12,3,3,12,13,16,3,5,
+                2,18,0,0,0,0,0,26,0,0,0,0,0,0,0,0,0,0,0,18,2,
+                2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
+                12,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
+                12,1,1,1,1,0,0,0,0,25,25,0,0,0,0,0,0,0,0,0,2,
+                12,1,1,1,1,1,1,0,0,21,23,0,0,0,0,1,1,1,1,1,17,
+                12,1,1,1,1,1,0,0,25,22,24,25,0,0,1,1,1,1,1,1,17,
+                12,1,1,1,1,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,2,
+                12,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
+                2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
+                2,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,2,
+                7,3,14,3,12,3,3,12,3,3,12,3,13,12,3,3,12,3,14,13,6
             };
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
+            current_room.actions[0].set(18,1,10);
+            current_room.actions[1].set(3,1,11);
+            break;
+        }
+        case 2: {
+            current_room.init(11,8,9,6);
+            int local[406] = {
+                4,11,8,12,8,3,3,3,3,3,5,
+                2,18,9,9,26,27,2,0,0,0,2,
+                2,0,10,10,0,0,2,19,1,20,2,
+                2,0,0,0,0,0,2,3,0,0,2,
+                2,0,1,1,1,0,2,0,0,18,2,
+                2,0,1,1,1,0,2,0,3,3,12,
+                2,18,0,0,0,0,0,0,0,0,17,
+                7,3,3,14,3,3,3,3,3,3,6
+            };
+            for (int t = 0; t < current_room.width * current_room.height; t++) {
+                current_room.local_tileset[t] = local[t];
+            }
+            current_room.actions[0].set(9,6,9);
+            current_room.actions[1].set(3,6,8);
+            current_room.actions[2].set(4,2,6);
+            current_room.actions[3].set(8,2,7);
             break;
         }
     };
 
-    /*
     // If different than default, reset
-    if (dt.spawn_x + dt.spawn_y > 0) {
+    if (dt.spawn_x > 0 && dt.spawn_y > 0 && dt.spawn_x < 999) {
         current_room.start_x = dt.spawn_x;
         current_room.start_y = dt.spawn_y;
     }
-    */
 
     // Camera init
     camera.set_position(current_room.start_x * 32, current_room.start_y * 32);
@@ -405,39 +459,43 @@ dungeon_return dungeon(dungeon_return dt) {
     character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 1, current_room.start_y, false);
     enoki.entity.set_camera(camera);
 
+    switch(save::last_char_id) {
+        case 0:
+            maple.isMain = true;
+            break;
+        case 1:
+            enoki.isMain = true;
+    }
+
     // GAMELOOP
     int update_counter = 0;
     bool firstThing = true;
-    int follow_x = maple.entity.x().integer();
-    int follow_y = maple.entity.y().integer();
     int flex = 84;
-    maple.isMain = true;
+    int follow_x = 0;
+    int follow_y = 0;
     while(true) {
 
         // Control actions
         a_notif.set_visible(false);
         for (int t = 0; t < 16; t++) {
-            if (current_room.actions[t].tile > 0) {
-                int prolog = (closestMultiple(follow_x,32) / 32) + ((closestMultiple(follow_y,32) / 32) * current_room.width);
-                if (prolog == current_room.actions[t].tile) {
-                    a_notif.set_visible(true);
-                    a_notif.put_above();
-                    a_notif.set_x(follow_x);
-                    a_notif.set_y(follow_y - 28);
-                    if (bn::keypad::a_pressed()) {
-                        
-                        // Clear out extra sprites
-                        for (int t = local_walls_p; t < w_size; t++) {
-                            //local_walls[t].entity.~sprite_ptr();
-                        }
+            if ((((follow_x - 16) / 32) + 1 == current_room.actions[t].x) && (((follow_y - 16) / 32) + 1 == current_room.actions[t].y)) {
+                a_notif.set_visible(true);
+                a_notif.put_above();
+                a_notif.set_x(follow_x);
+                a_notif.set_y(follow_y - 28);
+                if (bn::keypad::a_pressed()) {
+                    
+                    // Clear out extra sprites
+                    for (int t = local_walls_p; t < w_size; t++) {
+                        //local_walls[t].entity.~sprite_ptr();
+                    }
 
-                        // Start action
-                        bn::core::update();
-                        a_notif.set_visible(false);
-                        dungeon_return dt2 = do_action(current_room.actions[t].action);
-                        if (dt2.spawn_x + dt2.spawn_y > 0) {
-                            return dt2;
-                        }
+                    // Start action
+                    bn::core::update();
+                    a_notif.set_visible(false);
+                    dungeon_return dt2 = do_action(current_room.actions[t].action);
+                    if (dt2.spawn_x + dt2.spawn_y > 0) {
+                        return dt2;
                     }
                 }
             }
@@ -448,11 +506,13 @@ dungeon_return dungeon(dungeon_return dt) {
             bn::sound_items::pop.play();
             bn::blending::set_intensity_alpha(1);
             if (maple.isMain) {
+                save::last_char_id = 1;
                 maple.isMain = false;
                 enoki.isMain = true;
                 enoki.entity.set_blending_enabled(true);
                 maple.entity.set_blending_enabled(false);
             } else {
+                save::last_char_id = 0;
                 maple.isMain = true;
                 enoki.isMain = false;
                 maple.entity.set_blending_enabled(true);
@@ -496,14 +556,13 @@ dungeon_return dungeon(dungeon_return dt) {
         }
 
         // Camera adjustment
-        BN_LOG(camera.x().integer(), "x", (current_room.width * 32) - (flex * 2) + 16);
         if (camera.x().integer() > (current_room.width * 32) - (flex * 2) + 16) {
             camera.set_x((current_room.width * 32) - (flex * 2) + 16);
         } else if (camera.x().integer() < flex + 32) {
             camera.set_x(flex + 32);
         }
         if (camera.y().integer() > (current_room.height * 32) - (flex * 2) + 64) {
-            camera.set_y(follow_y = (current_room.height * 32) - (flex * 2) + 64);
+            camera.set_y((current_room.height * 32) - (flex * 2) + 64);
         } else if (camera.y().integer() < flex - 8) {
             camera.set_y(flex - 8);
         }
@@ -525,7 +584,7 @@ dungeon_return dungeon(dungeon_return dt) {
             for (int y = min_y; y < max_y; y++) {
                 for (int x = min_x; x < max_x; x++) {
                     int loc = current_room.local_tileset[(current_room.width * y) + x];
-                    if (local_walls_p < w_size && loc > 1) {
+                    if (local_walls_p < w_size && loc > 0) {
                         local_walls[local_walls_p].entity = bn::sprite_items::environment_stone.create_sprite(x * 32, y * 32, loc - 1);
                         local_walls[local_walls_p].entity.set_camera(camera);
                         local_walls[local_walls_p].entity.put_below();
@@ -543,11 +602,20 @@ dungeon_return dungeon(dungeon_return dt) {
             // After world load
             switch(dt.world_index) {
                 case 0: {
-                    bn::sound_items::shortclip.play();
-                    exec_dialogue(3);
+                    if (save::checkpoint == 0) {
+                        bn::sound_items::shortclip.play();
+                        exec_dialogue(3);
+                        save::checkpoint = 1;
+                    }
+
+                    if (!bn::music::playing()) {
+                        int music_volume = 25;
+                        bn::music_items_info::span[2].first.play(bn::fixed(music_volume) / 100);
+                    }
+
                     break;
                 }
-            }
+            };
             firstThing = false;
         }
     }
