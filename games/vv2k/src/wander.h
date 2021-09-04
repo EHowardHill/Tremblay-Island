@@ -4,11 +4,50 @@
 // UI elements
 #include "bn_sprite_items_a_button_2.h"
 
-// Character / backgrounds
+// Characters
 #include "bn_sprite_items_maple_walking.h"
 #include "bn_sprite_items_enoki_walking_pj.h"
+
+// Items
+#include "bn_sprite_items_fireball.h"
+
+// Backgrounds
 #include "bn_sprite_items_environment_stone.h"
 #include "bn_regular_bg_items_castle_floor.h"
+
+// Projectiles
+class projectile {
+    public:
+    bn::sprite_item fireball_item = bn::sprite_items::fireball;
+    bn::sprite_ptr fireball = fireball_item.create_sprite(0,0);
+    bn::sprite_animate_action<4> fireball_anim = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 0, 1, 2, 3);
+    int dir = 1;
+    int dur = 0;
+    void update() {
+        dur++;
+        BN_LOG(dur);
+        if (dur < 128) {
+            fireball_anim.update();
+            fireball = fireball_anim.sprite();
+            switch(dir) {
+                case 0:
+                    fireball.set_x(fireball.x() + 4);
+                    break;
+                case 1:
+                    fireball.set_x(fireball.x() - 4);
+                    break;
+                case 2:
+                    fireball.set_x(fireball.y() + 4);
+                    break;
+                case 3:
+                    fireball.set_x(fireball.y() - 4);
+                    break;
+            };
+        } else {
+            fireball.set_visible(false);
+        }
+    }
+};
 
 // Individual tiles
 class stone {
@@ -354,8 +393,7 @@ dungeon_return do_action(int act) {
 }
 
 dungeon_return dungeon(dungeon_return dt) {
-    BN_LOG(dt.spawn_x, ", ", dt.spawn_y, ", ", dt.world_index);
-    const int w_size = 104;
+    const int w_size = 96;
     stone local_walls[w_size];
     int local_walls_p = 0;
     room current_room;
@@ -392,7 +430,7 @@ dungeon_return dungeon(dungeon_return dt) {
             current_room.init(21,12,18,1);
             int local[406] = {
                 4,3,3,16,12,3,13,12,3,8,12,8,3,12,3,3,12,13,16,3,5,
-                2,18,0,0,0,0,0,26,0,0,0,0,0,0,0,0,0,0,0,18,2,
+                2,18,0,0,0,0,0,28,0,0,0,0,0,0,0,0,0,0,0,18,2,
                 2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
                 12,3,3,3,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
                 12,1,1,1,1,0,0,0,0,25,25,0,0,0,0,0,0,0,0,0,2,
@@ -467,6 +505,19 @@ dungeon_return dungeon(dungeon_return dt) {
             enoki.isMain = true;
     }
 
+    // Make a fireball!
+    int p_index = 0;
+    projectile p[3];
+    for (int t = 0; t < 3; t++) {
+        p[t].fireball.set_camera(camera);
+        p[t].fireball.set_visible(false);
+    }
+
+    p[0].fireball.set_x(maple.entity.x());
+    p[0].fireball.set_y(maple.entity.y());
+    p[0].dir = 1;
+    p[0].fireball.set_visible(true);
+
     // GAMELOOP
     int update_counter = 0;
     bool firstThing = true;
@@ -474,6 +525,13 @@ dungeon_return dungeon(dungeon_return dt) {
     int follow_x = 0;
     int follow_y = 0;
     while(true) {
+
+        // Update projectiles
+        for (int t = 0; t < 3; t++) {
+            if (p[t].fireball.visible()) {
+                p[t].update();
+            }
+        }
 
         // Control actions
         a_notif.set_visible(false);
