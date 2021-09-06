@@ -7,9 +7,12 @@
 // Characters
 #include "bn_sprite_items_maple_walking.h"
 #include "bn_sprite_items_enoki_walking_pj.h"
+#include "bn_sprite_items_aaron_sleep.h"
+#include "bn_sprite_items_del_sleep.h"
 
 // Items
 #include "bn_sprite_items_fireball.h"
+#include "bn_sprite_items_fireplace_anim.h"
 
 // Backgrounds
 #include "bn_sprite_items_environment_stone.h"
@@ -21,30 +24,37 @@ class projectile {
     bn::sprite_item fireball_item = bn::sprite_items::fireball;
     bn::sprite_ptr fireball = fireball_item.create_sprite(0,0);
     bn::sprite_animate_action<4> fireball_anim = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 0, 1, 2, 3);
+    bn::sprite_animate_action<4> fireball_anim_end = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 4, 5, 6, 7);
     int dir = 1;
     int dur = 0;
+    bool active = false;
     void update() {
         dur++;
-        BN_LOG(dur);
-        if (dur < 128) {
+        if (dur < 16) {
             fireball_anim.update();
             fireball = fireball_anim.sprite();
             switch(dir) {
                 case 0:
-                    fireball.set_x(fireball.x() + 4);
+                    fireball.set_y(fireball.y() + 4);
                     break;
                 case 1:
-                    fireball.set_x(fireball.x() - 4);
+                    fireball.set_x(fireball.x() + 4);
                     break;
                 case 2:
-                    fireball.set_x(fireball.y() + 4);
+                    fireball.set_x(fireball.x() - 4);
                     break;
                 case 3:
-                    fireball.set_x(fireball.y() - 4);
+                    fireball.set_y(fireball.y() - 4);
                     break;
             };
         } else {
-            fireball.set_visible(false);
+            if (dur < 23) {
+                if (dur == 16) bn::sound_items::firehit.play();
+                fireball = fireball_anim_end.sprite();
+                fireball_anim_end.update();
+            } else {
+                fireball.set_visible(false);
+            }
         }
     }
 };
@@ -144,25 +154,27 @@ class character {
             }
 
             // Keyboard controls
-            if (bn::keypad::up_released() || bn::keypad::down_released() || bn::keypad::left_released() || bn::keypad::right_released()) {
-                if (bn::keypad::down_held()) {
-                    dir = 0;
-                } else if (bn::keypad::right_held()) {
-                    dir = 1;
-                } else if (bn::keypad::left_held()) {
-                    dir = 2;
-                } else if (bn::keypad::up_held()) {
-                    dir = 3;
-                }
-            } else {
-                if (bn::keypad::down_pressed()) {
-                    dir = 0;
-                } else if (bn::keypad::right_pressed()) {
-                    dir = 1;
-                } else if (bn::keypad::left_pressed()) {
-                    dir = 2;
-                } else if (bn::keypad::up_pressed()) {
-                    dir = 3;
+            if (!bn::keypad::l_held()) {
+                if (bn::keypad::up_released() || bn::keypad::down_released() || bn::keypad::left_released() || bn::keypad::right_released()) {
+                    if (bn::keypad::down_held()) {
+                        dir = 0;
+                    } else if (bn::keypad::right_held()) {
+                        dir = 1;
+                    } else if (bn::keypad::left_held()) {
+                        dir = 2;
+                    } else if (bn::keypad::up_held()) {
+                        dir = 3;
+                    }
+                } else {
+                    if (bn::keypad::down_pressed()) {
+                        dir = 0;
+                    } else if (bn::keypad::right_pressed()) {
+                        dir = 1;
+                    } else if (bn::keypad::left_pressed()) {
+                        dir = 2;
+                    } else if (bn::keypad::up_pressed()) {
+                        dir = 3;
+                    }
                 }
             }
 
@@ -213,7 +225,7 @@ class character {
 
             // Key controls
             if (bn::keypad::left_held()) {
-                if (!col[0] || (col[0] && !col[1] && col[2] && col[7])) {
+                if ((!col[0] && !col[1]) || (col[0] && !col[1] && col[2] && col[7])) {
                     entity.set_x(entity.x() - 1);
                 }
             }
@@ -223,13 +235,24 @@ class character {
                 }
             }
             if (bn::keypad::up_held()) {
-                if (!col[1] && !col[3]) {
+                if (
+                    (!col[1] && 
+                        (!col[3] || (!col[0] && col[2] && col[3] && col[4] && col[5])))
+                    ||
+                    (col[1] &&
+                        (!col[2] && !col[3] && !col[4] && !col[5] && !col[6] && !col[7]))
+                ) {
                     entity.set_y(entity.y() - 1);
-
                 }
             }
             if (bn::keypad::down_held()) {
-                if (!col[0] && (!col[2] || (col[2] && col[3] && col[4] && col[5]))) {
+                if (
+                    (!col[0] &&
+                        (!col[2] || (col[2] && col[3] && col[4] && col[5])))
+                    ||
+                    (col[0] && col[1] && !col[2] &&
+                        (col[4] || (!col[2] && !col[3] && !col[4])))
+                ) {
                     entity.set_y(entity.y() + 1);
                 }
             }
@@ -237,6 +260,28 @@ class character {
             // Move
             if ((bn::keypad::down_held() || bn::keypad::up_held() || bn::keypad::left_held() || bn::keypad::right_held()) || (entity_anim.current_index() % 2 == 1)) {
                 entity_anim.update();
+            } else {
+                if (bn::keypad::r_pressed()) {
+                    switch(dir) {
+                        case 0:
+                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 12, 0, 0, 0);
+                            break;
+                        case 1:
+                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 13, 3, 3, 3);
+                            break;
+                        case 2:
+                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 14, 6, 6, 6);
+                            break;
+                        case 3:
+                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 15, 9, 9, 9);
+                            break;
+                    }
+                    entity_anim.update();
+                } else {
+                    if (bn::keypad::r_released()) {
+                        entity_anim.update();
+                    }
+                }
             }
         }
 
@@ -263,10 +308,12 @@ class character {
             col[6] = current_room->local_tileset[close[1] + ((close[2] + 1) * current_room->width)] > 1;
             col[7] = current_room->local_tileset[close[1] + ((close[3] + 1) * current_room->width)] > 1;
 
+            BN_LOG(col[0],col[1],col[2],col[3]);
+
             // Follow player
             bool isXTravel = false;
             if (x < entity.x() - 24) {
-                if (!col[0] || (col[0] && !col[1] && col[2] && col[7])) {
+                if ((!col[0]) || (col[0] && !col[1] && col[2])) {
                     isXTravel = true;
                     entity.set_x(entity.x() - 1);
                     dir = 2;
@@ -276,7 +323,7 @@ class character {
                 }
             } else
             if (x > entity.x() + 24) {
-                if (!col[2] || (col[0] && col[2] && !col[3] && col[7])) {
+                if (!col[2] || (col[0] && col[2] && !col[3])) {
                     isXTravel = true;
                     entity.set_x(entity.x() + 1);
                     dir = 1;
@@ -297,7 +344,7 @@ class character {
                 }
             } else
             if (y > entity.y() + 24) {
-                if (!col[0] && (!col[2] || (col[2] && col[3] && col[4] && col[5]))) {
+                if ((!col[2] && !col[3]) || (!col[0] && (!col[2] || (col[2] && col[3] && col[4] && col[5])))) {
                     entity.set_y(entity.y() + 1);
                     if (!isXTravel) {
                         dir = 0;
@@ -338,6 +385,15 @@ class character {
     }
 };
 
+// Animated objects
+class anim_object {
+    public:
+    int id = 0;
+    bn::sprite_item entity_item = bn::sprite_items::aaron_sleep;
+    bn::sprite_ptr entity = entity_item.create_sprite(0,0);
+    bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 18, entity_item.tiles_item(), 0, 0, 0, 1);
+};
+
 // Actual action... things
 dungeon_return do_action(int act) {
     dungeon_return dt(0,0,0);
@@ -352,7 +408,7 @@ dungeon_return do_action(int act) {
             dt.spawn_y = 6;
             dt.world_index = 2;
             break;
-        case 3: // Takin' a look out Enoki's window
+        case 3: // Takin' a look out chari[1]'s window
             exec_dialogue(5);
             break;
         case 4: // Observing le fine art
@@ -388,6 +444,9 @@ dungeon_return do_action(int act) {
             dt.spawn_y = 6;
             dt.world_index = 2;
             break;
+        case 12: // dialogue about the whole eyebrow thing:
+            exec_dialogue(10);
+            break;
     };
     return dt;
 }
@@ -402,6 +461,7 @@ dungeon_return dungeon(dungeon_return dt) {
     bn::camera_ptr camera = bn::camera_ptr::create(0,0);
     bn::regular_bg_ptr primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
     primary_bg.set_camera(camera);
+    bn::vector<anim_object,3> anim_objects;
 
     // World generation
     switch(dt.world_index) {
@@ -411,7 +471,7 @@ dungeon_return dungeon(dungeon_return dt) {
                 4,3,8,11,13,3,3,3,8,3,5,0,
                 2,18,0,0,0,18,2,9,0,9,2,0,
                 2,0,0,0,0,0,2,10,0,10,2,0,
-                2,3,3,2,0,0,2,0,0,0,2,0,
+                2,0,0,0,0,0,0,0,0,0,2,0,
                 17,0,0,0,0,0,0,0,0,18,2,0,
                 7,3,3,3,3,3,3,3,16,3,6,0
                 };
@@ -447,6 +507,15 @@ dungeon_return dungeon(dungeon_return dt) {
             }
             current_room.actions[0].set(18,1,10);
             current_room.actions[1].set(3,1,11);
+
+            anim_object fp;
+            fp.entity_item = bn::sprite_items::fireplace_anim;
+            fp.entity = fp.entity_item.create_sprite(0,0);
+            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 0, 1, 0, 2);
+            fp.entity.set_visible(false);
+            fp.entity.set_camera(camera);
+            fp.entity.set_position(304,176);
+            anim_objects.push_back(fp);
             break;
         }
         case 2: {
@@ -468,6 +537,23 @@ dungeon_return dungeon(dungeon_return dt) {
             current_room.actions[1].set(3,6,8);
             current_room.actions[2].set(4,2,6);
             current_room.actions[3].set(8,2,7);
+            current_room.actions[4].set(2,3,12);
+
+            anim_object aaron;
+            aaron.entity.set_visible(true);
+            aaron.entity.set_camera(camera);
+            aaron.entity.set_position(64,48);
+            anim_objects.push_back(aaron);
+
+            anim_object del;
+            del.id = 1;
+            del.entity_item = bn::sprite_items::del_sleep;
+            del.entity = del.entity_item.create_sprite(0,0);
+            del.entity_anim = bn::create_sprite_animate_action_forever(del.entity, 20, del.entity_item.tiles_item(), 0, 1, 0, 0);
+            del.entity.set_visible(true);
+            del.entity.set_camera(camera);
+            del.entity.set_position(256,48);
+            anim_objects.push_back(del);
             break;
         }
     };
@@ -476,6 +562,7 @@ dungeon_return dungeon(dungeon_return dt) {
     if (dt.spawn_x > 0 && dt.spawn_y > 0 && dt.spawn_x < 999) {
         current_room.start_x = dt.spawn_x;
         current_room.start_y = dt.spawn_y;
+        bn::sound_items::door.play();
     }
 
     // Camera init
@@ -486,37 +573,26 @@ dungeon_return dungeon(dungeon_return dt) {
     a_notif.set_camera(camera);
     a_notif.set_visible(false);
 
-    // Initial line of dialogue
-    //bn::core::update();
-    //exec_dialogue(3);
-    bn::core::update();
-
     // Create initial characters
     character maple(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
-    maple.entity.set_camera(camera);
     character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 1, current_room.start_y, false);
-    enoki.entity.set_camera(camera);
+    int max_chari = 2;
+    character chari[2] = {maple, enoki};
 
-    switch(save::last_char_id) {
-        case 0:
-            maple.isMain = true;
-            break;
-        case 1:
-            enoki.isMain = true;
+    for (int t = 0; t < 2; t++) {
+        chari[t].entity.set_camera(camera);
     }
+
+    chari[save::last_char_id].isMain = true;
 
     // Make a fireball!
     int p_index = 0;
+    int p_size = 3;
     projectile p[3];
     for (int t = 0; t < 3; t++) {
         p[t].fireball.set_camera(camera);
         p[t].fireball.set_visible(false);
     }
-
-    p[0].fireball.set_x(maple.entity.x());
-    p[0].fireball.set_y(maple.entity.y());
-    p[0].dir = 1;
-    p[0].fireball.set_visible(true);
 
     // GAMELOOP
     int update_counter = 0;
@@ -524,12 +600,46 @@ dungeon_return dungeon(dungeon_return dt) {
     int flex = 84;
     int follow_x = 0;
     int follow_y = 0;
+    int follow_dir = 0;
+    int follow_id = 0;
+
     while(true) {
 
+        // Animate NPCs
+        for (int t = 0; t < anim_objects.size(); t++) {
+            anim_objects.at(t).entity_anim.update();
+            anim_objects.at(t).entity = anim_objects.at(t).entity_anim.sprite();
+        }
+
+        // Create projectiles
+        if (bn::keypad::r_pressed()) {
+            if (follow_id == 0) {
+                bn::sound_items::fireblast.play();
+                p[p_index].active = true;
+                p[p_index].fireball.set_x(follow_x);
+                p[p_index].fireball.set_y(follow_y);
+                p[p_index].dir = chari[follow_id].dir;
+                p[p_index].dur = 0;
+                p[p_index].fireball.set_visible(true);
+                p_index++;
+                if (p_index >= p_size) p_index = 0;
+            } else {
+                bn::sound_items::squeak.play();
+            }
+        }
+
         // Update projectiles
-        for (int t = 0; t < 3; t++) {
-            if (p[t].fireball.visible()) {
+        for (int t = 0; t < p_size; t++) {
+            if (p[t].active) {
+                if (p[t].dir == 3) p[t].fireball.put_above();
                 p[t].update();
+                if (p[t].dur < 16 && (
+                    current_room.local_tileset[
+                        (p[t].fireball.x().integer() / 32) +
+                        ((p[t].fireball.y().integer() / 32) * current_room.width)] > 0
+                    )) {
+                    p[t].dur = 16;
+                }
             }
         }
 
@@ -561,44 +671,38 @@ dungeon_return dungeon(dungeon_return dt) {
 
         // Swap characters
         if (bn::keypad::b_pressed()) {
-            bn::sound_items::pop.play();
+            bn::sound_items::cnaut.play();
             bn::blending::set_intensity_alpha(1);
-            if (maple.isMain) {
-                save::last_char_id = 1;
-                maple.isMain = false;
-                enoki.isMain = true;
-                enoki.entity.set_blending_enabled(true);
-                maple.entity.set_blending_enabled(false);
-            } else {
-                save::last_char_id = 0;
-                maple.isMain = true;
-                enoki.isMain = false;
-                maple.entity.set_blending_enabled(true);
-                enoki.entity.set_blending_enabled(false);
+            int new_chari = (follow_id + 1) % max_chari;
+            save::last_char_id = new_chari;
+            chari[follow_id].isMain = false;
+            chari[follow_id].entity.set_blending_enabled(false);
+            chari[new_chari].isMain = true;
+            chari[new_chari].entity.set_blending_enabled(true);
+        }
+
+        // Character operations
+        int base_y = chari[0].entity.y().integer();
+        for (int t = 0; t < 2; t++) {
+
+            // Set primary camera following X/Y coordinates
+            if (chari[t].isMain) {
+                chari[t].update();
+                follow_x = chari[t].entity.x().integer();
+                follow_y = chari[t].entity.y().integer();
+                follow_dir = chari[t].dir;
+                follow_id = t;
             }
-        }
 
-        // Set primary camera following X/Y coordinates
-        if (maple.isMain) {
-            maple.update();
-            follow_x = maple.entity.x().integer();
-            follow_y = maple.entity.y().integer();
-        } else {
-            maple.update(enoki.entity.x().integer(), enoki.entity.y().integer());
-        }
-        if (enoki.isMain) {
-            enoki.update();
-            follow_x = enoki.entity.x().integer();
-            follow_y = enoki.entity.y().integer();
-        } else {
-            enoki.update(maple.entity.x().integer(), maple.entity.y().integer());
-        }
+            // Z-Order followers
+            if (chari[t].entity.y() > chari[(t+1)%max_chari].entity.y()) {
+                base_y = chari[t].entity.y().integer();
+                chari[t].entity.put_above();
+            }
 
-        // Z-Order followers
-        if (maple.entity.y() > enoki.entity.y()) {
-            maple.entity.put_above();
-        } else {
-            enoki.entity.put_above();
+            if (!chari[t].isMain) {
+                chari[t].update(follow_x,follow_y);
+            }
         }
 
         // Camera follows primary player
@@ -656,6 +760,7 @@ dungeon_return dungeon(dungeon_return dt) {
 
         bn::core::update();
 
+        // To run before everything else
         if (firstThing) {
             // After world load
             switch(dt.world_index) {
@@ -667,7 +772,7 @@ dungeon_return dungeon(dungeon_return dt) {
                     }
 
                     if (!bn::music::playing()) {
-                        int music_volume = 25;
+                        int music_volume = 50;
                         bn::music_items_info::span[2].first.play(bn::fixed(music_volume) / 100);
                     }
 
@@ -675,6 +780,35 @@ dungeon_return dungeon(dungeon_return dt) {
                 }
             };
             firstThing = false;
+        } else {
+
+            // World-specific special events
+            switch(dt.world_index) {
+                case 1:
+                    for (int i = 0; i < p_size; i++) {
+                        if (p[i].active) {
+                            int my_x = p[i].fireball.x().integer() / 32;
+                            int my_y = p[i].fireball.y().integer() / 32;
+                            if (my_x >= 8 && my_x <= 11 && my_y >= 4 && my_y <= 7) {
+                                anim_objects.at(0).entity.set_visible(true);
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    for (int i = 0; i < p_size; i++) {
+                        if (p[i].active && p[i].dur < 16) {
+                            int my_x = p[i].fireball.x().integer() / 32;
+                            int my_y = p[i].fireball.y().integer() / 32;
+                            if (my_x >= 2 && my_x <= 3 && my_y >= 2 && my_y <= 3) {
+                                p[i].dur = 16;
+                                anim_objects.at(0).entity_anim = bn::create_sprite_animate_action_forever(anim_objects.at(0).entity, 18, anim_objects.at(0).entity_item.tiles_item(), 2, 1, 0, 1);
+                                anim_objects.at(0).entity.set_horizontal_flip(!anim_objects.at(0).entity.horizontal_flip());
+                                anim_objects.at(0).entity_anim.update();
+                            }
+                        }
+                    }
+            }
         }
     }
 }

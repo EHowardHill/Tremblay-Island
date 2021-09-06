@@ -1,3 +1,3 @@
 graphics/enoki_walking_pj.bmp
-6262
-1629946721.4
+8310
+1630925662.14

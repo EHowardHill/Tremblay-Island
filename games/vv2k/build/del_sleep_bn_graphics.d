@@ -1,0 +1,1 @@
+del_sleep_bn_graphics.o: del_sleep_bn_graphics.s

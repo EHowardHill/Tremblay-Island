@@ -90,7 +90,7 @@ void exec_dialogue(int x) {
                 {true, true, 0, "ENOKI                            I don't wanna sound rude but...  Aren't you guys used to growing  up in places like, er, in a car?"},
                 {true, true, 0, "MAPLE                            Enoki, we all know you're rich,  no need to flaunt it."},
                 {true, true, 0, "ENOKI                            But didn't you literally grow up in a car? I mean, compared to    that, a castle is pretty nice,   right?"},
-                {true, true, 0, "MAPLE                            It just seems.. rash. I don't    meanto take the fun out of it,   but I can't help but think this  was a really, really bad idea."},
+                {true, true, 0, "MAPLE                            It just seems.. rash. I don't    mean to take the fun out of it,  but I can't help but think this  was a really, really bad idea."},
                 {true, true, 0, "ENOKI                            Coming from the girl who got     embarrased of her grades freshmanyear and decided to just up and  run away from college."},
                 {true, true, 0, "S01:10"},
                 {true, true, 0, "MAPLE                            Oh come on, that was your idea   first."},
@@ -190,7 +190,7 @@ void exec_dialogue(int x) {
                 {true, true, 0, "                                                                  ENOKI                            Uh huh, that's what I thought."},
                 {true, true, 0, "                                                                  MAPLE                            I'm sorry."},
                 {true, true, 0, "                                                                  ENOKI                            Thank you."},
-                {true, true, 0, "                                                                  MAPLE                            But when you both move in with me,"},
+                {true, true, 0, "                                                                  MAPLE                            But when you both move in with me"},
                 {true, true, 0, "                                                                  MAPLE                            don't say I didn't warn y'all."},
                 {true, true, 0, "COM: Endscene"}
             };
@@ -207,7 +207,50 @@ void exec_dialogue(int x) {
                 {true, true, 0, "                                                                  ENOKI                            slept anywhere but the tub."},
                 {true, true, 0, "                                                                  MAPLE                            That actually sounds pretty nice."},
                 {true, true, 0, "                                                                  ENOKI                            Yeah, I tried it but my skin"},
-                {true, true, 0, "                                                                  ENOKI                            didn't very much."},
+                {true, true, 0, "                                                                  ENOKI                            didn't like it very much."},
+                {true, true, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            break;
+        };
+
+        case 9: {
+            Concepts::line lc[9] = {
+                {true, true, 0, "                                                                  MAPLE                            Enoki, this one's locked."},
+                {true, true, 0, "                                                                  ENOKI                            Oh. Yeah, I think that's"},
+                {true, true, 0, "                                                                  ENOKI                            the kitchen. We don't know where"},
+                {true, true, 0, "                                                                  ENOKI                            the key is."},
+                {true, true, 0, "                                                                  MAPLE                            So how do you eat??"},
+                {true, true, 0, "                                                                  ENOKI                            We make most of our food over the"},
+                {true, true, 0, "                                                                  ENOKI                            big fire pit!"},
+                {true, true, 0, "                                                                  MAPLE                            You two, I *swear*...."},
+                {true, true, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            break;
+        };
+
+        case 10: {
+            Concepts::line lc[20] = {
+                {true, true, 0, "                                                                  ENOKI                            Isn't he so cute when he"},
+                {true, true, 0, "                                                                  ENOKI                            sleeps like that? <3"},
+                {true, true, 0, "                                                                  MAPLE                            You've been married for, what,"},
+                {true, true, 0, "                                                                  MAPLE                            a few months now?"},
+                {true, true, 0, "                                                                  MAPLE                            Aren't you supposed to be at the"},
+                {true, true, 0, "                                                                  MAPLE                            stage where neither of you talk"},
+                {true, true, 0, "                                                                  MAPLE                            to each other at meals and both"},
+                {true, true, 0, "                                                                  MAPLE                            of you've gained ten pounds?"},
+                {true, true, 0, "                                                                  ENOKI                            Huh, I think I've lost weight."},
+                {true, true, 0, "                                                                  MAPLE                            I guess I don't get it."},
+                {true, true, 0, "                                                                  ENOKI                            Just cos you always get in"},
+                {true, true, 0, "                                                                  ENOKI                            fights with your ex-boyfriends"},
+                {true, true, 0, "                                                                  ENOKI                            doesn't mean every couple's like"},
+                {true, true, 0, "                                                                  ENOKI                            that, y'know."},
+                {true, true, 0, "                                                                  ENOKI                            I mean, you've got this nasty"},
+                {true, true, 0, "                                                                  ENOKI                            habit of-"},
+                {true, true, 0, "                                                                  MAPLE                            You finish that sentence, and"},
+                {true, true, 0, "                                                                  MAPLE                            I'll burn your eyebrows off."},
+                {true, true, 0, "                                                                  ENOKI                            ......doing that."},
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
