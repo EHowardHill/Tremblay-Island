@@ -1,3 +1,9 @@
+audio/ahoy.wav
+111094
+1630941487.68
+audio/birds.wav
+1279980
+1631088735.08
 audio/castle.xm
 232022
 1629764745.57
@@ -34,6 +40,12 @@ audio/shortclip.wav
 audio/squeak.wav
 37164
 1630924062.97
+audio/title.xm
+1861296
+1630979939.72
+audio/twinkle.xm
+272734
+1630977714.62
 audio/ui_sfx01.wav
 10924
 1629764745.59
@@ -52,3 +64,9 @@ audio/v02.mod
 audio/v02_b.xm
 226033
 1629764745.6
+audio/velvet.xm
+272646
+1630981749.99
+audio/z01_maple_is_sad.xm
+1128711
+1631057913.66

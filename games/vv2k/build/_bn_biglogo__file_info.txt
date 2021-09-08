@@ -1,0 +1,3 @@
+graphics/biglogo.bmp
+8310
+1630967528.47

@@ -13,6 +13,7 @@
 // Items
 #include "bn_sprite_items_fireball.h"
 #include "bn_sprite_items_fireplace_anim.h"
+#include "bn_sprite_items_bookshelf.h"
 
 // Backgrounds
 #include "bn_sprite_items_environment_stone.h"
@@ -125,7 +126,7 @@ class character {
     bool isMain = false;
     room* current_room;
 
-    character(const bn::sprite_item sprite, room new_room, int x = 0, int y = 0, bool main = false) {
+    character(const bn::sprite_item sprite, room new_room, float x = 0, float y = 0, bool main = false) {
         entity = sprite.create_sprite(x * 32, y * 32);
         entity.set_visible(true);
         entity_item = sprite;
@@ -308,8 +309,6 @@ class character {
             col[6] = current_room->local_tileset[close[1] + ((close[2] + 1) * current_room->width)] > 1;
             col[7] = current_room->local_tileset[close[1] + ((close[3] + 1) * current_room->width)] > 1;
 
-            BN_LOG(col[0],col[1],col[2],col[3]);
-
             // Follow player
             bool isXTravel = false;
             if (x < entity.x() - 24) {
@@ -447,11 +446,32 @@ dungeon_return do_action(int act) {
         case 12: // dialogue about the whole eyebrow thing:
             exec_dialogue(10);
             break;
+        case 13: // locked kitchen door
+            exec_dialogue(9);
+            break;
+        case 14: // return to lobby from secret chamber
+            dt.spawn_x = 2;
+            dt.spawn_y = 10;
+            dt.world_index = 1;
+            break;
+        case 15: // go to secret chamber
+            dt.spawn_x = 22;
+            dt.spawn_y = 1;
+            dt.world_index = 3;
+            break;
+        case 16: // long-ass bookshelf dialogue
+            exec_dialogue(11);
+            break;
     };
     return dt;
 }
 
 dungeon_return dungeon(dungeon_return dt) {
+
+    if (dt.world_index == -1) {
+        return dt;
+    }
+
     const int w_size = 96;
     stone local_walls[w_size];
     int local_walls_p = 0;
@@ -507,6 +527,8 @@ dungeon_return dungeon(dungeon_return dt) {
             }
             current_room.actions[0].set(18,1,10);
             current_room.actions[1].set(3,1,11);
+            current_room.actions[2].set(18,10,13);
+            current_room.actions[3].set(2,10,15);
 
             anim_object fp;
             fp.entity_item = bn::sprite_items::fireplace_anim;
@@ -556,6 +578,39 @@ dungeon_return dungeon(dungeon_return dt) {
             anim_objects.push_back(del);
             break;
         }
+        case 3: {
+            current_room.init(24,12,22,1);
+            int local[406] = {
+                4,8,11,12,3,3,12,11,8,5,1,1,1,1,0,0,1,1,1,1,1,4,14,5,
+                2,18,0,0,0,0,0,0,18,2,1,1,1,1,0,0,1,1,1,1,1,2,0,2,
+                2,0,0,0,0,0,0,0,0,2,1,1,1,1,0,0,1,1,1,1,1,2,0,2,
+                2,0,0,0,0,0,0,0,0,2,1,1,1,1,0,0,1,1,1,1,1,2,0,2,
+                2,0,0,0,1,1,0,0,0,2,1,1,1,1,0,0,1,1,1,1,1,2,0,2,
+                2,0,0,1,1,1,1,0,0,2,1,1,1,1,1,1,1,1,1,1,1,2,0,2,
+                2,0,0,1,1,1,1,0,0,2,1,1,1,1,1,1,1,1,1,1,1,2,0,2,
+                2,0,0,0,1,1,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,2,0,2,
+                2,0,0,0,0,0,0,0,0,2,1,1,1,1,1,1,1,1,1,1,1,2,0,2,
+                2,0,0,0,0,0,0,0,0,7,3,3,3,3,3,3,3,3,3,3,3,2,0,2,
+                2,18,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
+                7,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,6
+            };
+            for (int t = 0; t < current_room.width * current_room.height; t++) {
+                current_room.local_tileset[t] = local[t];
+            }
+
+            current_room.actions[0].set(22,1,14);
+            current_room.actions[1].set(5,2,16);
+            current_room.actions[2].set(4,2,16);
+
+            anim_object fp;
+            fp.entity_item = bn::sprite_items::bookshelf;
+            fp.entity = fp.entity_item.create_sprite(0,0);
+            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 0, 0, 0, 0);
+            fp.entity.set_visible(true);
+            fp.entity.set_camera(camera);
+            fp.entity.set_position(144,16);
+            anim_objects.push_back(fp);
+        }
     };
 
     // If different than default, reset
@@ -575,7 +630,12 @@ dungeon_return dungeon(dungeon_return dt) {
 
     // Create initial characters
     character maple(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
-    character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 1, current_room.start_y, false);
+    character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
+
+    if (current_room.local_tileset[(current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
+        enoki.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
+        maple.entity.set_position(current_room.start_x * 32, (current_room.start_y * 32) + 32);
+    }
     int max_chari = 2;
     character chari[2] = {maple, enoki};
 
@@ -604,6 +664,18 @@ dungeon_return dungeon(dungeon_return dt) {
     int follow_id = 0;
 
     while(true) {
+
+        if (bn::keypad::start_pressed()) {
+            bn::core::update();
+            int old_vol = bn::music::volume().integer();
+            bn::music::pause();
+            bn::sound_items::cnaut.play();
+            while(!bn::keypad::start_pressed()) {
+                bn::core::update();
+            }
+            bn::music::resume();
+            bn::sound_items::pop.play();
+        }
 
         // Animate NPCs
         for (int t = 0; t < anim_objects.size(); t++) {
@@ -808,6 +880,32 @@ dungeon_return dungeon(dungeon_return dt) {
                             }
                         }
                     }
+                    break;
+                case 3:
+                    //(144,16);
+                    for (int i = 0; i < p_size; i++) {
+                        if (p[i].active && p[i].dur < 16) {
+                            int my_x = p[i].fireball.x().integer() / 32;
+                            int my_y = p[i].fireball.y().integer() / 32;
+                            if (my_x >= 4 && my_x <= 5 && my_y >= 0 && my_y <= 1) {
+                                p[i].dur = 16;
+                                bn::sound_items::firecrackle.play();
+                                anim_objects.at(0).entity_anim = bn::create_sprite_animate_action_forever(anim_objects.at(0).entity, 18, anim_objects.at(0).entity_item.tiles_item(), 1, 1, 1, 1);
+                                anim_objects.at(0).entity_anim.update();
+                                a_notif.set_visible(false);
+                                bn::music::stop();
+                                for (int t = 0; t < 128; t++) {
+                                    chari[0].update();
+                                    p[i].update();
+                                    bn::core::update();
+                                }
+                                exec_dialogue(12);
+                                dt.world_index = -1;
+                                return dt;
+                            }
+                        }
+                    }
+                    break;
             }
         }
     }

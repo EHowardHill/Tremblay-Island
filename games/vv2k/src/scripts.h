@@ -8,28 +8,28 @@ void exec_dialogue(int x) {
                 {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "S01:01"},
                 {fals, true, 0, ""},
-                {fals, true, 0, "4:15 AM                              January 1st, 2000            Providence of Nord Louisiane,    La République Laurentides"},
+                {fals, true, 0, "4:15 AM                          January 1st, 2000                Providence of Nord Louisiane,    La République Laurentides"},
                 {fals, true, 0, "S01:02"},
-                {fals, true, 0, "                                     AHHHHG.                      I've been driving for hours.     My right foot's asleep, and the  left one isn't too far behind.   Where is it???"},        
+                {fals, true, 0, "                                 AHHHHG.                          I've been driving for hours.     My right foot's asleep, and the  left one isn't too far behind."},        
                 {fals, true, 0, "S01:03"},
-                {fals, true, 0, "                                     Look at that gumbo.          It has to be cold by now.                                    I can't believe they wanted me   to bring the food."},
+                {fals, true, 0, "                                 Look at that gumbo.              It has to be cold by now.        I can't believe they wanted me   to bring the food."},
                 {fals, true, 0, "S01:04"},
-                {fals, true, 0, "Y'know....                           If I don't see that castle infifteen minutes, I might just    head back."},
-                {fals, true, 0, "                                     At least the drive was nice, I guess."},
+                {fals, true, 0, "                                 Y'know....                       If I don't see that castle in    fifteen minutes, I might just    head back."},
+                {fals, true, 0, "                                 At least the drive was nice,     I guess."},
                 {fals, true, 0, "S01:05"},
-                {fals, true, 0, "                                     Okay, I give up. There's no  way that I'm gonna-"},
+                {fals, true, 0, "                                 Okay, I give up. There's no way  that I'm gonna-"},
                 {fals, true, 0, "S01:06"},
-                {fals, true, 0, ".....Oh."},
-                {fals, true, 0, "                                     I.. can't decide if I'm      relieved or disappointed."},
+                {fals, true, 0, "                                 .....Oh."},
+                {fals, true, 0, "                                 I.. can't decide if I'm          relieved or disappointed."},
                 {fals, true, 0, "BG: fadeout"},
                 {fals, true, 0, "S01:07"},
-                {fals, true, 0, "                                     *knock*                      *knock*                          *knock*"},
+                {fals, true, 0, "                                 *knock*                          *knock*                          *knock*"},
                 {fals, true, 0, "S01:08"},
-                {fals, true, 0, "                                     I wonder if they can even    hear me in there... This place   looks huge."},
+                {fals, true, 0, "                                 I wonder if they can even        hear me in there... This place   looks huge."},
                 {fals, true, 0, "                                                                  '.....coming!'"},
                 {fals, true, 0, "S01:09"},
                 {fals, true, 0, "BG: 0"},
-                {fals, true, 0, "                                     Hey, Maple!!                 C'mon in!"},
+                {fals, true, 0, "                                                                  Hey, Maple!!                     C'mon in, allez!"},
                 {fals, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
@@ -107,7 +107,7 @@ void exec_dialogue(int x) {
                 {true, true, 0, "ENOKI                            Hey- I'm feeling down and that's stupid! You wanna go on another  Maple and Enoki adventure like   old times??"},
                 {true, true, 0, "ENOKI                            Let's go explore the castle!!"},
                 {true, true, 0, "MAPLE                            Hold up, you bought this castle  and hadn't explored it all first?"},
-                {true, true, 0, "ENOKI                            Well duh, I'm taking my sweet    time with it -- it's a castle!    C'mon, let's explore!"},
+                {true, true, 0, "ENOKI                            Well duh, I'm taking my sweet    time with it -- it's a castle!    Allons-y, let's explore!"},
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
@@ -188,8 +188,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "                                                                  ENOKI                            my house?"},
                 {true, true, 0, "                                                                  MAPLE                            Well, when you put it THAT way..."},
                 {true, true, 0, "                                                                  ENOKI                            Uh huh, that's what I thought."},
-                {true, true, 0, "                                                                  MAPLE                            I'm sorry."},
-                {true, true, 0, "                                                                  ENOKI                            Thank you."},
+                {true, true, 0, "                                                                  MAPLE                            Je m'excuse."},
+                {true, true, 0, "                                                                  ENOKI                            Merci."},
                 {true, true, 0, "                                                                  MAPLE                            But when you both move in with me"},
                 {true, true, 0, "                                                                  MAPLE                            don't say I didn't warn y'all."},
                 {true, true, 0, "COM: Endscene"}
@@ -245,7 +245,7 @@ void exec_dialogue(int x) {
                 {true, true, 0, "                                                                  ENOKI                            Just cos you always get in"},
                 {true, true, 0, "                                                                  ENOKI                            fights with your ex-boyfriends"},
                 {true, true, 0, "                                                                  ENOKI                            doesn't mean every couple's like"},
-                {true, true, 0, "                                                                  ENOKI                            that, y'know."},
+                {true, true, 0, "                                                                  ENOKI                            that, tu sais."},
                 {true, true, 0, "                                                                  ENOKI                            I mean, you've got this nasty"},
                 {true, true, 0, "                                                                  ENOKI                            habit of-"},
                 {true, true, 0, "                                                                  MAPLE                            You finish that sentence, and"},
@@ -253,6 +253,123 @@ void exec_dialogue(int x) {
                 {true, true, 0, "                                                                  ENOKI                            ......doing that."},
                 {true, true, 0, "COM: Endscene"}
             };
+            dialogue_page(lc);
+            break;
+        };
+
+        case 11: {
+            Concepts::line lc[32] = {
+                {true, true, 0, "                                                                  ENOKI                            Nous sommes ici!"},
+                {true, true, 0, "                                                                  ENOKI                            The bookshelf room."},
+                {true, true, 0, "                                                                  MAPLE                            You weren't kidding about there"},
+                {true, true, 0, "                                                                  MAPLE                            literally being just a bookshelf"},
+                {true, true, 0, "                                                                  MAPLE                            room, were you?"},
+                {true, true, 0, "                                                                  ENOKI                            Bon, so I can't move it and Aaron"},
+                {true, true, 0, "                                                                  ENOKI                            can't either, so I was wondering,"},
+                {true, true, 0, "                                                                  ENOKI                            how about using that elf magic?"},
+                {true, true, 0, "                                                                  MAPLE                            Let me get this straight..."},
+                {true, true, 0, "                                                                  MAPLE                            You want me to *burn* a perfectly"},
+                {true, true, 0, "                                                                  MAPLE                            good bookshelf?"},
+                {true, true, 0, "                                                                  ENOKI                            Yeah! I wanna see if there's a"},
+                {true, true, 0, "                                                                  ENOKI                            secret passage behind it or"},
+                {true, true, 0, "                                                                  ENOKI                            somethin', y'know?"},
+                {true, true, 0, "                                                                  MAPLE                            I refuse. This is rediculous."},
+                {true, true, 0, "                                                                  MAPLE                            These are perfectly good books."},
+                {true, true, 0, "                                                                  ENOKI                            Most are rotting away, so"},
+                {true, true, 0, "                                                                  ENOKI                            it's probably best that they get"},
+                {true, true, 0, "                                                                  ENOKI                            burned. I checked."},
+                {true, true, 0, "                                                                  MAPLE                            Are you sure?"},
+                {true, true, 0, "                                                                  ENOKI                            Absolutely."},
+                {true, true, 0, "                                                                  MAPLE                            Alright... I'll make a deal."},
+                {true, true, 0, "                                                                  MAPLE                            I'll burn this, but you need to"},
+                {true, true, 0, "                                                                  MAPLE                            save at least one book."}, //j'ai compris?
+                {true, true, 0, "                                                                  MAPLE                            J'ai compris? Oui?"},
+                {true, true, 0, "                                                                  ENOKI                            Oui!"},
+                {true, true, 0, "                                                                  ENOKI                            ....alright, I got my book."},
+                {true, true, 0, "                                                                  ENOKI                            Remember, use the 'R' trigger"},
+                {true, true, 0, "                                                                  ENOKI                            to send out a bolt of fire!"},
+                {true, true, 0, "                                                                  MAPLE                            ...What are you talking about??"},
+                {true, true, 0, "                                                                  ENOKI                            Huh? Oh, nothing"},
+                {true, true, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            break;
+        };
+
+        case 12: {
+            Concepts::line lc[32] = {
+                {true, true, 0, "                                                                  MAPLE                            ...."},
+                {true, true, 0, "                                                                  ENOKI                            Well, there's no passage."},
+                {true, true, 0, "                                                                  MAPLE                            You don't say."},
+                {true, true, 0, "                                                                  ENOKI                            That's weird."},
+                {true, true, 0, "                                                                  MAPLE                            Enoki... Look here."},
+                {true, true, 0, "                                                                  MAPLE                            I guess it doesn't make any sense"},
+                {true, true, 0, "                                                                  MAPLE                            to be angry, so I won't be, but.."},
+                {true, true, 0, "                                                                  MAPLE                            You need to stop being like this."},
+                {true, true, 0, "                                                                  MAPLE                            You and Aaron just spent all this"},
+                {true, true, 0, "                                                                  MAPLE                            money on a barely furnished"},
+                {true, true, 0, "                                                                  MAPLE                            castle without basic faculties"},
+                {true, true, 0, "                                                                  MAPLE                            for what? So you could play like"},
+                {true, true, 0, "                                                                  MAPLE                            you're a princess? While I'm over"},
+                {true, true, 0, "                                                                  MAPLE                            in Carolina, sacrificing the best"},
+                {true, true, 0, "                                                                  MAPLE                            parts of my life for an apartment"},
+                {true, true, 0, "                                                                  MAPLE                            with the bare essentials?"},
+                {true, true, 0, "                                                                  MAPLE                            Enoki... Please."},
+                {true, true, 0, "                                                                  MAPLE                            I don't want to be the bad guy."},
+                {true, true, 0, "                                                                  MAPLE                            I know you didn't really have a"},
+                {true, true, 0, "                                                                  MAPLE                            childhood or parents, I get it."},
+                {true, true, 0, "                                                                  MAPLE                            That's me too."},
+                {true, true, 0, "                                                                  MAPLE                            But you can't keep going on like"},
+                {true, true, 0, "                                                                  MAPLE                            this. Do you understand?"},
+                {true, true, 0, "                                                                  ENOKI                            I do understand."}, //j'ai compris?
+                {true, true, 0, "                                                                  MAPLE                            It's 5:00 in the morning, I'm"},
+                {true, true, 0, "                                                                  MAPLE                            going back to bed. I'll see y'all"},
+                {true, true, 0, "                                                                  MAPLE                            in the morning, oui?"},
+                {true, true, 0, "                                                                  ENOKI                            Oui.."},
+                {true, true, 0, "                                                                  MAPLE                            Hey, don't beat yourself up about"},
+                {true, true, 0, "                                                                  MAPLE                            it. S'il te plait.. Bonne nuit."},
+                {true, true, 0, "                                                                  ENOKI                            Bonne nuit.."},
+                {true, true, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            break;
+        };
+
+        case 13: {
+            Concepts::line lc[32] = {
+                {true, true, 0, "BG: Ocean"},
+                {true, fals, 4, "..."},
+                {true, true, 10, "AARON                            Bonjour! Did you sleep well?"},
+                {fals, fals, 4, "MAPLE                            Yeah, it was ok I guess."},
+                {true, true, 9, "ENOKI                            Bonjour! So.. We found something cool while you were sleeping, butyou've gotta promise you won't bemad."},
+                {fals, fals, 4, "MAPLE                            You know I can't promise that."},
+                {fals, true, 7, "ENOKI                            Remember that book you wanted me to get? Well, it's a world atlas!And we spotted something really  fun!"},
+                {fals, true, 9, "ENOKI                            So, we found this island up in   Lake Supérieur called Tremblay   Island!"},
+                {fals, fals, 0, "MAPLE                            Aw, that's fun. I was afraid thatthere'd be some kind of.. catch."},
+                {fals, true, 0, "ENOKI                            Well, we, uh- figured it'd be funif, well, the idea came from Del,so..."},
+                {true, true, 12, "DEL                              Last time we talked, my cousin   Rufus was obsessed with starting his own tiny country."},
+                {true, true, 11, "AARON                            There's work not too far out, so if we need to pick up supplies, it shouldn't be very difficult."},
+                {true, true, 7, "ENOKI                            With the money we could make     selling off the castle, and with your magic, we were thinking-"},
+                {fals, true, 3, "MAPLE                            WHOA WHOA WHOA,                  JUST HOLD UP FOR A MINUTE."},
+                {fals, fals, 3, "MAPLE                            Are you seriously telling me thatyou're going to SELL this castle and move to this random island,"},
+                {fals, true, 3, "MAPLE                            All because it shares the same   last name as us?"},
+                {fals, fals, 9, "ENOKI                            As a bonus, we're thinking we're gonna secede from the Laurentidesand be our own country, too."},
+                {fals, true, 9, "MAPLE                            ...I..."},
+                {fals, true, 4, "MAPLE                            ..."},
+                {fals, true, 9, "MAPLE                            ...I'm going to need some time toprocess this."},
+                {true, true, 10, "AARON                            It sounds insane, but we've gone over the details, and it seems   like this could actually happen."},
+                {true, true, 9, "ENOKI                            I know we had that talk last     night, but.."},
+                {fals, fals, 0, "MAPLE                            And then what's next?            What happens after you get bored  of being your own little island?"},
+                {fals, fals, 0, "MAPLE                            Do you want to be the Pope? The  Queen of France? Are you going to want your own planet?"},
+                {fals, fals, 0, "MAPLE                            And for what it's worth you're   lucky enough that you'll probably get it. But you know what?"},
+                {fals, fals, 0, "MAPLE                            I'm going to settle in reality   with my *real* job and stay out ofstarving to death on some rock,"},
+                {fals, fals, 0, "MAPLE                            Or worse, getting locked up in   federal prison for breaking some  sort of weird law."},
+                {fals, fals, 4, "MAPLE                            Look.... It's been fun, but I    need to go home. I'm done with    this."},
+                {fals, fals, 0, "MAPLE                            Aaron, Maple, Delphine, it's beenfun, but.... I need some time."},
+                {true, true, 10, "AARON                            Are you sure? We can change the subject. We were just talking. We've got breakfast made if you want some."},
+                {fals, fals, 0, "MAPLE                            ..Alright, I'll stay a little    longer, but I do need to be       heading out."},
+                {true, true, 0, "COM: Endscene"}
+                };
             dialogue_page(lc);
             break;
         };
