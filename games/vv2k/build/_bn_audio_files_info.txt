@@ -70,3 +70,6 @@ audio/velvet.xm
 audio/z01_maple_is_sad.xm
 1128711
 1631057913.66
+audio/z02_the_champ.xm
+1823067
+1631342975.36

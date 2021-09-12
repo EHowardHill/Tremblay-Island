@@ -18,6 +18,7 @@ namespace bn::music_items_info
         make_pair(music_item(7), string_view("v02_b")),
         make_pair(music_item(8), string_view("velvet")),
         make_pair(music_item(9), string_view("z01_maple_is_sad")),
+        make_pair(music_item(10), string_view("z02_the_champ")),
     };
 
     constexpr inline span<const pair<music_item, string_view>> span(array);

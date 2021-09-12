@@ -15,6 +15,7 @@ namespace bn::music_items
     constexpr inline music_item v02_b(7);
     constexpr inline music_item velvet(8);
     constexpr inline music_item z01_maple_is_sad(9);
+    constexpr inline music_item z02_the_champ(10);
 }
 
 #endif

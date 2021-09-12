@@ -40,6 +40,9 @@
 #include "bn_regular_bg_items_intro_final_1.h"
 #include "bn_regular_bg_items_intro_final_2.h"
 
+#include "bn_sprite_items_selection.h"
+#include "bn_regular_bg_items_keyboard.h"
+
 void timer(int delay) {
     for (int t = 0; t < delay; t++) {
         bn::core::update();
@@ -90,15 +93,12 @@ void startup() {
     bn::sprite_animate_action<2> trees_right = bn::create_sprite_animate_action_forever(tree2, 12, bn::sprite_items::titlebackground_trees.tiles_item(), 2, 3);
     tree1.set_visible(false);
     tree2.set_visible(false);
-    double sinewave = 0;
 
     while(!bn::keypad::start_pressed()) {
         trees_left.update();
         trees_right.update();
         tree1 = trees_left.sprite();
         tree2 = trees_right.sprite();
-        sinewave += 0.08;
-        if (sinewave >= 2 * 3.1415) sinewave = 0;
 
         switch(intro_stage) {
             case 0:
@@ -150,7 +150,6 @@ void startup() {
                     bn::sprites_mosaic::set_vertical_stretch(glow);
                 } else {
                     intro_stage++;
-                    sinewave = 0;
                 }
                 break;
             case 6:
@@ -160,10 +159,10 @@ void startup() {
                 intro_stage++;
                 break;
             case 7:
-                item0.set_y(-32 + height + sin(sinewave) * 5);
-                item1.set_y(-34 + height + sin(sinewave) * 5);
-                item2.set_y(32 + height + sin(sinewave) * 5);
-                item3.set_y(30 + height + sin(sinewave) * 5);
+                item0.set_y(-32 + height);
+                item1.set_y(-34 + height);
+                item2.set_y(32 + height);
+                item3.set_y(30 + height);
                 break;
         }
         bn::core::update();
@@ -225,6 +224,134 @@ void load_save() {
     timer(256);
 }
 
+void first_level() {
+    dungeon_return dt(0,0,0);
+    dt.spawn_x = 0;
+    dt.spawn_y = 0;
+    dt.world_index = 0;
+    while (true) {
+        dungeon_return dt = dungeon(dt);
+        if (dt.world_index == -1) {
+            break;
+        }
+    };
+}
+
+void first_month() {
+    // Cut to the dramatic month thing
+    bool isPlayed = false;
+    bn::regular_bg_ptr text = bn::regular_bg_items::s0201.create_bg(0, 0);
+    bn::music::stop();
+    if (!isPlayed) {
+        bn::sound_items::firehit.play();
+        isPlayed = true;
+    }
+    timer(96);
+}
+
+void keyboard() {
+        bn::regular_bg_ptr velvet = bn::regular_bg_items::velvet.create_bg(0,0);
+        bn::regular_bg_ptr ui = bn::regular_bg_items::keyboard.create_bg(0,0);
+        bn::sprite_ptr sel = bn::sprite_items::selection.create_sprite(-100, -18);
+
+        char basis[96] = "abcdefghijklmnopqrstuvwxyz     -'&  ABCDEFGHIJKLMNOPQRSTUVWXYZ     -'&";
+
+        int x_state = 0;
+        int y_state = 0;
+
+        bool lower = false;
+
+        ui.set_y(64);
+
+        int t = 0;
+        int c = 0;
+
+        bn::vector<char, 16> ss;
+        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 16> file1_spr;
+
+        while(true) {
+
+            if (bn::keypad::left_pressed()) {
+                if ((basis[x_state - 1 + (y_state * 12)] != ' ') || (y_state == 2)) {
+                    x_state--;
+                    if (x_state < 0) x_state = 11;
+                    sel.set_x(-100 + 18 * x_state);
+                }
+            } else if (bn::keypad::right_pressed()) {
+                if ((basis[x_state + 1 + (y_state * 12)] != ' ') || (x_state > 8)) {
+                    x_state++;
+                    x_state = x_state % 12;
+                    sel.set_x(-100 + 18 * x_state);
+                }
+            }
+
+            if (bn::keypad::up_pressed()) {
+                if (!(x_state > 1 && x_state < 7 && y_state == 0) || (x_state > 8)) {
+                    y_state--;
+                    if (y_state < 0) y_state = 2;
+                    sel.set_y(-18 + 26 * y_state);
+                }
+            } else if (bn::keypad::down_pressed()) {
+                if ((basis[x_state + ((y_state + 1) * 12)] != ' ') || (x_state > 8)) {
+                    y_state++;
+                    y_state = y_state % 3;
+                    sel.set_y(-18 + 26 * y_state);
+                }
+            }
+
+            if (bn::keypad::a_pressed()) {
+                if (ss.size() < 16) {
+                    bn::sound_items::pop.play();
+                    file1_spr.clear();
+                    ss.push_back(basis[x_state + (y_state * 12)]);
+                    std::string s(ss.begin(), ss.end());
+                    file1_gen.generate(-96, -42, s.c_str(), file1_spr);
+                } else {
+                    bn::sound_items::firehit.play();
+                }
+            }
+
+            if (bn::keypad::b_pressed()) {
+                if (ss.size() > 0) {
+                    ss.pop_back();
+                    file1_spr.clear();
+                    std::string s(ss.begin(), ss.end());
+                    file1_gen.generate(-96, -42, s.c_str(), file1_spr);
+                    bn::sound_items::cnaut.play();
+                } else {
+                    bn::sound_items::firehit.play();
+                }
+            }
+
+            if (bn::keypad::select_pressed()) {
+                lower = !lower;
+                if (!lower) {
+                    while(ui.y().integer() != 192) {
+                        int y = ui.y().integer() + 2;
+                        y = y % 256;
+                        ui.set_y(y);
+                        bn::core::update();
+                    }
+                } else {
+                    while(ui.y().integer() != 64) {
+                        int y = ui.y().integer() + 2;
+                        y = y % 256;
+                        ui.set_y(y);
+                        bn::core::update();
+                    }
+                }
+            }
+            
+            // Scrolling background
+            t++;
+            t = t % 256;
+            velvet.set_position(t,t);
+
+            bn::core::update();
+        }
+}
+
 int main()
 {
     bn::core::init();
@@ -232,25 +359,19 @@ int main()
     // Reset thing
     while(true) {
         
-        fadein();
-        exec_dialogue(13);
-        
-        startup();
-        load_save();
+        keyboard();
+
+        //startup();
+        //load_save();
         //exec_dialogue(0);
         //exec_dialogue(1);
         //exec_dialogue(2);
+        //first_level();
+        //fadein();
+        //exec_dialogue(13);
+        //first_month();
+        exec_dialogue(14);
 
-
-        dungeon_return dt(0,0,0);
-        dt.spawn_x = 0;
-        dt.spawn_y = 0;
-        dt.world_index = 0;
-        while (true) {
-            dungeon_return dt = dungeon(dt);
-            if (dt.world_index == -1) {
-                break;
-            }
-        };
+        bn::core::reset();
     }
 }

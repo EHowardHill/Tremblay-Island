@@ -337,39 +337,70 @@ void exec_dialogue(int x) {
 
         case 13: {
             Concepts::line lc[32] = {
-                {true, true, 0, "BG: Ocean"},
+                {true, true, 0, "S01:13"},
                 {true, fals, 4, "..."},
                 {true, true, 10, "AARON                            Bonjour! Did you sleep well?"},
                 {fals, fals, 4, "MAPLE                            Yeah, it was ok I guess."},
                 {true, true, 9, "ENOKI                            Bonjour! So.. We found something cool while you were sleeping, butyou've gotta promise you won't bemad."},
                 {fals, fals, 4, "MAPLE                            You know I can't promise that."},
                 {fals, true, 7, "ENOKI                            Remember that book you wanted me to get? Well, it's a world atlas!And we spotted something really  fun!"},
-                {fals, true, 9, "ENOKI                            So, we found this island up in   Lake Supérieur called Tremblay   Island!"},
+                {fals, true, 9, "ENOKI                            So, we found this island up in   Lake Supérieur called Tremblay  Island!"},
                 {fals, fals, 0, "MAPLE                            Aw, that's fun. I was afraid thatthere'd be some kind of.. catch."},
                 {fals, true, 0, "ENOKI                            Well, we, uh- figured it'd be funif, well, the idea came from Del,so..."},
                 {true, true, 12, "DEL                              Last time we talked, my cousin   Rufus was obsessed with starting his own tiny country."},
-                {true, true, 11, "AARON                            There's work not too far out, so if we need to pick up supplies, it shouldn't be very difficult."},
+                {true, true, 11, "AARON                            There's work not too far out, so if we need to pick up supplies,  it shouldn't be very difficult."},
                 {true, true, 7, "ENOKI                            With the money we could make     selling off the castle, and with your magic, we were thinking-"},
-                {fals, true, 3, "MAPLE                            WHOA WHOA WHOA,                  JUST HOLD UP FOR A MINUTE."},
+                {fals, fals, 3, "MAPLE                            WHOA WHOA WHOA,                  JUST HOLD UP FOR A MINUTE."},
                 {fals, fals, 3, "MAPLE                            Are you seriously telling me thatyou're going to SELL this castle and move to this random island,"},
-                {fals, true, 3, "MAPLE                            All because it shares the same   last name as us?"},
-                {fals, fals, 9, "ENOKI                            As a bonus, we're thinking we're gonna secede from the Laurentidesand be our own country, too."},
-                {fals, true, 9, "MAPLE                            ...I..."},
-                {fals, true, 4, "MAPLE                            ..."},
-                {fals, true, 9, "MAPLE                            ...I'm going to need some time toprocess this."},
+                {fals, fals, 3, "MAPLE                            All because it shares the same   last name as us?"},
+                {fals, true, 9, "ENOKI                            As a bonus, we're thinking we're gonna secede from the Laurentidesand be our own country, too."},
+                {fals, fals, 0, "MAPLE                            ...I..."},
+                {fals, fals, 0, "MAPLE                            ..."},
+                {fals, fals, 4, "MAPLE                            ...I'm going to need some time toprocess this."},
                 {true, true, 10, "AARON                            It sounds insane, but we've gone over the details, and it seems   like this could actually happen."},
                 {true, true, 9, "ENOKI                            I know we had that talk last     night, but.."},
-                {fals, fals, 0, "MAPLE                            And then what's next?            What happens after you get bored  of being your own little island?"},
-                {fals, fals, 0, "MAPLE                            Do you want to be the Pope? The  Queen of France? Are you going to want your own planet?"},
-                {fals, fals, 0, "MAPLE                            And for what it's worth you're   lucky enough that you'll probably get it. But you know what?"},
-                {fals, fals, 0, "MAPLE                            I'm going to settle in reality   with my *real* job and stay out ofstarving to death on some rock,"},
-                {fals, fals, 0, "MAPLE                            Or worse, getting locked up in   federal prison for breaking some  sort of weird law."},
-                {fals, fals, 4, "MAPLE                            Look.... It's been fun, but I    need to go home. I'm done with    this."},
+                {fals, fals, 3, "MAPLE                            And then what's next?            What happens after you get bored of being your own little island?"},
+                {fals, fals, 0, "MAPLE                            Do you want to be the Pope? The  Queen of France? Are you going towant your own planet?"},
+                {fals, fals, 0, "MAPLE                            And for what it's worth you're   lucky enough that you'll probablyget it. But you know what?"},
+                {fals, fals, 0, "MAPLE                            I'm going to settle in reality   with my *real* job and stay out  of starving to death on some     rock,"},
+                {fals, fals, 0, "MAPLE                            Or worse, getting locked up in   federal prison for breaking some sort of weird law."},
+                {fals, fals, 4, "MAPLE                            Look.... It's been fun, but I    need to go home. I'm done with   this."},
                 {fals, fals, 0, "MAPLE                            Aaron, Maple, Delphine, it's beenfun, but.... I need some time."},
-                {true, true, 10, "AARON                            Are you sure? We can change the subject. We were just talking. We've got breakfast made if you want some."},
-                {fals, fals, 0, "MAPLE                            ..Alright, I'll stay a little    longer, but I do need to be       heading out."},
+                {true, true, 10, "AARON                            Are you sure? We can change the  subject, we were just talking.   We've got breakfast made if you  want some."},
+                {fals, fals, 0, "MAPLE                            ..Alright, I'll stay a little    longer, but I do need to be      heading out soon."},
                 {true, true, 0, "COM: Endscene"}
                 };
+            dialogue_page(lc);
+            break;
+        };
+
+        case 14: {
+            Concepts::line lc[32] = {
+                {true, true, 0, "S02:02"},
+                {true, true, 0, "BG: champ"},
+                {true, true, 0, "                                                                                                   Hmm, hmm hmm hmm...."},
+                {true, true, 0, "For goodness' sake, when is that pizza going to show up? Wasn't itsupposed to be here in under     twenty minutes?"},
+                {true, true, 0, "                                 Have I checked my mail today? I  probably should go ahead and     check."},
+                {true, true, 0, "S02:03"},
+                {true, true, 0, "Huh, what's this? From the       Tremblay household? I guess I    haven't heard from Aaron and     Enoki in a while."},
+                {true, true, 0, "                                                                  Can't wait to read about how muchthey want to move in with me now."},
+                {true, true, 0, "BG: fadeout"},
+                {true, true, 0, "S02:04"},
+                {true, true, 0, "                                             Hey, Maple!"},
+                {true, true, 0, "S02:05"},
+                {true, true, 0, "Hold on, got this backwards."},
+                {true, true, 0, "S02:04"},
+                {true, true, 0, "BG: 0"},
+                {true, true, 0, "                                             'Hey, Maple!'"},
+                {true, true, 0, "      'We thought we'd send            you a quick letter to            give you an update.'"},
+                {true, true, 0, "      'We sold the castle and          got to make enough to            buy a nice trailer home.'"},
+                {true, true, 0, "      'However, that's not all-        we got it set up on our          new island!!'"},
+                {true, true, 0, "S02:05"},
+                {true, true, 0, "I'm...                           That's it,                       I'm gonna kill 'em."},
+                {true, true, 0, "S02:04"},
+                {true, true, 0, "      'So, we've decided that          we're going to name it-..'"},
+                {true, true, 0, "COM: Endscene"}
+            };
             dialogue_page(lc);
             break;
         };

@@ -56,9 +56,15 @@
 #include "bn_regular_bg_items_s0107.h"
 #include "bn_regular_bg_items_s0108.h"
 #include "bn_regular_bg_items_s0109.h"
+#include "bn_regular_bg_items_s0201.h"
+#include "bn_regular_bg_items_s0202.h"
+#include "bn_regular_bg_items_s0203.h"
+#include "bn_regular_bg_items_s0204.h"
+#include "bn_regular_bg_items_s0205.h"
 
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
+#include "bn_regular_bg_items_day_castle.h"
 
 // Set pointer by integer reference
 void set_sprite(bn::sprite_ptr chari, int value) {
@@ -141,6 +147,9 @@ void dialogue_page(Concepts::line n[64], bool fullsize = true) {
         } else if (strcmp(n[pos].text, "BG: 2") == 0) {
             int music_volume = 25;
             bn::music_items_info::span[2].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: champ") == 0) {
+            int music_volume = 25;
+            bn::music_items_info::span[10].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: fadeout") == 0) {
             if (bn::music::playing()) {
                 bn::music::set_volume(0);
@@ -188,6 +197,24 @@ void dialogue_page(Concepts::line n[64], bool fullsize = true) {
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S01:12") == 0) {
             primary_bg.set_item(bn::regular_bg_items::castle03);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S01:13") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::day_castle);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0201);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0202);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:03") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0203);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:04") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0204);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:05") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0205);
             primary_bg.set_visible(true);
 
         // End dialogue

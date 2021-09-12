@@ -118,8 +118,14 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0107.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0108.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0109.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0201.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0202.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0203.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0204.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0205.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_day_castle.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scripts.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/wander.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_builder.h \
@@ -148,7 +154,9 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_arrow.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_file_select_bg.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_intro_final_1.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_intro_final_2.h
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_intro_final_2.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_selection.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_keyboard.h
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -268,8 +276,14 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0107.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0108.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0109.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0201.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0202.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0203.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0204.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0205.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_day_castle.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scripts.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/wander.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_builder.h:
@@ -299,3 +313,5 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_file_select_bg.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_intro_final_1.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_intro_final_2.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_selection.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_keyboard.h:
