@@ -2,6 +2,8 @@
 
 The first game by Cinemint games! A sequel to **Vous Voilà**, a novel by yours truly that you can learn a little more about [on Amazon](https://www.amazon.com/dp/B08QCQ8DNV/ref=cm_sw_em_r_mt_dp_A6BZSE5MJ3HET2N6PV8P) .
 
+Check out my Discord server over at https://discord.gg/redJjECzkv !
+
 ## About the Game
 
 Tremblay Island is a currently in-development GameBoy Advance title built using C++ and the Butano library. You can learn a little more about Butano [here](https://github.com/GValiente/butano) if you're curious.
