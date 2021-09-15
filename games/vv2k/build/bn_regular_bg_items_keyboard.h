@@ -9,11 +9,11 @@
 //
 //	keyboard_bn_graphics, 256x256@4, 
 //	+ palette 16 entries, not compressed
-//	+ 324 tiles (t|f|p reduced) not compressed
+//	+ 310 tiles (t|f|p reduced) not compressed
 //	+ regular map (flat), not compressed, 32x32 
-//	Total size: 32 + 10368 + 2048 = 12448
+//	Total size: 32 + 9920 + 2048 = 12000
 //
-//	Time-stamp: 2021-09-12, 04:14:43
+//	Time-stamp: 2021-09-13, 00:09:34
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -22,8 +22,8 @@
 #ifndef GRIT_KEYBOARD_BN_GRAPHICS_H
 #define GRIT_KEYBOARD_BN_GRAPHICS_H
 
-#define keyboard_bn_graphicsTilesLen 10368
-extern const bn::tile keyboard_bn_graphicsTiles[bn::max(2592 / 8, 1)];
+#define keyboard_bn_graphicsTilesLen 9920
+extern const bn::tile keyboard_bn_graphicsTiles[bn::max(2480 / 8, 1)];
 
 #define keyboard_bn_graphicsMapLen 2048
 extern const bn::regular_bg_map_cell keyboard_bn_graphicsMap[1024];
@@ -38,7 +38,7 @@ extern const bn::color keyboard_bn_graphicsPal[16];
 namespace bn::regular_bg_items
 {
     constexpr inline regular_bg_item keyboard(
-            regular_bg_tiles_item(span<const tile>(keyboard_bn_graphicsTiles, 324), bpp_mode::BPP_4, compression_type::NONE), 
+            regular_bg_tiles_item(span<const tile>(keyboard_bn_graphicsTiles, 310), bpp_mode::BPP_4, compression_type::NONE), 
             bg_palette_item(span<const color>(keyboard_bn_graphicsPal, 16), bpp_mode::BPP_4, compression_type::NONE),
             regular_bg_map_item(keyboard_bn_graphicsMap[0], size(32, 32), compression_type::NONE));
 }

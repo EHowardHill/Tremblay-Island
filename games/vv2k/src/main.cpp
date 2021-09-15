@@ -39,9 +39,28 @@
 
 #include "bn_regular_bg_items_intro_final_1.h"
 #include "bn_regular_bg_items_intro_final_2.h"
+#include "bn_regular_bg_items_tbc.h"
 
 #include "bn_sprite_items_selection.h"
 #include "bn_regular_bg_items_keyboard.h"
+
+char* strdup(const char* s) {
+    if(!s)
+      return NULL;
+    int i;
+    char* res = NULL;
+    res = (char*) malloc(strlen(s)+1);
+    if(!res){
+        fprintf(stderr, "Memory Allocation Failed! Exiting...\n");
+        exit(EXIT_FAILURE);
+    } else{
+        for (i = 0; s[i] != '\0'; i++) {
+            res[i] = s[i];
+        }
+        res[i] = '\0';
+        return res;
+    }
+}
 
 void timer(int delay) {
     for (int t = 0; t < delay; t++) {
@@ -171,50 +190,48 @@ void startup() {
 
 void load_save() {
 
-    if (true) {
-        bn::regular_bg_ptr velvet = bn::regular_bg_items::velvet.create_bg(0,0);
-        bn::regular_bg_ptr ui = bn::regular_bg_items::file_select_bg.create_bg(0,0);
-        bn::sprite_ptr arrow = bn::sprite_items::arrow.create_sprite(-98, - 32);
+    bn::regular_bg_ptr velvet = bn::regular_bg_items::velvet.create_bg(0,0);
+    bn::regular_bg_ptr ui = bn::regular_bg_items::file_select_bg.create_bg(0,0);
+    bn::sprite_ptr arrow = bn::sprite_items::arrow.create_sprite(-98, - 32);
 
-        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
-        bn::vector<bn::sprite_ptr, 12> file1_spr;
-        file1_gen.generate(-72, -32, "Slot 1", file1_spr);
+    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 12> file1_spr;
+    file1_gen.generate(-72, -32, "Slot 1", file1_spr);
 
-        bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
-        bn::vector<bn::sprite_ptr, 12> file2_spr;
-        file2_gen.generate(-72, 0, "Slot 2", file2_spr);
+    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 12> file2_spr;
+    file2_gen.generate(-72, 0, "Slot 2", file2_spr);
 
-        bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
-        bn::vector<bn::sprite_ptr, 12> file3_spr;
-        file3_gen.generate(-72, 32, "Slot 3", file3_spr);
+    bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 12> file3_spr;
+    file3_gen.generate(-72, 32, "Slot 3", file3_spr);
 
-        int t = 0;
-        int c = 0;
+    int t = 0;
+    int c = 0;
 
-        bn::music_items_info::span[8].first.play(bn::fixed(50) / 100);
+    bn::music_items_info::span[8].first.play(bn::fixed(50) / 100);
 
-        while(!bn::keypad::a_pressed()) {
-            
-            // Scrolling background
-            t++;
-            t = t % 256;
-            velvet.set_position(t,t);
+    while(!bn::keypad::a_pressed()) {
+        
+        // Scrolling background
+        t++;
+        t = t % 256;
+        velvet.set_position(t,t);
 
-            //
-            if (bn::keypad::up_pressed()) {
-                c -= 1;
-                if (c < 0) c = 2;
-                bn::sound_items::pop.play();
-            } else if (bn::keypad::down_pressed()) {
-                c += 1;
-                if (c > 2) c = 0;
-                bn::sound_items::pop.play();
-            }
-
-            arrow.set_y(-32 + (32 * c));
-
-            bn::core::update();
+        //
+        if (bn::keypad::up_pressed()) {
+            c -= 1;
+            if (c < 0) c = 2;
+            bn::sound_items::pop.play();
+        } else if (bn::keypad::down_pressed()) {
+            c += 1;
+            if (c > 2) c = 0;
+            bn::sound_items::pop.play();
         }
+
+        arrow.set_y(-32 + (32 * c));
+
+        bn::core::update();
     }
 
 
@@ -231,9 +248,7 @@ void first_level() {
     dt.world_index = 0;
     while (true) {
         dungeon_return dt = dungeon(dt);
-        if (dt.world_index == -1) {
-            break;
-        }
+        if (dt.world_index == -1) break;
     };
 }
 
@@ -254,23 +269,24 @@ void keyboard() {
         bn::regular_bg_ptr ui = bn::regular_bg_items::keyboard.create_bg(0,0);
         bn::sprite_ptr sel = bn::sprite_items::selection.create_sprite(-100, -18);
 
-        char basis[96] = "abcdefghijklmnopqrstuvwxyz     -'&  ABCDEFGHIJKLMNOPQRSTUVWXYZ     -'&";
+        char basis[96] = "abcdefghijklmnopqrstuvwxyz     -'&  ABCDEFGHIJKLMNOPQRSTUVWXYZ     -'&  ";
 
         int x_state = 0;
         int y_state = 0;
 
-        bool lower = false;
+        bool lower = true;
 
         ui.set_y(64);
 
         int t = 0;
         int c = 0;
+        int height = -64;
 
         bn::vector<char, 16> ss;
         bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 16> file1_spr;
 
-        while(true) {
+        while(!bn::keypad::start_pressed()) {
 
             if (bn::keypad::left_pressed()) {
                 if ((basis[x_state - 1 + (y_state * 12)] != ' ') || (y_state == 2)) {
@@ -304,9 +320,11 @@ void keyboard() {
                 if (ss.size() < 16) {
                     bn::sound_items::pop.play();
                     file1_spr.clear();
-                    ss.push_back(basis[x_state + (y_state * 12)]);
+                    int plus = 0;
+                    if (!lower) plus = 36;
+                    ss.push_back(basis[x_state + plus + (y_state * 12)]);
                     std::string s(ss.begin(), ss.end());
-                    file1_gen.generate(-96, -42, s.c_str(), file1_spr);
+                    file1_gen.generate(-104, height, s.c_str(), file1_spr);
                 } else {
                     bn::sound_items::firehit.play();
                 }
@@ -317,7 +335,7 @@ void keyboard() {
                     ss.pop_back();
                     file1_spr.clear();
                     std::string s(ss.begin(), ss.end());
-                    file1_gen.generate(-96, -42, s.c_str(), file1_spr);
+                    file1_gen.generate(-104, height, s.c_str(), file1_spr);
                     bn::sound_items::cnaut.play();
                 } else {
                     bn::sound_items::firehit.play();
@@ -325,22 +343,28 @@ void keyboard() {
             }
 
             if (bn::keypad::select_pressed()) {
+                bn::sound_items::fireblast.play();
+                file1_spr.clear();
                 lower = !lower;
+                height = height * -1;
                 if (!lower) {
-                    while(ui.y().integer() != 192) {
-                        int y = ui.y().integer() + 2;
+                    while(ui.y().integer() != 192) { //192, 204
+                        int y = ui.y().integer() + 4;
                         y = y % 256;
                         ui.set_y(y);
                         bn::core::update();
                     }
                 } else {
                     while(ui.y().integer() != 64) {
-                        int y = ui.y().integer() + 2;
+                        int y = ui.y().integer() + 4;
                         y = y % 256;
                         ui.set_y(y);
                         bn::core::update();
                     }
                 }
+                std::string s(ss.begin(), ss.end());
+                file1_gen.generate(-104, height, s.c_str(), file1_spr);
+                bn::sound_items::firehit.play();
             }
             
             // Scrolling background
@@ -350,28 +374,40 @@ void keyboard() {
 
             bn::core::update();
         }
+       
+        for (int t = 0; t < ss.size(); t++) save::island_name.push_back(ss.at(t));
 }
+
+void tbc() {
+    // Cut to the dramatic month thing
+    bool isPlayed = false;
+    bn::regular_bg_ptr text = bn::regular_bg_items::tbc.create_bg(0, 0);
+    bn::music::stop();
+    if (!isPlayed) {
+        bn::sound_items::firehit.play();
+        isPlayed = true;
+    }
+    timer(128);
+}
+
 
 int main()
 {
     bn::core::init();
 
-    // Reset thing
-    while(true) {
-        
-        keyboard();
+    startup();
+    load_save();
+    exec_dialogue(0);
+    exec_dialogue(1);
+    exec_dialogue(2);
+    first_level();
+    fadein();
+    exec_dialogue(13);
+    first_month();
+    exec_dialogue(14);
+    keyboard();
+    exec_dialogue(15);
+    tbc();
 
-        //startup();
-        //load_save();
-        //exec_dialogue(0);
-        //exec_dialogue(1);
-        //exec_dialogue(2);
-        //first_level();
-        //fadein();
-        //exec_dialogue(13);
-        //first_month();
-        exec_dialogue(14);
-
-        bn::core::reset();
-    }
+    bn::core::reset();
 }

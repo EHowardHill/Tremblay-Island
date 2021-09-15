@@ -8,7 +8,7 @@ class Concepts {
                 bool transition;
                 bool left;
                 int img = 0;
-                char text[198];
+                char text[192];
         };
 };
 

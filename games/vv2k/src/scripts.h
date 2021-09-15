@@ -1,4 +1,4 @@
-void exec_dialogue(int x) {
+int exec_dialogue(int x) {
     bool fals = false;
     int n = -1;
 
@@ -33,7 +33,8 @@ void exec_dialogue(int x) {
                 {fals, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 1: {
@@ -72,7 +73,8 @@ void exec_dialogue(int x) {
                     {true, true, 0, "COM: Endscene"}
                 };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 2: {
@@ -111,7 +113,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 3: {
@@ -128,19 +131,21 @@ void exec_dialogue(int x) {
             bn::sound_item hm = bn::sound_items::heymaple;
             hm.play();
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 4: {
             Concepts::line lc[5] = {
-                {true, true, 0, "                                 You stare at the art."},
-                {true, true, 0, "                                 And as such...."},
-                {true, true, 0, "                                 So the art stares unto you."},
-                {true, true, 0, "                                 Art is weird."},
+                {true, true, 0, "                                                                  You stare at the art."},
+                {true, true, 0, "                                                                  And as such...."},
+                {true, true, 0, "                                                                  So the art stares unto you."},
+                {true, true, 0, "                                                                  Art is weird."},
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 5: {
@@ -157,19 +162,21 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 6: {
-            Concepts::line lc[10] = {
-                {true, true, 0, "                                 You see a pot."},
-                {true, true, 0, "                                 You feel compelled to smash it."},
-                {true, true, 0, "                                 However, this is not possible."},
-                {true, true, 0, "                                 You feel strangely disappointed."},
+            Concepts::line l2[10] = {
+                {true, true, 0, "                                                                  You see a pot."},
+                {true, true, 0, "                                                                  You feel compelled to smash it."},
+                {true, true, 0, "                                                                  However, this is not possible."},
+                {true, true, 0, "                                                                  You feel strangely disappointed."},
                 {true, true, 0, "COM: Endscene"}
             };
-            dialogue_page(lc);
-            break;
+            dialogue_page(l2);
+            return 0;
+			break;
         };
 
         case 7: {
@@ -195,7 +202,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 8: {
@@ -211,7 +219,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 9: {
@@ -227,7 +236,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 10: {
@@ -254,7 +264,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 11: {
@@ -293,7 +304,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 12: {
@@ -332,7 +344,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 13: {
@@ -371,7 +384,8 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
                 };
             dialogue_page(lc);
-            break;
+            return 0;
+			break;
         };
 
         case 14: {
@@ -402,7 +416,44 @@ void exec_dialogue(int x) {
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
+            return 0;
+			break;
+        };      
+
+        case 15: {
+            Concepts::line lc[32] = {
+                {true, true, 0, "S02:06"},
+                {true, true, 0, "MAPLE                            Thunder my DOG,                  I have had ENOUGH,               they are ALL gonna get it!"},
+                {true, true, 0, "MAPLE                            That's it! I'm at my limit.      They're going to DIE ALONE and   it's gonna be ALL their fault."},
+                {true, true, 0, "MAPLE                            When they're tired of living thisisland fantasy, they're gonna    come here, and you know what I'llsay?"},
+                {true, true, 0, "PIZZA GUY                        What will you say?"},
+                {true, true, 0, "S02:07"},
+                {true, true, 0, "MAPLE                            I'll say NO!"},
+                {true, true, 0, "PIZZA GUY                        I dunno, living on an island by  yourself sounds kinda nice."},
+                {true, true, 0, "MAPLE                            It's the nicest thing on the     planet, but they're gonna ruin itcos they're the most incompetant people on the planet!"},
+                {true, true, 0, "PIZZA GUY                        If I were you, I'd go up and     teach 'em how to run the island."},
+                {true, true, 0, "MAPLE                            I guess I'm gonna have to huh?   They're gonna die up there or    freeze to death!"},
+                {true, true, 0, "MAPLE                            But I can't. I've gotta be the   better person and stay in adult  world."},
+                {true, true, 0, "S02:06"},
+                {true, true, 0, "PIZZA GUY                        Right, it's more important to    keep buying pizza and crying     yourself to sleep on your couch  like ya' do every night?"},
+                {true, true, 0, "S02:08"},
+                {true, true, 0, "MAPLE                            Is it really that obvious?"},
+                {true, true, 0, "PIZZA GUY                        Yeah, we all take turns at the   place to see who'll get to       deliver to the 'sad pizza girl'."},
+                {true, true, 0, "MAPLE                            Spectacular."},
+                {true, true, 0, "S02:04"},
+                {true, true, 0, "MAPLE                            Well, I suppose....              I mean, I don't exactly have the money to pay rent this month cos of all the pizza..."},
+                {true, true, 0, "PIZZA GUY                        So... we gonna tip for today's   counseling session?"},
+                {true, true, 0, "BG: fadeout"},
+                {true, true, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            return 0;
             break;
         };
+        
+        default: {
+            return 1;
+            break;
+        }
     }
 }

@@ -88,11 +88,6 @@ class dungeon_return {
     int spawn_x = 0;
     int spawn_y = 0;
     int world_index = 0;
-    dungeon_return(int x, int y, int i) {
-        spawn_x = x;
-        spawn_y = y;
-        world_index = i;
-    }
 };
 
 // Room setup object
@@ -395,72 +390,48 @@ class anim_object {
 
 // Actual action... things
 dungeon_return do_action(int act) {
-    dungeon_return dt(0,0,0);
+    dungeon_return dt;
+
     switch(act) {
-        case 1: // Go to hall from guest bedroom
+        case -1: // Go to hall from guest bedroom
             dt.spawn_x = 18;
             dt.spawn_y = 1;
             dt.world_index = 1;
             break;
-        case 2: // Go to Aaron's castle room
+        case -2: // Go to Aaron's castle room
             dt.spawn_x = 9;
             dt.spawn_y = 6;
             dt.world_index = 2;
             break;
-        case 3: // Takin' a look out chari[1]'s window
-            exec_dialogue(5);
-            break;
-        case 4: // Observing le fine art
-            exec_dialogue(4);
-            break;
-        case 5: // Observing le fine pot
-            exec_dialogue(6);
-            break;
-
-        case 6: // Lamp talk
-            exec_dialogue(7);
-            break;
-        case 7:
-            exec_dialogue(8); // sees Del
-            break;
-        case 8: // Go to castle chamber from Aaron's room
+        case -7: // Go to castle chamber from Aaron's room
             dt.spawn_x = 3;
             dt.spawn_y = 1;
             dt.world_index = 1;
             break;
-        case 9: // Go to guest room
+        case -6: // Go to guest room
             dt.spawn_x = 1;
             dt.spawn_y = 4;
             dt.world_index = 0;
             break;
-        case 10: // go to guest room from chamber
+        case -3: // go to guest room from chamber
             dt.spawn_x = 8;
             dt.spawn_y = 4;
             dt.world_index = 0;
             break;
-        case 11: // go to aaron's room from chamber
+        case -4: // go to aaron's room from chamber
             dt.spawn_x = 3;
             dt.spawn_y = 6;
             dt.world_index = 2;
             break;
-        case 12: // dialogue about the whole eyebrow thing:
-            exec_dialogue(10);
-            break;
-        case 13: // locked kitchen door
-            exec_dialogue(9);
-            break;
-        case 14: // return to lobby from secret chamber
+        case -8: // return to lobby from secret chamber
             dt.spawn_x = 2;
             dt.spawn_y = 10;
             dt.world_index = 1;
             break;
-        case 15: // go to secret chamber
+        case -5: // go to secret chamber
             dt.spawn_x = 22;
             dt.spawn_y = 1;
             dt.world_index = 3;
-            break;
-        case 16: // long-ass bookshelf dialogue
-            exec_dialogue(11);
             break;
     };
     return dt;
@@ -495,12 +466,12 @@ dungeon_return dungeon(dungeon_return dt) {
                 17,0,0,0,0,0,0,0,0,18,2,0,
                 7,3,3,3,3,3,3,3,16,3,6,0
                 };
-            current_room.actions[1].set(8,4,1);  // door 1
-            current_room.actions[2].set(1,4,2);  // door 2
-            current_room.actions[3].set(2,1,3);  // night sky
+            current_room.actions[1].set(8,4,-1);  // door 1
+            current_room.actions[2].set(1,4,-2);  // door 2
+            current_room.actions[3].set(2,1,5);  // night sky
             current_room.actions[4].set(3,1,4);  // painting
-            current_room.actions[5].set(4,1,5);  // pot
-            current_room.actions[6].set(1,2,5);  // pot
+            current_room.actions[5].set(4,1,6);  // pot
+            current_room.actions[6].set(1,2,6);  // pot
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
@@ -525,10 +496,10 @@ dungeon_return dungeon(dungeon_return dt) {
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
-            current_room.actions[0].set(18,1,10);
-            current_room.actions[1].set(3,1,11);
-            current_room.actions[2].set(18,10,13);
-            current_room.actions[3].set(2,10,15);
+            current_room.actions[0].set(18,1,-3); // back to gr
+            current_room.actions[1].set(3,1,-4); // back to mb
+            current_room.actions[2].set(18,10,9); // complain
+            current_room.actions[3].set(2,10,-5); // bookshelf room
 
             anim_object fp;
             fp.entity_item = bn::sprite_items::fireplace_anim;
@@ -555,11 +526,12 @@ dungeon_return dungeon(dungeon_return dt) {
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
-            current_room.actions[0].set(9,6,9);
-            current_room.actions[1].set(3,6,8);
-            current_room.actions[2].set(4,2,6);
-            current_room.actions[3].set(8,2,7);
-            current_room.actions[4].set(2,3,12);
+            current_room.actions[0].set(9,6,-6); // to gb
+            current_room.actions[1].set(3,6,-7); // to hall
+            current_room.actions[2].set(4,2,10);
+            current_room.actions[5].set(3,2,10);
+            current_room.actions[3].set(8,2,8);
+            current_room.actions[4].set(4,6,7);
 
             anim_object aaron;
             aaron.entity.set_visible(true);
@@ -598,9 +570,9 @@ dungeon_return dungeon(dungeon_return dt) {
                 current_room.local_tileset[t] = local[t];
             }
 
-            current_room.actions[0].set(22,1,14);
-            current_room.actions[1].set(5,2,16);
-            current_room.actions[2].set(4,2,16);
+            current_room.actions[0].set(22,1,-8); // to gb
+            current_room.actions[1].set(5,2,11);
+            current_room.actions[2].set(4,2,11);
 
             anim_object fp;
             fp.entity_item = bn::sprite_items::bookshelf;
@@ -633,9 +605,10 @@ dungeon_return dungeon(dungeon_return dt) {
     character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
 
     if (current_room.local_tileset[(current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
-        enoki.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
-        maple.entity.set_position(current_room.start_x * 32, (current_room.start_y * 32) + 32);
+        enoki.entity.set_position(4 + current_room.start_x * 32, current_room.start_y * 32);
+        maple.entity.set_position(-4 + current_room.start_x * 32, (current_room.start_y * 32));
     }
+
     int max_chari = 2;
     character chari[2] = {maple, enoki};
 
@@ -733,9 +706,12 @@ dungeon_return dungeon(dungeon_return dt) {
                     // Start action
                     bn::core::update();
                     a_notif.set_visible(false);
-                    dungeon_return dt2 = do_action(current_room.actions[t].action);
-                    if (dt2.spawn_x + dt2.spawn_y > 0) {
-                        return dt2;
+                    int action = current_room.actions[t].action;
+                    if (exec_dialogue(current_room.actions[t].action) == 1) {
+                        dungeon_return dr = do_action(current_room.actions[t].action);
+                        if (dr.spawn_x > 0 && dr.spawn_y > 0) {
+                            return dr;
+                        }
                     }
                 }
             }
@@ -898,6 +874,10 @@ dungeon_return dungeon(dungeon_return dt) {
                                     chari[0].update();
                                     p[i].update();
                                     bn::core::update();
+                                }
+                                projectile p[3];
+                                for (int t; t < p_size; t++) {
+                                    p[t].fireball.set_visible(false);
                                 }
                                 exec_dialogue(12);
                                 dt.world_index = -1;

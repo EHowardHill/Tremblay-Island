@@ -61,6 +61,9 @@
 #include "bn_regular_bg_items_s0203.h"
 #include "bn_regular_bg_items_s0204.h"
 #include "bn_regular_bg_items_s0205.h"
+#include "bn_regular_bg_items_s0206.h"
+#include "bn_regular_bg_items_s0207.h"
+#include "bn_regular_bg_items_s0208.h"
 
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
@@ -114,15 +117,10 @@ void set_sprite(bn::sprite_ptr chari, int value) {
 }
 
 // Primary page
-void dialogue_page(Concepts::line n[64], bool fullsize = true) {
+void dialogue_page(Concepts::line n[32]) {
 
     // Variable initialization
     bn::sprite_text_generator text_line0(common::variable_8x16_sprite_font);
-    bn::sprite_text_generator text_line1(common::variable_8x16_sprite_font);
-    bn::sprite_text_generator text_line2(common::variable_8x16_sprite_font);
-    bn::sprite_text_generator text_line3(common::variable_8x16_sprite_font);
-    bn::sprite_text_generator text_line4(common::variable_8x16_sprite_font);
-    bn::sprite_text_generator text_line5(common::variable_8x16_sprite_font);
     bn::sprite_ptr chari_l = bn::sprite_items::maple01.create_sprite(-50, -17);
     bn::sprite_ptr chari_r = bn::sprite_items::maple01.create_sprite(50, -17);
     bn::regular_bg_ptr primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
@@ -216,6 +214,15 @@ void dialogue_page(Concepts::line n[64], bool fullsize = true) {
         } else if (strcmp(n[pos].text, "S02:05") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0205);
             primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:06") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0206);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:07") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0207);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S02:08") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0208);
+            primary_bg.set_visible(true);
 
         // End dialogue
         } else if (strcmp(n[pos].text, "COM: Endscene") == 0) {
@@ -261,57 +268,112 @@ void dialogue_page(Concepts::line n[64], bool fullsize = true) {
             bn::sound_items::pop.play(0.5);
 
             // Fresh init
-            if (fullsize) {
-                bn::vector<bn::sprite_ptr, 33> text_sprite0;
-                bn::vector<bn::sprite_ptr, 33> text_sprite2;
-                bn::vector<bn::sprite_ptr, 33> text_sprite3;
-                bn::vector<bn::sprite_ptr, 33> text_sprite4;
-                bn::vector<bn::sprite_ptr, 33> text_sprite5;
-                
-                // String initialization
-                char line1[33], line3[33], line4[33], line5[33], line6[33];
-                char txt[165] = "                                                                                                  ";
-                strcpy(txt, n[pos].text);
-                strncpy(line1, txt + (33 * 0), 33);
-                strncpy(line3, txt + (33 * 1), 33);
-                strncpy(line4, txt + (33 * 2), 33);
-                strncpy(line5, txt + (33 * 3), 33);
-                strncpy(line6, txt + (33 * 4), 33);
+            bn::vector<bn::sprite_ptr, 33> text_sprite0;
+            bn::vector<bn::sprite_ptr, 33> text_sprite2;
+            bn::vector<bn::sprite_ptr, 33> text_sprite3;
+            bn::vector<bn::sprite_ptr, 33> text_sprite4;
+            bn::vector<bn::sprite_ptr, 33> text_sprite5;
 
-                text_line0.generate(-108, 21, line1, text_sprite0);
-                text_line2.generate(-108, 33, line3, text_sprite2);
-                text_line3.generate(-108, 45, line4, text_sprite3);
-                text_line4.generate(-108, 57, line5, text_sprite4);
-                text_line5.generate(-108, 69, line6, text_sprite5);
+            // String initialization
+            char line1[33] = "                                ";
+            char line3[33] = "                                ";
+            char line4[33] = "                                ";
+            char line5[33] = "                                ";
+            char line6[33] = "                                ";
+            char txt[165] = "                                                                                                                                                                    ";
+
+            strncpy(txt, n[pos].text, 165);
+            strncpy(line1, txt, 33);
+            strncpy(line3, txt + (33 * 1), 33);
+            strncpy(line4, txt + (33 * 2), 33);
+            strncpy(line5, txt + (33 * 3), 33);
+            strncpy(line6, txt + (33 * 4), 33);
+
+            text_line0.generate(-108, 21, line1, text_sprite0);
+            text_line0.generate(-108, 33, line3, text_sprite2);
+            text_line0.generate(-108, 45, line4, text_sprite3);
+            text_line0.generate(-108, 57, line5, text_sprite4);
+            text_line0.generate(-108, 69, line6, text_sprite5);
+            bn::core::update();
+
+            // Process visual effects
+            while(!bn::keypad::a_pressed()) {
+
+                if (chari_l.visible() && chari_l.x().integer() < -40) {
+                    chari_l.set_x(chari_l.x() + 1);
+                }
+                if (chari_r.visible() && chari_r.x().integer() > 40) {
+                    chari_r.set_x(chari_r.x() - 1);
+                }
+                if (bn::blending::transparency_alpha().to_double() + 0.1 <= 1) {
+                    bn::blending::set_transparency_alpha(bn::blending::transparency_alpha().to_double() + 0.1);
+                } else {
+                    bn::blending::set_transparency_alpha(1);
+                    chari_l.set_blending_enabled(false);
+                }
 
                 bn::core::update();
+            }
+        }
 
-                // Process visual effects
-                while(!bn::keypad::a_pressed()) {
-                    if (chari_l.visible() && chari_l.x().integer() < -40) {
-                        chari_l.set_x(chari_l.x() + 1);
-                    }
-                    if (chari_r.visible() && chari_r.x().integer() > 40) {
-                        chari_r.set_x(chari_r.x() - 1);
-                    }
-                    if (bn::blending::transparency_alpha().to_double() + 0.1 <= 1) {
-                        bn::blending::set_transparency_alpha(bn::blending::transparency_alpha().to_double() + 0.1);
-                    } else {
-                        bn::blending::set_transparency_alpha(1);
-                        chari_l.set_blending_enabled(false);
-                    }
-                    bn::core::update();
-                }
-            } else {
+        // Increment location
+        pos++;
+    }
+}
 
-                bn::vector<bn::sprite_ptr, 33> text_sprite;
-                
-                // String initialization
-                char line[33];
-                char txt[33] = "                                ";
-                strcpy(txt, n[pos].text);
-                strncpy(line, txt + (33 * 0), 33);
-                text_line5.generate(-108, 69, line, text_sprite);
+void dialogue_page_small(Concepts::line n[32]) {
+
+    // Variable initialization
+    bn::sprite_text_generator text_line0(common::variable_8x16_sprite_font);
+    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
+
+    // While dialogue is going,
+    int pos = 0;
+    bool cont = true;
+    while (cont) {
+
+        // Set dialogue
+        if (strcmp(n[pos].text, "COM: Endscene") == 0) {
+            cont = false;
+
+        // Handle sprite/dialogue
+        } else {
+
+            // SFX
+            bn::sound_items::pop.play(0.5);
+
+            // Fresh init
+            bn::vector<bn::sprite_ptr, 33> text_sprite0;
+            bn::vector<bn::sprite_ptr, 33> text_sprite2;
+            bn::vector<bn::sprite_ptr, 33> text_sprite3;
+            bn::vector<bn::sprite_ptr, 33> text_sprite4;
+            bn::vector<bn::sprite_ptr, 33> text_sprite5;
+
+            // String initialization
+            char line1[33] = {0};
+            char line3[33] = {0};
+            char line4[33] = {0};
+            char line5[33] = {0};
+            char line6[33] = {0};
+
+            //while(!bn::keypad::b_pressed()) bn::core::update(); // breakpoint again
+
+            for (int t = 0; t < 33; t++) line1[t] = n[pos].text[t];
+            for (int t = 0; t < 33; t++) line3[t] = n[pos].text[t + 33];
+            for (int t = 0; t < 33; t++) line4[t] = n[pos].text[t + 66];
+            for (int t = 0; t < 33; t++) line5[t] = n[pos].text[t + 99];
+            for (int t = 0; t < 32; t++) line6[t] = n[pos].text[t + 132];
+
+            text_line0.generate(-108, 21, line1, text_sprite0);
+            text_line0.generate(-108, 33, line3, text_sprite2);
+            text_line0.generate(-108, 45, line4, text_sprite3);
+            text_line0.generate(-108, 57, line5, text_sprite4);
+            text_line0.generate(-108, 69, line6, text_sprite5);
+            bn::core::update();
+
+            // Process visual effects
+            while(!bn::keypad::a_pressed()) {
+                bn::core::update();
             }
         }
 
