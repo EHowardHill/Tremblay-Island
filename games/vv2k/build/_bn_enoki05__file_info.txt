@@ -1,0 +1,3 @@
+graphics/enoki05.bmp
+2154
+1634279670.48

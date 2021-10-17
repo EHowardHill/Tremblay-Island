@@ -22,6 +22,7 @@ namespace bn::sound_items_info
         make_pair(sound_item(36), string_view("ui_sfx01")),
         make_pair(sound_item(37), string_view("ui_sfx02")),
         make_pair(sound_item(38), string_view("ui_sfx03")),
+        make_pair(sound_item(77), string_view("z3_overworld_01")),
     };
 
     constexpr inline span<const pair<sound_item, string_view>> span(array);

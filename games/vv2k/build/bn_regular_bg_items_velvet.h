@@ -9,11 +9,11 @@
 //
 //	velvet_bn_graphics, 256x256@4, 
 //	+ palette 16 entries, not compressed
-//	+ 503 tiles (t|f|p reduced) not compressed
+//	+ 505 tiles (t|f|p reduced) not compressed
 //	+ regular map (flat), not compressed, 32x32 
-//	Total size: 32 + 16096 + 2048 = 18176
+//	Total size: 32 + 16160 + 2048 = 18240
 //
-//	Time-stamp: 2021-09-06, 21:11:19
+//	Time-stamp: 2021-09-28, 00:24:20
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -22,8 +22,8 @@
 #ifndef GRIT_VELVET_BN_GRAPHICS_H
 #define GRIT_VELVET_BN_GRAPHICS_H
 
-#define velvet_bn_graphicsTilesLen 16096
-extern const bn::tile velvet_bn_graphicsTiles[bn::max(4024 / 8, 1)];
+#define velvet_bn_graphicsTilesLen 16160
+extern const bn::tile velvet_bn_graphicsTiles[bn::max(4040 / 8, 1)];
 
 #define velvet_bn_graphicsMapLen 2048
 extern const bn::regular_bg_map_cell velvet_bn_graphicsMap[1024];
@@ -38,7 +38,7 @@ extern const bn::color velvet_bn_graphicsPal[16];
 namespace bn::regular_bg_items
 {
     constexpr inline regular_bg_item velvet(
-            regular_bg_tiles_item(span<const tile>(velvet_bn_graphicsTiles, 503), bpp_mode::BPP_4, compression_type::NONE), 
+            regular_bg_tiles_item(span<const tile>(velvet_bn_graphicsTiles, 505), bpp_mode::BPP_4, compression_type::NONE), 
             bg_palette_item(span<const color>(velvet_bn_graphicsPal, 16), bpp_mode::BPP_4, compression_type::NONE),
             regular_bg_map_item(velvet_bn_graphicsMap[0], size(32, 32), compression_type::NONE));
 }

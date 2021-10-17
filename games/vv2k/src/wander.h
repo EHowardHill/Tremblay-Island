@@ -6,6 +6,7 @@
 
 // Characters
 #include "bn_sprite_items_maple_walking.h"
+#include "bn_sprite_items_maple_walking_spring.h"
 #include "bn_sprite_items_enoki_walking_pj.h"
 #include "bn_sprite_items_aaron_sleep.h"
 #include "bn_sprite_items_del_sleep.h"
@@ -18,46 +19,48 @@
 // Backgrounds
 #include "bn_sprite_items_environment_stone.h"
 #include "bn_regular_bg_items_castle_floor.h"
+#include "bn_sprite_items_ocean_terrain.h"
+#include "bn_regular_bg_items_grassy_knoll.h"
+#include "bn_sprite_items_water_animation.h"
 
 // Projectiles
 class projectile {
     public:
-    bn::sprite_item fireball_item = bn::sprite_items::fireball;
-    bn::sprite_ptr fireball = fireball_item.create_sprite(0,0);
-    bn::sprite_animate_action<4> fireball_anim = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 0, 1, 2, 3);
-    bn::sprite_animate_action<4> fireball_anim_end = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 4, 5, 6, 7);
-    int dir = 1;
-    int dur = 0;
-    bool active = false;
-    void update() {
-        dur++;
-        if (dur < 16) {
-            fireball_anim.update();
-            fireball = fireball_anim.sprite();
-            switch(dir) {
-                case 0:
-                    fireball.set_y(fireball.y() + 4);
-                    break;
-                case 1:
-                    fireball.set_x(fireball.x() + 4);
-                    break;
-                case 2:
-                    fireball.set_x(fireball.x() - 4);
-                    break;
-                case 3:
-                    fireball.set_y(fireball.y() - 4);
-                    break;
-            };
-        } else {
-            if (dur < 23) {
-                if (dur == 16) bn::sound_items::firehit.play();
-                fireball = fireball_anim_end.sprite();
-                fireball_anim_end.update();
+        bn::sprite_item fireball_item = bn::sprite_items::fireball;
+        bn::sprite_ptr fireball = fireball_item.create_sprite(0,0);
+        bn::sprite_animate_action<4> fireball_anim = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 0, 1, 2, 3);
+        bn::sprite_animate_action<4> fireball_anim_end = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 4, 5, 6, 7);
+        int dir = 1, dur = 0;
+        bool active = false;
+        void update() {
+            dur++;
+            if (dur < 16) {
+                fireball_anim.update();
+                fireball = fireball_anim.sprite();
+                switch(dir) {
+                    case 1:
+                        fireball.set_x(fireball.x() + 4);
+                        break;
+                    case 2:
+                        fireball.set_x(fireball.x() - 4);
+                        break;
+                    case 3:
+                        fireball.set_y(fireball.y() - 4);
+                        break;
+                    default:
+                        fireball.set_y(fireball.y() + 4);
+                        break;
+                };
             } else {
-                fireball.set_visible(false);
+                if (dur < 23) {
+                    if (dur == 16) bn::sound_items::firehit.play();
+                    fireball = fireball_anim_end.sprite();
+                    fireball_anim_end.update();
+                } else {
+                    fireball.set_visible(false);
+                }
             }
         }
-    }
 };
 
 // Individual tiles
@@ -72,14 +75,9 @@ class stone {
 // Handles pairs of tile/action pairs
 class action {
     public:
-        int x = 0;
-        int y = 0;
-        int action = 0;
-        void set(int xx, int yy, int a) {
-            x = xx;
-            y = yy;
-            action = a;
-        }
+        int x = 0, y = 0, act = 0;
+        action(int X, int Y, int Act): x(X), y(Y), act(Act) {}
+        action() {}
 };
 
 // Dungeon return type
@@ -119,6 +117,7 @@ class character {
     bn::sprite_ptr entity = entity_item.create_sprite(0,0);
     bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 0, 1, 0, 2);
     bool isMain = false;
+    int collideFrom = 1;
     room* current_room;
 
     character(const bn::sprite_item sprite, room new_room, float x = 0, float y = 0, bool main = false) {
@@ -183,9 +182,6 @@ class character {
             // Control directional animation
             if (!done) {
                 switch(dir) {
-                    case 0:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 0, 2, 0);
-                        break;
                     case 1:
                         entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 4, 3, 5, 3);
                         break;
@@ -194,6 +190,9 @@ class character {
                         break;
                     case 3:
                         entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 10, 9, 11, 9);
+                        break;
+                    default:
+                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 0, 2, 0);
                         break;
                 }
                 done = true;
@@ -209,14 +208,14 @@ class character {
                 (y_int + 12) / 32
             };
             int col[8] = {
-                current_room->local_tileset[close[0] - 1 + (close[2] * current_room->width)] > 1,
-                current_room->local_tileset[close[0] - 1 + (close[3] * current_room->width)] > 1,
-                current_room->local_tileset[close[1] + 1 + (close[2] * current_room->width)] > 1,
-                current_room->local_tileset[close[1] + 1 + (close[3] * current_room->width)] > 1,
-                current_room->local_tileset[close[0] + ((close[2] - 1) * current_room->width)] > 1,
-                current_room->local_tileset[close[0] + ((close[3] - 1) * current_room->width)] > 1,
-                current_room->local_tileset[close[1] + ((close[2] + 1) * current_room->width)] > 1,
-                current_room->local_tileset[close[1] + ((close[3] + 1) * current_room->width)] > 1
+                current_room->local_tileset[close[0] - 1 + (close[2] * current_room->width)] > collideFrom,
+                current_room->local_tileset[close[0] - 1 + (close[3] * current_room->width)] > collideFrom,
+                current_room->local_tileset[close[1] + 1 + (close[2] * current_room->width)] > collideFrom,
+                current_room->local_tileset[close[1] + 1 + (close[3] * current_room->width)] > collideFrom,
+                current_room->local_tileset[close[0] + ((close[2] - 1) * current_room->width)] > collideFrom,
+                current_room->local_tileset[close[0] + ((close[3] - 1) * current_room->width)] > collideFrom,
+                current_room->local_tileset[close[1] + ((close[2] + 1) * current_room->width)] > collideFrom,
+                current_room->local_tileset[close[1] + ((close[3] + 1) * current_room->width)] > collideFrom
             };
 
             // Key controls
@@ -259,9 +258,6 @@ class character {
             } else {
                 if (bn::keypad::r_pressed()) {
                     switch(dir) {
-                        case 0:
-                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 12, 0, 0, 0);
-                            break;
                         case 1:
                             entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 13, 3, 3, 3);
                             break;
@@ -270,6 +266,9 @@ class character {
                             break;
                         case 3:
                             entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 15, 9, 9, 9);
+                            break;
+                        default:
+                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 12, 0, 0, 0);
                             break;
                     }
                     entity_anim.update();
@@ -352,9 +351,6 @@ class character {
             // Animate
             if (!done) {
                 switch(dir) {
-                    case 0:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 0, 2, 0);
-                        break;
                     case 1:
                         entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 4, 3, 5, 3);
                         break;
@@ -363,6 +359,9 @@ class character {
                         break;
                     case 3:
                         entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 10, 9, 11, 9);
+                        break;
+                    default:
+                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 0, 2, 0);
                         break;
                 }
             }
@@ -433,6 +432,11 @@ dungeon_return do_action(int act) {
             dt.spawn_y = 1;
             dt.world_index = 3;
             break;
+        default:
+            dt.spawn_x = 18;
+            dt.spawn_y = 1;
+            dt.world_index = 1;
+            break;
     };
     return dt;
 }
@@ -466,12 +470,12 @@ dungeon_return dungeon(dungeon_return dt) {
                 17,0,0,0,0,0,0,0,0,18,2,0,
                 7,3,3,3,3,3,3,3,16,3,6,0
                 };
-            current_room.actions[1].set(8,4,-1);  // door 1
-            current_room.actions[2].set(1,4,-2);  // door 2
-            current_room.actions[3].set(2,1,5);  // night sky
-            current_room.actions[4].set(3,1,4);  // painting
-            current_room.actions[5].set(4,1,6);  // pot
-            current_room.actions[6].set(1,2,6);  // pot
+            current_room.actions[1] = action(8,4,-1);  // door 1
+            current_room.actions[2] = action(1,4,-2);  // door 2
+            current_room.actions[3] = action(2,1,5);  // night sky
+            current_room.actions[4] = action(3,1,4);  // painting
+            current_room.actions[5] = action(4,1,6);  // pot
+            current_room.actions[6] = action(1,2,6);  // pot
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
@@ -496,10 +500,10 @@ dungeon_return dungeon(dungeon_return dt) {
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
-            current_room.actions[0].set(18,1,-3); // back to gr
-            current_room.actions[1].set(3,1,-4); // back to mb
-            current_room.actions[2].set(18,10,9); // complain
-            current_room.actions[3].set(2,10,-5); // bookshelf room
+            current_room.actions[0] = action(18,1,-3); // back to gr
+            current_room.actions[1] = action(3,1,-4); // back to mb
+            current_room.actions[2] = action(18,10,9); // complain
+            current_room.actions[3] = action(2,10,-5); // bookshelf room
 
             anim_object fp;
             fp.entity_item = bn::sprite_items::fireplace_anim;
@@ -526,12 +530,12 @@ dungeon_return dungeon(dungeon_return dt) {
             for (int t = 0; t < current_room.width * current_room.height; t++) {
                 current_room.local_tileset[t] = local[t];
             }
-            current_room.actions[0].set(9,6,-6); // to gb
-            current_room.actions[1].set(3,6,-7); // to hall
-            current_room.actions[2].set(4,2,10);
-            current_room.actions[5].set(3,2,10);
-            current_room.actions[3].set(8,2,8);
-            current_room.actions[4].set(4,6,7);
+            current_room.actions[0] = action(9,6,-6); // to gb
+            current_room.actions[1] = action(3,6,-7); // to hall
+            current_room.actions[2] = action(4,2,10);
+            current_room.actions[5] = action(3,2,10);
+            current_room.actions[3] = action(8,2,8);
+            current_room.actions[4] = action(4,6,7);
 
             anim_object aaron;
             aaron.entity.set_visible(true);
@@ -570,9 +574,9 @@ dungeon_return dungeon(dungeon_return dt) {
                 current_room.local_tileset[t] = local[t];
             }
 
-            current_room.actions[0].set(22,1,-8); // to gb
-            current_room.actions[1].set(5,2,11);
-            current_room.actions[2].set(4,2,11);
+            current_room.actions[0] = action(22,1,-8); // to gb
+            current_room.actions[1] = action(5,2,11);
+            current_room.actions[2] = action(4,2,11);
 
             anim_object fp;
             fp.entity_item = bn::sprite_items::bookshelf;
@@ -583,6 +587,40 @@ dungeon_return dungeon(dungeon_return dt) {
             fp.entity.set_position(144,16);
             anim_objects.push_back(fp);
         }
+        case 4: {
+            current_room.init(20,20,9,17);
+            int local[406] = {
+                31,32,31,32,39,27,27,27,27,27,27,27,27,27,27,42,43,42,12,13,
+                30,33,32,39,0,0,0,0,0,0,0,0,0,0,0,43,3,43,11,26,
+                31,34,39,0,0,0,0,0,0,0,0,0,1,0,0,5,2,3,12,26,
+                30,39,0,0,0,15,18,18,18,18,18,18,18,23,0,4,3,2,11,26,
+                30,38,0,0,1,16,19,19,19,19,19,19,19,24,1,5,2,3,12,26,
+                31,39,0,0,39,17,20,21,20,22,20,21,20,25,27,4,3,2,11,26,
+                30,38,0,0,0,0,0,0,0,3,0,0,0,0,0,4,2,3,12,26,
+                31,39,1,0,0,0,0,0,0,2,0,0,0,0,0,5,3,2,11,26,
+                30,38,39,0,0,0,0,0,40,3,42,0,0,0,0,4,2,3,12,26,
+                31,39,0,0,0,0,0,1,41,2,43,1,0,14,7,6,3,2,11,26,
+                31,38,0,0,0,0,0,27,2,3,3,27,0,4,2,3,2,3,12,26,
+                31,39,1,0,0,0,0,0,42,2,42,0,0,5,3,2,3,2,11,26,
+                30,36,39,0,0,0,0,14,43,3,43,8,7,6,2,3,2,3,12,26,
+                31,37,0,0,0,0,14,6,2,2,2,2,3,2,3,2,3,9,26,26,
+                34,0,0,0,0,0,5,2,3,3,2,3,2,3,2,10,9,26,13,26,
+                35,7,8,7,8,7,6,3,3,2,3,2,3,2,11,26,26,26,26,26,
+                42,2,3,2,3,2,3,11,42,3,42,10,26,13,26,26,26,26,26,26,
+                43,10,9,10,9,10,9,26,43,2,43,26,26,26,26,26,26,0,0,0,
+                26,26,26,26,13,26,26,26,26,10,26,26,26,26,26,26,26,0,0,0,
+                26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,0,0,0
+            };
+            for (int t = 0; t < current_room.width * current_room.height; t++) {
+                current_room.local_tileset[t] = local[t];
+            }
+
+            primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+        }
+        default: {
+            break;
+        }
     };
 
     // If different than default, reset
@@ -591,6 +629,8 @@ dungeon_return dungeon(dungeon_return dt) {
         current_room.start_y = dt.spawn_y;
         bn::sound_items::door.play();
     }
+
+    
 
     // Camera init
     camera.set_position(current_room.start_x * 32, current_room.start_y * 32);
@@ -601,22 +641,40 @@ dungeon_return dungeon(dungeon_return dt) {
     a_notif.set_visible(false);
 
     // Create initial characters
-    character maple(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
-    character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
+    int max_chari = 0;
 
-    if (current_room.local_tileset[(current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
-        enoki.entity.set_position(4 + current_room.start_x * 32, current_room.start_y * 32);
-        maple.entity.set_position(-4 + current_room.start_x * 32, (current_room.start_y * 32));
+    bn::vector<character, 2> chari;
+
+    if (dt.world_index < 4) {
+        character maple(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
+        character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
+
+        if (current_room.local_tileset[(current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
+            enoki.entity.set_position(4 + current_room.start_x * 32, current_room.start_y * 32);
+            maple.entity.set_position(-4 + current_room.start_x * 32, (current_room.start_y * 32));
+        }
+
+        max_chari = 2;
+        chari.push_back(maple);
+        chari.push_back(enoki);
+        
+
+        for (int t = 0; t < 2; t++) {
+            chari.at(t).entity.set_camera(camera);
+        }
+    
+    // Overworld 1
+    } else if (dt.world_index == 4) {
+        character maple(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        maple.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
+        maple.entity.set_camera(camera);
+        max_chari = 1;
+        maple.collideFrom = 15;
+        chari.push_back(maple);
+        chari.at(0).isMain = true;
     }
 
-    int max_chari = 2;
-    character chari[2] = {maple, enoki};
-
-    for (int t = 0; t < 2; t++) {
-        chari[t].entity.set_camera(camera);
-    }
-
-    chari[save::last_char_id].isMain = true;
+    //chari.at(save::last_char_id).isMain = true;
 
     // Make a fireball!
     int p_index = 0;
@@ -633,14 +691,14 @@ dungeon_return dungeon(dungeon_return dt) {
     int flex = 84;
     int follow_x = 0;
     int follow_y = 0;
-    int follow_dir = 0;
     int follow_id = 0;
 
+
+    int anim8 = 0;
     while(true) {
 
         if (bn::keypad::start_pressed()) {
             bn::core::update();
-            int old_vol = bn::music::volume().integer();
             bn::music::pause();
             bn::sound_items::cnaut.play();
             while(!bn::keypad::start_pressed()) {
@@ -663,7 +721,7 @@ dungeon_return dungeon(dungeon_return dt) {
                 p[p_index].active = true;
                 p[p_index].fireball.set_x(follow_x);
                 p[p_index].fireball.set_y(follow_y);
-                p[p_index].dir = chari[follow_id].dir;
+                p[p_index].dir = chari.at(follow_id).dir;
                 p[p_index].dur = 0;
                 p[p_index].fireball.set_visible(true);
                 p_index++;
@@ -697,18 +755,12 @@ dungeon_return dungeon(dungeon_return dt) {
                 a_notif.set_x(follow_x);
                 a_notif.set_y(follow_y - 28);
                 if (bn::keypad::a_pressed()) {
-                    
-                    // Clear out extra sprites
-                    for (int t = local_walls_p; t < w_size; t++) {
-                        //local_walls[t].entity.~sprite_ptr();
-                    }
 
                     // Start action
                     bn::core::update();
                     a_notif.set_visible(false);
-                    int action = current_room.actions[t].action;
-                    if (exec_dialogue(current_room.actions[t].action) == 1) {
-                        dungeon_return dr = do_action(current_room.actions[t].action);
+                    if (exec_dialogue(current_room.actions[t].act) == 1) {
+                        dungeon_return dr = do_action(current_room.actions[t].act);
                         if (dr.spawn_x > 0 && dr.spawn_y > 0) {
                             return dr;
                         }
@@ -718,38 +770,37 @@ dungeon_return dungeon(dungeon_return dt) {
         }
 
         // Swap characters
-        if (bn::keypad::b_pressed()) {
-            bn::sound_items::cnaut.play();
-            bn::blending::set_intensity_alpha(1);
-            int new_chari = (follow_id + 1) % max_chari;
-            save::last_char_id = new_chari;
-            chari[follow_id].isMain = false;
-            chari[follow_id].entity.set_blending_enabled(false);
-            chari[new_chari].isMain = true;
-            chari[new_chari].entity.set_blending_enabled(true);
+        if (max_chari > 1) {
+            if (bn::keypad::b_pressed()) {
+                bn::sound_items::cnaut.play();
+                bn::blending::set_intensity_alpha(1);
+                int new_chari = (follow_id + 1) % max_chari;
+                save::last_char_id = new_chari;
+                chari.at(follow_id).isMain = false;
+                chari.at(follow_id).entity.set_blending_enabled(false);
+                chari.at(new_chari).isMain = true;
+                chari.at(new_chari).entity.set_blending_enabled(true);
+            }
         }
 
         // Character operations
-        int base_y = chari[0].entity.y().integer();
-        for (int t = 0; t < 2; t++) {
+        for (int t = 0; t < max_chari; t++) {
 
             // Set primary camera following X/Y coordinates
-            if (chari[t].isMain) {
-                chari[t].update();
-                follow_x = chari[t].entity.x().integer();
-                follow_y = chari[t].entity.y().integer();
-                follow_dir = chari[t].dir;
+            if (chari.at(t).isMain) {
+                chari.at(t).update();
+                follow_x = chari.at(t).entity.x().integer();
+                follow_y = chari.at(t).entity.y().integer();
                 follow_id = t;
             }
 
             // Z-Order followers
-            if (chari[t].entity.y() > chari[(t+1)%max_chari].entity.y()) {
-                base_y = chari[t].entity.y().integer();
-                chari[t].entity.put_above();
+            if (chari.at(t).entity.y() > chari.at((t+1)%max_chari).entity.y()) {
+                chari.at(t).entity.put_above();
             }
 
-            if (!chari[t].isMain) {
-                chari[t].update(follow_x,follow_y);
+            if (!chari.at(t).isMain) {
+                chari.at(t).update(follow_x,follow_y);
             }
         }
 
@@ -795,9 +846,27 @@ dungeon_return dungeon(dungeon_return dt) {
                 for (int x = min_x; x < max_x; x++) {
                     int loc = current_room.local_tileset[(current_room.width * y) + x];
                     if (local_walls_p < w_size && loc > 0) {
-                        local_walls[local_walls_p].entity = bn::sprite_items::environment_stone.create_sprite(x * 32, y * 32, loc - 1);
+
+                        if (dt.world_index < 4) {
+                            local_walls[local_walls_p].entity = bn::sprite_items::environment_stone.create_sprite(x * 32, y * 32, loc - 1);
+                            local_walls[local_walls_p].entity.put_below();
+                        } else {
+                            if (loc == 26) {
+                                local_walls[local_walls_p].entity = bn::sprite_items::water_animation.create_sprite(x * 32, y * 32, anim8);
+                                anim8++;
+                                anim8 = anim8 % 8;
+                                local_walls[local_walls_p].entity.put_below();
+                            } else {
+                                local_walls[local_walls_p].entity = bn::sprite_items::ocean_terrain.create_sprite(x * 32, y * 32, loc - 1);
+                                if (loc == 1) {
+                                    local_walls[local_walls_p].entity.put_above();
+                                } else {
+                                    local_walls[local_walls_p].entity.put_below();
+                                }
+                            }
+                        }
+                        
                         local_walls[local_walls_p].entity.set_camera(camera);
-                        local_walls[local_walls_p].entity.put_below();
                         local_walls_p++;
                     }
                 }
@@ -826,6 +895,7 @@ dungeon_return dungeon(dungeon_return dt) {
 
                     break;
                 }
+                default: {}
             };
             firstThing = false;
         } else {
@@ -871,13 +941,13 @@ dungeon_return dungeon(dungeon_return dt) {
                                 a_notif.set_visible(false);
                                 bn::music::stop();
                                 for (int t = 0; t < 128; t++) {
-                                    chari[0].update();
+                                    chari.at(0).update();
                                     p[i].update();
                                     bn::core::update();
                                 }
-                                projectile p[3];
-                                for (int t; t < p_size; t++) {
-                                    p[t].fireball.set_visible(false);
+                                projectile pro[3];
+                                for (int t = 0; t < p_size; t++) {
+                                    pro[t].fireball.set_visible(false);
                                 }
                                 exec_dialogue(12);
                                 dt.world_index = -1;
@@ -886,6 +956,7 @@ dungeon_return dungeon(dungeon_return dt) {
                         }
                     }
                     break;
+                default: {}
             }
         }
     }

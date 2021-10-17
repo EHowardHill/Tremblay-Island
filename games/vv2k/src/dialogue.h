@@ -34,12 +34,26 @@
 #include "bn_sprite_items_maple03.h"
 #include "bn_sprite_items_maple04.h"
 #include "bn_sprite_items_maple05.h"
+#include "bn_sprite_items_maple06.h"
+#include "bn_sprite_items_maple07.h"
+#include "bn_sprite_items_maple08.h"
+#include "bn_sprite_items_maple09.h"
+#include "bn_sprite_items_maple10.h"
 #include "bn_sprite_items_enoki01.h"
 #include "bn_sprite_items_enoki02.h"
 #include "bn_sprite_items_enoki03.h"
 #include "bn_sprite_items_enoki04.h"
+#include "bn_sprite_items_enoki05.h"
+#include "bn_sprite_items_enoki06.h"
+#include "bn_sprite_items_enoki07.h"
+#include "bn_sprite_items_enoki08.h"
+#include "bn_sprite_items_enoki09.h"
 #include "bn_sprite_items_aaron01.h"
 #include "bn_sprite_items_aaron02.h"
+#include "bn_sprite_items_aaron03.h"
+#include "bn_sprite_items_aaron04.h"
+#include "bn_sprite_items_aaron05.h"
+#include "bn_sprite_items_aaron06.h"
 #include "bn_sprite_items_delphine01.h"
 #include "bn_sprite_items_delphine02.h"
 
@@ -64,6 +78,8 @@
 #include "bn_regular_bg_items_s0206.h"
 #include "bn_regular_bg_items_s0207.h"
 #include "bn_regular_bg_items_s0208.h"
+#include "bn_regular_bg_items_s0301.h"
+#include "bn_regular_bg_items_s0302.h"
 
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
@@ -111,6 +127,50 @@ void set_sprite(bn::sprite_ptr chari, int value) {
         case 13:
             chari.set_item(bn::sprite_items::delphine02);
             break;
+
+        // Spring
+        case 14:
+            chari.set_item(bn::sprite_items::maple06);
+            break;
+        case 15:
+            chari.set_item(bn::sprite_items::maple07);
+            break;
+        case 16:
+            chari.set_item(bn::sprite_items::maple08);
+            break;
+        case 17:
+            chari.set_item(bn::sprite_items::maple09);
+            break;
+        case 18:
+            chari.set_item(bn::sprite_items::maple10);
+            break;
+        case 19:
+            chari.set_item(bn::sprite_items::enoki05);
+            break;
+        case 20:
+            chari.set_item(bn::sprite_items::enoki06);
+            break;
+        case 21:
+            chari.set_item(bn::sprite_items::enoki07);
+            break;
+        case 22:
+            chari.set_item(bn::sprite_items::enoki08);
+            break;
+        case 23:
+            chari.set_item(bn::sprite_items::enoki09);
+            break;
+        case 24:
+            chari.set_item(bn::sprite_items::aaron03);
+            break;
+        case 25:
+            chari.set_item(bn::sprite_items::aaron04);
+            break;
+        case 26:
+            chari.set_item(bn::sprite_items::aaron05);
+            break;
+        case 27:
+            chari.set_item(bn::sprite_items::aaron06);
+            break;
         default:
             break;
     }
@@ -148,6 +208,9 @@ void dialogue_page(Concepts::line n[32]) {
         } else if (strcmp(n[pos].text, "BG: champ") == 0) {
             int music_volume = 25;
             bn::music_items_info::span[10].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: Overworld 01") == 0) {
+            int music_volume = 30;
+            bn::music_items_info::span[11].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: fadeout") == 0) {
             if (bn::music::playing()) {
                 bn::music::set_volume(0);
@@ -223,6 +286,12 @@ void dialogue_page(Concepts::line n[32]) {
         } else if (strcmp(n[pos].text, "S02:08") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0208);
             primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S03:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0301);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S03:02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0302);
+            primary_bg.set_visible(true);
 
         // End dialogue
         } else if (strcmp(n[pos].text, "COM: Endscene") == 0) {
@@ -234,10 +303,7 @@ void dialogue_page(Concepts::line n[32]) {
             // Process initial transparency states
             if (n[pos].img != 0) {
                 if (n[pos].left) {
-                    if (n[pos].transition || n[pos].img == -1) {
-                        chari_l.set_visible(false);
-                    }
-
+                    if (n[pos].transition || n[pos].img == -1) chari_l.set_visible(false);
                     if (!chari_l.visible() && n[pos].img != -1) {
                         chari_r.set_blending_enabled(false);
                         chari_l.set_blending_enabled(true);
@@ -245,13 +311,9 @@ void dialogue_page(Concepts::line n[32]) {
                         chari_l.set_x(-50);
                         chari_l.set_visible(true);
                     }
-
                     set_sprite(chari_l, n[pos].img);
                 } else {
-                    if (n[pos].transition || n[pos].img == -1) {
-                        chari_r.set_visible(false);
-                    }
-
+                    if (n[pos].transition || n[pos].img == -1) chari_r.set_visible(false);
                     if (!chari_r.visible() && n[pos].img != -1) {
                         chari_l.set_blending_enabled(false);
                         chari_r.set_blending_enabled(true);
@@ -259,7 +321,6 @@ void dialogue_page(Concepts::line n[32]) {
                         chari_r.set_x(50);
                         chari_r.set_visible(true);
                     }
-
                     set_sprite(chari_r, n[pos].img);
                 }
             }
@@ -273,22 +334,16 @@ void dialogue_page(Concepts::line n[32]) {
             bn::vector<bn::sprite_ptr, 33> text_sprite3;
             bn::vector<bn::sprite_ptr, 33> text_sprite4;
             bn::vector<bn::sprite_ptr, 33> text_sprite5;
-
-            // String initialization
-            char line1[33] = "                                ";
-            char line3[33] = "                                ";
-            char line4[33] = "                                ";
-            char line5[33] = "                                ";
-            char line6[33] = "                                ";
-            char txt[165] = "                                                                                                                                                                    ";
-
-            strncpy(txt, n[pos].text, 165);
-            strncpy(line1, txt, 33);
-            strncpy(line3, txt + (33 * 1), 33);
-            strncpy(line4, txt + (33 * 2), 33);
-            strncpy(line5, txt + (33 * 3), 33);
-            strncpy(line6, txt + (33 * 4), 33);
-
+            char line1[33] = {0};
+            char line3[33] = {0};
+            char line4[33] = {0};
+            char line5[33] = {0};
+            char line6[33] = {0};
+            for (int t = 0; t < 33; t++) line1[t] = n[pos].text[t];
+            for (int t = 0; t < 33; t++) line3[t] = n[pos].text[t + 33];
+            for (int t = 0; t < 33; t++) line4[t] = n[pos].text[t + 66];
+            for (int t = 0; t < 33; t++) line5[t] = n[pos].text[t + 99];
+            for (int t = 0; t < 32; t++) line6[t] = n[pos].text[t + 132];
             text_line0.generate(-108, 21, line1, text_sprite0);
             text_line0.generate(-108, 33, line3, text_sprite2);
             text_line0.generate(-108, 45, line4, text_sprite3);
@@ -299,12 +354,11 @@ void dialogue_page(Concepts::line n[32]) {
             // Process visual effects
             while(!bn::keypad::a_pressed()) {
 
-                if (chari_l.visible() && chari_l.x().integer() < -40) {
-                    chari_l.set_x(chari_l.x() + 1);
-                }
-                if (chari_r.visible() && chari_r.x().integer() > 40) {
-                    chari_r.set_x(chari_r.x() - 1);
-                }
+                // Move in from side
+                if (chari_l.visible() && chari_l.x().integer() < -40) chari_l.set_x(chari_l.x() + 1);
+                if (chari_r.visible() && chari_r.x().integer() > 40) chari_r.set_x(chari_r.x() - 1);
+
+                // Handle transparency
                 if (bn::blending::transparency_alpha().to_double() + 0.1 <= 1) {
                     bn::blending::set_transparency_alpha(bn::blending::transparency_alpha().to_double() + 0.1);
                 } else {
@@ -312,67 +366,6 @@ void dialogue_page(Concepts::line n[32]) {
                     chari_l.set_blending_enabled(false);
                 }
 
-                bn::core::update();
-            }
-        }
-
-        // Increment location
-        pos++;
-    }
-}
-
-void dialogue_page_small(Concepts::line n[32]) {
-
-    // Variable initialization
-    bn::sprite_text_generator text_line0(common::variable_8x16_sprite_font);
-    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
-
-    // While dialogue is going,
-    int pos = 0;
-    bool cont = true;
-    while (cont) {
-
-        // Set dialogue
-        if (strcmp(n[pos].text, "COM: Endscene") == 0) {
-            cont = false;
-
-        // Handle sprite/dialogue
-        } else {
-
-            // SFX
-            bn::sound_items::pop.play(0.5);
-
-            // Fresh init
-            bn::vector<bn::sprite_ptr, 33> text_sprite0;
-            bn::vector<bn::sprite_ptr, 33> text_sprite2;
-            bn::vector<bn::sprite_ptr, 33> text_sprite3;
-            bn::vector<bn::sprite_ptr, 33> text_sprite4;
-            bn::vector<bn::sprite_ptr, 33> text_sprite5;
-
-            // String initialization
-            char line1[33] = {0};
-            char line3[33] = {0};
-            char line4[33] = {0};
-            char line5[33] = {0};
-            char line6[33] = {0};
-
-            //while(!bn::keypad::b_pressed()) bn::core::update(); // breakpoint again
-
-            for (int t = 0; t < 33; t++) line1[t] = n[pos].text[t];
-            for (int t = 0; t < 33; t++) line3[t] = n[pos].text[t + 33];
-            for (int t = 0; t < 33; t++) line4[t] = n[pos].text[t + 66];
-            for (int t = 0; t < 33; t++) line5[t] = n[pos].text[t + 99];
-            for (int t = 0; t < 32; t++) line6[t] = n[pos].text[t + 132];
-
-            text_line0.generate(-108, 21, line1, text_sprite0);
-            text_line0.generate(-108, 33, line3, text_sprite2);
-            text_line0.generate(-108, 45, line4, text_sprite3);
-            text_line0.generate(-108, 57, line5, text_sprite4);
-            text_line0.generate(-108, 69, line6, text_sprite5);
-            bn::core::update();
-
-            // Process visual effects
-            while(!bn::keypad::a_pressed()) {
                 bn::core::update();
             }
         }

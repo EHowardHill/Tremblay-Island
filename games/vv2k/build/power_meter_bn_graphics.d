@@ -1,0 +1,1 @@
+power_meter_bn_graphics.o: power_meter_bn_graphics.s

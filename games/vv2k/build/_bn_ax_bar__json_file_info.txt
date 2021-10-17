@@ -1,0 +1,3 @@
+graphics/ax_bar.json
+44
+1631964260.78
