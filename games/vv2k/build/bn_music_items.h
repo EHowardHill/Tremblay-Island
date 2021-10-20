@@ -18,6 +18,7 @@ namespace bn::music_items
     constexpr inline music_item z02_the_champ(10);
     constexpr inline music_item z03_overworld(11);
     constexpr inline music_item z04_underground(12);
+    constexpr inline music_item z05_victory(13);
 }
 
 #endif

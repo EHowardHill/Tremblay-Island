@@ -81,6 +81,8 @@
 #include "bn_regular_bg_items_s0301.h"
 #include "bn_regular_bg_items_s0302.h"
 
+#include "bn_regular_bg_items_dialogue_bg.h"
+
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
 #include "bn_regular_bg_items_day_castle.h"
@@ -190,10 +192,15 @@ void dialogue_page(Concepts::line n[32]) {
     chari_r.set_horizontal_flip(true);
     primary_bg.set_visible(false);
 
+    bn::regular_bg_ptr dialogue_bg = bn::regular_bg_items::dialogue_bg.create_bg(0, 0);
+    dialogue_bg.set_visible(false);
+
     // While dialogue is going,
     int pos = 0;
     bool cont = true;
     while (cont) {
+
+        if (n[pos].img > 0) dialogue_bg.set_visible(true);
 
         // Set music
         if (strcmp(n[pos].text, "BG: 0") == 0) {
@@ -222,6 +229,9 @@ void dialogue_page(Concepts::line n[32]) {
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "BG: Forest") == 0) {
             primary_bg.set_item(bn::regular_bg_items::mountain);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "BG: Trailer Home") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::velvet);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S01:01") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0101);
@@ -349,6 +359,8 @@ void dialogue_page(Concepts::line n[32]) {
             text_line0.generate(-108, 45, line4, text_sprite3);
             text_line0.generate(-108, 57, line5, text_sprite4);
             text_line0.generate(-108, 69, line6, text_sprite5);
+
+            dialogue_bg.put_above();
             bn::core::update();
 
             // Process visual effects
@@ -366,6 +378,7 @@ void dialogue_page(Concepts::line n[32]) {
                     chari_l.set_blending_enabled(false);
                 }
 
+                dialogue_bg.put_above();
                 bn::core::update();
             }
         }

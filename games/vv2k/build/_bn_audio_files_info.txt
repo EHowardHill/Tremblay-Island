@@ -10,6 +10,12 @@ audio/castle.xm
 audio/cnaut.wav
 58104
 1630924188.6
+audio/desktop.ini
+46
+1634502077.95
+audio/ding.wav
+80856
+1634501883.71
 audio/door.wav
 56592
 1630927134.47
@@ -40,6 +46,9 @@ audio/shortclip.wav
 audio/squeak.wav
 37164
 1630924062.97
+audio/start.wav
+280
+1634502140.77
 audio/title.xm
 1861296
 1630979939.72
@@ -79,6 +88,9 @@ audio/z03_overworld.xm
 audio/z04_underground.xm
 483292
 1634081895.67
+audio/z05_victory.xm
+1042047
+1634501665.14
 audio/z3_overworld_01.wav
 24223788
 1633846585.31

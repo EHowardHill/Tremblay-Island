@@ -548,7 +548,9 @@ int exec_dialogue(int x) {
         /* ------------------------------------- Init dialogue */
 
         case 18: {
+            bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
             Concepts::line lc[32] = {
+                {fals, fals, 0, "BG: Trailer Home"},
                 {true, true, 22, "ENOKI                            MAPLE! YOU CAME!!!"},
                 {true, fals, 17, "MAPLE                            Yeah, this was my best option."},
                 {true, true, 24, "AARON                            How was the trip? Did it take youlong?"},

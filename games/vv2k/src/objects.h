@@ -13,15 +13,14 @@ class Concepts {
 };
 
 // Function to calculate the smallest multiple
-int closestMultiple(int n, int x)
-{  
-    if(x>n)
-    return x;
+int roundDown(int n) {
+    return n >> 5;
+}
 
-    n = n + x/2;
-    n = n - (n%x);
-    return n;
-};
+int roundUp(int n) 
+{
+    return roundDown(n + 31);
+}
 
 int countDigit(int n)
 {
@@ -35,4 +34,9 @@ struct save_struct {
     int checkpoint = 0;
     char island_name[16] = {0};
     int level_data[10] = {0};
+};
+
+template<typename C, typename T>
+bool contains(C&& c, T e) { 
+    return std::find(std::begin(c), std::end(c), e) != std::end(c);
 };

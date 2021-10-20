@@ -21,6 +21,7 @@ namespace bn::music_items_info
         make_pair(music_item(10), string_view("z02_the_champ")),
         make_pair(music_item(11), string_view("z03_overworld")),
         make_pair(music_item(12), string_view("z04_underground")),
+        make_pair(music_item(13), string_view("z05_victory")),
     };
 
     constexpr inline span<const pair<music_item, string_view>> span(array);

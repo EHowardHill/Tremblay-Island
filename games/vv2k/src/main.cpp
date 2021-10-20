@@ -986,6 +986,9 @@ void victory_page() {
     text_gen.generate(32, 32, "Restart", text_spr_3);
     text_gen.generate(32, 48, "Exit", text_spr_4);
 
+    bn::music_items_info::span[13].first.play(bn::fixed(50) / 100);
+
+    int music_int = 0;
     while(true) {
         if (offset < 48 * 2) {
             victory_anim.update();
@@ -996,6 +999,13 @@ void victory_page() {
         victory_spr2 = victory_anim2.sprite();
 
        background.set_position((background.x().integer() + 1) % 256, (background.y().integer() + 1) % 256);
+
+        if (music_int < 225) {
+            music_int++;
+        } else if (music_int == 225) {
+            bn::music::stop();
+            music_int++;
+        }
 
         if (total < score) total += 5;
         if (total > score) total = score;
@@ -1011,12 +1021,12 @@ void victory_page() {
 
         if (new_lc < new_xp_d) {
             new_lc++;
-            bn::sound_items::pop.play();
+            bn::sound_items::start.play();
         }
         else if (!final_hit) {
             final_hit = true;
             total = score;
-            bn::sound_items::ahoy.play();
+            bn::sound_items::firecrackle.play();
         }
         b_a.set_x(new_lc + 32);
 
@@ -1039,10 +1049,18 @@ int main()
     bn::core::init();           // Initialize Butano libraries
     bn::sram::read(so);         // Read save data from cartridge
 
-    victory_page();
+    //exec_dialogue(18);
 
-    /*
-    exec_dialogue(18);
+    dungeon_return dt(0,0,0);
+    dt.spawn_x = 0;
+    dt.spawn_y = 0;
+    dt.world_index = 5;
+    dungeon_return dt2 = dungeon(dt);
+
+    //victory_page();
+        /*
+    
+    
 
     exec_dialogue(16);
     dungeon_return dt(0,0,0);

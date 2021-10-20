@@ -18,6 +18,7 @@
 
 // Backgrounds
 #include "bn_sprite_items_environment_stone.h"
+#include "bn_sprite_items_trailer_home.h"
 #include "bn_regular_bg_items_castle_floor.h"
 #include "bn_sprite_items_ocean_terrain.h"
 #include "bn_regular_bg_items_grassy_knoll.h"
@@ -96,6 +97,7 @@ class room {
     int start_x = 8;
     int start_y = 3;
     int local_tileset[406];
+    int collisions[64] = {64};
     action actions[16];
 
     void init(int w, int h, int x, int y) {
@@ -136,6 +138,92 @@ class character {
 
     // Run this regularly!
     void update(int x = 0, int y = 0) {
+
+        // Collision detection
+        int x_int = entity.x().integer();
+        int y_int = entity.y().integer();
+        int close[4] = {
+            roundDown(x_int + 6),
+            roundUp(x_int - 6),
+            roundDown(y_int + 6) * current_room->width,
+            roundUp(y_int) * current_room->width
+        };
+
+        int col[8] = {
+            contains(current_room->collisions, current_room->local_tileset[close[0] + close[2]] - 1),
+            contains(current_room->collisions, current_room->local_tileset[close[0] + close[3]] - 1),
+
+            contains(current_room->collisions, current_room->local_tileset[close[1] + close[2]] - 1),
+            contains(current_room->collisions, current_room->local_tileset[close[1] + close[3]] - 1),
+
+            contains(current_room->collisions, current_room->local_tileset[close[0] + close[2]] - 1),
+            contains(current_room->collisions, current_room->local_tileset[close[1] + close[2]] - 1),
+
+            contains(current_room->collisions, current_room->local_tileset[close[0] + close[3]] - 1),
+            contains(current_room->collisions, current_room->local_tileset[close[1] + close[3]] - 1)
+        };
+
+        bool canLeft = !(((col[4] && col[5]) ^ col[0]) || ((col[6] && col[7]) ^ col[1]));
+        bool canRite = !(((col[4] && col[5]) ^ col[2]) || ((col[6] && col[7]) ^ col[3]));
+        bool canUp =   !(((col[0] && col[1]) ^ col[4]) || ((col[2] && col[3]) ^ col[5]));
+        bool canDn =   !(((col[0] && col[1]) ^ col[6]) || ((col[2] && col[3]) ^ col[7]));
+
+        /*
+        int canUp = 0;
+        int canDn = 0;
+
+        if !(canLeft || canRite) {
+            canUp = !(col[4] || col[5]);
+            canDn = !(col[6] || col[7]);
+        }
+        */
+
+        int block = current_room->local_tileset[close[0] + close[1]] - 1;
+
+        BN_LOG(
+            close[0],
+            " ",
+            close[1],
+            " ",
+            close[2],
+            " ",
+            close[3],
+            " x ",
+            current_room->local_tileset[close[0] + close[2]] - 1,
+            " ",
+            current_room->local_tileset[close[0] + close[3]] - 1,
+            " ",
+            current_room->local_tileset[close[1] + close[2]] - 1,
+            " ",
+            current_room->local_tileset[close[1] + close[3]] - 1,
+            " ",
+            current_room->local_tileset[close[0] + close[2] - current_room->width] - 1,
+            " ",
+            current_room->local_tileset[close[1] + close[2] + current_room->width] - 1,
+            " ",
+            current_room->local_tileset[close[0] + close[3] - current_room->width] - 1,
+            " ",
+            current_room->local_tileset[close[1] + close[3] + current_room->width] - 1,
+            " x ",
+            col[0],
+            " ",
+            col[1],
+            " ",
+            col[2],
+            " ",
+            col[3],
+            " ",
+            col[4],
+            " ",
+            col[5],
+            " ",
+            col[6],
+            " ",
+            col[7],
+            " ",
+            "&",
+            canLeft
+        );
 
         // If main character....
         if (isMain) {
@@ -198,58 +286,18 @@ class character {
                 done = true;
             }
 
-            // Collision detection
-            int x_int = entity.x().integer();
-            int y_int = entity.y().integer();
-            int close[4] {
-                ((x_int + 6 + 31) & (-32)) / 32,
-                (x_int - 6) / 32,
-                ((y_int + 31) & (-32)) / 32,
-                (y_int + 12) / 32
-            };
-            int col[8] = {
-                current_room->local_tileset[close[0] - 1 + (close[2] * current_room->width)] > collideFrom,
-                current_room->local_tileset[close[0] - 1 + (close[3] * current_room->width)] > collideFrom,
-                current_room->local_tileset[close[1] + 1 + (close[2] * current_room->width)] > collideFrom,
-                current_room->local_tileset[close[1] + 1 + (close[3] * current_room->width)] > collideFrom,
-                current_room->local_tileset[close[0] + ((close[2] - 1) * current_room->width)] > collideFrom,
-                current_room->local_tileset[close[0] + ((close[3] - 1) * current_room->width)] > collideFrom,
-                current_room->local_tileset[close[1] + ((close[2] + 1) * current_room->width)] > collideFrom,
-                current_room->local_tileset[close[1] + ((close[3] + 1) * current_room->width)] > collideFrom
-            };
-
             // Key controls
             if (bn::keypad::left_held()) {
-                if ((!col[0] && !col[1]) || (col[0] && !col[1] && col[2] && col[7])) {
-                    entity.set_x(entity.x() - 1);
-                }
+                entity.set_x(entity.x() + (-1 * canLeft));
             }
             if (bn::keypad::right_held()) {
-                if (!col[2] || (col[0] && col[2] && !col[3] && col[7])) {
-                    entity.set_x(entity.x() + 1);
-                }
+                entity.set_x(entity.x() + (1 * canRite));
             }
             if (bn::keypad::up_held()) {
-                if (
-                    (!col[1] && 
-                        (!col[3] || (!col[0] && col[2] && col[3] && col[4] && col[5])))
-                    ||
-                    (col[1] &&
-                        (!col[2] && !col[3] && !col[4] && !col[5] && !col[6] && !col[7]))
-                ) {
-                    entity.set_y(entity.y() - 1);
-                }
+                entity.set_y(entity.y() + (-1 * canUp));
             }
             if (bn::keypad::down_held()) {
-                if (
-                    (!col[0] &&
-                        (!col[2] || (col[2] && col[3] && col[4] && col[5])))
-                    ||
-                    (col[0] && col[1] && !col[2] &&
-                        (col[4] || (!col[2] && !col[3] && !col[4])))
-                ) {
-                    entity.set_y(entity.y() + 1);
-                }
+                entity.set_y(entity.y() + (1 * canDn));
             }
 
             // Move
@@ -286,27 +334,11 @@ class character {
             // Collision detection
             done = true;
             is_walking = false;
-            int x_int = entity.x().integer();
-            int y_int = entity.y().integer();
-            int close[4];
-            int col[8];
-            close[0] = ((x_int + 6 + 31) & (-32)) / 32;
-            close[1] = (x_int - 6) / 32;
-            close[2] = ((y_int + 31) & (-32)) / 32;
-            close[3] = y_int / 32;
-            col[0] = current_room->local_tileset[close[0] - 1 + (close[2] * current_room->width)] > 1;
-            col[1] = current_room->local_tileset[close[0] - 1 + (close[3] * current_room->width)] > 1;
-            col[2] = current_room->local_tileset[close[1] + 1 + (close[2] * current_room->width)] > 1;
-            col[3] = current_room->local_tileset[close[1] + 1 + (close[3] * current_room->width)] > 1;
-            col[4] = current_room->local_tileset[close[0] + ((close[2] - 1) * current_room->width)] > 1;
-            col[5] = current_room->local_tileset[close[0] + ((close[3] - 1) * current_room->width)] > 1;
-            col[6] = current_room->local_tileset[close[1] + ((close[2] + 1) * current_room->width)] > 1;
-            col[7] = current_room->local_tileset[close[1] + ((close[3] + 1) * current_room->width)] > 1;
 
             // Follow player
             bool isXTravel = false;
             if (x < entity.x() - 24) {
-                if ((!col[0]) || (col[0] && !col[1] && col[2])) {
+                if (true) {
                     isXTravel = true;
                     entity.set_x(entity.x() - 1);
                     dir = 2;
@@ -316,7 +348,7 @@ class character {
                 }
             } else
             if (x > entity.x() + 24) {
-                if (!col[2] || (col[0] && col[2] && !col[3])) {
+                if (true) {
                     isXTravel = true;
                     entity.set_x(entity.x() + 1);
                     dir = 1;
@@ -326,7 +358,7 @@ class character {
                 }
             }
             if (y < entity.y() - 24) {
-                if (!col[1] && !col[3]) {
+                if (true) {
                     entity.set_y(entity.y() - 1);
                     if (!isXTravel) {
                         dir = 3;
@@ -337,7 +369,7 @@ class character {
                 }
             } else
             if (y > entity.y() + 24) {
-                if ((!col[2] && !col[3]) || (!col[0] && (!col[2] || (col[2] && col[3] && col[4] && col[5])))) {
+                if (true) {
                     entity.set_y(entity.y() + 1);
                     if (!isXTravel) {
                         dir = 0;
@@ -618,6 +650,26 @@ dungeon_return dungeon(dungeon_return dt) {
             primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
             primary_bg.set_camera(camera);
         }
+        case 5: {
+            current_room.init(11,5,5,3);
+            int local_col[42] = {6,7,8,9,10,14,15,18,19,20,22,23,24,25,29,30,34,35,37,38,39,40,44,45,47,48,49,50,51,52,53,54};
+            int local[406] = {
+                1,6,11,16,21,26,31,36,41,46,51,
+                2,7,12,17,22,27,32,37,42,47,52,
+                3,8,13,18,23,28,33,38,43,48,53,
+                4,9,14,19,24,29,34,39,44,49,54,
+                5,10,15,20,25,30,35,40,45,50,55
+            };
+            for (int t = 0; t < current_room.width * current_room.height; t++) {
+                current_room.local_tileset[t] = local[t];
+            }
+            for (int t = 0; t < 42; t++) {
+                current_room.collisions[t] = local_col[t];
+            }
+
+            primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+        }
         default: {
             break;
         }
@@ -664,7 +716,7 @@ dungeon_return dungeon(dungeon_return dt) {
         }
     
     // Overworld 1
-    } else if (dt.world_index == 4) {
+    } else if (dt.world_index > 4) {
         character maple(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
         maple.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
         maple.entity.set_camera(camera);
@@ -810,6 +862,7 @@ dungeon_return dungeon(dungeon_return dt) {
         } else if (camera.x() < follow_x - 30) {
             camera.set_x(camera.x() + 1);
         }
+
         if (camera.y() > follow_y + 30) {
             camera.set_y(camera.y() - 1);
         } else if (camera.y() < follow_y - 30) {
@@ -822,10 +875,13 @@ dungeon_return dungeon(dungeon_return dt) {
         } else if (camera.x().integer() < flex + 32) {
             camera.set_x(flex + 32);
         }
-        if (camera.y().integer() > (current_room.height * 32) - (flex * 2) + 64) {
-            camera.set_y((current_room.height * 32) - (flex * 2) + 64);
-        } else if (camera.y().integer() < flex - 8) {
-            camera.set_y(flex - 8);
+        
+        if (current_room.height > 12) {
+            if (camera.y().integer() > (current_room.height * 32) - (flex * 2) + 64) {
+                camera.set_y((current_room.height * 32) - (flex * 2) + 64);
+            } else if (camera.y().integer() < flex - 8) {
+                camera.set_y(flex - 8);
+            }
         }
 
         // Regularly update the tileset based on new camera coordinates
@@ -850,7 +906,7 @@ dungeon_return dungeon(dungeon_return dt) {
                         if (dt.world_index < 4) {
                             local_walls[local_walls_p].entity = bn::sprite_items::environment_stone.create_sprite(x * 32, y * 32, loc - 1);
                             local_walls[local_walls_p].entity.put_below();
-                        } else {
+                        } else if (dt.world_index == 4) {
                             if (loc == 26) {
                                 local_walls[local_walls_p].entity = bn::sprite_items::water_animation.create_sprite(x * 32, y * 32, anim8);
                                 anim8++;
@@ -864,6 +920,9 @@ dungeon_return dungeon(dungeon_return dt) {
                                     local_walls[local_walls_p].entity.put_below();
                                 }
                             }
+                        } else if (dt.world_index == 5) {
+                            local_walls[local_walls_p].entity = bn::sprite_items::trailer_home.create_sprite(x * 32, y * 32, loc - 1);
+                            local_walls[local_walls_p].entity.put_below();
                         }
                         
                         local_walls[local_walls_p].entity.set_camera(camera);
