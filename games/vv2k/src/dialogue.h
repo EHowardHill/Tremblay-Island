@@ -231,8 +231,9 @@ void dialogue_page(Concepts::line n[32]) {
             primary_bg.set_item(bn::regular_bg_items::mountain);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "BG: Trailer Home") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::velvet);
+            primary_bg.set_item(bn::regular_bg_items::bg_trailer_home);
             primary_bg.set_visible(true);
+            primary_bg.set_position(88,-64);
         } else if (strcmp(n[pos].text, "S01:01") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0101);
             primary_bg.set_visible(true);

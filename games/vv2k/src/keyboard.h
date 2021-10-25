@@ -96,5 +96,5 @@ void keyboard() {
             bn::core::update();
         }
 
-        for (int tt = 0; tt < ss.size(); tt++) save::island_name.push_back(ss.at(tt));
+        //for (int tt = 0; tt < ss.size(); tt++) save::island_name.push_back(ss.at(tt));
 }

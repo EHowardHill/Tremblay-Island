@@ -1,4 +1,5 @@
 int exec_dialogue(int x) {
+
     bool fals = false;
     int n = -1;
 
@@ -110,237 +111,6 @@ int exec_dialogue(int x) {
                 {true, true, 0, "ENOKI                            Let's go explore the castle!!"},
                 {true, true, 0, "MAPLE                            Hold up, you bought this castle  and hadn't explored it all first?"},
                 {true, true, 0, "ENOKI                            Well duh, I'm taking my sweet    time with it -- it's a castle!    Allons-y, let's explore!"},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 3: {
-            Concepts::line lc[8] = {
-                {true, true, 0, "                                                                  ENOKI                            Let's go for the room with-"},
-                {true, true, 0, "                                                                  ENOKI                            -the big bookshelf!"},
-                {true, true, 0, "                                                                  ENOKI                            There's gotta be secrets!"},
-                {true, true, 0, "                                                                  ENOKI                            If you want me to lead,"},
-                {true, true, 0, "                                                                  ENOKI                            just press 'B'."},
-                {true, true, 0, "                                                                  MAPLE                            ...Huh?"},
-                {true, true, 0, "                                                                  ENOKI                            What?"},
-                {true, true, 0, "COM: Endscene"}
-            };
-            bn::sound_item hm = bn::sound_items::heymaple;
-            hm.play();
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 4: {
-            Concepts::line lc[5] = {
-                {true, true, 0, "                                                                  You stare at the art."},
-                {true, true, 0, "                                                                  And as such...."},
-                {true, true, 0, "                                                                  So the art stares unto you."},
-                {true, true, 0, "                                                                  Art is weird."},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 5: {
-            Concepts::line lc[10] = {
-                {true, true, 0, "                                                                  MAPLE                            Enoki, there's no window."},
-                {true, true, 0, "                                                                  ENOKI                            Uh-huh?"},
-                {true, true, 0, "                                                                  MAPLE                            What happens if someone tries-"},
-                {true, true, 0, "                                                                  MAPLE                            to break in?"},
-                {true, true, 0, "                                                                  ENOKI                            Aaron punches 'em."},
-                {true, true, 0, "                                                                  ENOKI                            In the face."},
-                {true, true, 0, "                                                                  MAPLE                            He's not here, though."},
-                {true, true, 0, "                                                                  ENOKI                            Then I'll punch 'em."},
-                {true, true, 0, "                                                                  MAPLE                            I.... Hmm. Alright, then."},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 6: {
-            Concepts::line l2[10] = {
-                {true, true, 0, "                                                                  You see a pot."},
-                {true, true, 0, "                                                                  You feel compelled to smash it."},
-                {true, true, 0, "                                                                  However, this is not possible."},
-                {true, true, 0, "                                                                  You feel strangely disappointed."},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(l2);
-            return 0;
-			break;
-        };
-
-        case 7: {
-            Concepts::line lc[19] = {
-                {true, true, 0, "                                                                  MAPLE                            Hey, let's head out. I don't want"},
-                {true, true, 0, "                                                                  MAPLE                            to wake him up."},
-                {true, true, 0, "                                                                  ENOKI                            I dunno, it doesn't matter,"},
-                {true, true, 0, "                                                                  ENOKI                            there's no way he'll wake up."},
-                {true, true, 0, "                                                                  ENOKI                            He likes the light on, too."},
-                {true, true, 0, "                                                                  MAPLE                            I thought you didn't have"},
-                {true, true, 0, "                                                                  MAPLE                            electricity..?"},
-                {true, true, 0, "                                                                  ENOKI                            Oh, we do- just that one plug."},
-                {true, true, 0, "                                                                  ENOKI                            It's a very important plug."},
-                {true, true, 0, "                                                                  MAPLE                            You sure you like this place?"},
-                {true, true, 0, "                                                                  ENOKI                            You gonna come here and insult"},
-                {true, true, 0, "                                                                  ENOKI                            my house?"},
-                {true, true, 0, "                                                                  MAPLE                            Well, when you put it THAT way..."},
-                {true, true, 0, "                                                                  ENOKI                            Uh huh, that's what I thought."},
-                {true, true, 0, "                                                                  MAPLE                            Je m'excuse."},
-                {true, true, 0, "                                                                  ENOKI                            Merci."},
-                {true, true, 0, "                                                                  MAPLE                            But when you both move in with me"},
-                {true, true, 0, "                                                                  MAPLE                            don't say I didn't warn y'all."},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 8: {
-            Concepts::line lc[9] = {
-                {true, true, 0, "                                                                  ENOKI                            Y'know, back when Del was my"},
-                {true, true, 0, "                                                                  ENOKI                            nanny, my parents gave her like"},
-                {true, true, 0, "                                                                  ENOKI                            three different rooms she could"},
-                {true, true, 0, "                                                                  ENOKI                            stay in. I don't think she ever"},
-                {true, true, 0, "                                                                  ENOKI                            slept anywhere but the tub."},
-                {true, true, 0, "                                                                  MAPLE                            That actually sounds pretty nice."},
-                {true, true, 0, "                                                                  ENOKI                            Yeah, I tried it but my skin"},
-                {true, true, 0, "                                                                  ENOKI                            didn't like it very much."},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 9: {
-            Concepts::line lc[9] = {
-                {true, true, 0, "                                                                  MAPLE                            Enoki, this one's locked."},
-                {true, true, 0, "                                                                  ENOKI                            Oh. Yeah, I think that's"},
-                {true, true, 0, "                                                                  ENOKI                            the kitchen. We don't know where"},
-                {true, true, 0, "                                                                  ENOKI                            the key is."},
-                {true, true, 0, "                                                                  MAPLE                            So how do you eat??"},
-                {true, true, 0, "                                                                  ENOKI                            We make most of our food over the"},
-                {true, true, 0, "                                                                  ENOKI                            big fire pit!"},
-                {true, true, 0, "                                                                  MAPLE                            You two, I *swear*...."},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 10: {
-            Concepts::line lc[20] = {
-                {true, true, 0, "                                                                  ENOKI                            Isn't he so cute when he"},
-                {true, true, 0, "                                                                  ENOKI                            sleeps like that? <3"},
-                {true, true, 0, "                                                                  MAPLE                            You've been married for, what,"},
-                {true, true, 0, "                                                                  MAPLE                            a few months now?"},
-                {true, true, 0, "                                                                  MAPLE                            Aren't you supposed to be at the"},
-                {true, true, 0, "                                                                  MAPLE                            stage where neither of you talk"},
-                {true, true, 0, "                                                                  MAPLE                            to each other at meals and both"},
-                {true, true, 0, "                                                                  MAPLE                            of you've gained ten pounds?"},
-                {true, true, 0, "                                                                  ENOKI                            Huh, I think I've lost weight."},
-                {true, true, 0, "                                                                  MAPLE                            I guess I don't get it."},
-                {true, true, 0, "                                                                  ENOKI                            Just cos you always get in"},
-                {true, true, 0, "                                                                  ENOKI                            fights with your ex-boyfriends"},
-                {true, true, 0, "                                                                  ENOKI                            doesn't mean every couple's like"},
-                {true, true, 0, "                                                                  ENOKI                            that, tu sais."},
-                {true, true, 0, "                                                                  ENOKI                            I mean, you've got this nasty"},
-                {true, true, 0, "                                                                  ENOKI                            habit of-"},
-                {true, true, 0, "                                                                  MAPLE                            You finish that sentence, and"},
-                {true, true, 0, "                                                                  MAPLE                            I'll burn your eyebrows off."},
-                {true, true, 0, "                                                                  ENOKI                            ......doing that."},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 11: {
-            Concepts::line lc[32] = {
-                {true, true, 0, "                                                                  ENOKI                            Nous sommes ici!"},
-                {true, true, 0, "                                                                  ENOKI                            The bookshelf room."},
-                {true, true, 0, "                                                                  MAPLE                            You weren't kidding about there"},
-                {true, true, 0, "                                                                  MAPLE                            literally being just a bookshelf"},
-                {true, true, 0, "                                                                  MAPLE                            room, were you?"},
-                {true, true, 0, "                                                                  ENOKI                            Bon, so I can't move it and Aaron"},
-                {true, true, 0, "                                                                  ENOKI                            can't either, so I was wondering,"},
-                {true, true, 0, "                                                                  ENOKI                            how about using that elf magic?"},
-                {true, true, 0, "                                                                  MAPLE                            Let me get this straight..."},
-                {true, true, 0, "                                                                  MAPLE                            You want me to *burn* a perfectly"},
-                {true, true, 0, "                                                                  MAPLE                            good bookshelf?"},
-                {true, true, 0, "                                                                  ENOKI                            Yeah! I wanna see if there's a"},
-                {true, true, 0, "                                                                  ENOKI                            secret passage behind it or"},
-                {true, true, 0, "                                                                  ENOKI                            somethin', y'know?"},
-                {true, true, 0, "                                                                  MAPLE                            I refuse. This is rediculous."},
-                {true, true, 0, "                                                                  MAPLE                            These are perfectly good books."},
-                {true, true, 0, "                                                                  ENOKI                            Most are rotting away, so"},
-                {true, true, 0, "                                                                  ENOKI                            it's probably best that they get"},
-                {true, true, 0, "                                                                  ENOKI                            burned. I checked."},
-                {true, true, 0, "                                                                  MAPLE                            Are you sure?"},
-                {true, true, 0, "                                                                  ENOKI                            Absolutely."},
-                {true, true, 0, "                                                                  MAPLE                            Alright... I'll make a deal."},
-                {true, true, 0, "                                                                  MAPLE                            I'll burn this, but you need to"},
-                {true, true, 0, "                                                                  MAPLE                            save at least one book."}, //j'ai compris?
-                {true, true, 0, "                                                                  MAPLE                            J'ai compris? Oui?"},
-                {true, true, 0, "                                                                  ENOKI                            Oui!"},
-                {true, true, 0, "                                                                  ENOKI                            ....alright, I got my book."},
-                {true, true, 0, "                                                                  ENOKI                            Remember, use the 'R' trigger"},
-                {true, true, 0, "                                                                  ENOKI                            to send out a bolt of fire!"},
-                {true, true, 0, "                                                                  MAPLE                            ...What are you talking about??"},
-                {true, true, 0, "                                                                  ENOKI                            Huh? Oh, nothing"},
-                {true, true, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
-        case 12: {
-            Concepts::line lc[32] = {
-                {true, true, 0, "                                                                  MAPLE                            ...."},
-                {true, true, 0, "                                                                  ENOKI                            Well, there's no passage."},
-                {true, true, 0, "                                                                  MAPLE                            You don't say."},
-                {true, true, 0, "                                                                  ENOKI                            That's weird."},
-                {true, true, 0, "                                                                  MAPLE                            Enoki... Look here."},
-                {true, true, 0, "                                                                  MAPLE                            I guess it doesn't make any sense"},
-                {true, true, 0, "                                                                  MAPLE                            to be angry, so I won't be, but.."},
-                {true, true, 0, "                                                                  MAPLE                            You need to stop being like this."},
-                {true, true, 0, "                                                                  MAPLE                            You and Aaron just spent all this"},
-                {true, true, 0, "                                                                  MAPLE                            money on a barely furnished"},
-                {true, true, 0, "                                                                  MAPLE                            castle without basic faculties"},
-                {true, true, 0, "                                                                  MAPLE                            for what? So you could play like"},
-                {true, true, 0, "                                                                  MAPLE                            you're a princess? While I'm over"},
-                {true, true, 0, "                                                                  MAPLE                            in Carolina, sacrificing the best"},
-                {true, true, 0, "                                                                  MAPLE                            parts of my life for an apartment"},
-                {true, true, 0, "                                                                  MAPLE                            with the bare essentials?"},
-                {true, true, 0, "                                                                  MAPLE                            Enoki... Please."},
-                {true, true, 0, "                                                                  MAPLE                            I don't want to be the bad guy."},
-                {true, true, 0, "                                                                  MAPLE                            I know you didn't really have a"},
-                {true, true, 0, "                                                                  MAPLE                            childhood or parents, I get it."},
-                {true, true, 0, "                                                                  MAPLE                            That's me too."},
-                {true, true, 0, "                                                                  MAPLE                            But you can't keep going on like"},
-                {true, true, 0, "                                                                  MAPLE                            this. Do you understand?"},
-                {true, true, 0, "                                                                  ENOKI                            I do understand."}, //j'ai compris?
-                {true, true, 0, "                                                                  MAPLE                            It's 5:00 in the morning, I'm"},
-                {true, true, 0, "                                                                  MAPLE                            going back to bed. I'll see y'all"},
-                {true, true, 0, "                                                                  MAPLE                            in the morning, oui?"},
-                {true, true, 0, "                                                                  ENOKI                            Oui.."},
-                {true, true, 0, "                                                                  MAPLE                            Hey, don't beat yourself up about"},
-                {true, true, 0, "                                                                  MAPLE                            it. S'il te plait.. Bonne nuit."},
-                {true, true, 0, "                                                                  ENOKI                            Bonne nuit.."},
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
@@ -473,7 +243,7 @@ int exec_dialogue(int x) {
 			break;
         };
 
-        /* ---------------------------------------- Scout Dialogue */
+
 
         case 17: {
             Concepts::line lc[32] = {
@@ -545,10 +315,10 @@ int exec_dialogue(int x) {
             };
         };
 
-        /* ------------------------------------- Init dialogue */
+
 
         case 18: {
-            bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
+            bn::music_items_info::span[8].first.play(bn::fixed(50) / 100);
             Concepts::line lc[32] = {
                 {fals, fals, 0, "BG: Trailer Home"},
                 {true, true, 22, "ENOKI                            MAPLE! YOU CAME!!!"},
@@ -568,7 +338,8 @@ int exec_dialogue(int x) {
                 {fals, fals, 14, "MAPLE                            I guess that isn't too difficult."},
                 {fals, fals, 15, "MAPLE                            Hey... thanks for the room."},
                 {fals, true, 25, "AARON                            No problem."},
-                {fals, true, 22, "ENOKI                            Oh, and if you haven't met Scout yet, he's pretty cool! He's down in the bunker thing outside."}
+                {fals, true, 22, "ENOKI                            Oh, and if you haven't met Scout yet, he's pretty cool! He's down in the bunker thing outside."},
+                {fals, fals, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
             return 0;
@@ -582,8 +353,6 @@ int exec_dialogue(int x) {
                 {fals, true, 0, "MAPLE                            I just got here, I think I might just want to relax a bit."}
             };
         };
-
-        /* -------------------------------------------  */
         
         default: {
             return 1;

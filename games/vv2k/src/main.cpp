@@ -44,6 +44,11 @@
 #include "bn_sprite_items_selection.h"
 #include "bn_regular_bg_items_keyboard_bg.h"
 
+#include "bn_regular_bg_map_ptr.h"
+#include "bn_regular_bg_map_cell_info.h"
+
+#include "bn_regular_bg_items_bg_trailer_home.h"
+
 // Extended headers
 #include "objects.h"
 #include "save.h"
@@ -60,6 +65,8 @@
 #include "bn_sprite_items_power_meter.h"
 #include "bn_regular_bg_items_fun_background.h"
 #include "bn_regular_bg_items_sidebar.h"
+
+static struct save_struct so;
 
 void timer(int delay) {
     for (int t = 0; t < delay; t++) {
@@ -168,6 +175,8 @@ void startup() {
         }
         bn::core::update();
     }
+
+    bn::core::update();
 }
 
 void load_save() {
@@ -214,9 +223,16 @@ void load_save() {
         bn::core::update();
     }
 
+    velvet.set_visible(false);
+    ui.set_visible(false);
+    arrow.set_visible(false);
+    file1_spr.clear();
+    file2_spr.clear();
+    file3_spr.clear();
+
     bn::sound_items::firehit.play();
     bn::music::stop();
-    timer(256);
+    timer(64);
 }
 
 void introduction() {
@@ -225,7 +241,7 @@ void introduction() {
     dt.spawn_y = 0;
     dt.world_index = 0;
     while (true) {
-        dungeon_return dt2 = dungeon(dt);
+        dungeon_return dt2 = dungeon(dt, so, false);
         if (dt2.world_index == -1) break;
     };
 }
@@ -1042,26 +1058,49 @@ void victory_page() {
     }
 }
 
-static struct save_struct so;
-
 int main()
 {
     bn::core::init();           // Initialize Butano libraries
+
+    //bg_test();
+
+    startup();
+    load_save();
     bn::sram::read(so);         // Read save data from cartridge
 
-    //exec_dialogue(18);
+    dungeon_return dt(9,16,4);
+    if (so.spawn_x == -1 && so.spawn_y == -1) {
+        dt.spawn_x = 9;
+        dt.spawn_y = 16;
+        dt.world_index = 4;
+    } else {
+        dt.spawn_x = so.spawn_x;
+        dt.spawn_y = so.spawn_y;
+        dt.world_index = so.world_index;
+    }
 
-    dungeon_return dt(0,0,0);
-    dt.spawn_x = 0;
-    dt.spawn_y = 0;
-    dt.world_index = 5;
-    dungeon_return dt2 = dungeon(dt);
+    dungeon_return dt2 = dungeon(dt, so, false);
+    while (!(dt2.spawn_x == 0 && dt2.spawn_y == 0)) {
+        bn::core::update();
 
-    //victory_page();
-        /*
+        if (dt2.world_index == 5 && so.spring_housewarming < 1) {
+            exec_dialogue(18);
+            so.spring_housewarming = 1;
+        }
+
+        dungeon_return dt3 = dungeon(dt2, so, true);
+        dt2.spawn_x = dt3.spawn_x;
+        dt2.spawn_y = dt3.spawn_y;
+        dt2.world_index = dt3.world_index;
+        so.spawn_x = dt3.spawn_x;
+        so.spawn_y = dt3.spawn_y;
+        so.world_index = dt3.world_index;
+        bn::sram::write(so);
+    }
+
+    victory_page();
+    /*
     
-    
-
     exec_dialogue(16);
     dungeon_return dt(0,0,0);
     dt.spawn_x = 0;
