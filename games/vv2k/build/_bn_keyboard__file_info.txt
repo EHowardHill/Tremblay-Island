@@ -1,3 +1,0 @@
-graphics/keyboard.bmp
-32882
-1631509771.11

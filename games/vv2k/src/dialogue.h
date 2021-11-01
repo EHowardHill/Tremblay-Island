@@ -27,6 +27,7 @@
 #include "bn_sprite_items_a_button.h"
 
 #include "bn_regular_bg_items_cinemint_studios.h"
+#include "bn_regular_bg_items_dialogue_bg.h"
 
 #include "bn_sprite_items_enoki.h"
 #include "bn_sprite_items_maple01.h"
@@ -80,8 +81,6 @@
 #include "bn_regular_bg_items_s0208.h"
 #include "bn_regular_bg_items_s0301.h"
 #include "bn_regular_bg_items_s0302.h"
-
-#include "bn_regular_bg_items_dialogue_bg.h"
 
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
@@ -179,7 +178,7 @@ void set_sprite(bn::sprite_ptr chari, int value) {
 }
 
 // Primary page
-void dialogue_page(Concepts::line n[32]) {
+void dialogue_page(line n[32]) {
 
     // Variable initialization
     bn::sprite_text_generator text_line0(common::variable_8x16_sprite_font);
@@ -308,6 +307,9 @@ void dialogue_page(Concepts::line n[32]) {
         } else if (strcmp(n[pos].text, "COM: Endscene") == 0) {
             cont = false;
 
+        } else if (strcmp(n[pos].text, "COM: Popup") == 0) {
+            dialogue_bg.set_visible(true);
+
         // Handle sprite/dialogue
         } else {
 
@@ -382,6 +384,62 @@ void dialogue_page(Concepts::line n[32]) {
                 dialogue_bg.put_above();
                 bn::core::update();
             }
+        }
+
+        // Increment location
+        pos++;
+    }
+}
+
+void dialogue_page_lite(line n[32]) {
+
+    // Variable initialization
+    bn::sprite_text_generator text_line0(common::variable_8x16_sprite_font);
+    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
+
+    // While dialogue is going,
+    int pos = 0;
+    bool cont = true;
+    while (cont) {
+
+        // End dialogue
+        if (strcmp(n[pos].text, "COM: Endscene") == 0) {
+            cont = false;
+
+        // Handle sprite/dialogue
+        } else {
+
+            // SFX
+            bn::sound_items::pop.play(0.5);
+
+            // Fresh init
+            bn::vector<bn::sprite_ptr, 33> text_sprite0;
+            bn::vector<bn::sprite_ptr, 33> text_sprite2;
+            bn::vector<bn::sprite_ptr, 33> text_sprite3;
+            bn::vector<bn::sprite_ptr, 33> text_sprite4;
+            bn::vector<bn::sprite_ptr, 33> text_sprite5;
+            char line1[33] = {0};
+            char line3[33] = {0};
+            char line4[33] = {0};
+            char line5[33] = {0};
+            char line6[33] = {0};
+            for (int t = 0; t < 33; t++) line1[t] = n[pos].text[t];
+            for (int t = 0; t < 33; t++) line3[t] = n[pos].text[t + 33];
+            for (int t = 0; t < 33; t++) line4[t] = n[pos].text[t + 66];
+            for (int t = 0; t < 33; t++) line5[t] = n[pos].text[t + 99];
+            for (int t = 0; t < 32; t++) line6[t] = n[pos].text[t + 132];
+            text_line0.generate(-108, 21, line1, text_sprite0);
+            text_line0.generate(-108, 33, line3, text_sprite2);
+            text_line0.generate(-108, 45, line4, text_sprite3);
+            text_line0.generate(-108, 57, line5, text_sprite4);
+            text_line0.generate(-108, 69, line6, text_sprite5);
+
+            // Process visual effects
+            while(!bn::keypad::a_pressed()) {
+                bn::core::update();
+            }
+
+            bn::core::update();
         }
 
         // Increment location

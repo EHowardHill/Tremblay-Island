@@ -19,6 +19,12 @@ namespace bn::music_items
     constexpr inline music_item z03_overworld(11);
     constexpr inline music_item z04_underground(12);
     constexpr inline music_item z05_victory(13);
+    constexpr inline music_item z06_dangerous(14);
+    constexpr inline music_item z07_frog(15);
+    constexpr inline music_item z08_rain(16);
+    constexpr inline music_item z09_scout_lab(17);
+    constexpr inline music_item z10_enoki_theme(18);
+    constexpr inline music_item z11_maple_theme(19);
 }
 
 #endif

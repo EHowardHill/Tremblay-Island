@@ -11,6 +11,7 @@
 #include "bn_sprite_items_enoki_walking_spring.h"
 #include "bn_sprite_items_aaron_sleep.h"
 #include "bn_sprite_items_aaron_walking_spring.h"
+#include "bn_sprite_items_scout_walking_spring.h"
 #include "bn_sprite_items_del_sleep.h"
 
 // Items
@@ -25,13 +26,16 @@
 #include "bn_sprite_items_ocean_terrain.h"
 #include "bn_regular_bg_items_grassy_knoll.h"
 #include "bn_sprite_items_water_animation.h"
+#include "bn_sprite_items_scout_lab.h"
+
+#include "bn_regular_bg_items_dialogue_bg.h"
 
 // Projectiles
 class projectile {
     public:
         bn::sprite_item fireball_item = bn::sprite_items::fireball;
         bn::sprite_ptr fireball = fireball_item.create_sprite(0,0);
-        bn::sprite_animate_action<4> fireball_anim = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 0, 1, 2, 3);
+        bn::sprite_animate_action<4> fireball_anim = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 00, 1, 2, 3);
         bn::sprite_animate_action<4> fireball_anim_end = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 4, 5, 6, 7);
         int dir = 1, dur = 0;
         bool active = false;
@@ -75,14 +79,6 @@ class stone {
         };
 };
 
-// Handles pairs of tile/action pairs
-class action {
-    public:
-        int x = 0, y = 0, act = 0;
-        action(int X, int Y, int Act): x(X), y(Y), act(Act) {}
-        action() {}
-};
-
 // Dungeon return type
 class dungeon_return {
     public:
@@ -98,9 +94,8 @@ class room {
     int height = 14;
     int start_x = 8;
     int start_y = 3;
-    int local_tileset[406];
-    int collisions[64] = {64};
-    action actions[16];
+    std::vector<int> local_tileset = {0};
+    std::vector<int> collisions = {0};
 
     void init(int w, int h, int x, int y) {
         width = w;
@@ -125,7 +120,7 @@ class character {
     bool is_walking = false;
     bn::sprite_item entity_item = bn::sprite_items::maple_walking;
     bn::sprite_ptr entity = entity_item.create_sprite(0,0);
-    bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 0, 1, 0, 2);
+    bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 00, 1, 00, 2);
     
     int role = 0;
     // 0 = follower
@@ -135,11 +130,11 @@ class character {
     int collideFrom = 1;
     room* current_room;
 
-    character(const bn::sprite_item sprite, room new_room, float x = 0, float y = 0, int main = 0) {
+    character(const bn::sprite_item sprite, room &new_room, float x = 00, float y = 00, int main = 0) {
         entity = sprite.create_sprite(x * 32, y * 32);
         entity.set_visible(true);
         entity_item = sprite;
-        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 0, 1, 0, 2);
+        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 00, 1, 00, 2);
         role = main;
         current_room = &new_room;
     }
@@ -150,7 +145,7 @@ class character {
     }
 
     // Run this regularly!
-    void update(int x = 0, int y = 0) {
+    void update(int x = 00, int y = 0) {
 
         // Collision detection
         int x_int = entity.x().integer();
@@ -178,13 +173,18 @@ class character {
 
         bool canLeft = !(((col[4] && col[5]) ^ col[0]) || ((col[6] && col[7]) ^ col[1]));
         bool canRite = !(((col[4] && col[5]) ^ col[2]) || ((col[6] && col[7]) ^ col[3]));
+        //
+        //
+        // !(((0 && 1) ^ 1) || (1 && 1) ^ 0)
+
         bool canUp =   !(((col[0] && col[1]) ^ col[4]) || ((col[2] && col[3]) ^ col[5]));
         bool canDn =   !(((col[0] && col[1]) ^ col[6]) || ((col[2] && col[3]) ^ col[7]));
 
-        int block = current_room->local_tileset[close[0] + close[1]] - 1;
-
+        int block = current_room->local_tileset.at(close[0] + close[1]) - 1;
         /*
         BN_LOG(
+            identity,
+            " = ",
             close[0],
             " ",
             close[1],
@@ -193,21 +193,21 @@ class character {
             " ",
             close[3],
             " x ",
-            current_room->local_tileset[close[0] + close[2]] - 1,
+            current_room->local_tileset.at(close[0] + close[2]] - 1,
             " ",
-            current_room->local_tileset[close[0] + close[3]] - 1,
+            current_room->local_tileset.at(close[0] + close[3]] - 1,
             " ",
-            current_room->local_tileset[close[1] + close[2]] - 1,
+            current_room->local_tileset.at(close[1] + close[2]] - 1,
             " ",
-            current_room->local_tileset[close[1] + close[3]] - 1,
+            current_room->local_tileset.at(close[1] + close[3]] - 1,
             " ",
-            current_room->local_tileset[close[0] + close[2] - current_room->width] - 1,
+            current_room->local_tileset.at(close[0] + close[2] - current_room->width] - 1,
             " ",
-            current_room->local_tileset[close[1] + close[2] + current_room->width] - 1,
+            current_room->local_tileset.at(close[1] + close[2] + current_room->width] - 1,
             " ",
-            current_room->local_tileset[close[0] + close[3] - current_room->width] - 1,
+            current_room->local_tileset.at(close[0] + close[3] - current_room->width] - 1,
             " ",
-            current_room->local_tileset[close[1] + close[3] + current_room->width] - 1,
+            current_room->local_tileset.at(close[1] + close[3] + current_room->width] - 1,
             " x ",
             col[0],
             " ",
@@ -226,7 +226,7 @@ class character {
             col[7],
             " ",
             "&",
-            canLeft
+            canRite
         );
         */
 
@@ -295,7 +295,7 @@ class character {
                         entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 10, 9, 11, 9);
                         break;
                     default:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 0, 2, 0);
+                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 00, 2, 0);
                         break;
                 }
             }
@@ -361,7 +361,7 @@ class character {
                         entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 10, 9, 11, 9);
                         break;
                     default:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 0, 2, 0);
+                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 00, 2, 0);
                         break;
                 }
                 done = true;
@@ -397,7 +397,7 @@ class character {
                             entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 15, 9, 9, 9);
                             break;
                         default:
-                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 12, 0, 0, 0);
+                            entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 12, 00, 00, 0);
                             break;
                     }
                     entity_anim.update();
@@ -423,7 +423,7 @@ class character {
                     entity_anim = bn::create_sprite_animate_action_forever(entity, 4, entity_item.tiles_item(), 9, 9, 9, 9);
                 } else
                 if (y > entity.y() + 24) {
-                    entity_anim = bn::create_sprite_animate_action_forever(entity, 4, entity_item.tiles_item(), 0, 0, 0, 0);
+                    entity_anim = bn::create_sprite_animate_action_forever(entity, 4, entity_item.tiles_item(), 00, 00, 00, 0);
                 }
                 entity_anim.update();
             }
@@ -441,64 +441,10 @@ class anim_object {
     int id = 0;
     bn::sprite_item entity_item = bn::sprite_items::aaron_sleep;
     bn::sprite_ptr entity = entity_item.create_sprite(0,0);
-    bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 18, entity_item.tiles_item(), 0, 0, 0, 1);
+    bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 18, entity_item.tiles_item(), 00, 00, 00, 1);
 };
 
-// Actual action... things
-dungeon_return do_action(int act) {
-    dungeon_return dt;
-
-    switch(act) {
-        case -1: // Go to hall from guest bedroom
-            dt.spawn_x = 18;
-            dt.spawn_y = 1;
-            dt.world_index = 1;
-            break;
-        case -2: // Go to Aaron's castle room
-            dt.spawn_x = 9;
-            dt.spawn_y = 6;
-            dt.world_index = 2;
-            break;
-        case -7: // Go to castle chamber from Aaron's room
-            dt.spawn_x = 3;
-            dt.spawn_y = 1;
-            dt.world_index = 1;
-            break;
-        case -6: // Go to guest room
-            dt.spawn_x = 1;
-            dt.spawn_y = 4;
-            dt.world_index = 0;
-            break;
-        case -3: // go to guest room from chamber
-            dt.spawn_x = 8;
-            dt.spawn_y = 4;
-            dt.world_index = 0;
-            break;
-        case -4: // go to aaron's room from chamber
-            dt.spawn_x = 3;
-            dt.spawn_y = 6;
-            dt.world_index = 2;
-            break;
-        case -8: // return to lobby from secret chamber
-            dt.spawn_x = 2;
-            dt.spawn_y = 10;
-            dt.world_index = 1;
-            break;
-        case -5: // go to secret chamber
-            dt.spawn_x = 22;
-            dt.spawn_y = 1;
-            dt.world_index = 3;
-            break;
-        default:
-            dt.spawn_x = 18;
-            dt.spawn_y = 1;
-            dt.world_index = 1;
-            break;
-    };
-    return dt;
-}
-
-dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_noise = true) {
+dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noise = true) {
 
     if (door_noise) bn::sound_items::door.play();
     if (bn::music::playing()) bn::music::stop();
@@ -507,7 +453,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
     const int w_size = 96;
     stone local_walls[w_size];
     int local_walls_p = 0;
-    room current_room;
+    static room current_room;
 
     // If different than default, reset
     if (dt.spawn_x > 0 && dt.spawn_y > 0) {
@@ -516,7 +462,10 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
     }
 
     // Camera setup
-    bn::camera_ptr camera = bn::camera_ptr::create(current_room.start_x * 32, current_room.start_y * 32);
+    int sx = current_room.start_x * 32;
+    int sy = current_room.start_y * 32;
+
+    bn::camera_ptr camera = bn::camera_ptr::create(sx, sy);
     bn::regular_bg_ptr primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
     primary_bg.set_camera(camera);
     bn::vector<anim_object,3> anim_objects;
@@ -524,49 +473,11 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
     // Create initial characters
     bn::vector<character, 4> chari;
 
-    if (dt.world_index == 4) {
-        bn::music_items_info::span[11].first.play(bn::fixed(50) / 100);
-    }
-
-    else if (dt.world_index == 5) {
-        bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
-    }
-
-    switch(so.last_char_id) {
-        case 0: {
-            character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-            default_chari.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
-            default_chari.entity.set_camera(camera);
-            default_chari.role = 1;
-            default_chari.identity = so.last_char_id;
-            chari.push_back(default_chari);
-            break;
-        }
-        case 1:{
-            character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-            default_chari.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
-            default_chari.entity.set_camera(camera);
-            default_chari.role = 1;
-            default_chari.identity = so.last_char_id;
-            chari.push_back(default_chari);
-            break;
-        }
-        case 2:{
-            character default_chari(bn::sprite_items::aaron_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-            default_chari.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
-            default_chari.entity.set_camera(camera);
-            default_chari.role = 1;
-            default_chari.identity = so.last_char_id;
-            chari.push_back(default_chari);
-            break;
-        }
-    }
-
     // World generation
     switch(dt.world_index) {
         case 0: {
             current_room.init(12, 6, 8, 3);
-            int local[406] = {
+            std::vector<int> local {
                 4,3,8,11,13,3,3,3,8,3,5,0,
                 2,18,0,0,0,18,2,9,0,9,2,0,
                 2,0,0,0,0,0,2,10,0,10,2,0,
@@ -574,20 +485,12 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                 17,0,0,0,0,0,0,0,0,18,2,0,
                 7,3,3,3,3,3,3,3,16,3,6,0
                 };
-            current_room.actions[1] = action(8,4,-1);  // door 1
-            current_room.actions[2] = action(1,4,-2);  // door 2
-            current_room.actions[3] = action(2,1,5);  // night sky
-            current_room.actions[4] = action(3,1,4);  // painting
-            current_room.actions[5] = action(4,1,6);  // pot
-            current_room.actions[6] = action(1,2,6);  // pot
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
-                current_room.local_tileset[t] = local[t];
-            }
+            deep_copy(local, current_room.local_tileset);
             break;
         }
         case 1: {
             current_room.init(21,12,18,1);
-            int local[406] = {
+            std::vector<int> local {
                 4,3,3,16,12,3,13,12,3,8,12,8,3,12,3,3,12,13,16,3,5,
                 2,18,0,0,0,0,0,28,0,0,0,0,0,0,0,0,0,0,0,18,2,
                 2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
@@ -601,18 +504,12 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                 2,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,2,
                 7,3,14,3,12,3,3,12,3,3,12,3,13,12,3,3,12,3,14,13,6
             };
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
-                current_room.local_tileset[t] = local[t];
-            }
-            current_room.actions[0] = action(18,1,-3); // back to gr
-            current_room.actions[1] = action(3,1,-4); // back to mb
-            current_room.actions[2] = action(18,10,9); // complain
-            current_room.actions[3] = action(2,10,-5); // bookshelf room
+            deep_copy(local, current_room.local_tileset);
 
             anim_object fp;
             fp.entity_item = bn::sprite_items::fireplace_anim;
             fp.entity = fp.entity_item.create_sprite(0,0);
-            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 0, 1, 0, 2);
+            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 00, 1, 00, 2);
             fp.entity.set_visible(false);
             fp.entity.set_camera(camera);
             fp.entity.set_position(304,176);
@@ -621,7 +518,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
         }
         case 2: {
             current_room.init(11,8,9,6);
-            int local[406] = {
+            std::vector<int> local {
                 4,11,8,12,8,3,3,3,3,3,5,
                 2,18,9,9,26,27,2,0,0,0,2,
                 2,0,10,10,0,0,2,19,1,20,2,
@@ -631,15 +528,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                 2,18,0,0,0,0,0,0,0,0,17,
                 7,3,3,14,3,3,3,3,3,3,6
             };
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
-                current_room.local_tileset[t] = local[t];
-            }
-            current_room.actions[0] = action(9,6,-6); // to gb
-            current_room.actions[1] = action(3,6,-7); // to hall
-            current_room.actions[2] = action(4,2,10);
-            current_room.actions[5] = action(3,2,10);
-            current_room.actions[3] = action(8,2,8);
-            current_room.actions[4] = action(4,6,7);
+            deep_copy(local, current_room.local_tileset);
 
             anim_object aaron;
             aaron.entity.set_visible(true);
@@ -651,7 +540,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
             del.id = 1;
             del.entity_item = bn::sprite_items::del_sleep;
             del.entity = del.entity_item.create_sprite(0,0);
-            del.entity_anim = bn::create_sprite_animate_action_forever(del.entity, 20, del.entity_item.tiles_item(), 0, 1, 0, 0);
+            del.entity_anim = bn::create_sprite_animate_action_forever(del.entity, 20, del.entity_item.tiles_item(), 00, 1, 00, 0);
             del.entity.set_visible(true);
             del.entity.set_camera(camera);
             del.entity.set_position(256,48);
@@ -660,7 +549,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
         }
         case 3: {
             current_room.init(24,12,22,1);
-            int local[406] = {
+            std::vector<int> local {
                 4,8,11,12,3,3,12,11,8,5,1,1,1,1,0,0,1,1,1,1,1,4,14,5,
                 2,18,0,0,0,0,0,0,18,2,1,1,1,1,0,0,1,1,1,1,1,2,0,2,
                 2,0,0,0,0,0,0,0,0,2,1,1,1,1,0,0,1,1,1,1,1,2,0,2,
@@ -674,33 +563,24 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                 2,18,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
                 7,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,6
             };
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
-                current_room.local_tileset[t] = local[t];
-            }
-
-            current_room.actions[0] = action(22,1,-8); // to gb
-            current_room.actions[1] = action(5,2,11);
-            current_room.actions[2] = action(4,2,11);
+            deep_copy(local, current_room.local_tileset);
 
             anim_object fp;
             fp.entity_item = bn::sprite_items::bookshelf;
             fp.entity = fp.entity_item.create_sprite(0,0);
-            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 0, 0, 0, 0);
+            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 00, 00, 00, 0);
             fp.entity.set_visible(true);
             fp.entity.set_camera(camera);
             fp.entity.set_position(144,16);
             anim_objects.push_back(fp);
 
-            character maple(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
-            character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
-
-            if (current_room.local_tileset[(current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
+            //character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
+            /*
+            if (current_room.local_tileset.at((current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
                 enoki.entity.set_position(4 + current_room.start_x * 32, current_room.start_y * 32);
                 maple.entity.set_position(-4 + current_room.start_x * 32, (current_room.start_y * 32));
             }
-
-            chari.push_back(maple);
-            chari.push_back(enoki);
+            */
 
             for (int t = 0; t < 2; t++) {
                 chari.at(t).entity.set_camera(camera);
@@ -709,86 +589,82 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
             break;
         }
         case 4: {
+            bn::music_items_info::span[11].first.play(bn::fixed(50) / 100);
+
             current_room.init(20,20,9,17);
-            int local_col[406] = {
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+            std::vector<int> local_col {
+                00,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,
+                00,1,1,1,0,0,0,0,22,24,0,0,0,0,0,1,0,1,1,0,
+                00,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+                00,1,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,
+                00,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,
+                00,1,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,0,
+                00,1,0,0,0,0,0,0,0,14,0,0,0,0,0,0,0,0,1,0,
+                00,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+                00,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,
+                01,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,
+                01,23,21,0,0,0,0,1,20,0,0,1,0,0,0,0,0,0,1,0,
+                01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,
+                01,1,1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,
+                01,1,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,
+                01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,
+                01,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,
+                01,0,0,0,0,0,0,0,1,0,1,0,1,1,1,1,0,0,1,0,
+                01,0,0,0,0,0,0,1,1,0,1,1,1,0,0,0,0,0,1,0,
+                01,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,
+                00,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0
             };
-            int local[406] = {
-                31,32,31,32,39,27,27,27,27,27,27,27,27,27,27,42,43,42,12,13,
+            
+            std::vector<int> local {
+                31,32,31,32,39,27,27,27,44,0,27,27,27,27,27,42,43,42,12,13,
                 30,33,32,39,0,0,0,0,0,0,0,0,0,0,0,43,3,43,11,26,
                 31,34,39,0,0,0,0,0,0,0,0,0,1,0,0,5,2,3,12,26,
                 30,39,0,0,0,15,18,18,18,18,18,18,18,23,0,4,3,2,11,26,
                 30,38,0,0,1,16,19,19,19,19,19,19,19,24,1,5,2,3,12,26,
-                31,39,0,0,39,17,20,21,20,22,20,21,20,25,27,4,3,2,11,26,
+                31,39,0,0,27,17,20,21,20,22,20,21,20,25,27,4,3,2,11,26,
                 30,38,0,0,0,0,0,0,0,3,0,0,0,0,0,4,2,3,12,26,
                 31,39,1,0,0,0,0,0,0,2,0,0,0,0,0,5,3,2,11,26,
-                30,38,39,0,0,0,0,0,40,3,42,0,0,0,0,4,2,3,12,26,
-                31,39,0,0,0,0,0,1,41,2,43,1,0,14,7,6,3,2,11,26,
-                31,38,0,0,0,0,0,27,2,3,3,27,0,4,2,3,2,3,12,26,
-                31,39,1,0,0,0,0,0,42,2,42,0,0,5,3,2,3,2,11,26,
-                30,36,39,0,0,0,0,14,43,3,43,8,7,6,2,3,2,3,12,26,
-                31,37,0,0,0,0,14,6,2,2,2,2,3,2,3,2,3,9,26,26,
-                34,0,0,0,0,0,5,2,3,3,2,3,2,3,2,10,9,26,13,26,
-                35,7,8,7,8,7,6,3,3,2,3,2,3,2,11,26,26,26,26,26,
-                42,2,3,2,3,2,3,11,42,3,42,10,26,13,26,26,26,26,26,26,
-                43,10,9,10,9,10,9,26,43,2,43,26,26,26,26,26,26,0,0,0,
+                30,38,27,0,0,0,0,0,40,3,42,0,0,0,0,4,2,3,12,26,
+                31,39,44,0,0,0,0,1,41,2,43,1,0,14,7,6,3,2,11,26,
+                00,0,0,0,0,0,0,27,2,3,3,27,0,4,2,3,2,3,12,26,
+                38,0,1,0,0,0,0,0,2,2,3,0,0,5,3,2,3,2,11,26,
+                30,36,27,0,0,0,0,14,42,3,42,8,7,6,2,3,2,3,12,26,
+                31,37,0,0,0,0,14,6,43,2,43,2,3,2,3,2,3,46,45,26,
+                34,0,0,0,0,0,5,2,3,3,2,3,2,46,9,10,9,45,13,26,
+                35,7,8,7,8,7,6,3,3,2,3,2,46,45,13,26,26,26,26,26,
+                42,2,3,2,3,2,3,46,42,3,42,10,45,26,26,26,26,26,26,26,
+                43,10,9,10,9,10,9,45,43,2,43,26,26,26,26,26,26,0,0,0,
                 26,26,26,26,13,26,26,26,26,10,26,26,26,26,26,26,26,0,0,0,
                 26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,0,0,0
             };
-            
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
-                current_room.local_tileset[t] = local[t];
-            }
-            
-            for (int t = 0; t < 406; t++) {
-                current_room.collisions[t] = local_col[t];
-            }
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
 
             primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
             primary_bg.set_camera(camera);
             break;
         }
         case 5: {
+            bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
+
             current_room.init(11,5,5,3);
-            int local_col[406] = {
-                1,1,1,1,1,1,1,1,1,1,1,
-                1,1,0,0,0,0,0,0,0,0,1,
-                1,1,0,0,1,0,0,1,0,1,1,
-                1,1,0,1,1,13,0,1,0,1,1,
-                1,1,1,1,1,1,1,1,1,1,1
+            std::vector<int> local_col {
+                01,1,1,1,1,1,1,1,1,1,1,
+                01,1,0,0,17,0,18,0,0,0,1,
+                01,1,0,0,1,0,0,1,0,1,1,
+                01,1,16,1,1,13,0,1,0,1,1,
+                01,1,1,1,1,1,1,1,1,1,1
             };
-            int local[406] = {
+            std::vector<int> local {
                 1,6,0,0,0,0,0,0,0,0,51,
                 2,7,0,0,0,0,0,0,0,0,52,
                 3,8,0,0,0,0,0,0,0,0,53,
                 4,9,0,0,0,0,0,0,0,0,54,
                 5,10,0,0,0,0,0,0,0,0,55
             };
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
-                current_room.local_tileset[t] = local[t];
-            }
-            for (int t = 0; t < 406; t++) {
-                current_room.collisions[t] = local_col[t];
-            }
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
 
             primary_bg = bn::regular_bg_items::bg_trailer_home.create_bg(0, 0);
             primary_bg.set_camera(camera);
@@ -822,10 +698,93 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
 
             break;
         }
+        case 6: {
+            bn::music_items_info::span[17].first.play(bn::fixed(50) / 100);
+            current_room.init(9,11,7,3);
+            std::vector<int> local {
+                00,0,0,0,0,0,0,12,0,
+                00,0,0,0,0,0,0,12,0,
+                00,0,0,0,0,0,1,12,1,
+                00,0,0,0,0,0,1,0,1,
+                1,1,1,1,1,1,1,0,1,
+                1,2,4,8,9,11,0,0,1,
+                1,3,5,0,10,0,0,0,1,
+                1,0,0,0,0,0,0,0,1,
+                1,6,0,0,0,13,14,0,1,
+                1,7,0,0,0,0,0,0,1,
+                1,1,1,1,1,1,1,1,1
+            };
+            std::vector<int> local_col {
+                00,0,0,0,0,0,0,0,0,
+                00,0,0,0,0,0,1,1,1,
+                00,0,0,0,0,0,1,1,1,
+                00,0,0,0,0,0,1,19,1,
+                1,1,1,1,1,1,1,0,1,
+                1,1,0,1,1,1,0,0,1,
+                1,1,0,0,0,0,0,0,1,
+                1,0,0,0,0,0,0,0,1,
+                1,1,0,0,0,1,1,0,1,
+                1,1,0,0,0,0,0,0,1,
+                1,1,1,1,1,1,1,1,1
+            };
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so.last_char_id != 3) {
+                character scout(bn::sprite_items::scout_walking_spring, current_room, 4, 8, false);
+                scout.entity.set_position(4 * 32, 8 * 32);
+                scout.entity.set_camera(camera);
+                scout.role = 2;
+                scout.identity = 3;
+                chari.push_back(scout);
+            }
+
+            primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+        }
         default: {
             break;
         }
     };
+
+    switch(so.last_char_id) {
+        default: {
+            character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = so.last_char_id;
+            chari.push_back(default_chari);
+            break;
+        }
+        case 1:{
+            character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = so.last_char_id;
+            chari.push_back(default_chari);
+            break;
+        }
+        case 2:{
+            character default_chari(bn::sprite_items::aaron_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = so.last_char_id;
+            chari.push_back(default_chari);
+            break;
+        }
+        case 3: {
+            character default_chari(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = so.last_char_id;
+            chari.push_back(default_chari);
+            break;
+        }
+    }
     
     // A header
     bn::sprite_ptr a_notif = bn::sprite_items::a_button_2.create_sprite(0, 0);
@@ -851,11 +810,8 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
 
     int anim8 = 0;
     int max_chari = chari.size();
-    while(true) {
 
-        if (bn::keypad::select_pressed()) {
-            exec_dialogue(9);
-        }
+    while(true) {
 
         if (bn::keypad::start_pressed()) {
             bn::core::update();
@@ -876,7 +832,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
 
         // Create projectiles
         if (bn::keypad::r_pressed()) {
-            if (follow_id == 0) {
+            if (chari.at(follow_id).identity == 0) {
                 bn::sound_items::fireblast.play();
                 p[p_index].active = true;
                 p[p_index].fireball.set_x(follow_x);
@@ -897,9 +853,10 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                 if (p[t].dir == 3) p[t].fireball.put_above();
                 p[t].update();
                 if (p[t].dur < 16 && (
-                    current_room.local_tileset[
+                    current_room.local_tileset.at(
                         (p[t].fireball.x().integer() / 32) +
-                        ((p[t].fireball.y().integer() / 32) * current_room.width)] > 0
+                        ((p[t].fireball.y().integer() / 32) * current_room.width)
+                        ) > 0
                     )) {
                     p[t].dur = 16;
                 }
@@ -908,7 +865,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
 
         // Control actions
         a_notif.set_visible(false);
-        int possible_action = current_room.collisions[(follow_x / 32) + ((follow_y / 32) * current_room.width)];
+        int possible_action = current_room.collisions.at(((follow_x + 16) / 32) + (((follow_y + 16) / 32) * current_room.width));
         if (possible_action > 1) {
             a_notif.set_visible(true);
             a_notif.put_above();
@@ -919,231 +876,232 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                 // Start action
                 a_notif.set_visible(false);
                 bn::core::update();
+
+                int me = chari.at(follow_id).identity;
                 
                 switch (possible_action) {
                     case 0: {
-                        Concepts::line lc[8] = {
-                            {true, true, 0, "                                                                  ENOKI                            Let's go for the room with-"},
-                            {true, true, 0, "                                                                  ENOKI                            -the big bookshelf!"},
-                            {true, true, 0, "                                                                  ENOKI                            There's gotta be secrets!"},
-                            {true, true, 0, "                                                                  ENOKI                            If you want me to lead,"},
-                            {true, true, 0, "                                                                  ENOKI                            just press 'B'."},
-                            {true, true, 0, "                                                                  MAPLE                            ...Huh?"},
-                            {true, true, 0, "                                                                  ENOKI                            What?"},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[8] = {
+                            {true, true, 00, "                                                                  ENOKI                            Let's go for the room with-"},
+                            {true, true, 00, "                                                                  ENOKI                            -the big bookshelf!"},
+                            {true, true, 00, "                                                                  ENOKI                            There's gotta be secrets!"},
+                            {true, true, 00, "                                                                  ENOKI                            If you want me to lead,"},
+                            {true, true, 00, "                                                                  ENOKI                            just press 'B'."},
+                            {true, true, 00, "                                                                  MAPLE                            ...Huh?"},
+                            {true, true, 00, "                                                                  ENOKI                            What?"},
+                            {true, true, 00, "COM: Endscene"}
                         };
                         bn::sound_item hm = bn::sound_items::heymaple;
                         hm.play();
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 1: {
-                        Concepts::line lc[5] = {
-                            {true, true, 0, "                                                                  You stare at the art."},
-                            {true, true, 0, "                                                                  And as such...."},
-                            {true, true, 0, "                                                                  So the art stares unto you."},
-                            {true, true, 0, "                                                                  Art is weird."},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[5] = {
+                            {true, true, 00, "                                                                  You stare at the art."},
+                            {true, true, 00, "                                                                  And as such...."},
+                            {true, true, 00, "                                                                  So the art stares unto you."},
+                            {true, true, 00, "                                                                  Art is weird."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 2: {
-                        Concepts::line lc[10] = {
-                            {true, true, 0, "                                                                  MAPLE                            Enoki, there's no window."},
-                            {true, true, 0, "                                                                  ENOKI                            Uh-huh?"},
-                            {true, true, 0, "                                                                  MAPLE                            What happens if someone tries-"},
-                            {true, true, 0, "                                                                  MAPLE                            to break in?"},
-                            {true, true, 0, "                                                                  ENOKI                            Aaron punches 'em."},
-                            {true, true, 0, "                                                                  ENOKI                            In the face."},
-                            {true, true, 0, "                                                                  MAPLE                            He's not here, though."},
-                            {true, true, 0, "                                                                  ENOKI                            Then I'll punch 'em."},
-                            {true, true, 0, "                                                                  MAPLE                            I.... Hmm. Alright, then."},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[10] = {
+                            {true, true, 00, "                                                                  MAPLE                            Enoki, there's no window."},
+                            {true, true, 00, "                                                                  ENOKI                            Uh-huh?"},
+                            {true, true, 00, "                                                                  MAPLE                            What happens if someone tries-"},
+                            {true, true, 00, "                                                                  MAPLE                            to break in?"},
+                            {true, true, 00, "                                                                  ENOKI                            Aaron punches 'em."},
+                            {true, true, 00, "                                                                  ENOKI                            In the face."},
+                            {true, true, 00, "                                                                  MAPLE                            He's not here, though."},
+                            {true, true, 00, "                                                                  ENOKI                            Then I'll punch 'em."},
+                            {true, true, 00, "                                                                  MAPLE                            I.... Hmm. Alright, then."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 3: {
-                        Concepts::line l2[10] = {
-                            {true, true, 0, "                                                                  You see a pot."},
-                            {true, true, 0, "                                                                  You feel compelled to smash it."},
-                            {true, true, 0, "                                                                  However, this is not possible."},
-                            {true, true, 0, "                                                                  You feel strangely disappointed."},
-                            {true, true, 0, "COM: Endscene"}
+                        line l2[10] = {
+                            {true, true, 00, "                                                                  You see a pot."},
+                            {true, true, 00, "                                                                  You feel compelled to smash it."},
+                            {true, true, 00, "                                                                  However, this is not possible."},
+                            {true, true, 00, "                                                                  You feel strangely disappointed."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(l2);
+                        dialogue_page_lite(l2);
                         break;
                     };
 
                     case 4: {
-                        Concepts::line lc[19] = {
-                            {true, true, 0, "                                                                  MAPLE                            Hey, let's head out. I don't want"},
-                            {true, true, 0, "                                                                  MAPLE                            to wake him up."},
-                            {true, true, 0, "                                                                  ENOKI                            I dunno, it doesn't matter,"},
-                            {true, true, 0, "                                                                  ENOKI                            there's no way he'll wake up."},
-                            {true, true, 0, "                                                                  ENOKI                            He likes the light on, too."},
-                            {true, true, 0, "                                                                  MAPLE                            I thought you didn't have"},
-                            {true, true, 0, "                                                                  MAPLE                            electricity..?"},
-                            {true, true, 0, "                                                                  ENOKI                            Oh, we do- just that one plug."},
-                            {true, true, 0, "                                                                  ENOKI                            It's a very important plug."},
-                            {true, true, 0, "                                                                  MAPLE                            You sure you like this place?"},
-                            {true, true, 0, "                                                                  ENOKI                            You gonna come here and insult"},
-                            {true, true, 0, "                                                                  ENOKI                            my house?"},
-                            {true, true, 0, "                                                                  MAPLE                            Well, when you put it THAT way..."},
-                            {true, true, 0, "                                                                  ENOKI                            Uh huh, that's what I thought."},
-                            {true, true, 0, "                                                                  MAPLE                            Je m'excuse."},
-                            {true, true, 0, "                                                                  ENOKI                            Merci."},
-                            {true, true, 0, "                                                                  MAPLE                            But when you both move in with me"},
-                            {true, true, 0, "                                                                  MAPLE                            don't say I didn't warn y'all."},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[19] = {
+                            {true, true, 00, "                                                                  MAPLE                            Hey, let's head out. I don't want"},
+                            {true, true, 00, "                                                                  MAPLE                            to wake him up."},
+                            {true, true, 00, "                                                                  ENOKI                            I dunno, it doesn't matter,"},
+                            {true, true, 00, "                                                                  ENOKI                            there's no way he'll wake up."},
+                            {true, true, 00, "                                                                  ENOKI                            He likes the light on, too."},
+                            {true, true, 00, "                                                                  MAPLE                            I thought you didn't have"},
+                            {true, true, 00, "                                                                  MAPLE                            electricity..?"},
+                            {true, true, 00, "                                                                  ENOKI                            Oh, we do- just that one plug."},
+                            {true, true, 00, "                                                                  ENOKI                            It's a very important plug."},
+                            {true, true, 00, "                                                                  MAPLE                            You sure you like this place?"},
+                            {true, true, 00, "                                                                  ENOKI                            You gonna come here and insult"},
+                            {true, true, 00, "                                                                  ENOKI                            my house?"},
+                            {true, true, 00, "                                                                  MAPLE                            Well, when you put it THAT way..."},
+                            {true, true, 00, "                                                                  ENOKI                            Uh huh, that's what I thought."},
+                            {true, true, 00, "                                                                  MAPLE                            Je m'excuse."},
+                            {true, true, 00, "                                                                  ENOKI                            Merci."},
+                            {true, true, 00, "                                                                  MAPLE                            But when you both move in with me"},
+                            {true, true, 00, "                                                                  MAPLE                            don't say I didn't warn y'all."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 8: {
-                        Concepts::line lc[9] = {
-                            {true, true, 0, "                                                                  ENOKI                            Y'know, back when Del was my"},
-                            {true, true, 0, "                                                                  ENOKI                            nanny, my parents gave her like"},
-                            {true, true, 0, "                                                                  ENOKI                            three different rooms she could"},
-                            {true, true, 0, "                                                                  ENOKI                            stay in. I don't think she ever"},
-                            {true, true, 0, "                                                                  ENOKI                            slept anywhere but the tub."},
-                            {true, true, 0, "                                                                  MAPLE                            That actually sounds pretty nice."},
-                            {true, true, 0, "                                                                  ENOKI                            Yeah, I tried it but my skin"},
-                            {true, true, 0, "                                                                  ENOKI                            didn't like it very much."},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[9] = {
+                            {true, true, 00, "                                                                  ENOKI                            Y'know, back when Del was my"},
+                            {true, true, 00, "                                                                  ENOKI                            nanny, my parents gave her like"},
+                            {true, true, 00, "                                                                  ENOKI                            three different rooms she could"},
+                            {true, true, 00, "                                                                  ENOKI                            stay in. I don't think she ever"},
+                            {true, true, 00, "                                                                  ENOKI                            slept anywhere but the tub."},
+                            {true, true, 00, "                                                                  MAPLE                            That actually sounds pretty nice."},
+                            {true, true, 00, "                                                                  ENOKI                            Yeah, I tried it but my skin"},
+                            {true, true, 00, "                                                                  ENOKI                            didn't like it very much."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 9: {
-                        Concepts::line lc[9] = {
-                            {true, true, 0, "                                                                  MAPLE                            Enoki, this one's locked."},
-                            {true, true, 0, "                                                                  ENOKI                            Oh. Yeah, I think that's"},
-                            {true, true, 0, "                                                                  ENOKI                            the kitchen. We don't know where"},
-                            {true, true, 0, "                                                                  ENOKI                            the key is."},
-                            {true, true, 0, "                                                                  MAPLE                            So how do you eat??"},
-                            {true, true, 0, "                                                                  ENOKI                            We make most of our food over the"},
-                            {true, true, 0, "                                                                  ENOKI                            big fire pit!"},
-                            {true, true, 0, "                                                                  MAPLE                            You two, I *swear*...."},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[9] = {
+                            {true, true, 00, "                                                                  MAPLE                            Enoki, this one's locked."},
+                            {true, true, 00, "                                                                  ENOKI                            Oh. Yeah, I think that's"},
+                            {true, true, 00, "                                                                  ENOKI                            the kitchen. We don't know where"},
+                            {true, true, 00, "                                                                  ENOKI                            the key is."},
+                            {true, true, 00, "                                                                  MAPLE                            So how do you eat??"},
+                            {true, true, 00, "                                                                  ENOKI                            We make most of our food over the"},
+                            {true, true, 00, "                                                                  ENOKI                            big fire pit!"},
+                            {true, true, 00, "                                                                  MAPLE                            You two, I *swear*...."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 10: {
-                        Concepts::line lc[20] = {
-                            {true, true, 0, "                                                                  ENOKI                            Isn't he so cute when he"},
-                            {true, true, 0, "                                                                  ENOKI                            sleeps like that? <3"},
-                            {true, true, 0, "                                                                  MAPLE                            You've been married for, what,"},
-                            {true, true, 0, "                                                                  MAPLE                            a few months now?"},
-                            {true, true, 0, "                                                                  MAPLE                            Aren't you supposed to be at the"},
-                            {true, true, 0, "                                                                  MAPLE                            stage where neither of you talk"},
-                            {true, true, 0, "                                                                  MAPLE                            to each other at meals and both"},
-                            {true, true, 0, "                                                                  MAPLE                            of you've gained ten pounds?"},
-                            {true, true, 0, "                                                                  ENOKI                            Huh, I think I've lost weight."},
-                            {true, true, 0, "                                                                  MAPLE                            I guess I don't get it."},
-                            {true, true, 0, "                                                                  ENOKI                            Just cos you always get in"},
-                            {true, true, 0, "                                                                  ENOKI                            fights with your ex-boyfriends"},
-                            {true, true, 0, "                                                                  ENOKI                            doesn't mean every couple's like"},
-                            {true, true, 0, "                                                                  ENOKI                            that, tu sais."},
-                            {true, true, 0, "                                                                  ENOKI                            I mean, you've got this nasty"},
-                            {true, true, 0, "                                                                  ENOKI                            habit of-"},
-                            {true, true, 0, "                                                                  MAPLE                            You finish that sentence, and"},
-                            {true, true, 0, "                                                                  MAPLE                            I'll burn your eyebrows off."},
-                            {true, true, 0, "                                                                  ENOKI                            ......doing that."},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[20] = {
+                            {true, true, 00, "                                                                  ENOKI                            Isn't he so cute when he"},
+                            {true, true, 00, "                                                                  ENOKI                            sleeps like that? <3"},
+                            {true, true, 00, "                                                                  MAPLE                            You've been married for, what,"},
+                            {true, true, 00, "                                                                  MAPLE                            a few months now?"},
+                            {true, true, 00, "                                                                  MAPLE                            Aren't you supposed to be at the"},
+                            {true, true, 00, "                                                                  MAPLE                            stage where neither of you talk"},
+                            {true, true, 00, "                                                                  MAPLE                            to each other at meals and both"},
+                            {true, true, 00, "                                                                  MAPLE                            of you've gained ten pounds?"},
+                            {true, true, 00, "                                                                  ENOKI                            Huh, I think I've lost weight."},
+                            {true, true, 00, "                                                                  MAPLE                            I guess I don't get it."},
+                            {true, true, 00, "                                                                  ENOKI                            Just cos you always get in"},
+                            {true, true, 00, "                                                                  ENOKI                            fights with your ex-boyfriends"},
+                            {true, true, 00, "                                                                  ENOKI                            doesn't mean every couple's like"},
+                            {true, true, 00, "                                                                  ENOKI                            that, tu sais."},
+                            {true, true, 00, "                                                                  ENOKI                            I mean, you've got this nasty"},
+                            {true, true, 00, "                                                                  ENOKI                            habit of-"},
+                            {true, true, 00, "                                                                  MAPLE                            You finish that sentence, and"},
+                            {true, true, 00, "                                                                  MAPLE                            I'll burn your eyebrows off."},
+                            {true, true, 00, "                                                                  ENOKI                            ......doing that."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 11: {
-                        Concepts::line lc[32] = {
-                            {true, true, 0, "                                                                  ENOKI                            Nous sommes ici!"},
-                            {true, true, 0, "                                                                  ENOKI                            The bookshelf room."},
-                            {true, true, 0, "                                                                  MAPLE                            You weren't kidding about there"},
-                            {true, true, 0, "                                                                  MAPLE                            literally being just a bookshelf"},
-                            {true, true, 0, "                                                                  MAPLE                            room, were you?"},
-                            {true, true, 0, "                                                                  ENOKI                            Bon, so I can't move it and Aaron"},
-                            {true, true, 0, "                                                                  ENOKI                            can't either, so I was wondering,"},
-                            {true, true, 0, "                                                                  ENOKI                            how about using that elf magic?"},
-                            {true, true, 0, "                                                                  MAPLE                            Let me get this straight..."},
-                            {true, true, 0, "                                                                  MAPLE                            You want me to *burn* a perfectly"},
-                            {true, true, 0, "                                                                  MAPLE                            good bookshelf?"},
-                            {true, true, 0, "                                                                  ENOKI                            Yeah! I wanna see if there's a"},
-                            {true, true, 0, "                                                                  ENOKI                            secret passage behind it or"},
-                            {true, true, 0, "                                                                  ENOKI                            somethin', y'know?"},
-                            {true, true, 0, "                                                                  MAPLE                            I refuse. This is rediculous."},
-                            {true, true, 0, "                                                                  MAPLE                            These are perfectly good books."},
-                            {true, true, 0, "                                                                  ENOKI                            Most are rotting away, so"},
-                            {true, true, 0, "                                                                  ENOKI                            it's probably best that they get"},
-                            {true, true, 0, "                                                                  ENOKI                            burned. I checked."},
-                            {true, true, 0, "                                                                  MAPLE                            Are you sure?"},
-                            {true, true, 0, "                                                                  ENOKI                            Absolutely."},
-                            {true, true, 0, "                                                                  MAPLE                            Alright... I'll make a deal."},
-                            {true, true, 0, "                                                                  MAPLE                            I'll burn this, but you need to"},
-                            {true, true, 0, "                                                                  MAPLE                            save at least one book."}, //j'ai compris?
-                            {true, true, 0, "                                                                  MAPLE                            J'ai compris? Oui?"},
-                            {true, true, 0, "                                                                  ENOKI                            Oui!"},
-                            {true, true, 0, "                                                                  ENOKI                            ....alright, I got my book."},
-                            {true, true, 0, "                                                                  ENOKI                            Remember, use the 'R' trigger"},
-                            {true, true, 0, "                                                                  ENOKI                            to send out a bolt of fire!"},
-                            {true, true, 0, "                                                                  MAPLE                            ...What are you talking about??"},
-                            {true, true, 0, "                                                                  ENOKI                            Huh? Oh, nothing"},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[32] = {
+                            {true, true, 00, "                                                                  ENOKI                            Nous sommes ici!"},
+                            {true, true, 00, "                                                                  ENOKI                            The bookshelf room."},
+                            {true, true, 00, "                                                                  MAPLE                            You weren't kidding about there"},
+                            {true, true, 00, "                                                                  MAPLE                            literally being just a bookshelf"},
+                            {true, true, 00, "                                                                  MAPLE                            room, were you?"},
+                            {true, true, 00, "                                                                  ENOKI                            Bon, so I can't move it and Aaron"},
+                            {true, true, 00, "                                                                  ENOKI                            can't either, so I was wondering,"},
+                            {true, true, 00, "                                                                  ENOKI                            how about using that elf magic?"},
+                            {true, true, 00, "                                                                  MAPLE                            Let me get this straight..."},
+                            {true, true, 00, "                                                                  MAPLE                            You want me to *burn* a perfectly"},
+                            {true, true, 00, "                                                                  MAPLE                            good bookshelf?"},
+                            {true, true, 00, "                                                                  ENOKI                            Yeah! I wanna see if there's a"},
+                            {true, true, 00, "                                                                  ENOKI                            secret passage behind it or"},
+                            {true, true, 00, "                                                                  ENOKI                            somethin', y'know?"},
+                            {true, true, 00, "                                                                  MAPLE                            I refuse. This is rediculous."},
+                            {true, true, 00, "                                                                  MAPLE                            These are perfectly good books."},
+                            {true, true, 00, "                                                                  ENOKI                            Most are rotting away, so"},
+                            {true, true, 00, "                                                                  ENOKI                            it's probably best that they get"},
+                            {true, true, 00, "                                                                  ENOKI                            burned. I checked."},
+                            {true, true, 00, "                                                                  MAPLE                            Are you sure?"},
+                            {true, true, 00, "                                                                  ENOKI                            Absolutely."},
+                            {true, true, 00, "                                                                  MAPLE                            Alright... I'll make a deal."},
+                            {true, true, 00, "                                                                  MAPLE                            I'll burn this, but you need to"},
+                            {true, true, 00, "                                                                  MAPLE                            save at least one book."}, //j'ai compris?
+                            {true, true, 00, "                                                                  MAPLE                            J'ai compris? Oui?"},
+                            {true, true, 00, "                                                                  ENOKI                            Oui!"},
+                            {true, true, 00, "                                                                  ENOKI                            ....alright, I got my book."},
+                            {true, true, 00, "                                                                  ENOKI                            Remember, use the 'R' trigger"},
+                            {true, true, 00, "                                                                  ENOKI                            to send out a bolt of fire!"},
+                            {true, true, 00, "                                                                  MAPLE                            ...What are you talking about??"},
+                            {true, true, 00, "                                                                  ENOKI                            Huh? Oh, nothing"},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
 
                     case 12: {
-                        Concepts::line lc[32] = {
-                            {true, true, 0, "                                                                  MAPLE                            ...."},
-                            {true, true, 0, "                                                                  ENOKI                            Well, there's no passage."},
-                            {true, true, 0, "                                                                  MAPLE                            You don't say."},
-                            {true, true, 0, "                                                                  ENOKI                            That's weird."},
-                            {true, true, 0, "                                                                  MAPLE                            Enoki... Look here."},
-                            {true, true, 0, "                                                                  MAPLE                            I guess it doesn't make any sense"},
-                            {true, true, 0, "                                                                  MAPLE                            to be angry, so I won't be, but.."},
-                            {true, true, 0, "                                                                  MAPLE                            You need to stop being like this."},
-                            {true, true, 0, "                                                                  MAPLE                            You and Aaron just spent all this"},
-                            {true, true, 0, "                                                                  MAPLE                            money on a barely furnished"},
-                            {true, true, 0, "                                                                  MAPLE                            castle without basic faculties"},
-                            {true, true, 0, "                                                                  MAPLE                            for what? So you could play like"},
-                            {true, true, 0, "                                                                  MAPLE                            you're a princess? While I'm over"},
-                            {true, true, 0, "                                                                  MAPLE                            in Carolina, sacrificing the best"},
-                            {true, true, 0, "                                                                  MAPLE                            parts of my life for an apartment"},
-                            {true, true, 0, "                                                                  MAPLE                            with the bare essentials?"},
-                            {true, true, 0, "                                                                  MAPLE                            Enoki... Please."},
-                            {true, true, 0, "                                                                  MAPLE                            I don't want to be the bad guy."},
-                            {true, true, 0, "                                                                  MAPLE                            I know you didn't really have a"},
-                            {true, true, 0, "                                                                  MAPLE                            childhood or parents, I get it."},
-                            {true, true, 0, "                                                                  MAPLE                            That's me too."},
-                            {true, true, 0, "                                                                  MAPLE                            But you can't keep going on like"},
-                            {true, true, 0, "                                                                  MAPLE                            this. Do you understand?"},
-                            {true, true, 0, "                                                                  ENOKI                            I do understand."}, //j'ai compris?
-                            {true, true, 0, "                                                                  MAPLE                            It's 5:00 in the morning, I'm"},
-                            {true, true, 0, "                                                                  MAPLE                            going back to bed. I'll see y'all"},
-                            {true, true, 0, "                                                                  MAPLE                            in the morning, oui?"},
-                            {true, true, 0, "                                                                  ENOKI                            Oui.."},
-                            {true, true, 0, "                                                                  MAPLE                            Hey, don't beat yourself up about"},
-                            {true, true, 0, "                                                                  MAPLE                            it. S'il te plait.. Bonne nuit."},
-                            {true, true, 0, "                                                                  ENOKI                            Bonne nuit.."},
-                            {true, true, 0, "COM: Endscene"}
+                        line lc[32] = {
+                            {true, true, 00, "                                                                  MAPLE                            ...."},
+                            {true, true, 00, "                                                                  ENOKI                            Well, there's no passage."},
+                            {true, true, 00, "                                                                  MAPLE                            You don't say."},
+                            {true, true, 00, "                                                                  ENOKI                            That's weird."},
+                            {true, true, 00, "                                                                  MAPLE                            Enoki... Look here."},
+                            {true, true, 00, "                                                                  MAPLE                            I guess it doesn't make any sense"},
+                            {true, true, 00, "                                                                  MAPLE                            to be angry, so I won't be, but.."},
+                            {true, true, 00, "                                                                  MAPLE                            You need to stop being like this."},
+                            {true, true, 00, "                                                                  MAPLE                            You and Aaron just spent all this"},
+                            {true, true, 00, "                                                                  MAPLE                            money on a barely furnished"},
+                            {true, true, 00, "                                                                  MAPLE                            castle without basic faculties"},
+                            {true, true, 00, "                                                                  MAPLE                            for what? So you could play like"},
+                            {true, true, 00, "                                                                  MAPLE                            you're a princess? While I'm over"},
+                            {true, true, 00, "                                                                  MAPLE                            in Carolina, sacrificing the best"},
+                            {true, true, 00, "                                                                  MAPLE                            parts of my life for an apartment"},
+                            {true, true, 00, "                                                                  MAPLE                            with the bare essentials?"},
+                            {true, true, 00, "                                                                  MAPLE                            Enoki... Please."},
+                            {true, true, 00, "                                                                  MAPLE                            I don't want to be the bad guy."},
+                            {true, true, 00, "                                                                  MAPLE                            I know you didn't really have a"},
+                            {true, true, 00, "                                                                  MAPLE                            childhood or parents, I get it."},
+                            {true, true, 00, "                                                                  MAPLE                            That's me too."},
+                            {true, true, 00, "                                                                  MAPLE                            But you can't keep going on like"},
+                            {true, true, 00, "                                                                  MAPLE                            this. Do you understand?"},
+                            {true, true, 00, "                                                                  ENOKI                            I do understand."}, //j'ai compris?
+                            {true, true, 00, "                                                                  MAPLE                            It's 5:00 in the morning, I'm"},
+                            {true, true, 00, "                                                                  MAPLE                            going back to bed. I'll see y'all"},
+                            {true, true, 00, "                                                                  MAPLE                            in the morning, oui?"},
+                            {true, true, 00, "                                                                  ENOKI                            Oui.."},
+                            {true, true, 00, "                                                                  MAPLE                            Hey, don't beat yourself up about"},
+                            {true, true, 00, "                                                                  MAPLE                            it. S'il te plait.. Bonne nuit."},
+                            {true, true, 00, "                                                                  ENOKI                            Bonne nuit.."},
+                            {true, true, 00, "COM: Endscene"}
                         };
-                        dialogue_page(lc);
+                        dialogue_page_lite(lc);
                         break;
                     };
                 
                     case 13: {
-                        dungeon_return dt(9,6,4);
                         dt.spawn_x = 9;
                         dt.spawn_y = 6;
                         dt.world_index = 4;
@@ -1156,6 +1114,197 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                         dt.spawn_y = 3;
                         dt.world_index = 5;
                         return dt;
+                        break;
+                    };
+
+                    case 16: {
+                        if (me == 0) {
+                            line lc[32] = {
+    
+                            {true, true, 00, "                                                                  (Every single one of these are   Enoki's, aren't they?)"},
+                            {true, true, 00, "                                                                  (Of course Aaron would pick up   around here.)"},
+                            {true, true, 00, "                                                                  (They're so different... How on  earth are they not fighting-"},
+                            {true, true, 00, "                                                                  -all the time? I don't get it.)"},
+                            {true, true, 00, "                                                                  (If I had a boyfriend, I'd make  him pick up these clothes-"},
+                            {true, true, 00, "                                                                  -immediately.)"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                        }
+
+                        if (me == 1) {
+                            line lc[32] = {
+    
+                            {true, true, 00, "                                                                  (If I knew Maple was coming so   soon I probably would'a cleaned="},
+                            {true, true, 00, "                                                                  -these up a little sooner....)"},
+                            {true, true, 00, "                                                                  (Maybe I can pick 'em up now and she won't notice.)"},
+                            {true, true, 00, "                                                                  (Then again, maybe she already   saw it and is already judging.)"},
+                            {true, true, 00, "                                                                  (..This one's cute enough, maybe I'll just leave it on the floor-"},
+                            {true, true, 00, "                                                                  -and wear it tomorrow.)"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                            }
+
+                        if (me == 2) {
+                            line lc[32] = {
+    
+                            {true, true, 00, "                                                                  (Enoki wasn't this messy when we lived in the castle.)"},
+                            {true, true, 00, "                                                                  (Maybe she thinks we're finally  moved in for good, so she-"},
+                            {true, true, 00, "                                                                  -feels comfortable here.)"},
+                            {true, true, 00, "                                                                  (I know it's probably too soon tocall, but Aaron Tremblay-"},
+                            {true, true, 00, "                                                                  -you've done it. You've got your own place, and you've got yourself-"},
+                            {true, true, 00, "                                                                  -a wife to leave her clothes on  the floor.)"},
+                            {true, true, 00, "                                                                  (I can't think of anything else  I could want, now.)"},
+                            {true, true, 00, "                                                                  (Well.....                       I miss my car.)"},
+                            {true, true, 00, "                                                                  (Maybe I'll talk to Scout about  putting in a racetrack.)"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                            }
+
+                        break;
+                    };
+
+                    case 17: {
+                        if (me == 0) {
+                            line lc[32] = {
+    
+                            {true, true, 00, "                                                                  (At least when they were living  in that castle, their bed was in-"},
+                            {true, true, 00, "                                                                  -the center of the room. What's  this supposed to be?)"},
+                            {true, true, 00, "                                                                  (Who's shoved up awkwardly in thecorner? Aaron probably.)"},
+                            {true, true, 00, "                                                                  (I swear, that girl is going to  give him grey hairs ten years    early.)"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                        }
+
+                        if (me == 1) {
+                            line lc[32] = {
+
+                            {true, true, 00, "                                                                  (I'm so glad I don't have'ta     sleep in the middle of the room.)"},
+                            {true, true, 00, "                                                                  (Rolling over off the bed onto   that stone really really hurt.)"},
+                            {true, true, 00, "                                                                  (Now I getta roll either into    the wall or into Aaron.)"},
+                            {true, true, 00, "                                                                  (I'm so glad he doesn't seem to  mind that much.)"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                            }
+                        
+                        if (me == 2) {
+                            line lc[32] = {
+
+                            {true, true, 00, "                                                                  (Maple isn't gonna be happy when she sees this room.)"},
+                            {true, true, 00, "                                                                  (I remember when she used to be  so easy-going...)"},
+                            {true, true, 00, "                                                                  (She's just so frustrating to be around these days.)"},
+                            {true, true, 00, "                                                                  (Maybe she shouldn't have come.  Every time I try to do something-"},
+                            {true, true, 00, "                                                                  -to help her out, she just spits all over me and pouts.)"},
+                            {true, true, 00, "                                                                  (Maybe she'll get tired of       living here and just go home.)"},
+                            {true, true, 00, "                                                                  (Maybe she's right. Maybe I'm    just living Enoki's fantasy.)"},
+                            {true, true, 00, "                                                                  (But Enoki's the first bit of    happiness I've had in years.)"},
+                            {true, true, 00, "                                                                  (Maybe we'll both change...      I hope something changes.)"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                        }
+
+                        break;
+                    };
+
+                    case 18: {
+                        if (me == 0) {
+                            line lc[32] = {
+    
+                            {true, true, 00, "                                                                  MAPLE                            So, uh, what's the book?"},
+                            {true, true, 00, "                                                                  AARON                            Oh, that's mine."},
+                            {true, true, 00, "                                                                  AARON                            You know I'm not a fiction guy,"},
+                            {true, true, 00, "                                                                  AARON                            But Enoki is stubborn."},
+                            {true, true, 00, "                                                                  ENOKI                            You ever heard'a Yellow?"},
+                            {true, true, 00, "                                                                  ENOKI                            It's kinda fun, I got Aaron into it."},
+                            {true, true, 00, "                                                                  MAPLE                            ...does this have pictures?"},
+                            {true, true, 00, "                                                                  MAPLE                            Do you still read picture books?"},
+                            {true, true, 00, "                                                                  ENOKI                            It's got cigarettes in it though!"},
+                            {true, true, 00, "                                                                  ENOKI                            That means its for kids AND      adults."},
+                            {true, true, 00, "                                                                  MAPLE                            Huh, they make books like that?"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                        }
+
+                        if (me == 1) {
+                            line lc[32] = {
+    
+                            {true, true, 00, "                                                                  ENOKI                            Oh, oh Maple? You want juice?"},
+                            {true, true, 00, "                                                                  MAPLE                            What kind of juice?"},
+                            {true, true, 00, "                                                                  ENOKI                            It's a secret."},
+                            {true, true, 00, "                                                                  MAPLE                            I'm not drinking mystery liquid."},
+                            {true, true, 00, "                                                                  ENOKI                            ...."},
+                            {true, true, 00, "                                                                  ENOKI                            Ok fine, it's orange juice."},
+                            {true, true, 00, "                                                                  MAPLE                            You don't think I would have"},
+                            {true, true, 00, "                                                                  MAPLE                            found that out?"},
+                            {true, true, 00, "                                                                  ENOKI                            Maybe?"},
+                            {true, true, 00, "                                                                  MAPLE                            No. Merci."},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                        }
+
+                        if (me == 2) {
+                            line lc[32] = {
+
+                            {true, true, 00, "                                                                  (We're kind of low on orange     juice.)"},
+                            {true, true, 00, "                                                                  (I'll probably need to head to   town and sell some produce.)"},
+                            {true, true, 00, "                                                                  (Selling one fruit to get        another fruit, heh.)"},
+                            {true, true, 00, "                                                                  (If only cucumber juice tasted   a little better."},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                        }
+
+                        break;
+                    };
+                
+                    case 19: {
+                        dt.spawn_x = 8;
+                        dt.spawn_y = 10;
+                        dt.world_index = 4;
+                        return dt;
+                        break;
+                    };
+
+                    case 20: {
+                        dt.spawn_x = 7;
+                        dt.spawn_y = 3;
+                        dt.world_index = 6;
+                        return dt;
+                        break;
+                    };
+
+                    case 21: {
+                            line lc[32] = {
+                            {true, true, 00, "                                                                  ENOKI'S GARDEN                   You touch it, I kill you"},
+                            {true, true, 00, "COM: Endscene"},
+                            };
+                            dialogue_page_lite(lc);
+                            break;
+                    };
+
+                    case 22: {
+                            line lc[32] = {
+                            {true, true, 00, "                                                                  WHOP CHOPPING SPOT               Where wood is chopped"},
+                            {true, true, 00, "COM: Endscene"}
+                            };
+                            dialogue_page_lite(lc);
+                            break;
+                    };
+
+                    case 23: {
+                        if (me == 1) {
+                            dt.spawn_x = 2;
+                            dt.spawn_y = 0;
+                            dt.world_index = 99;
+                            return dt;
+                        }
                         break;
                     };
                 }
@@ -1196,9 +1345,9 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
             for (int c = 0; c < max_chari; c++) {
                 if (t != c) {
                     if (chari.at(t).entity.y() > chari.at(c).entity.y()) {
-                        chari.at(c).entity.put_below();
+                        chari.at(c).entity.set_z_order(3);
                     } else {
-                        chari.at(c).entity.put_above();
+                        chari.at(c).entity.set_z_order(2);
                     }
                 }
             }
@@ -1248,29 +1397,32 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
             if (max_x > current_room.width) max_x = current_room.width;
             for (int y = min_y; y < max_y; y++) {
                 for (int x = min_x; x < max_x; x++) {
-                    int loc = current_room.local_tileset[(current_room.width * y) + x];
+                    int loc = current_room.local_tileset.at((current_room.width * y) + x);
                     if (local_walls_p < w_size && loc > 0) {
 
                         if (dt.world_index < 4) {
                             local_walls[local_walls_p].entity = bn::sprite_items::environment_stone.create_sprite(x * 32, y * 32, loc - 1);
-                            local_walls[local_walls_p].entity.put_below();
+                            local_walls[local_walls_p].entity.set_z_order(4);
                         } else if (dt.world_index == 4) {
                             if (loc == 26) {
                                 local_walls[local_walls_p].entity = bn::sprite_items::water_animation.create_sprite(x * 32, y * 32, anim8);
                                 anim8++;
                                 anim8 = anim8 % 8;
-                                local_walls[local_walls_p].entity.put_below();
+                                local_walls[local_walls_p].entity.set_z_order(4);
                             } else {
                                 local_walls[local_walls_p].entity = bn::sprite_items::ocean_terrain.create_sprite(x * 32, y * 32, loc - 1);
                                 if (loc == 1) {
-                                    local_walls[local_walls_p].entity.put_above();
+                                    local_walls[local_walls_p].entity.set_z_order(0);
                                 } else {
-                                    local_walls[local_walls_p].entity.put_below();
+                                    local_walls[local_walls_p].entity.set_z_order(4);
                                 }
                             }
                         } else if (dt.world_index == 5) {
                             local_walls[local_walls_p].entity = bn::sprite_items::trailer_home.create_sprite(x * 32, y * 32, loc - 1);
-                            local_walls[local_walls_p].entity.put_below();
+                            local_walls[local_walls_p].entity.set_z_order(4);
+                        } else if (dt.world_index == 6) {
+                            local_walls[local_walls_p].entity = bn::sprite_items::scout_lab.create_sprite(x * 32, y * 32, loc - 1);
+                            local_walls[local_walls_p].entity.set_z_order(4);
                         }
                         
                         local_walls[local_walls_p].entity.set_camera(camera);
@@ -1328,7 +1480,7 @@ dungeon_return dungeon(dungeon_return dt, struct save_struct &so, bool door_nois
                             int my_y = p[i].fireball.y().integer() / 32;
                             if (my_x >= 2 && my_x <= 3 && my_y >= 2 && my_y <= 3) {
                                 p[i].dur = 16;
-                                anim_objects.at(0).entity_anim = bn::create_sprite_animate_action_forever(anim_objects.at(0).entity, 18, anim_objects.at(0).entity_item.tiles_item(), 2, 1, 0, 1);
+                                anim_objects.at(0).entity_anim = bn::create_sprite_animate_action_forever(anim_objects.at(0).entity, 18, anim_objects.at(0).entity_item.tiles_item(), 2, 1, 00, 1);
                                 anim_objects.at(0).entity.set_horizontal_flip(!anim_objects.at(0).entity.horizontal_flip());
                                 anim_objects.at(0).entity_anim.update();
                             }

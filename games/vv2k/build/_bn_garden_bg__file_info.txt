@@ -1,0 +1,3 @@
+graphics/garden_bg.bmp
+32882
+1635763545.95

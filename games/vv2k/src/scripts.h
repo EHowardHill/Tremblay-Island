@@ -1,11 +1,11 @@
 int exec_dialogue(int x) {
 
-    bool fals = false;
-    int n = -1;
+    constexpr bool fals = false;
+    constexpr int n = -1;
 
     switch (x) {
         case 0: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "S01:01"},
                 {fals, true, 0, ""},
@@ -39,7 +39,7 @@ int exec_dialogue(int x) {
         };
 
         case 1: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {true, true, 0, "BG: Ocean"},
                 {true, fals, 1, "MAPLE                            Alright, so where do I plug this crock-pot in at? Are there any   plugs?"},
                 {fals, fals, 1, "MAPLE                            I take it that I'm late enough   y'all probably already ate       something else."},
@@ -79,7 +79,7 @@ int exec_dialogue(int x) {
         };
 
         case 2: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {true, true, 0, "BG: fadeout"},
                 {true, true, 0, "S01:11"},
                 {true, true, 0, "MAPLE                            Wow.. It's sort of chilly in     here, isn't it?"},
@@ -119,7 +119,7 @@ int exec_dialogue(int x) {
         };
 
         case 13: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {true, true, 0, "S01:13"},
                 {true, fals, 4, "..."},
                 {true, true, 10, "AARON                            Bonjour! Did you sleep well?"},
@@ -159,7 +159,7 @@ int exec_dialogue(int x) {
         };
 
         case 14: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {true, true, 0, "S02:02"},
                 {true, true, 0, "BG: champ"},
                 {true, true, 0, "                                                                                                   Hmm, hmm hmm hmm...."},
@@ -191,7 +191,7 @@ int exec_dialogue(int x) {
         };      
 
         case 15: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {true, true, 0, "S02:06"},
                 {true, true, 0, "MAPLE                            Thunder my DOG,                  I have had ENOUGH,               they are ALL gonna get it!"},
                 {true, true, 0, "MAPLE                            That's it! I'm at my limit.      They're going to DIE ALONE and   it's gonna be ALL their fault."},
@@ -222,9 +222,10 @@ int exec_dialogue(int x) {
         };
 
         case 16: {
-            Concepts::line lc[32] = {
+            // Spring
+            line lc[32] = {
                 {fals, true, 0, "S03:01"},
-                {fals, true, 0, "BG: Overworld 01"},
+                {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "6:40 PM                          March 20th, 2000                 The middle of Lake Supérieur,   La République Laurentides(?)"},
                 {fals, true, 0, "                                 So.. That's the island.          It's cute."},
                 {fals, true, 0, "                                 I'm not sure if it's sell-every- thing-I-own cute, but..."},
@@ -240,13 +241,39 @@ int exec_dialogue(int x) {
             };
             dialogue_page(lc);
             return 0;
-			break;
-        };
+            break;
+        }
 
-
+        case 18: {
+            line lc[32] = {
+                {fals, fals, 0,  "BG: Trailer Home"},
+                {true, true, 22, "ENOKI                            Maple!! You came!"},
+                {true, fals, 17, "MAPLE                            Yeah, this was my best option."},
+                {true, true, 24, "AARON                            How was the trip? Did it take youlong?"},
+                {fals, fals, 16, "MAPLE                            I took the train. It was like..  three days? It was fine. I read alot. My legs hurt."},
+                {fals, true, 25, "AARON                            If you'd had let us know you werecoming sooner, you know we would have arranged for a plane trip!"},
+                {fals, fals, 18, "MAPLE                            Doesn't matter. I'm already here.So, you go from castle to mobile home? Classy."},
+                {true, true, 20, "ENOKI                            Dude, we moved outta the castle  in a 'normal home' and now you   want us to go back?"},
+                {fals, fals, 16, "MAPLE                            No, I mean.. I guess I don't     know what I mean."},
+                {true, true, 26, "AARON                            Well, we've only got a couch, butit's very comfortable. Feel free to make yourself at home."},
+                {fals, true, 24, "AARON                            We've been working hard. I've    been chopping wood for the winterand Enoki's been-"},
+                {true, true, 22, "ENOKI                            So, I, uh, I thought bringing    some bunnies here would make the island a little more alive,      y'know?"},
+                {fals, true, 20, "ENOKI                            Turns out they started           multiplying so I spenda lotta    time tryna' keep em out of the   garden."},
+                {true, true, 26, "AARON                            How do you feel about going into the caves a little north of here?"},
+                {fals, true, 24, "AARON                            We've heard there's some gems in there that could be really       useful in earning us some money."},
+                {fals, fals, 14, "MAPLE                            I guess that isn't too difficult."},
+                {fals, fals, 15, "MAPLE                            Hey... thanks for the room."},
+                {fals, true, 25, "AARON                            No problem."},
+                {fals, true, 22, "ENOKI                            Oh, and if you haven't met Scout yet, he's pretty cool! He's down in the bunker thing outside."},
+                {fals, fals, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
 
         case 17: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "MAPLE                            Bonjour? Anyone here?"},
                 {fals, true, 0, "SCOUT                            Shhhh! I just got the radar up   and running! It's very sensitive!"},
@@ -268,7 +295,7 @@ int exec_dialogue(int x) {
         };
 
         case 19: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "SCOUT                            Oh, hey Enoki! How's it going?"},
                 {fals, true, 0, "ENOKI                            Really good!! It's perfect       outside today. Whatcha' workin'  on?"},
@@ -283,7 +310,7 @@ int exec_dialogue(int x) {
         };
 
         case 20: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "SCOUT                            Oh, hey Aaron! How've you been?"},
                 {fals, true, 0, "AARON                            Good, I'm just really tired. I    think I underestimated how much wood I'd be chopping."},
@@ -309,45 +336,14 @@ int exec_dialogue(int x) {
         };
 
         case 21: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "SCOUT                            You need anything, just let me    know, alright?"}
             };
         };
 
-
-
-        case 18: {
-            bn::music_items_info::span[8].first.play(bn::fixed(50) / 100);
-            Concepts::line lc[32] = {
-                {fals, fals, 0, "BG: Trailer Home"},
-                {true, true, 22, "ENOKI                            MAPLE! YOU CAME!!!"},
-                {true, fals, 17, "MAPLE                            Yeah, this was my best option."},
-                {true, true, 24, "AARON                            How was the trip? Did it take youlong?"},
-                {fals, fals, 16, "MAPLE                            I took the train. It was like..  three days? It was fine. I read alot. My legs hurt."},
-                {fals, true, 25, "AARON                            If you'd had let us know you werecoming sooner, you know we would have arranged for a plane trip!"},
-                {fals, fals, 18, "MAPLE                            Doesn't matter. I'm already here.So, you go from castle to mobile home? Classy."},
-                {true, true, 20, "ENOKI                            Dude, we moved outta the castle  in a 'normal home' and now you   want us to go back?"},
-                {fals, fals, 16, "MAPLE                            No, I mean.. I guess I don't     know what I mean."},
-                {true, true, 26, "AARON                            Well, our guest bedroom's past   the kitchen. Feel free to make   yourself at home."},
-                {fals, true, 24, "AARON                            We've been working hard. I've    been chopping wood for the winterand Enoki's been-"},
-                {true, true, 22, "ENOKI                            So, I, uh, I thought bringing    some bunnies here would make the island a little more alive,      y'know?"},
-                {fals, true, 20, "ENOKI                            Turns out they started           multiplying so I spenda lotta    time tryna' keep em out of the   garden."},
-                {true, true, 26, "AARON                            How do you feel about going into the caves a little north of here?"},
-                {fals, true, 24, "AARON                            We've heard there's some gems in there that could be really       useful in earning us some money."},
-                {fals, fals, 14, "MAPLE                            I guess that isn't too difficult."},
-                {fals, fals, 15, "MAPLE                            Hey... thanks for the room."},
-                {fals, true, 25, "AARON                            No problem."},
-                {fals, true, 22, "ENOKI                            Oh, and if you haven't met Scout yet, he's pretty cool! He's down in the bunker thing outside."},
-                {fals, fals, 0, "COM: Endscene"}
-            };
-            dialogue_page(lc);
-            return 0;
-			break;
-        };
-
         case 22: {
-            Concepts::line lc[32] = {
+            line lc[32] = {
                 {fals, true, 0, "BG: 1"},
                 {fals, true, 0, "ENOKI                            So, do you wanna go do somethin'?"},
                 {fals, true, 0, "MAPLE                            I just got here, I think I might just want to relax a bit."}

@@ -1,3 +1,0 @@
-graphics/dinosaur.bmp
-2166
-1629764745.87

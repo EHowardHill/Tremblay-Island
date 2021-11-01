@@ -1,15 +1,12 @@
 #include <sstream>
 
 // Generic classes
-class Concepts {
+class line {
     public:
-        class line {
-            public:
-                bool transition;
-                bool left;
-                int img = 0;
-                char text[192];
-        };
+        bool transition;
+        bool left;
+        int img = 0;
+        char text[192] = {0};
 };
 
 // Function to calculate the smallest multiple
@@ -37,9 +34,17 @@ struct save_struct {
     int spawn_x = 0;
     int spawn_y = 0;
     int world_index = 0;
+    int xp = 0;
 
     int spring_housewarming = 0;
 };
+
+void deep_copy(std::vector<int> &a, std::vector<int> &b) {
+    b.clear();
+    for (auto &c : a) {
+        b.push_back(c);
+    }
+}
 
 template<typename C, typename T>
 bool contains(C&& c, T e) { 

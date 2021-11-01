@@ -21,7 +21,10 @@ namespace bn::sound_items
     constexpr inline sound_item ui_sfx01(38);
     constexpr inline sound_item ui_sfx02(39);
     constexpr inline sound_item ui_sfx03(40);
-    constexpr inline sound_item z3_overworld_01(84);
+    constexpr inline sound_item z08_rain(90);
+    constexpr inline sound_item z10_enoki_theme(98);
+    constexpr inline sound_item z11_maple_theme(103);
+    constexpr inline sound_item z3_overworld_01(106);
 }
 
 #endif

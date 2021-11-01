@@ -65,20 +65,26 @@
 #include "bn_sprite_items_power_meter.h"
 #include "bn_regular_bg_items_fun_background.h"
 #include "bn_regular_bg_items_sidebar.h"
+#include "bn_regular_bg_items_garden_bg.h"
+#include "bn_sprite_items_bunbun.h"
 
 static struct save_struct so;
+constexpr bool fals = false;
 
-void timer(int delay) {
-    for (int t = 0; t < delay; t++) {
+void timer(int delay)
+{
+    for (int t = 0; t < delay; t++)
+    {
         bn::core::update();
     }
 }
 
-void startup() {
+void startup()
+{
 
     //bn::regular_bg_ptr
-    auto header = bn::regular_bg_items::cinemint_studios.create_bg(0,0);
-    auto ocean = bn::regular_bg_items::titlebackground.create_bg(0,0);
+    auto header = bn::regular_bg_items::cinemint_studios.create_bg(0, 0);
+    auto ocean = bn::regular_bg_items::titlebackground.create_bg(0, 0);
     ocean.set_visible(false);
 
     header.set_mosaic_enabled(true);
@@ -94,84 +100,96 @@ void startup() {
     item2.set_mosaic_enabled(true);
     item3.set_mosaic_enabled(true);
 
-    auto tree1 = bn::sprite_items::titlebackground_trees.create_sprite(64 + 16,-32);
-    auto tree2 = bn::sprite_items::titlebackground_trees.create_sprite(64 + 32,-32);
+    auto tree1 = bn::sprite_items::titlebackground_trees.create_sprite(64 + 16, -32);
+    auto tree2 = bn::sprite_items::titlebackground_trees.create_sprite(64 + 32, -32);
     auto trees_left = bn::create_sprite_animate_action_forever(tree1, 12, bn::sprite_items::titlebackground_trees.tiles_item(), 0, 1);
     auto trees_right = bn::create_sprite_animate_action_forever(tree2, 12, bn::sprite_items::titlebackground_trees.tiles_item(), 2, 3);
     tree1.set_visible(false);
     tree2.set_visible(false);
 
-    while(!bn::keypad::start_pressed()) {
+    while (!bn::keypad::start_pressed())
+    {
         trees_left.update();
         trees_right.update();
         tree1 = trees_left.sprite();
         tree2 = trees_right.sprite();
 
-        switch(intro_stage) {
-            case 0:
-                item0.set_visible(false);
-                item1.set_visible(false);
-                item2.set_visible(false);
-                item3.set_visible(false);
-                if (glow - 0.02 > 0) {
-                    glow -= 0.02;
-                    bn::bgs_mosaic::set_horizontal_stretch(glow);
-                    bn::bgs_mosaic::set_vertical_stretch(glow);
-                } else {
-                    header.set_mosaic_enabled(false);
-                    intro_stage++;
-                }
-                break;
-            case 1:
-                bn::sound_items::ahoy.play();
-                header.set_blending_enabled(true);
-                intro_stage++;
-                break;
-            case 2:
-                timer(32);
-                glow = 1;
-                intro_stage++;
-                break;
-            case 3:
-                if (glow - 0.02 > 0) {
-                    glow -= 0.02;
-                    bn::blending::set_transparency_alpha(glow);
-                } else {
-                    intro_stage++;
-                }
-                break;
-            case 4:
-                glow = 0.5;
-                bn::music_items_info::span[3].first.play(bn::fixed(50) / 100);
-                timer(16);
-                intro_stage++;
-                break;
-            case 5:
-                item0.set_visible(true);
-                item1.set_visible(true);
-                item2.set_visible(true);
-                item3.set_visible(true);
-                if (glow - 0.01 > 0) {
-                    glow -= 0.01;
-                    bn::sprites_mosaic::set_horizontal_stretch(glow);
-                    bn::sprites_mosaic::set_vertical_stretch(glow);
-                } else {
-                    intro_stage++;
-                }
-                break;
-            case 6:
-                ocean.set_visible(true);
-                tree1.set_visible(true);
-                tree2.set_visible(true);
-                intro_stage++;
-                break;
-            default: {
-                item0.set_y(-32 + height);
-                item1.set_y(-34 + height);
-                item2.set_y(32 + height);
-                item3.set_y(30 + height);
-                break;
+        switch (intro_stage)
+        {
+        case 0:
+            item0.set_visible(false);
+            item1.set_visible(false);
+            item2.set_visible(false);
+            item3.set_visible(false);
+            if (glow - 0.02 > 0)
+            {
+                glow -= 0.02;
+                bn::bgs_mosaic::set_horizontal_stretch(glow);
+                bn::bgs_mosaic::set_vertical_stretch(glow);
             }
+            else
+            {
+                header.set_mosaic_enabled(false);
+                intro_stage++;
+            }
+            break;
+        case 1:
+            bn::sound_items::ahoy.play();
+            header.set_blending_enabled(true);
+            intro_stage++;
+            break;
+        case 2:
+            timer(32);
+            glow = 1;
+            intro_stage++;
+            break;
+        case 3:
+            if (glow - 0.02 > 0)
+            {
+                glow -= 0.02;
+                bn::blending::set_transparency_alpha(glow);
+            }
+            else
+            {
+                intro_stage++;
+            }
+            break;
+        case 4:
+            glow = 0.5;
+            bn::music_items_info::span[3].first.play(bn::fixed(50) / 100);
+            timer(16);
+            intro_stage++;
+            break;
+        case 5:
+            item0.set_visible(true);
+            item1.set_visible(true);
+            item2.set_visible(true);
+            item3.set_visible(true);
+            if (glow - 0.01 > 0)
+            {
+                glow -= 0.01;
+                bn::sprites_mosaic::set_horizontal_stretch(glow);
+                bn::sprites_mosaic::set_vertical_stretch(glow);
+            }
+            else
+            {
+                intro_stage++;
+            }
+            break;
+        case 6:
+            ocean.set_visible(true);
+            tree1.set_visible(true);
+            tree2.set_visible(true);
+            intro_stage++;
+            break;
+        default:
+        {
+            item0.set_y(-32 + height);
+            item1.set_y(-34 + height);
+            item2.set_y(32 + height);
+            item3.set_y(30 + height);
+            break;
+        }
         }
         bn::core::update();
     }
@@ -179,11 +197,12 @@ void startup() {
     bn::core::update();
 }
 
-void load_save() {
+void load_save()
+{
 
-    auto velvet = bn::regular_bg_items::velvet.create_bg(0,0);
-    auto ui = bn::regular_bg_items::file_select_bg.create_bg(0,0);
-    auto arrow = bn::sprite_items::arrow.create_sprite(-98, - 32);
+    auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
+    auto ui = bn::regular_bg_items::file_select_bg.create_bg(0, 0);
+    auto arrow = bn::sprite_items::arrow.create_sprite(-98, -32);
 
     bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
     bn::vector<bn::sprite_ptr, 12> file1_spr;
@@ -202,20 +221,26 @@ void load_save() {
 
     bn::music_items_info::span[8].first.play(bn::fixed(50) / 100);
 
-    while(!bn::keypad::a_pressed()) {
-        
+    while (!bn::keypad::a_pressed())
+    {
+
         // Scrolling background
         t++;
         t = t % 256;
-        velvet.set_position(t,t);
+        velvet.set_position(t, t);
 
-        if (bn::keypad::up_pressed()) {
+        if (bn::keypad::up_pressed())
+        {
             c -= 1;
-            if (c < 0) c = 2;
+            if (c < 0)
+                c = 2;
             bn::sound_items::pop.play();
-        } else if (bn::keypad::down_pressed()) {
+        }
+        else if (bn::keypad::down_pressed())
+        {
             c += 1;
-            if (c > 2) c = 0;
+            if (c > 2)
+                c = 0;
             bn::sound_items::pop.play();
         }
 
@@ -235,40 +260,50 @@ void load_save() {
     timer(64);
 }
 
-void introduction() {
-    dungeon_return dt(0,0,0);
+void introduction()
+{
+    dungeon_return dt(0, 0, 0);
     dt.spawn_x = 0;
     dt.spawn_y = 0;
     dt.world_index = 0;
-    while (true) {
+    while (true)
+    {
         dungeon_return dt2 = dungeon(dt, so, false);
-        if (dt2.world_index == -1) break;
+        if (dt2.world_index == -1)
+            break;
     };
 }
 
-void cutscenes(int c) {
-    if (c == 0) {
+void cutscenes(int c)
+{
+    if (c == 0)
+    {
         bn::sound_items::birds.play();
         bn::music_items_info::span[9].first.play(bn::fixed(25) / 100);
-        bn::regular_bg_ptr f1 = bn::regular_bg_items::intro_final_1.create_bg(0,0);
-        bn::regular_bg_ptr f2 = bn::regular_bg_items::intro_final_2.create_bg(0,0);
+        bn::regular_bg_ptr f1 = bn::regular_bg_items::intro_final_1.create_bg(0, 0);
+        bn::regular_bg_ptr f2 = bn::regular_bg_items::intro_final_2.create_bg(0, 0);
         f2.set_blending_enabled(true);
         bn::blending::set_transparency_alpha(0);
         f1.put_below();
         timer(32);
         float see = 0;
         f2.set_visible(true);
-        for (int t = 0; t < 256; t++) {
+        for (int t = 0; t < 256; t++)
+        {
             bn::blending::set_transparency_alpha(see);
             float c_see = see + 0.01;
-            if (c_see <= 1) see = c_see;
+            if (c_see <= 1)
+                see = c_see;
             bn::core::update();
         }
-    } else if (c == 1) {
+    }
+    else if (c == 1)
+    {
         bool isPlayed = false;
         bn::regular_bg_ptr text = bn::regular_bg_items::s0201.create_bg(0, 0);
         bn::music::stop();
-        if (!isPlayed) {
+        if (!isPlayed)
+        {
             bn::sound_items::firehit.play();
             isPlayed = true;
         }
@@ -276,8 +311,132 @@ void cutscenes(int c) {
     }
 }
 
-void tree_cut() {
-    auto cursor = bn::sprite_items::ax_bar.create_sprite(0,0);
+bool victory_page(int chari, int score)
+{
+    bn::sprite_ptr victory_spr = bn::sprite_items::enoki_victory_anim.create_sprite(-48, -32);
+    bn::sprite_ptr victory_spr2 = bn::sprite_items::enoki_victory_anim.create_sprite(-48, 32);
+    bn::sprite_animate_action victory_anim = bn::create_sprite_animate_action_forever(victory_spr, 3, bn::sprite_items::enoki_victory_anim.tiles_item(),
+                                                                                      46, 44, 42, 40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0);
+    bn::sprite_animate_action victory_anim2 = bn::create_sprite_animate_action_forever(victory_spr2, 3, bn::sprite_items::enoki_victory_anim.tiles_item(),
+                                                                                       47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 27, 25, 23, 21, 19, 17, 15, 13, 11, 9, 7, 5, 3, 1);
+
+    int offset = 0;
+    int total = 0;
+    char buf[16];
+    char bf2[16];
+    bn::sprite_text_generator text_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 16> text_spr;
+    bn::vector<bn::sprite_ptr, 16> text_spr_2;
+    bn::vector<bn::sprite_ptr, 7> text_spr_3;
+    bn::vector<bn::sprite_ptr, 4> text_spr_4;
+
+    bn::sprite_ptr b_m1 = bn::sprite_items::power_meter.create_sprite(32, 0, 1);
+    bn::sprite_ptr b_m2 = bn::sprite_items::power_meter.create_sprite(64, 0, 1);
+    b_m1.set_scale(4, 1);
+    b_m2.set_scale(4, 1);
+    bn::sprite_ptr b_l = bn::sprite_items::power_meter.create_sprite(16, 0, 0);
+    bn::sprite_ptr b_r = bn::sprite_items::power_meter.create_sprite(80, 0, 2);
+    bn::sprite_ptr b_a = bn::sprite_items::power_meter.create_sprite(32, 0, 3);
+
+    bn::regular_bg_ptr background = bn::regular_bg_items::fun_background.create_bg(0, 0);
+    bn::regular_bg_ptr sidebar = bn::regular_bg_items::sidebar.create_bg(0, 0);
+
+    // Forest   0.065x
+    // Garden   0.13x
+    // Caves    0.023x + 2.94
+
+    float modifier = 0;
+    switch (chari)
+    {
+    case 1:
+    { // Garden
+        modifier = 0.06;
+        break;
+    }
+    }
+
+    int xp = so.xp;
+    if (xp == -1) xp = 0;
+
+    int new_lc = 0;
+    float new_xp = xp + (modifier * score);
+    if (new_xp > 100)
+        new_xp = 100;
+
+    so.xp = new_xp; // Add score to save total
+
+    float new_xp_d = new_xp * 0.48;
+    int new_xp_p = 0;
+    bool arrow_pos = false;
+    bool final_hit = false;
+
+    text_gen.generate(32, 32, "Press A to", text_spr_3);
+    text_gen.generate(32, 48, "Continue", text_spr_4);
+
+    bn::music_items_info::span[13].first.play(bn::fixed(40) / 100);
+
+    int music_int = 0;
+    while (!bn::keypad::a_pressed())
+    {
+        if (offset < 48 * 2)
+        {
+            victory_anim.update();
+            victory_anim2.update();
+            offset++;
+        }
+        victory_spr = victory_anim.sprite();
+        victory_spr2 = victory_anim2.sprite();
+
+        background.set_position((background.x().integer() + 1) % 256, (background.y().integer() + 1) % 256);
+
+        if (music_int < 225)
+        {
+            music_int++;
+        }
+        else if (music_int == 225)
+        {
+            bn::music::stop();
+            music_int++;
+        }
+
+        if (total < score)
+            total += 5;
+        if (total > score)
+            total = score;
+        if (new_xp_p < new_xp)
+            new_xp_p += 5;
+        if (new_xp_p > new_xp)
+            new_xp_p = new_xp;
+
+        sprintf(buf, "Score:     %d", total);
+        sprintf(bf2, "XP Earned: %d", new_xp_p);
+        text_spr.clear();
+        text_spr_2.clear();
+        text_gen.generate(8, -64, buf, text_spr);
+        text_gen.generate(8, -48, bf2, text_spr_2);
+
+        if (new_lc < new_xp_d)
+        {
+            new_lc++;
+            bn::sound_items::start.play();
+        }
+        else if (!final_hit)
+        {
+            final_hit = true;
+            total = score;
+            bn::sound_items::firecrackle.play();
+        }
+        b_a.set_x(new_lc + 32);
+
+        bn::core::update();
+    }
+
+    return true; // Fortunately, arrow_pos and the final decision weight mean the same thing
+}
+
+dungeon_return tree_cut()
+{
+    auto cursor = bn::sprite_items::ax_bar.create_sprite(0, 0);
 
     int score = 100;
     char buf[16];
@@ -286,10 +445,11 @@ void tree_cut() {
     bn::vector<bn::sprite_ptr, 16> file1_spr;
     bn::vector<bn::sprite_ptr, 16> file2_spr;
 
-    bn::vector<bn::sprite_ptr,16> bars;
-    bn::vector<bn::sprite_ptr,16> chop;
+    bn::vector<bn::sprite_ptr, 16> bars;
+    bn::vector<bn::sprite_ptr, 16> chop;
     bn::random random;
-    for (int t = 0; t < 14; t++) bars.push_back(bn::sprite_items::horizontal_bar.create_sprite(((t - 7) * 8) + 4,0));
+    for (int t = 0; t < 14; t++)
+        bars.push_back(bn::sprite_items::horizontal_bar.create_sprite(((t - 7) * 8) + 4, 0));
 
     float curs = 0;
     int width = 16;
@@ -298,52 +458,67 @@ void tree_cut() {
     int hits = 1;
     bool left = false;
     int total = 0;
-    for (int t = 0; t < max_chop; t++) {
+    for (int t = 0; t < max_chop; t++)
+    {
         int x_pos = -(calc_width / 2) + (random.get() % calc_width);
         x_pos = (x_pos / 16) * 16;
         chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
     }
 
-    while(true) {
+    while (true)
+    {
 
         sprintf(buf, "Score: %d", score);
         sprintf(bf2, "Total: %d", total);
         file1_spr.clear();
-        file2_spr.clear();        
+        file2_spr.clear();
         file1_gen.generate(-114, -70, buf, file1_spr);
         file1_gen.generate(-114, -58, bf2, file2_spr);
 
         curs += 1 + (score / 200);
-        if (curs > 200) curs = 0;
+        if (curs > 200)
+            curs = 0;
         float curs_f = curs;
         int curs_i = curs_f / 32;
         int dir = ((curs) / 20);
         int curs_loc = sin(curs_f / 32) * calc_width;
 
-        if (score > total) total = score;
+        if (score > total)
+            total = score;
 
-        if (dir > 2 && dir < 8) { //left
-            if (bn::keypad::a_held()) {
+        if (dir > 2 && dir < 8)
+        { //left
+            if (bn::keypad::a_held())
+            {
                 cursor.set_scale(1.1);
-            } else {
+            }
+            else
+            {
                 cursor.set_scale(1);
             }
             cursor.put_above();
             left = true;
-        } else { // right
-            if (left) {
+        }
+        else
+        { // right
+            if (left)
+            {
                 cursor.set_scale(0.9);
-                for (int t = 0; t < max_chop; t++) {
-                    if (chop.at(t).visible()) score = score / 2;
+                for (int t = 0; t < max_chop; t++)
+                {
+                    if (chop.at(t).visible())
+                        score = score / 2;
                 }
 
                 hits = 1;
                 bn::sound_items::ui_sfx01.play();
                 chop.clear();
                 max_chop = 4 + (score / 1000);
-                if (max_chop > 16) max_chop = 16;
+                if (max_chop > 16)
+                    max_chop = 16;
 
-                for (int t = 0; t < max_chop; t++) {
+                for (int t = 0; t < max_chop; t++)
+                {
                     int x_pos = -(calc_width / 2) + (random.get() % calc_width);
                     x_pos = (x_pos / 4) * 4;
                     chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
@@ -353,22 +528,29 @@ void tree_cut() {
             left = false;
         }
 
-        for (int t = 0; t < max_chop; t++) {
-            if (left) {
-                if (chop.at(t).visible() && chop.at(t).x().integer() > curs_loc - 6) {
+        for (int t = 0; t < max_chop; t++)
+        {
+            if (left)
+            {
+                if (chop.at(t).visible() && chop.at(t).x().integer() > curs_loc - 6)
+                {
                     //chop.at(t).set_visible(false);
                     //score = 0;
                 }
             }
         }
 
-        if (bn::keypad::a_pressed() && left) {
+        if (bn::keypad::a_pressed() && left)
+        {
             bool penalty = true;
-            for (int t = 0; t < max_chop; t++) {
+            for (int t = 0; t < max_chop; t++)
+            {
                 int c_x = chop.at(t).x().integer();
-                if (curs_loc + 8 > c_x - 16 && curs_loc + 8 < c_x + 16) {
+                if (curs_loc + 8 > c_x - 16 && curs_loc + 8 < c_x + 16)
+                {
                     chop.at(t).set_visible(false);
-                    if (hits < 5) {
+                    if (hits < 5)
+                    {
                         bn::sound_items::firehit.play();
                         hits++;
                     }
@@ -376,7 +558,8 @@ void tree_cut() {
                     penalty = false;
                 }
             }
-            if (penalty) {
+            if (penalty)
+            {
                 score -= (score / 5);
             }
         }
@@ -386,285 +569,393 @@ void tree_cut() {
     }
 }
 
-class rabbit {
-    public:
-        bn::sprite_ptr sprite = bn::sprite_items::horizontal_bar.create_sprite(0,0);
-        bool moving = true;
-        bool carry = false;
-        int spend = 0;
-        int dir = 0;
-        float x_vector = 0;
-        float y_vector = 1;
-        int init_y = 0;
-        bool enabled = true;
-        rabbit() {}
+class rabbit
+{
+public:
+    bn::sprite_item entity = bn::sprite_items::bunbun;
+    bn::sprite_ptr sprite = entity.create_sprite(0, 0);
+    bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(sprite, 4, entity.tiles_item(), 0, 1, 0, 1);
+    bool moving = true;
+    bool carry = false;
+    int spend = 0;
+    int dir = 0;
+    float x_vector = 0;
+    float y_vector = 1;
+    int init_y = 0;
+    bool enabled = true;
+    rabbit() {}
 
-        void move() {
-            if (spend > 0) {
-                if (sprite.x() < 0 || sprite.x() > 240 || sprite.y() < 0 || sprite.y() > 160) {
-                    sprite.set_visible(false);
-                }
-                float sine = sinf((64 - spend) / 21);
-                switch(dir) {
-                    case 0:
-                        sprite.set_position(sprite.x(), sprite.y() + 3);
-                        break;
-                    case 1:
-                        sprite.set_position(sprite.x() + 3, init_y + (sine * 20.01));
-                        break;
-                    case 2:
-                        sprite.set_position(sprite.x() - 3, init_y + (sine * 20.01));
-                        break;
-                    case 3:
-                        sprite.set_position(sprite.x(), sprite.y() - 3);
-                        break;
-                }
-                spend--;
-            } else if (moving) {
-                sprite.set_position(sprite.x() + x_vector, sprite.y() + y_vector);
-            }
+    void move()
+    {
+        entity_anim.update();
+        sprite = entity_anim.sprite();
+
+        if (x_vector > 0) {
+            sprite.set_horizontal_flip(true);
+        } else {
+            sprite.set_horizontal_flip(false);
         }
+
+        if (spend > 0)
+        {
+            if (sprite.x() < 0 || sprite.x() > 240 || sprite.y() < 0 || sprite.y() > 160)
+            {
+                sprite.set_visible(false);
+            }
+            float sine = sinf((64 - spend) / 21);
+            switch (dir)
+            {
+            case 0:
+                sprite.set_position(sprite.x(), sprite.y() + 3);
+                break;
+            case 1:
+                sprite.set_position(sprite.x() + 3, init_y + (sine * 20.01));
+                break;
+            case 2:
+                sprite.set_position(sprite.x() - 3, init_y + (sine * 20.01));
+                break;
+            case 3:
+                sprite.set_position(sprite.x(), sprite.y() - 3);
+                break;
+            }
+            spend--;
+        }
+        else if (moving)
+        {
+            sprite.set_position(sprite.x() + x_vector, sprite.y() + y_vector);
+        }
+    }
 };
 
-void rabbit_game() {
-    bn::vector<rabbit, 8> rabbits;
-    auto max_rabbits = 6;
-    bn::random rnd;
-    bn::camera_ptr camera = bn::camera_ptr::create(0,0);
-
-    char buf[16];
-    char bf2[16];
-    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 16> file1_spr;
-    bn::vector<bn::sprite_ptr, 16> file2_spr;
-
-    bn::vector<bn::sprite_ptr,16> bars;
-    bn::vector<bn::sprite_ptr,16> chop;
-
-    bool isHolding = false;
-    bool heldItem = 0;
-
-    room myRoom;
-
-    int local[406] = {
-        2,2,2,2,2,2,2,2,2,
-        2,0,0,0,0,0,0,0,2,
-        2,0,0,0,0,0,0,0,2,
-        2,0,0,0,0,0,0,0,2,
-        2,2,2,2,2,2,2,2,2
-    };
-    for (int t = 0; t < myRoom.width * myRoom.height; t++) {
-        myRoom.local_tileset[t] = local[t];
-    }
-    myRoom.width = 9;
-    myRoom.height = 5;
-    myRoom.start_x = 4;
-    myRoom.start_y = 2;
-    camera.set_position(myRoom.start_x * 32, myRoom.start_y * 32);
-
-    character enoki(bn::sprite_items::enoki_walking_pj, myRoom, myRoom.start_x, myRoom.start_y, true);
-    enoki.entity.set_camera(camera);
-
-    for (int t = 0; t < max_rabbits; t++) {
-        rabbit r;
-        r.sprite.set_camera(camera);
-        rabbits.push_back(r);
-    }
-
+dungeon_return rabbit_game()
+{
     int score = 0;
-    int total = 0;
-    int score_meter = 0;
-    bool playing = true;
+    if (true)
+    {
+        bn::vector<rabbit, 8> rabbits;
+        auto max_rabbits = 6;
+        bn::random rnd;
+        bn::camera_ptr camera = bn::camera_ptr::create(0, 0);
 
-    while(playing) {
+        bn::regular_bg_ptr garden_bg = bn::regular_bg_items::garden_bg.create_bg(0,0);
+        garden_bg.set_camera(camera);
 
-        score_meter++;
-        if (score_meter == 50) {
-            score_meter = 0;
-            if (score > 0) score -= 1;
+        char buf[12];
+        char bf2[12];
+        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 12> file1_spr;
+        bn::vector<bn::sprite_ptr, 12> file2_spr;
+
+        bn::vector<bn::sprite_ptr, 16> bars;
+        bn::vector<bn::sprite_ptr, 16> chop;
+
+        bool isHolding = false;
+        bool heldItem = 0;
+
+        room myRoom;
+
+        std::vector<int> local = {
+            2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 0, 0, 0, 0, 0, 0, 0, 2,
+            2, 0, 0, 0, 0, 0, 0, 0, 2,
+            2, 0, 0, 0, 0, 0, 0, 0, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2};
+        deep_copy(local, myRoom.local_tileset);
+
+        std::vector<int> local_col = {
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0
+        };
+        deep_copy(local_col, myRoom.collisions);
+
+        myRoom.width = 9;
+        myRoom.height = 5;
+        myRoom.start_x = 4;
+        myRoom.start_y = 2;
+        camera.set_position(myRoom.start_x * 32, myRoom.start_y * 32);
+
+        bool cont = false;
+        int total = 0;
+        if (bn::music::playing()) bn::music::stop();
+        bn::music_items_info::span[18].first.play(bn::fixed(50) / 100);
+
+        character enoki(bn::sprite_items::enoki_walking_spring, myRoom, myRoom.start_x, myRoom.start_y, true);
+        enoki.entity.set_camera(camera);
+
+        bn::sprite_ptr enoki_hold = bn::sprite_items::enoki_walking_spring.create_sprite(myRoom.start_x, myRoom.start_y, 12);
+        enoki_hold.set_camera(camera);
+        enoki_hold.set_visible(false);
+
+        for (int t = 0; t < max_rabbits; t++)
+        {
+            rabbit r;
+            r.sprite.set_camera(camera);
+            rabbits.push_back(r);
         }
 
-        sprintf(buf, "Score: %d", score);
-        sprintf(bf2, "Total: %d", total);
-        file1_spr.clear();
-        file2_spr.clear();        
-        file1_gen.generate(-114, -70, buf, file1_spr);
-        file1_gen.generate(-114, -58, bf2, file2_spr);
+        int score_meter = 0;
+        int dir = 0;
+        int last_dir = 0;
+        bool playing = true;
 
-        enoki.update();
-
-        bool allOut = true;
-        for (int t = 0; t < max_rabbits; t++) {
-            if (rabbits.at(t).sprite.visible()) {
-                allOut = false;
-                if (rabbits.at(t).sprite.y() < enoki.entity.y() + 4) {
-                    rabbits.at(t).sprite.put_below();
-                } else {
-                    rabbits.at(t).sprite.put_above();
-                }
-
-                if (rabbits.at(t).carry) {
-                    rabbits.at(t).sprite.set_position(enoki.entity.x(), enoki.entity.y() - 12);
-                    rabbits.at(t).sprite.put_above();
-                } else {
-                    rabbits.at(t).move();
-                }
-            } else if (rabbits.at(t).enabled) {
-                rabbits.at(t).enabled = false;
-                bn::sound_items::firecrackle.play();
-                score += 25;
+        while (playing)
+        {
+            score_meter++;
+            if (score_meter == 50)
+            {
+                score_meter = 0;
+                if (score > 0)
+                    score -= 2;
             }
-        }
-        if (allOut) {
-            playing = false;
-        }
 
-        // Random init
-        if (rnd.get() % 20 == 0) {
-            for (int t = 0; t < max_rabbits; t++) {
-                if (rnd.get() % 3 == 0) {
-                    rabbits.at(t).moving = false;
-                } else {
-                    rabbits.at(t).moving = true;
-                    signed int c_x = (rnd.get() % 4) - 2;
-                    signed int c_y = (rnd.get() % 4) - 2;
+            sprintf(buf, "Score: %d", score);
+            file1_spr.clear();
+            file1_gen.generate(-114, -70, buf, file1_spr);
 
-                    if (rabbits.at(t).sprite.x().integer() > 190) {
-                        c_x = -2;
-                    } else if (rabbits.at(t).sprite.x().integer() < 50) {
-                        c_x = 2;
-                    }
-
-                    if (rabbits.at(t).sprite.y().integer() > 120) {
-                        c_y = -2;
-                    } else if (rabbits.at(t).sprite.y().integer() < 40) {
-                        c_y = 2;
-                    }
-
-                    rabbits.at(t).x_vector = c_x;
-                    rabbits.at(t).y_vector = c_y;
-                }
-            }
-        }
-
-        if (bn::keypad::a_pressed()) {
             if (isHolding) {
-                bn::sound_items::cnaut.play();
-                for (int t = 0; t < max_rabbits; t++) {
-                    if (rabbits.at(t).carry) {
-                        rabbits.at(t).init_y = enoki.entity.y().integer();
-                        rabbits.at(t).dir = enoki.dir;
-                        rabbits.at(t).carry = false;
-                        rabbits.at(t).spend = 64;
+                enoki_hold.set_position(enoki.entity.x(), enoki.entity.y());
+                enoki_hold.set_visible(true);
+                enoki.entity.set_visible(false);
+
+                if (bn::keypad::down_pressed()) dir = 0;
+                if (bn::keypad::left_pressed()) dir = 2;
+                if (bn::keypad::right_pressed()) dir = 1;
+                if (bn::keypad::up_pressed()) dir = 3;
+
+                if (dir != last_dir) {
+                    enoki_hold = bn::sprite_items::enoki_walking_spring.create_sprite(enoki_hold.x(), enoki_hold.y(), 12 + dir);
+                    enoki_hold.set_camera(camera);
+                    last_dir = dir;
+                }
+            } else {
+                enoki_hold.set_visible(false);
+                enoki.entity.set_visible(true);
+                enoki.update();
+            }
+
+            bool allOut = true;
+            for (int t = 0; t < max_rabbits; t++)
+            {
+                if (rabbits.at(t).sprite.visible())
+                {
+                    allOut = false;
+                    if (rabbits.at(t).sprite.y() < enoki.entity.y() + 4)
+                    {
+                        rabbits.at(t).sprite.put_below();
+                    }
+                    else
+                    {
+                        rabbits.at(t).sprite.put_above();
+                    }
+
+                    if (rabbits.at(t).carry)
+                    {
+                        rabbits.at(t).sprite.set_position(enoki.entity.x(), enoki.entity.y() - 12);
+                        rabbits.at(t).sprite.put_above();
+                    }
+                    else
+                    {
+                        rabbits.at(t).move();
                     }
                 }
-                isHolding = false;
-            } else {
-                for (int t = 0; t < max_rabbits; t++) {
-                    if (
-                        (std::abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
-                        (std::abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16)
-                    ) {
-                        bn::sound_items::squeak.play();
-                        isHolding = true;
-                        heldItem = t;
-                        rabbits.at(t).carry = true;
-                        t = max_rabbits;
+                else if (rabbits.at(t).enabled)
+                {
+                    rabbits.at(t).enabled = false;
+                    bn::sound_items::firecrackle.play();
+                    score += 25;
+                }
+            }
+            if (allOut)
+            {
+                playing = false;
+            }
+
+            // Random init
+            if (rnd.get() % 20 == 0)
+            {
+                for (int t = 0; t < max_rabbits; t++)
+                {
+                    if (rnd.get() % 3 == 0)
+                    {
+                        rabbits.at(t).moving = false;
+                    }
+                    else
+                    {
+                        rabbits.at(t).moving = true;
+                        signed int c_x = (rnd.get() % 4) - 2;
+                        signed int c_y = (rnd.get() % 4) - 2;
+
+                        if (rabbits.at(t).sprite.x().integer() > 190)
+                        {
+                            c_x = -2;
+                        }
+                        else if (rabbits.at(t).sprite.x().integer() < 50)
+                        {
+                            c_x = 2;
+                        }
+
+                        if (rabbits.at(t).sprite.y().integer() > 120)
+                        {
+                            c_y = -2;
+                        }
+                        else if (rabbits.at(t).sprite.y().integer() < 40)
+                        {
+                            c_y = 2;
+                        }
+
+                        rabbits.at(t).x_vector = c_x;
+                        rabbits.at(t).y_vector = c_y;
                     }
                 }
             }
+
+            if (bn::keypad::a_pressed())
+            {
+                if (isHolding)
+                {
+                    bn::sound_items::cnaut.play();
+                    for (int t = 0; t < max_rabbits; t++)
+                    {
+                        if (rabbits.at(t).carry)
+                        {
+                            rabbits.at(t).init_y = enoki.entity.y().integer();
+                            rabbits.at(t).dir = enoki.dir;
+                            rabbits.at(t).carry = false;
+                            rabbits.at(t).spend = 64;
+                        }
+                    }
+                    isHolding = false;
+                }
+                else
+                {
+                    for (int t = 0; t < max_rabbits; t++)
+                    {
+                        if (
+                            (std::abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
+                            (std::abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16))
+                        {
+                            bn::sound_items::squeak.play();
+                            isHolding = true;
+                            heldItem = t;
+                            rabbits.at(t).carry = true;
+                            t = max_rabbits;
+                        }
+                    }
+                }
+            }
+
+            //while(true) bn::core::update();
+
+            bn::core::update();
         }
-
-        bn::core::update();
     }
 
-    bn::sound_items::ahoy.play();
+    victory_page(1, score);
 
-    while(true) {
-        enoki.update();
-        bn::core::update();
-    }
+    dungeon_return dt(1, 10, 4);
+    return dt;
 }
 
-class creepy_crawly {
-    public:
-        bn::sprite_ptr sprite = bn::sprite_items::chop_bar.create_sprite(0,0);
-        bool moving = true;
-        bool carry = false;
-        int spend = 0;
-        int dir = 0;
-        int x_vector = 1;
-        int y_vector = 1;
-        int to_x = 0;
-        int to_y = 0;
-        int init_y = 0;
-        bool enabled = true;
-        room* current_room;
-        creepy_crawly() {}
-        bn::random rand;
+class creepy_crawly
+{
+public:
+    bn::sprite_ptr sprite = bn::sprite_items::chop_bar.create_sprite(0, 0);
+    bool moving = true;
+    bool carry = false;
+    int spend = 0;
+    int dir = 0;
+    int x_vector = 1;
+    int y_vector = 1;
+    int to_x = 0;
+    int to_y = 0;
+    int init_y = 0;
+    bool enabled = true;
+    room *current_room;
+    creepy_crawly() {}
+    bn::random rand;
 
-        void update() {
-            int mx = sprite.x().integer() / 32;
-            int my = sprite.y().integer() / 32;
-            int mz = mx + (my * current_room -> width);
+    void update()
+    {
+        int mx = sprite.x().integer() / 32;
+        int my = sprite.y().integer() / 32;
+        int mz = mx + (my * current_room->width);
 
-            if (mx == to_x && my == to_y) {
-                to_x = 0;
-                to_y = 0;
-            }
+        if (mx == to_x && my == to_y)
+        {
+            to_x = 0;
+            to_y = 0;
+        }
 
-            if (to_x == 0 && to_y == 0) {
-                int dir = rand.get() % 4;
-                switch(dir) {
-                    case 0:
-                        if (current_room -> local_tileset[mz + 1] == 0) {
-                            to_x = mx + 1;
-                            to_y = my;
-                        }
-                        break;
-                    case 1:
-                        if (current_room -> local_tileset[mz + current_room -> width] == 0) {
-                            to_y = my + 1;
-                            to_x = mx;
-                        }
-                        break;
-                    case 2:
-                        if (current_room -> local_tileset[mz - 1] == 0) {
-                            to_x = mx - 1;
-                            to_y = my;
-                        }
-                        break;
-                    case 3:
-                        if (current_room -> local_tileset[mz - current_room -> width] == 0) {
-                            to_y = my - 1;
-                            to_x = mx;
-                        }
-                        break;
+        if (to_x == 0 && to_y == 0)
+        {
+            int dir = rand.get() % 4;
+            switch (dir)
+            {
+            case 0:
+                if (current_room->local_tileset[mz + 1] == 0)
+                {
+                    to_x = mx + 1;
+                    to_y = my;
                 }
-            } else {
-                int vector_x = 0;
-                if (mx < to_x) {
-                    vector_x++;
-                } else if (mx > to_x) {
-                    vector_x--;
+                break;
+            case 1:
+                if (current_room->local_tileset[mz + current_room->width] == 0)
+                {
+                    to_y = my + 1;
+                    to_x = mx;
                 }
-
-                int vector_y = 0;
-                if (my < to_y) {
-                    vector_y++;
-                } else if (my > to_y) {
-                    vector_y--;
+                break;
+            case 2:
+                if (current_room->local_tileset[mz - 1] == 0)
+                {
+                    to_x = mx - 1;
+                    to_y = my;
                 }
-
-                sprite.set_position(sprite.x().integer() + (vector_x * 2), sprite.y().integer() + (vector_y * 2));
+                break;
+            case 3:
+                if (current_room->local_tileset[mz - current_room->width] == 0)
+                {
+                    to_y = my - 1;
+                    to_x = mx;
+                }
+                break;
             }
         }
+        else
+        {
+            int vector_x = 0;
+            if (mx < to_x)
+            {
+                vector_x++;
+            }
+            else if (mx > to_x)
+            {
+                vector_x--;
+            }
+
+            int vector_y = 0;
+            if (my < to_y)
+            {
+                vector_y++;
+            }
+            else if (my > to_y)
+            {
+                vector_y--;
+            }
+
+            sprite.set_position(sprite.x().integer() + (vector_x * 2), sprite.y().integer() + (vector_y * 2));
+        }
+    }
 };
 
-void underground() {
-    bn::camera_ptr camera = bn::camera_ptr::create(0,0);
-    bn::regular_bg_ptr back_floor = bn::regular_bg_items::castle_floor.create_bg(0,0);
-    bn::regular_bg_ptr back_black = bn::regular_bg_items::velvet.create_bg(0,0);
+dungeon_return underground()
+{
+    bn::camera_ptr camera = bn::camera_ptr::create(0, 0);
+    bn::regular_bg_ptr back_floor = bn::regular_bg_items::castle_floor.create_bg(0, 0);
+    bn::regular_bg_ptr back_black = bn::regular_bg_items::velvet.create_bg(0, 0);
     back_floor.set_camera(camera);
     back_black.set_camera(camera);
 
@@ -673,8 +964,8 @@ void underground() {
     char buf[16];
     bn::sprite_text_generator file_gen(common::variable_8x16_sprite_font);
     bn::vector<bn::sprite_ptr, 16> file_spr;
-    bn::vector<bn::sprite_ptr,16> bars;
-    
+    bn::vector<bn::sprite_ptr, 16> bars;
+
     bn::rect_window external_window = bn::rect_window::external();
     external_window.set_show_bg(back_floor, false);
     external_window.set_show_bg(back_black, true);
@@ -695,28 +986,28 @@ void underground() {
 
     current_room.init(20, 20, 16, 16);
     int local[406] = {
-        4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,5,
-        2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
-        2,0,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,0,2,
-        2,0,2,0,0,0,0,0,0,2,0,2,0,0,0,0,0,2,0,2,
-        2,0,2,0,2,2,2,2,2,2,0,2,2,2,2,2,0,2,0,2,
-        2,0,2,0,2,0,0,0,0,2,0,0,0,0,0,2,0,2,0,2,
-        2,0,2,0,2,0,2,2,0,2,2,2,0,0,0,2,0,2,0,2,
-        2,0,2,0,2,0,2,0,0,2,0,3,0,3,0,2,0,2,0,2,
-        2,0,2,0,2,0,0,0,0,2,0,0,0,3,2,2,0,2,0,2,
-        2,0,2,0,0,0,0,0,0,2,0,0,0,3,0,0,0,2,0,2,
-        2,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,2,0,2,
-        2,0,2,0,2,0,3,3,3,3,3,3,3,0,0,0,0,2,0,2,
-        2,0,2,0,2,0,0,0,0,0,0,0,0,0,2,0,2,2,0,2,
-        2,0,2,0,2,0,3,3,3,3,3,3,3,0,2,0,2,0,0,2,
-        2,0,2,0,2,0,2,0,0,0,0,0,2,0,2,3,3,0,0,2,
-        2,0,2,0,2,0,2,0,0,0,0,0,2,0,2,0,0,0,0,2,
-        2,0,0,0,2,0,2,0,0,0,0,0,2,0,2,0,0,0,0,2,
-        2,0,0,0,0,0,2,2,2,0,2,2,2,2,2,0,0,0,0,2,
-        2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,
-        7,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,6
-        };
-    for (int t = 0; t < current_room.width * current_room.height; t++) {
+        4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 5,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        2, 0, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 0, 2,
+        2, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2,
+        2, 0, 2, 0, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 0, 2, 0, 2,
+        2, 0, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 2,
+        2, 0, 2, 0, 2, 0, 2, 2, 0, 2, 2, 2, 0, 0, 0, 2, 0, 2, 0, 2,
+        2, 0, 2, 0, 2, 0, 2, 0, 0, 2, 0, 3, 0, 3, 0, 2, 0, 2, 0, 2,
+        2, 0, 2, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 3, 2, 2, 0, 2, 0, 2,
+        2, 0, 2, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 2, 0, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2,
+        2, 0, 2, 0, 2, 0, 3, 3, 3, 3, 3, 3, 3, 0, 0, 0, 0, 2, 0, 2,
+        2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 2, 2, 0, 2,
+        2, 0, 2, 0, 2, 0, 3, 3, 3, 3, 3, 3, 3, 0, 2, 0, 2, 0, 0, 2,
+        2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 3, 3, 0, 0, 2,
+        2, 0, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 0, 2, 0, 2, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 0, 0, 2, 2, 2, 0, 2, 2, 2, 2, 2, 0, 0, 0, 0, 2,
+        2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+        7, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6};
+    for (int t = 0; t < current_room.width * current_room.height; t++)
+    {
         current_room.local_tileset[t] = local[t];
     }
 
@@ -729,11 +1020,13 @@ void underground() {
     maple.entity.set_camera(camera);
 
     creepy_crawly bugs[24];
-    for (int t = 0; t < 24; t++) {
+    for (int t = 0; t < 24; t++)
+    {
         bugs[t].sprite.set_camera(camera);
         int mx = (rnd.get() % (current_room.width - 6));
         int my = (rnd.get() % (current_room.height - 6));
-        while (current_room.local_tileset[mx + (my * current_room.width)] > 0) {
+        while (current_room.local_tileset[mx + (my * current_room.width)] > 0)
+        {
             mx = (rnd.get() % (current_room.width - 6));
             my = (rnd.get() % (current_room.height - 6));
         }
@@ -745,7 +1038,8 @@ void underground() {
     int p_index = 0;
     int p_size = 3;
     projectile p[3];
-    for (int t = 0; t < 3; t++) {
+    for (int t = 0; t < 3; t++)
+    {
         p[t].fireball.set_camera(camera);
         p[t].fireball.set_visible(false);
     }
@@ -760,7 +1054,8 @@ void underground() {
 
     int abx = 0;
     int aby = 0;
-    while (current_room.local_tileset[abx + (current_room.width * aby)] > 0) {
+    while (current_room.local_tileset[abx + (current_room.width * aby)] > 0)
+    {
         abx = rnd.get() % (current_room.width - 6);
         aby = rnd.get() % (current_room.height - 6);
     }
@@ -772,15 +1067,18 @@ void underground() {
     destination.set_camera(camera);
     destination.set_visible(false);
 
-    while(true) {
+    while (true)
+    {
 
         sprintf(buf, "%d", score);
-        file_spr.clear();    
-        file_gen.generate( - (countDigit(score-1) * 3), -24, buf, file_spr);
+        file_spr.clear();
+        file_gen.generate(-(countDigit(score - 1) * 3), -24, buf, file_spr);
 
         // Create projectiles
-        if (bn::keypad::r_pressed()) {
-            if (score > 50) {
+        if (bn::keypad::r_pressed())
+        {
+            if (score > 50)
+            {
                 score -= 50;
             }
             bn::sound_items::fireblast.play();
@@ -791,15 +1089,19 @@ void underground() {
             p[p_index].dur = 0;
             p[p_index].fireball.set_visible(true);
             p_index++;
-            if (p_index >= p_size) p_index = 0;
+            if (p_index >= p_size)
+                p_index = 0;
         }
 
         // Check collision
         int mx = maple.entity.x().integer();
         int my = maple.entity.y().integer();
-        if (forgiveness < 1) {
-            for (int t = 0; t < 24; t++) {
-                if (abs(mx - bugs[t].sprite.x().integer()) + abs(my - bugs[t].sprite.y().integer()) < 16) {
+        if (forgiveness < 1)
+        {
+            for (int t = 0; t < 24; t++)
+            {
+                if (abs(mx - bugs[t].sprite.x().integer()) + abs(my - bugs[t].sprite.y().integer()) < 16)
+                {
                     score -= 100;
                     bn::sound_items::squeak.play();
                     forgiveness = 2000;
@@ -807,7 +1109,8 @@ void underground() {
                     // Move the treasure
                     int abx = 0;
                     int aby = 0;
-                    while (current_room.local_tileset[abx + (current_room.width * aby)] > 0) {
+                    while (current_room.local_tileset[abx + (current_room.width * aby)] > 0)
+                    {
                         abx = rnd.get() % (current_room.width - 6);
                         aby = rnd.get() % (current_room.height - 6);
                     }
@@ -815,26 +1118,35 @@ void underground() {
                     treasure.set_visible(true);
                     bool is_done = false;
                 }
-                if (score < 0) {
+                if (score < 0)
+                {
                     score = 0;
                     maple.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
                 }
             }
-        } else {
+        }
+        else
+        {
             forgiveness = 0;
         }
 
         // Update projectiles
-        for (int t = 0; t < p_size; t++) {
-            if (p[t].active) {
-                if (p[t].dir == 3) p[t].fireball.put_above();
+        for (int t = 0; t < p_size; t++)
+        {
+            if (p[t].active)
+            {
+                if (p[t].dir == 3)
+                    p[t].fireball.put_above();
                 p[t].update();
                 int mx = p[t].fireball.x().integer();
                 int my = p[t].fireball.y().integer();
-                if (p[t].fireball.visible()) {
-                    for (int t = 0; t < 24; t++) {
+                if (p[t].fireball.visible())
+                {
+                    for (int t = 0; t < 24; t++)
+                    {
                         int distance = abs(bugs[t].sprite.y().integer() - my) + abs(bugs[t].sprite.x().integer() - mx);
-                        if (distance < 16) {
+                        if (distance < 16)
+                        {
 
                             bn::sound_items::pop.play();
 
@@ -845,7 +1157,6 @@ void underground() {
                             bugs[t].to_x = 0;
                             bugs[t].to_y = 0;
 
-                            BN_LOG("GOTEM!");
                             score += distance * 5;
                         }
                     }
@@ -855,65 +1166,81 @@ void underground() {
 
         back_black.set_position(
             (back_black.x().integer() + 1) % 256,
-            (back_black.y().integer() + 1) % 256
-            );
+            (back_black.y().integer() + 1) % 256);
         maple.update();
 
         camera.set_x(maple.entity.x());
         camera.set_y(maple.entity.y());
 
-        if (bn::keypad::r_pressed()) brightness = 200;
-        if (brightness > 4) brightness -= 4;
+        if (bn::keypad::r_pressed())
+            brightness = 200;
+        if (brightness > 4)
+            brightness -= 4;
         int x_from = maple.entity.x().integer() - 24 - (brightness);
-        int y_from = maple.entity.y().integer() -24 - (brightness);
+        int y_from = maple.entity.y().integer() - 24 - (brightness);
         int x_to = maple.entity.x().integer() + 24 + (brightness);
         int y_to = maple.entity.y().integer() + 24 + (brightness);
-        switch(maple.dir) {
-            case 0: {
-                y_to += 36;
-                break;
-            }
-            case 1: {
-                x_to += 36;
-                break;
-            }
-            case 2: {
-                x_from -= 36;
-                break;
-            }
-            case 3: {
-                y_from -= 36;
-                break;
-            }
+        switch (maple.dir)
+        {
+        case 0:
+        {
+            y_to += 36;
+            break;
+        }
+        case 1:
+        {
+            x_to += 36;
+            break;
+        }
+        case 2:
+        {
+            x_from -= 36;
+            break;
+        }
+        case 3:
+        {
+            y_from -= 36;
+            break;
+        }
         }
         internal_window.set_boundaries(y_from, x_from, y_to, x_to);
 
-        for (int t = 0; t < 24; t++) {
+        for (int t = 0; t < 24; t++)
+        {
             bugs[t].update();
-            if (bugs[t].sprite.x().integer() + 32 > x_from && bugs[t].sprite.x().integer() - 32 < x_to) {
-                if (bugs[t].sprite.y().integer() + 32 > y_from && bugs[t].sprite.y().integer() - 32 < y_to) {
-                    
+            if (bugs[t].sprite.x().integer() + 32 > x_from && bugs[t].sprite.x().integer() - 32 < x_to)
+            {
+                if (bugs[t].sprite.y().integer() + 32 > y_from && bugs[t].sprite.y().integer() - 32 < y_to)
+                {
                 }
             }
         }
 
         // Regularly update the tileset based on new camera coordinates
-        if (update_counter == 0) {
+        if (update_counter == 0)
+        {
             local_walls_p = 0;
             int f_x_a = camera.x().integer() / 32;
             int f_y_a = camera.y().integer() / 32;
             int min_y = f_y_a - 4;
-            if (min_y < 0) min_y = 0;
+            if (min_y < 0)
+                min_y = 0;
             int min_x = f_x_a - 4;
-            if (min_x < 0) min_x = 0;
+            if (min_x < 0)
+                min_x = 0;
             int max_y = f_y_a + 7;
-            if (max_y > current_room.height) max_y = current_room.height;
+            if (max_y > current_room.height)
+                max_y = current_room.height;
             int max_x = f_x_a + 7;
-            if (max_x > current_room.width) max_x = current_room.width;
-            for (int y = min_y; y < max_y; y++) {
-                for (int x = min_x; x < max_x; x++) {
+            if (max_x > current_room.width)
+                max_x = current_room.width;
+            for (int y = min_y; y < max_y; y++)
+            {
+                for (int x = min_x; x < max_x; x++)
+                {
                     int loc = current_room.local_tileset[(current_room.width * y) + x];
-                    if (local_walls_p < w_size && loc > 0) {
+                    if (local_walls_p < w_size && loc > 0)
+                    {
                         local_walls[local_walls_p].entity = bn::sprite_items::environment_stone.create_sprite(x * 32, y * 32, loc - 1);
                         local_walls[local_walls_p].entity.set_camera(camera);
                         local_walls[local_walls_p].entity.put_below();
@@ -923,9 +1250,11 @@ void underground() {
             }
         }
         update_counter++;
-        if (update_counter > 16) update_counter = 0;
+        if (update_counter > 16)
+            update_counter = 0;
 
-        if (treasure.visible()) {
+        if (treasure.visible())
+        {
             destination.set_visible(false);
             if (abs(maple.entity.x() - treasure.x()) + abs(maple.entity.y() - treasure.y()) < 16)
             {
@@ -933,174 +1262,161 @@ void underground() {
                 is_done == true;
                 treasure.set_visible(false);
             }
-        } else {
+        }
+        else
+        {
             destination.set_visible(true);
-            if (abs(maple.entity.x() - destination.x()) + abs(maple.entity.y() - destination.y()) < 16) {
+            if (abs(maple.entity.x() - destination.x()) + abs(maple.entity.y() - destination.y()) < 16)
+            {
                 bn::sound_items::cnaut.play();
-                while(true) {
+                while (true)
+                {
                     maple.update();
                     bn::core::update();
                 }
             }
         }
-        
 
         maple.entity.put_above();
         bn::core::update();
     }
 }
 
-void victory_page() {
+//9,16,4
 
-    bn::sprite_ptr victory_spr = bn::sprite_items::enoki_victory_anim.create_sprite(-48,-32);
-    bn::sprite_ptr victory_spr2 = bn::sprite_items::enoki_victory_anim.create_sprite(-48,32);
-    bn::sprite_animate_action victory_anim = bn::create_sprite_animate_action_forever(victory_spr, 3, bn::sprite_items::enoki_victory_anim.tiles_item(),
-    46,44,42,40,38,36,34,32,30,28,26,24,22,20,18,16,14,12,10,8,6,4,2,0
-    );
-    bn::sprite_animate_action victory_anim2 = bn::create_sprite_animate_action_forever(victory_spr2, 3, bn::sprite_items::enoki_victory_anim.tiles_item(),
-    47,45,43,41,39,37,35,33,31,29,27,25,23,21,19,17,15,13,11,9,7,5,3,1
-    );
-
-    int offset = 0;
-    int total = 0;
-    char buf[16];
-    char bf2[16];
-    bn::sprite_text_generator text_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 16> text_spr;
-    bn::vector<bn::sprite_ptr, 16> text_spr_2;
-    bn::vector<bn::sprite_ptr, 7> text_spr_3;
-    bn::vector<bn::sprite_ptr, 4> text_spr_4;
-
-    bn::sprite_ptr b_m1 = bn::sprite_items::power_meter.create_sprite(32,0,1);
-    bn::sprite_ptr b_m2 = bn::sprite_items::power_meter.create_sprite(64,0,1);
-    b_m1.set_scale(4,1);
-    b_m2.set_scale(4,1);
-    bn::sprite_ptr b_l = bn::sprite_items::power_meter.create_sprite(16,0,0);
-    bn::sprite_ptr b_r = bn::sprite_items::power_meter.create_sprite(80,0,2);
-    bn::sprite_ptr b_a = bn::sprite_items::power_meter.create_sprite(32,0,3);
-
-    bn::sprite_ptr arrow = bn::sprite_items::arrow.create_sprite(16,32);
-
-    bn::regular_bg_ptr background = bn::regular_bg_items::fun_background.create_bg(0,0);
-    bn::regular_bg_ptr sidebar = bn::regular_bg_items::sidebar.create_bg(0,0);
-
-    // Forest   0.065x
-    // Garden   0.13x
-    // Caves    0.023x + 2.94
-
-    int score = 770;
-    int xp = 0;
-    int new_lc = 0;
-    float new_xp = xp + (0.13 * score);
-    if (new_xp > 100) new_xp = 100;
-
-    float new_xp_d = new_xp * 0.48;
-    int new_xp_p = 0;
-    bool arrow_pos = false;
-    bool final_hit = false;
-
-    text_gen.generate(32, 32, "Restart", text_spr_3);
-    text_gen.generate(32, 48, "Exit", text_spr_4);
-
-    bn::music_items_info::span[13].first.play(bn::fixed(50) / 100);
-
-    int music_int = 0;
-    while(true) {
-        if (offset < 48 * 2) {
-            victory_anim.update();
-            victory_anim2.update();
-            offset++;
-        }
-        victory_spr = victory_anim.sprite();
-        victory_spr2 = victory_anim2.sprite();
-
-       background.set_position((background.x().integer() + 1) % 256, (background.y().integer() + 1) % 256);
-
-        if (music_int < 225) {
-            music_int++;
-        } else if (music_int == 225) {
-            bn::music::stop();
-            music_int++;
-        }
-
-        if (total < score) total += 5;
-        if (total > score) total = score;
-        if (new_xp_p < new_xp) new_xp_p += 5;
-        if (new_xp_p > new_xp) new_xp_p = new_xp;
-
-        sprintf(buf, "Score:     %d", total);
-        sprintf(bf2, "XP Earned: %d", new_xp_p);
-        text_spr.clear();    
-        text_spr_2.clear();
-        text_gen.generate(8, -64, buf, text_spr);
-        text_gen.generate(8, -48, bf2, text_spr_2);
-
-        if (new_lc < new_xp_d) {
-            new_lc++;
-            bn::sound_items::start.play();
-        }
-        else if (!final_hit) {
-            final_hit = true;
-            total = score;
-            bn::sound_items::firecrackle.play();
-        }
-        b_a.set_x(new_lc + 32);
-
-        if (bn::keypad::up_pressed() || bn::keypad::down_pressed()) {
-            bn::sound_items::pop.play();
-            arrow_pos = !arrow_pos;
-        }
-
-        if (arrow_pos) arrow.set_y(48);
-        else arrow.set_y(32);
-
-        bn::core::update();
-    }
-}
-
-int main()
+void core_gameplay(int x, int y, int world, int until, bool force = false, int force_char = 0)
 {
-    bn::core::init();           // Initialize Butano libraries
 
-    //bg_test();
-
-    startup();
-    load_save();
-    bn::sram::read(so);         // Read save data from cartridge
-
-    dungeon_return dt(9,16,4);
-    if (so.spawn_x == -1 && so.spawn_y == -1) {
-        dt.spawn_x = 9;
-        dt.spawn_y = 16;
-        dt.world_index = 4;
-    } else {
+    // Configure defaults
+    dungeon_return dt(x, y, world);
+    if ((so.spawn_x < 1 && so.spawn_y < 1) || force)
+    {
+        if (so.last_char_id == -1)
+            so.last_char_id = force_char;
+        dt.spawn_x = x;
+        dt.spawn_y = y;
+        dt.world_index = world;
+    }
+    else
+    {
         dt.spawn_x = so.spawn_x;
         dt.spawn_y = so.spawn_y;
         dt.world_index = so.world_index;
     }
 
-    dungeon_return dt2 = dungeon(dt, so, false);
-    while (!(dt2.spawn_x == 0 && dt2.spawn_y == 0)) {
-        bn::core::update();
+    // Execute until time to leave
+    do
+    {
 
-        if (dt2.world_index == 5 && so.spring_housewarming < 1) {
-            exec_dialogue(18);
-            so.spring_housewarming = 1;
+        // if minigame....
+        if (dt.world_index == 99)
+        {
+            bn::core::update();
+
+            switch (dt.spawn_x)
+            {
+            case 1:
+            {
+                dt = tree_cut();
+                break;
+            }
+            case 2:
+            {
+                dt = rabbit_game();
+                break;
+            }
+            case 3:
+            {
+                dt = underground();
+                break;
+            }
+            };
+        }
+        else
+        {
+
+            // if legit world....
+            dt = dungeon(dt, so, false);
         }
 
-        dungeon_return dt3 = dungeon(dt2, so, true);
-        dt2.spawn_x = dt3.spawn_x;
-        dt2.spawn_y = dt3.spawn_y;
-        dt2.world_index = dt3.world_index;
-        so.spawn_x = dt3.spawn_x;
-        so.spawn_y = dt3.spawn_y;
-        so.world_index = dt3.world_index;
         bn::sram::write(so);
+        bn::core::update();
+    } while (!(dt.world_index == until));
+}
+
+int checkpoint(int level)
+{
+
+    if (so.checkpoint < 1)
+    {
+        so.checkpoint = 1;
+        level = 1;
     }
 
-    victory_page();
+    switch (level)
+    {
+
+    // Introduction
+    case 0:
+        exec_dialogue(0);
+        exec_dialogue(1);
+        exec_dialogue(2);
+        introduction();
+        cutscenes(0);
+        exec_dialogue(13);
+        cutscenes(1);
+        exec_dialogue(14);
+        keyboard();
+        exec_dialogue(15);
+        break;
+
+    // Spring
+    case 1:
+        exec_dialogue(16);
+        core_gameplay(9, 16, 4, 5, true);
+        break;
+    case 2:
+        bn::music_items_info::span[8].first.play(bn::fixed(50) / 100);
+        exec_dialogue(18);
+        break;
+    case 3:
+        core_gameplay(5, 3, 5, 4, true);
+        break;
+    case 4:
+        core_gameplay(9, 6, 4, 7);
+    default:
+        return -1;
+        break;
+    }
+    bn::core::update();
+    return level + 1;
+}
+
+int main()
+{
+    bn::core::init(); // Initialize Butano libraries
+
+    //bg_test();
+
     /*
-    
+    startup();
+    load_save();
+    */
+
+    /*
+    dungeon_return dt(7,3,6);
+    dt.spawn_x = 7;
+    dt.spawn_y = 3;
+    dt.world_index = 6;
+    dungeon(dt, so, false);
+    */
+
+    bn::sram::read(so);         // Read save data from cartridge
+    while (so.checkpoint < 99) {
+        so.checkpoint = checkpoint(so.checkpoint);
+    }
+
+    /*    
     exec_dialogue(16);
     dungeon_return dt(0,0,0);
     dt.spawn_x = 0;

@@ -22,6 +22,12 @@ namespace bn::music_items_info
         make_pair(music_item(11), string_view("z03_overworld")),
         make_pair(music_item(12), string_view("z04_underground")),
         make_pair(music_item(13), string_view("z05_victory")),
+        make_pair(music_item(14), string_view("z06_dangerous")),
+        make_pair(music_item(15), string_view("z07_frog")),
+        make_pair(music_item(16), string_view("z08_rain")),
+        make_pair(music_item(17), string_view("z09_scout_lab")),
+        make_pair(music_item(18), string_view("z10_enoki_theme")),
+        make_pair(music_item(19), string_view("z11_maple_theme")),
     };
 
     constexpr inline span<const pair<music_item, string_view>> span(array);
