@@ -25,9 +25,6 @@ namespace bn::sound_items_info
         make_pair(sound_item(39), string_view("ui_sfx02")),
         make_pair(sound_item(40), string_view("ui_sfx03")),
         make_pair(sound_item(90), string_view("z08_rain")),
-        make_pair(sound_item(98), string_view("z10_enoki_theme")),
-        make_pair(sound_item(103), string_view("z11_maple_theme")),
-        make_pair(sound_item(106), string_view("z3_overworld_01")),
     };
 
     constexpr inline span<const pair<sound_item, string_view>> span(array);

@@ -1307,6 +1307,16 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
                         }
                         break;
                     };
+
+                    case 24: {
+                        if (me == 2) {
+                            dt.spawn_x = 1;
+                            dt.spawn_y = 0;
+                            dt.world_index = 99;
+                            return dt;
+                        }
+                        break;
+                    };
                 }
             }
         }

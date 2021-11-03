@@ -1,0 +1,1 @@
+axe_game_bg_bn_graphics.o: axe_game_bg_bn_graphics.s

@@ -57,16 +57,24 @@
 #include "wander.h"
 #include "keyboard.h"
 
+#include "bn_sprite_items_b_button.h"
+
 // tree cut
 #include "bn_sprite_items_horizontal_bar.h"
 #include "bn_sprite_items_chop_bar.h"
 #include "bn_sprite_items_ax_bar.h"
+
 #include "bn_sprite_items_enoki_victory_anim.h"
+#include "bn_sprite_items_aaron_victory_anim.h"
+
 #include "bn_sprite_items_power_meter.h"
 #include "bn_regular_bg_items_fun_background.h"
 #include "bn_regular_bg_items_sidebar.h"
 #include "bn_regular_bg_items_garden_bg.h"
 #include "bn_sprite_items_bunbun.h"
+#include "bn_sprite_items_aaron_axe_anim.h"
+#include "bn_regular_bg_items_axe_game_bg.h"
+#include "bn_sprite_items_tree_stump.h"
 
 static struct save_struct so;
 constexpr bool fals = false;
@@ -316,9 +324,19 @@ bool victory_page(int chari, int score)
     bn::sprite_ptr victory_spr = bn::sprite_items::enoki_victory_anim.create_sprite(-48, -32);
     bn::sprite_ptr victory_spr2 = bn::sprite_items::enoki_victory_anim.create_sprite(-48, 32);
     bn::sprite_animate_action victory_anim = bn::create_sprite_animate_action_forever(victory_spr, 3, bn::sprite_items::enoki_victory_anim.tiles_item(),
-                                                                                      46, 44, 42, 40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0);
+                                                                                            46, 44, 42, 40, 38, 36, 34, 32, 30, 28, 26, 24, 22, 20, 18, 16, 14, 12, 10, 8, 6, 4, 2, 0);
     bn::sprite_animate_action victory_anim2 = bn::create_sprite_animate_action_forever(victory_spr2, 3, bn::sprite_items::enoki_victory_anim.tiles_item(),
-                                                                                       47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 27, 25, 23, 21, 19, 17, 15, 13, 11, 9, 7, 5, 3, 1);
+                                                                                            47, 45, 43, 41, 39, 37, 35, 33, 31, 29, 27, 25, 23, 21, 19, 17, 15, 13, 11, 9, 7, 5, 3, 1);
+
+    switch (chari) {
+        case 2: {
+            victory_anim = bn::create_sprite_animate_action_forever(victory_spr, 3, bn::sprite_items::aaron_victory_anim.tiles_item(),
+                                                                                            0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30);
+            victory_anim2 = bn::create_sprite_animate_action_forever(victory_spr2, 3, bn::sprite_items::aaron_victory_anim.tiles_item(),
+                                                                                            1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 31, 31, 31, 31, 31, 31, 31, 31);
+            break;
+        }
+    }
 
     int offset = 0;
     int total = 0;
@@ -350,7 +368,11 @@ bool victory_page(int chari, int score)
     {
     case 1:
     { // Garden
-        modifier = 0.06;
+        modifier = 0.065;
+        break;
+    }
+    case 2: {
+        modifier = 0.065;
         break;
     }
     }
@@ -384,6 +406,15 @@ bool victory_page(int chari, int score)
             victory_anim2.update();
             offset++;
         }
+        
+        switch (chari) {
+            case 2: {
+                victory_spr.set_palette(bn::sprite_items::aaron_victory_anim.palette_item());
+                victory_spr2.set_palette(bn::sprite_items::aaron_victory_anim.palette_item());
+                break;
+            }
+        }
+
         victory_spr = victory_anim.sprite();
         victory_spr2 = victory_anim2.sprite();
 
@@ -436,137 +467,239 @@ bool victory_page(int chari, int score)
 
 dungeon_return tree_cut()
 {
-    auto cursor = bn::sprite_items::ax_bar.create_sprite(0, 0);
-
-    int score = 100;
-    char buf[16];
-    char bf2[16];
-    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 16> file1_spr;
-    bn::vector<bn::sprite_ptr, 16> file2_spr;
-
-    bn::vector<bn::sprite_ptr, 16> bars;
-    bn::vector<bn::sprite_ptr, 16> chop;
-    bn::random random;
-    for (int t = 0; t < 14; t++)
-        bars.push_back(bn::sprite_items::horizontal_bar.create_sprite(((t - 7) * 8) + 4, 0));
-
-    float curs = 0;
-    int width = 16;
-    int calc_width = width * 4;
-    int max_chop = 4;
-    int hits = 1;
-    bool left = false;
+    bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
+    int score = 0;
     int total = 0;
-    for (int t = 0; t < max_chop; t++)
-    {
-        int x_pos = -(calc_width / 2) + (random.get() % calc_width);
-        x_pos = (x_pos / 16) * 16;
-        chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
-    }
+    bool can_have_sp = false;
 
-    while (true)
-    {
+    if (true) {
+        auto cursor = bn::sprite_items::ax_bar.create_sprite(0, 0);
+        auto axe_bg = bn::regular_bg_items::axe_game_bg.create_bg(0,0);
+        char buf[16];
+        char bf2[16];
+        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 16> file1_spr;
+        bn::vector<bn::sprite_ptr, 16> file2_spr;
 
-        sprintf(buf, "Score: %d", score);
-        sprintf(bf2, "Total: %d", total);
-        file1_spr.clear();
-        file2_spr.clear();
-        file1_gen.generate(-114, -70, buf, file1_spr);
-        file1_gen.generate(-114, -58, bf2, file2_spr);
+        bn::vector<bn::sprite_ptr, 16> bars;
+        bn::vector<bn::sprite_ptr, 16> chop;
+        bn::random random;
+        for (int t = 0; t < 14; t++)
+            bars.push_back(bn::sprite_items::horizontal_bar.create_sprite(((t - 7) * 8) + 4, 0));
 
-        curs += 1 + (score / 200);
-        if (curs > 200)
-            curs = 0;
-        float curs_f = curs;
-        int curs_i = curs_f / 32;
-        int dir = ((curs) / 20);
-        int curs_loc = sin(curs_f / 32) * calc_width;
+        auto sq1_spr = bn::sprite_items::aaron_axe_anim.create_sprite(-64 - 48,-16);
+        auto sq1 = bn::create_sprite_animate_action_forever(sq1_spr, 4, bn::sprite_items::aaron_axe_anim.tiles_item(), 0, 0, 0, 12, 14, 16, 18, 20, 4, 14, 12);
 
-        if (score > total)
-            total = score;
+        auto sq2_spr = bn::sprite_items::aaron_axe_anim.create_sprite(-64 - 48,-16 + 64);
+        auto sq2 = bn::create_sprite_animate_action_forever(sq2_spr, 4, bn::sprite_items::aaron_axe_anim.tiles_item(), 1, 1, 1, 13, 15, 17, 19, 21, 5, 15, 13);
 
-        if (dir > 2 && dir < 8)
-        { //left
-            if (bn::keypad::a_held())
-            {
-                cursor.set_scale(1.1);
-            }
-            else
-            {
-                cursor.set_scale(1);
-            }
-            cursor.put_above();
-            left = true;
-        }
-        else
-        { // right
-            if (left)
-            {
-                cursor.set_scale(0.9);
-                for (int t = 0; t < max_chop; t++)
-                {
-                    if (chop.at(t).visible())
-                        score = score / 2;
-                }
+        auto sq3_spr = bn::sprite_items::aaron_axe_anim.create_sprite(- 48,-16);
+        auto sq3 = bn::create_sprite_animate_action_forever(sq3_spr, 4, bn::sprite_items::aaron_axe_anim.tiles_item(), 28, 28, 28, 40, 42, 44, 46, 48, 32, 42, 40);
 
-                hits = 1;
-                bn::sound_items::ui_sfx01.play();
-                chop.clear();
-                max_chop = 4 + (score / 1000);
-                if (max_chop > 16)
-                    max_chop = 16;
+        auto sq4_spr = bn::sprite_items::aaron_axe_anim.create_sprite(- 48,-16 + 64);
+        auto sq4 = bn::create_sprite_animate_action_forever(sq4_spr, 4, bn::sprite_items::aaron_axe_anim.tiles_item(), 29, 29, 29, 41, 43, 45, 47, 49, 33, 43, 41);
 
-                for (int t = 0; t < max_chop; t++)
-                {
-                    int x_pos = -(calc_width / 2) + (random.get() % calc_width);
-                    x_pos = (x_pos / 4) * 4;
-                    chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
-                }
-            }
-            cursor.put_below();
-            left = false;
-        }
+        auto sq1_sw = bn::create_sprite_animate_action_once(sq1_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 26, 6, 8, 10);
+        auto sq2_sw = bn::create_sprite_animate_action_once(sq2_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 27, 7, 9, 11);
+        auto sq3_sw = bn::create_sprite_animate_action_once(sq3_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 38, 34, 36, 36);
+        auto sq4_sw = bn::create_sprite_animate_action_once(sq4_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 39, 35, 37, 37);
+
+        auto b_button = bn::sprite_items::b_button.create_sprite(90,-50);
+        b_button.set_visible(false);
+
+        auto stump = bn::sprite_items::tree_stump.create_sprite(-32,39,0);
+
+        float curs = 0;
+        int width = 16;
+        int calc_width = width * 4;
+        int max_chop = 4;
+        int hits = 1;
+        bool left = false;
+        int wood_stage = 0;
 
         for (int t = 0; t < max_chop; t++)
         {
-            if (left)
-            {
-                if (chop.at(t).visible() && chop.at(t).x().integer() > curs_loc - 6)
-                {
-                    //chop.at(t).set_visible(false);
-                    //score = 0;
-                }
-            }
+            int x_pos = -(calc_width / 2) + (random.get() % calc_width);
+            x_pos = (x_pos / 16) * 16;
+            chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
         }
 
-        if (bn::keypad::a_pressed() && left)
+        while (!bn::keypad::b_pressed())
         {
-            bool penalty = true;
-            for (int t = 0; t < max_chop; t++)
-            {
-                int c_x = chop.at(t).x().integer();
-                if (curs_loc + 8 > c_x - 16 && curs_loc + 8 < c_x + 16)
-                {
-                    chop.at(t).set_visible(false);
-                    if (hits < 5)
-                    {
-                        bn::sound_items::firehit.play();
-                        hits++;
+
+            switch (wood_stage) {
+                case 0: {
+                    stump = bn::sprite_items::tree_stump.create_sprite(-32,38,0);
+                    wood_stage += 1;
+                    break;
+                }
+                case 1: {
+                    stump.set_y(39);
+                    wood_stage += 1;
+                    break;
+                }
+                case 2: {
+                    if (bn::keypad::a_held()) {
+                        stump = bn::sprite_items::tree_stump.create_sprite(-32,39,1);
+                        wood_stage += 1;
                     }
-                    score += hits;
-                    penalty = false;
+                    break;
+                }
+                case 3: {
+                    break;
+                }
+                case 4: {
+                    stump = bn::sprite_items::tree_stump.create_sprite(-32,39,2);
+                    wood_stage += 1;
+                    break;
+                }
+                case 5: {
+                    stump.set_y(stump.y() + 4);
+                    if (stump.y().integer() > 128) wood_stage += 1;
+                    break;
+                }
+                case 6: {
+                    stump = bn::sprite_items::tree_stump.create_sprite(-32,38,0);
+                    bn::sound_items::pop.play();
+                    wood_stage = 1;
                 }
             }
-            if (penalty)
-            {
-                score -= (score / 5);
+
+            if (!can_have_sp && score > 100) {
+                bn::sound_items::squeak.play();
+                b_button.set_visible(true);
+                can_have_sp = true;
             }
+
+            if (bn::keypad::a_released()) {
+                sq1_sw = bn::create_sprite_animate_action_once(sq1_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 26, 6, 8, 10);
+                sq2_sw = bn::create_sprite_animate_action_once(sq2_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 27, 7, 9, 11);
+                sq3_sw = bn::create_sprite_animate_action_once(sq3_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 38, 34, 36, 36);
+                sq4_sw = bn::create_sprite_animate_action_once(sq4_spr, 1, bn::sprite_items::aaron_axe_anim.tiles_item(), 39, 35, 37, 37);
+            }
+
+            if (bn::keypad::a_held()) {
+                sq1_spr = sq1_sw.sprite();
+                sq2_spr = sq2_sw.sprite();
+                sq3_spr = sq3_sw.sprite();
+                sq4_spr = sq4_sw.sprite();
+                if (!sq1_sw.done()) {
+                    sq1_sw.update();
+                    sq2_sw.update();
+                    sq3_sw.update();
+                    sq4_sw.update();
+                }
+            } else {
+                sq1_spr = sq1.sprite();
+                sq2_spr = sq2.sprite();
+                sq3_spr = sq3.sprite();
+                sq4_spr = sq4.sprite();
+                sq1.update();
+                sq2.update();
+                sq3.update();
+                sq4.update();
+            }
+
+            sprintf(buf, "Score: %d", score);
+            sprintf(bf2, "Total: %d", total);
+            file1_spr.clear();
+            file2_spr.clear();
+            file1_gen.generate(-114, -70, buf, file1_spr);
+            file1_gen.generate(-114, -58, bf2, file2_spr);
+
+            curs += 1 + (score / 200);
+            if (curs > 200)
+                curs = 0;
+            float curs_f = curs;
+            int curs_i = curs_f / 32;
+            int dir = ((curs) / 20);
+            int curs_loc = sin(curs_f / 32) * calc_width;
+
+            if (score > total)
+                total = score;
+
+            if (dir > 2 && dir < 8)
+            { //left
+                if (bn::keypad::a_held())
+                {
+                    cursor.set_scale(1.1);
+                }
+                else
+                {
+                    cursor.set_scale(1);
+                }
+                cursor.put_above();
+                left = true;
+            }
+            else
+            { // right
+                if (left)
+                {
+                    cursor.set_scale(0.9);
+                    for (int t = 0; t < max_chop; t++)
+                    {
+                        if (chop.at(t).visible())
+                            score = score / 2;
+                    }
+
+                    hits = 1;
+                    bn::sound_items::ui_sfx01.play();
+                    chop.clear();
+                    max_chop = 4 + (score / 1000);
+                    if (max_chop > 16)
+                        max_chop = 16;
+
+                    for (int t = 0; t < max_chop; t++)
+                    {
+                        int x_pos = -(calc_width / 2) + (random.get() % calc_width);
+                        x_pos = (x_pos / 4) * 4;
+                        chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
+                    }
+                }
+                cursor.put_below();
+                left = false;
+            }
+
+            if (bn::keypad::a_pressed() && left)
+            {
+                bool penalty = true;
+                for (int t = 0; t < max_chop; t++)
+                {
+                    int c_x = chop.at(t).x().integer();
+                    if (curs_loc + 8 > c_x - 16 && curs_loc + 8 < c_x + 16)
+                    {
+                        chop.at(t).set_visible(false);
+                        if (hits < 5)
+                        {
+                            bn::sound_items::firehit.play();
+                            hits++;
+                        }
+                        score += hits;
+                        penalty = false;
+
+                        if (t == max_chop - 1 && wood_stage < 4) {
+                            wood_stage = 4;
+                        }
+                    }
+                }
+                if (penalty)
+                {
+                    score -= (score / 5);
+                }
+            }
+
+            cursor.set_x(curs_loc);
+            bn::core::update();
         }
 
-        cursor.set_x(curs_loc);
-        bn::core::update();
     }
+    
+    if (can_have_sp) {
+        victory_page(2, total);
+    }
+
+    dungeon_return dt(9, 1, 4);
+    return dt;
 }
 
 class rabbit

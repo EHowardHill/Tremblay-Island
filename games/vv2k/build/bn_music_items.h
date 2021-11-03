@@ -25,6 +25,7 @@ namespace bn::music_items
     constexpr inline music_item z09_scout_lab(17);
     constexpr inline music_item z10_enoki_theme(18);
     constexpr inline music_item z11_maple_theme(19);
+    constexpr inline music_item z12_aaron_theme(20);
 }
 
 #endif
