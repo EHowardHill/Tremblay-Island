@@ -1447,7 +1447,7 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
                 case 22:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  WHOP CHOPPING SPOT               Where wood is chopped"},
+                        {true, true, 00, "                                                                  WOOD CHOPPING SPOT               Where wood is chopped"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
