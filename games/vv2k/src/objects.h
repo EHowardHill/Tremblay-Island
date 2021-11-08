@@ -35,7 +35,6 @@ struct save_struct {
     int spawn_y = 0;
     int world_index = 0;
     int xp = 0;
-
     int spring_housewarming = 0;
 };
 

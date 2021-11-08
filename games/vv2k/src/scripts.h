@@ -231,12 +231,12 @@ int exec_dialogue(int x) {
                 {fals, true, 0, "                                 I'm not sure if it's sell-every- thing-I-own cute, but..."},
                 {fals, true, 0, "                                 J'suppose the thought of living  on an island and having no debt  is pretty cool."},        
                 {fals, true, 0, "S03:02"},
-                {fals, true, 0, "                                                                  MAPLE                            How much was the ferry again?    10 dollars?"},
-                {fals, true, 0, "                                                                  OLD SAILOR                       Aye lass, but aye've got one     warnin' fer ye befer ye dock."},
-                {fals, true, 0, "                                                                  MAPLE                            Oh dear, what?"},
-                {fals, true, 0, "                                                                  OLD SAILOR                       Keep yer wits about 'ye, ye neverknow who might go to stab ye."},
-                {fals, true, 0, "                                                                  MAPLE                            Will you take a 20?"},
-                {fals, true, 0, "                                                                  OLD SAILOR                       Aye, I can cut a 20."},
+                {fals, true, 0, "MAPLE                            How much was the ferry again?    10 dollars?"},
+                {fals, true, 0, "OLD SAILOR                       Aye lass, but aye've got one     warnin' fer ye befer ye dock."},
+                {fals, true, 0, "MAPLE                            Oh dear, what?"},
+                {fals, true, 0, "OLD SAILOR                       Keep yer wits about 'ye, ye neverknow who might go to stab ye."},
+                {fals, true, 0, "MAPLE                            Will you take a 20?"},
+                {fals, true, 0, "OLD SAILOR                       Aye, I can cut a 20."},
                 {fals, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
@@ -274,81 +274,85 @@ int exec_dialogue(int x) {
 
         case 17: {
             line lc[32] = {
-                {fals, true, 0, "BG: 1"},
-                {fals, true, 0, "MAPLE                            Bonjour? Anyone here?"},
-                {fals, true, 0, "SCOUT                            Shhhh! I just got the radar up   and running! It's very sensitive!"},
-                {fals, true, 0, "MAPLE                            Who are you?"},
-                {fals, true, 0, "SCOUT                            You must be Maple Tremblay,      right? Aaron's little sister?    I'm Scout Williams."},
-                {fals, true, 0, "MAPLE                            Do you, uh, have this whole      underground thing to yourself?"},
-                {fals, true, 0, "SCOUT                            Yeah, I, er- It's sort of top    secret, but you're not the kind  to share secrets, are you?"},
-                {fals, true, 0, "MAPLE                            I-"},
-                {fals, true, 0, "SCOUT                            So this company hired me to studysoil and stuff on this island,   and then they.. forgot about me."},
-                {fals, true, 0, "SCOUT                            They still send a paycheck thoughso I don't see a reason to leave."},
-                {fals, true, 0, "SCOUT                            I'm starting to think it's some  weird sociology experiment or    something."},
-                {fals, true, 0, "MAPLE                            Paid to do absolutely nothing?   That sounds like something I     could get behind."},
-                {fals, true, 0, "SCOUT                            It gets so lonely up here though.I'm so glad your family showed   up here."},
-                {fals, true, 0, "SCOUT                            They were talkin' all this about a 'new country' or whatever, but they said I could be a Lord or a Duke or something."},
-                {fals, true, 0, "MAPLE                            Oh?"},
-                {fals, true, 0, "SCOUT                            I said as long as I got to be    court magician, I wouldn't ask   for anything else."},
-                {fals, true, 0, "MAPLE                            Yeah, you seem like the type."}
+                {fals, fals, 0,  "BG: Trailer Home"},
+                {true, true, 22, "ENOKI                            Well.. First day is done! I thinktoday was a lot of fun."},
+                {true, fals, 17, "MAPLE                            You know what? I think I agree.  This is the most interesting day I've had in a while."},
+                {true, true, 24, "AARON                            Ready to change your mind about  this having been a bad idea?"},
+                {fals, fals, 16, "MAPLE                            I've only been here a day, I'll  give it some time before I make  my final judgement."},
+                {fals, true, 25, "AARON                            Well, we're happy to have you.   I'm sorry, we only have a couch, but I'm working on a new home."},
+                {fals, fals, 18, "MAPLE                            Oh, I slept on my couch back at  my old apartment all the time.   No need to worry."},
+                {true, true, 20, "ENOKI                            Aw, you slept on a couch?"},
+                {fals, fals, 16, "MAPLE                            It was a really nice couch."},
+                {true, true, 26, "AARON                            Anyway, we're gonna get some     sleep. I've been chopping wood   all day and I'm tired."},
+                {fals, true, 24, "AARON                            See you tomorrow?"},
+                {true, true, 22, "ENOKI                            I'm sure I'll find more stuff to do!"},
+                {fals, fals, 15, "MAPLE                            Thanks again. I'll do my best to not be a butt about all this.    Goodnight, y'all."},
+                {fals, true, 22, "ENOKI                            Bonne nuit!"},
+                {fals, fals, 0, "COM: Endscene"}
             };
-        };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
 
         case 19: {
             line lc[32] = {
-                {fals, true, 0, "BG: 1"},
-                {fals, true, 0, "SCOUT                            Oh, hey Enoki! How's it going?"},
-                {fals, true, 0, "ENOKI                            Really good!! It's perfect       outside today. Whatcha' workin'  on?"},
-                {fals, true, 0, "SCOUT                            Right now? I've got this idea forthis robot that's half-bat,      half-fly swatter."},
-                {fals, true, 0, "SCOUT                            Bats like insects, right? So thisis going to both eat and squash  insects."},
-                {fals, true, 0, "ENOKI                            Are you calling it Smackula?"},
-                {fals, true, 0, "SCOUT                            I.. most certainly can."},
-                {fals, true, 0, "ENOKI                            By royal degree, I declare that ithereby be referred to as the    'Smackula'."},
-                {fals, true, 0, "ENOKI                            Or maybe the 'Smackchula', that   way something finally rhymes    with Spatula."},
-                {fals, true, 0, "SCOUT                            We're solving the world's true    issues on Tremblay Island."}
+                {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  "S04:01"},
+                {fals, fals, 0,  "                                 Ugh.. My head.                   Why can't I sleep?"},
+                {fals, fals, 0,  "                                 Aren't you supposed to be able tosleep easier after a long day of travel and manual labor?"},
+                {fals, fals, 0,  "                                 And where's that light coming    from outside? Probably Scout or  something."},
+                {fals, fals, 0,  "                                 Maybe I should go on a walk and  check it out."},
+                {fals, fals, 0,  "S04:02"},
+                {fals, fals, 0,  "                                 What the-                        is that a Mons d'Plonj? Is he    writing something?"},
+                {fals, fals, 0,  "                                 I guess I should go check it out.Before something bad happens."},
+                {fals, fals, 0,  "S04:03"},
+                {fals, fals, 0,  "                                 Hmmm, hmmm... hmmm...."},
+                {fals, fals, 0,  "S04:04"},
+                {fals, fals, 0,  "MAPLE                            HEY! IDENTIFY YOURSELF, OR I'LL  BURN YOUR FACE OFF!"},
+                {fals, fals, 0,  "S04:05"},
+                {fals, fals, 0,  "                                 AHHHH?!"},
+                {fals, fals, 0,  "                                 AH, UH.. UH, RUFUS!              RUFUS THIBODEAUX!"},
+                {fals, fals, 0,  "                                 DON'T BURN MY FACE OFF, I NEED   THAT!"},
+                {fals, fals, 0, "COM: Endscene"}
             };
-        };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
 
         case 20: {
             line lc[32] = {
-                {fals, true, 0, "BG: 1"},
-                {fals, true, 0, "SCOUT                            Oh, hey Aaron! How've you been?"},
-                {fals, true, 0, "AARON                            Good, I'm just really tired. I    think I underestimated how much wood I'd be chopping."},
-                {fals, true, 0, "AARON                            I'm making boards, too. I plan on having some houses up and about a quarter of the woods levelled."},
-                {fals, true, 0, "SCOUT                            How many people are coming here,  do you think?"},
-                {fals, true, 0, "AARON                            I don't know.. maybe eight? Nine?"},
-                {fals, true, 0, "AARON                            Do you know anyone who' want to   live here, too?"},
-                {fals, true, 0, "SCOUT                            No, not really."},
-                {fals, true, 0, "AARON                            Are you still talking to that one girl?"},
-                {fals, true, 0, "SCOUT                            Nah, I lied about her, she doesn'texist."},
-                {fals, true, 0, "SCOUT                            I'll be straight with you, I don'treally  have.. friends, outside of y'all."},
-                {fals, true, 0, "SCOUT                            But it's cool. I've got cable."},
-                {fals, true, 0, "AARON                            I'm gonna build those houses, and we'll get some more people here.I'm looking forward to having.."},
-                {fals, true, 0, "AARON                            You understand, having a group."},
-                {fals, true, 0, "AARON                            I suppose making an island        community is a bit unorthodox."},
-                {fals, true, 0, "SCOUT                            So, What are you gonna do when those  people come?"},
-                {fals, true, 0, "AARON                            I... don't know to be honest."},
-                {fals, true, 0, "AARON                            Probably chop more wood."},
-                {fals, true, 0, "SCOUT                            You're worried about me all the   time down here but now I'm      thinking I should be more worriedabout you."},
-                {fals, true, 0, "SCOUT                            Take it easy, alright?"},
-                {fals, true, 0, "AARON                            Got it. You too."}
+                {fals, fals, 0,  "BG: frog"},
+                {fals, fals, 0,  "S04:06"},
+                {fals, fals, 0,  "MAPLE                            Oh, so you're /that/ Rufus? Del'scousin, right? I'm Maple."},
+                {fals, fals, 0,  "RUFUS                            Oh, you're the fire elf, right?  Wish I knew that earlier when I  was trying to get this fire      started."},
+                {fals, fals, 0,  "MAPLE                            What are you doing here?"},
+                {fals, fals, 0,  "RUFUS                            Just checking things out. I've   got my eye on the Bill & Jim     Islands next door."},
+                {fals, fals, 0,  "RUFUS                            I really like the idea of just   having my own place and not      having to talk to anyone."},
+                {fals, fals, 0,  "RUFUS                            I'm just worried this whole      'private island' thing is...     kind of foolhardy."},
+                {fals, fals, 0,  "RUFUS                            Everyone this close to Quebec    speaks with that annoying accent,too."},
+                {fals, fals, 0,  "MAPLE                            That's what I was afraid of, too.Enoki is great, but that accent  wears on me sometimes."},
+                {fals, fals, 0,  "MAPLE                            I'm starting to hear a little    Quebec in Aaron's voice, too.    It bothers me."},
+                {fals, fals, 0,  "MAPLE                            So what are you writing?"},
+                {fals, fals, 0,  "RUFUS                            ...                              You're going to think it's       dumb. It's a drawing."},
+                {fals, fals, 0,  "MAPLE                            Look, I just sold everything I   owned to move to this stupid     island, your drawing isn't dumb."},  
+                {fals, fals, 0,  "RUFUS                            ...Okay, it's a frog. I saw this picture of a frog when I was a   kid, and I don't know why, but itmakes me nostalgic."},
+                {fals, fals, 0,  "RUFUS                            I can't quite remember what it   looked like though, so I keep    trying. I don't know why but it'ssomething I just have to do."},  
+                {fals, fals, 0,  "MAPLE                            Yeah, that is pretty dumb, but   I think I get what you mean."},
+                {fals, fals, 0,  "MAPLE                            Hey, I know it's not my place to offer, but you got a place to    sleep? I know it's cold out, but we have a bathtub."},
+                {fals, fals, 0,  "RUFUS                            Oh it's fine, I'll be gone in themorning, I don't really want to  interact with anyone else. You   seem reasonable, though."},
+                {fals, fals, 0,  "MAPLE                            You too. It was kind of nice to  find someone with any sense to   chat for a little while."},
+                {fals, fals, 0,  "S04:07"},
+                {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  "MAPLE                            You take care of yourself,       alright? Ravi de vous rencontrer,Rufus."},
+                {fals, fals, 0,  "RUFUS                            You too! Ravi de vous rencontrer,Maple."},
+                {fals, fals, 0, "COM: Endscene"}
             };
-        };
-
-        case 21: {
-            line lc[32] = {
-                {fals, true, 0, "BG: 1"},
-                {fals, true, 0, "SCOUT                            You need anything, just let me    know, alright?"}
-            };
-        };
-
-        case 22: {
-            line lc[32] = {
-                {fals, true, 0, "BG: 1"},
-                {fals, true, 0, "ENOKI                            So, do you wanna go do somethin'?"},
-                {fals, true, 0, "MAPLE                            I just got here, I think I might just want to relax a bit."}
-            };
-        };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
         
         default: {
             return 1;

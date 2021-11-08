@@ -29,6 +29,8 @@ namespace bn::music_items_info
         make_pair(music_item(18), string_view("z10_enoki_theme")),
         make_pair(music_item(19), string_view("z11_maple_theme")),
         make_pair(music_item(20), string_view("z12_aaron_theme")),
+        make_pair(music_item(21), string_view("z12_overworld_night")),
+        make_pair(music_item(22), string_view("z13_spooky")),
     };
 
     constexpr inline span<const pair<music_item, string_view>> span(array);

@@ -82,9 +82,19 @@
 #include "bn_regular_bg_items_s0301.h"
 #include "bn_regular_bg_items_s0302.h"
 
+#include "bn_regular_bg_items_s0401.h"
+#include "bn_regular_bg_items_s0402.h"
+#include "bn_regular_bg_items_s0403.h"
+#include "bn_regular_bg_items_s0404.h"
+#include "bn_regular_bg_items_s0405.h"
+#include "bn_regular_bg_items_s0406.h"
+#include "bn_regular_bg_items_s0407.h"
+
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
 #include "bn_regular_bg_items_day_castle.h"
+
+#include "bn_sprite_items_dialogue_bg_2.h"
 
 // Set pointer by integer reference
 void set_sprite(bn::sprite_ptr chari, int value) {
@@ -194,29 +204,44 @@ void dialogue_page(line n[32]) {
     bn::regular_bg_ptr dialogue_bg = bn::regular_bg_items::dialogue_bg.create_bg(0, 0);
     dialogue_bg.set_visible(false);
 
+    auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64 - 16);
+    auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 64 - 16);
+    dg_bg1.set_scale(2,1);
+    dg_bg2.set_scale(2,1);
+    dg_bg1.set_blending_enabled(true);
+    dg_bg2.set_blending_enabled(true);
+    float bg_alpha = 0.0;
+
     // While dialogue is going,
     int pos = 0;
     bool cont = true;
     while (cont) {
 
-        if (n[pos].img > 0) dialogue_bg.set_visible(true);
+        if (n[pos].img > 0) {
+            dialogue_bg.set_visible(true);
+            dg_bg1.set_visible(false);
+            dg_bg2.set_visible(false);
+        }
 
         // Set music
         if (strcmp(n[pos].text, "BG: 0") == 0) {
-            int music_volume = 15;
+            int music_volume = 80;
             bn::music_items_info::span[0].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: 1") == 0) {
-            int music_volume = 15;
+            int music_volume = 80;
             bn::music_items_info::span[1].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: 2") == 0) {
-            int music_volume = 25;
+            int music_volume = 80;
             bn::music_items_info::span[2].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: champ") == 0) {
-            int music_volume = 25;
+            int music_volume = 80;
             bn::music_items_info::span[10].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: Overworld 01") == 0) {
-            int music_volume = 30;
+            int music_volume = 80;
             bn::music_items_info::span[11].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: frog") == 0) {
+            int music_volume = 80;
+            bn::music_items_info::span[15].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: fadeout") == 0) {
             if (bn::music::playing()) {
                 bn::music::set_volume(0);
@@ -303,6 +328,29 @@ void dialogue_page(line n[32]) {
             primary_bg.set_item(bn::regular_bg_items::s0302);
             primary_bg.set_visible(true);
 
+        } else if (strcmp(n[pos].text, "S04:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0401);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S04:02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0402);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S04:03") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0403);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S04:04") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0404);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S04:05") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0405);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S04:06") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0406);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S04:07") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0407);
+            primary_bg.set_visible(true);
+        
+
         // End dialogue
         } else if (strcmp(n[pos].text, "COM: Endscene") == 0) {
             cont = false;
@@ -369,16 +417,27 @@ void dialogue_page(line n[32]) {
             // Process visual effects
             while(!bn::keypad::a_pressed()) {
 
-                // Move in from side
-                if (chari_l.visible() && chari_l.x().integer() < -40) chari_l.set_x(chari_l.x() + 1);
-                if (chari_r.visible() && chari_r.x().integer() > 40) chari_r.set_x(chari_r.x() - 1);
+                if (dialogue_bg.visible()) {
 
-                // Handle transparency
-                if (bn::blending::transparency_alpha().to_double() + 0.1 <= 1) {
-                    bn::blending::set_transparency_alpha(bn::blending::transparency_alpha().to_double() + 0.1);
+                    // Move in from side
+                    if (chari_l.visible() && chari_l.x().integer() < -40) chari_l.set_x(chari_l.x() + 1);
+                    if (chari_r.visible() && chari_r.x().integer() > 40) chari_r.set_x(chari_r.x() - 1);
+
+                    // Handle transparency
+                    if (bn::blending::transparency_alpha().to_double() + 0.1 <= 1) {
+                        bn::blending::set_transparency_alpha(bn::blending::transparency_alpha().to_double() + 0.1);
+                    } else {
+                        bn::blending::set_transparency_alpha(1);
+                        chari_l.set_blending_enabled(false);
+                    }
+
                 } else {
-                    bn::blending::set_transparency_alpha(1);
-                    chari_l.set_blending_enabled(false);
+
+                    // Handle dialogue background sprite box
+                    if (bg_alpha < 0.9) {
+                        bg_alpha += 0.05;
+                        bn::blending::set_transparency_alpha(bg_alpha);
+                    }
                 }
 
                 dialogue_bg.put_above();
@@ -389,6 +448,18 @@ void dialogue_page(line n[32]) {
         // Increment location
         pos++;
     }
+
+    // Process visual effects
+    while(bg_alpha > 0.1) {
+        bg_alpha -= 0.1;
+        if (bg_alpha < 0) bg_alpha = 0;
+        bn::blending::set_transparency_alpha(bg_alpha);
+        bn::core::update();
+    }
+
+    dg_bg1.set_visible(false);
+    dg_bg2.set_visible(false);
+    bn::blending::set_transparency_alpha(1);
 }
 
 void dialogue_page_lite(line n[32]) {
@@ -396,6 +467,13 @@ void dialogue_page_lite(line n[32]) {
     // Variable initialization
     bn::sprite_text_generator text_line0(common::variable_8x16_sprite_font);
     bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
+    auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64);
+    auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 64);
+    dg_bg1.set_scale(2,1);
+    dg_bg2.set_scale(2,1);
+    dg_bg1.set_blending_enabled(true);
+    dg_bg2.set_blending_enabled(true);
+    float bg_alpha = 0.0;
 
     // While dialogue is going,
     int pos = 0;
@@ -436,6 +514,11 @@ void dialogue_page_lite(line n[32]) {
 
             // Process visual effects
             while(!bn::keypad::a_pressed()) {
+                if (bg_alpha < 0.9) {
+                    bg_alpha += 0.05;
+                    bn::blending::set_transparency_alpha(bg_alpha);
+                }
+
                 bn::core::update();
             }
 
@@ -445,4 +528,16 @@ void dialogue_page_lite(line n[32]) {
         // Increment location
         pos++;
     }
+
+    // Process visual effects
+    while(bg_alpha > 0.1) {
+        bg_alpha -= 0.1;
+        if (bg_alpha < 0) bg_alpha = 0;
+        bn::blending::set_transparency_alpha(bg_alpha);
+        bn::core::update();
+    }
+
+    dg_bg1.set_visible(false);
+    dg_bg2.set_visible(false);
+    bn::blending::set_transparency_alpha(1);
 }

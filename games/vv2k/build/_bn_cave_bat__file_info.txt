@@ -1,0 +1,3 @@
+graphics/cave_bat.bmp
+330
+1636080165.53
