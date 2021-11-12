@@ -292,20 +292,6 @@ void load_save()
     timer(64);
 }
 
-void introduction()
-{
-    dungeon_return dt(0, 0, 0);
-    dt.spawn_x = 0;
-    dt.spawn_y = 0;
-    dt.world_index = 0;
-    while (true)
-    {
-        dungeon_return dt2 = dungeon(dt, so, false);
-        if (dt2.world_index == -1)
-            break;
-    };
-}
-
 void cutscenes(int c)
 {
     if (c == 0)
@@ -359,6 +345,9 @@ bool victory_page(int chari, int score)
             victory_anim2 = bn::create_sprite_animate_action_forever(victory_spr2, 5, bn::sprite_items::maple_victory_anim.tiles_item(),
                                                                                             1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27);
             break;
+
+            bn::sound_items::maple_alright_01.play();
+            bn::sound_items::fireblast.play();
         }
         case 2: {
             victory_anim = bn::create_sprite_animate_action_forever(victory_spr, 3, bn::sprite_items::aaron_victory_anim.tiles_item(),
@@ -367,15 +356,18 @@ bool victory_page(int chari, int score)
                                                                                             1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 31, 31, 31, 31, 31, 31, 31, 31);
             break;
         }
+        default: {
+            break;
+        }
     }
 
     int offset = 0;
     int total = 0;
-    char buf[16];
-    char bf2[16];
+    char buf[24];
+    char bf2[24];
     bn::sprite_text_generator text_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 16> text_spr;
-    bn::vector<bn::sprite_ptr, 16> text_spr_2;
+    bn::vector<bn::sprite_ptr, 24> text_spr;
+    bn::vector<bn::sprite_ptr, 24> text_spr_2;
     bn::vector<bn::sprite_ptr, 7> text_spr_3;
     bn::vector<bn::sprite_ptr, 4> text_spr_4;
 
@@ -395,22 +387,24 @@ bool victory_page(int chari, int score)
     // Caves    0.023x + 2.94
 
     float modifier = 0;
-    float boost = 0;
     switch (chari)
     {
         case 0: {
             modifier = 0.13;
             break;
         }
-    case 1:
-    { // Garden
-        modifier = 0.035;
-        break;
-    }
-    case 2: {
-        modifier = 0.065;
-        break;
-    }
+        case 1:
+        { // Garden
+            modifier = 0.035;
+            break;
+        }
+        case 2: {
+            modifier = 0.065;
+            break;
+        }
+        default: {
+            break;
+        }
     }
 
     int xp = so.xp;
@@ -425,7 +419,6 @@ bool victory_page(int chari, int score)
 
     float new_xp_d = new_xp * 0.48;
     int new_xp_p = 0;
-    bool arrow_pos = false;
     bool final_hit = false;
 
     auto a_button = bn::sprite_items::a_button.create_sprite(48,48);
@@ -451,6 +444,9 @@ bool victory_page(int chari, int score)
             case 2: {
                 victory_spr.set_palette(bn::sprite_items::aaron_victory_anim.palette_item());
                 victory_spr2.set_palette(bn::sprite_items::aaron_victory_anim.palette_item());
+                break;
+            }
+            default: {
                 break;
             }
         }
@@ -568,7 +564,7 @@ dungeon_return tree_cut()
         {
 
             switch (wood_stage) {
-                case 0: {
+                default: {
                     stump = bn::sprite_items::tree_stump.create_sprite(-32,38,0);
                     wood_stage += 1;
                     break;
@@ -651,7 +647,6 @@ dungeon_return tree_cut()
             if (curs > 200)
                 curs = 0;
             float curs_f = curs;
-            int curs_i = curs_f / 32;
             int dir = ((curs) / 20);
             int curs_loc = sin(curs_f / 32) * calc_width;
 
@@ -778,18 +773,18 @@ public:
             float sine = sinf((64 - spend) / 21);
             switch (dir)
             {
-            case 0:
-                sprite.set_position(sprite.x(), sprite.y() + 3);
-                break;
-            case 1:
-                sprite.set_position(sprite.x() + 3, init_y + (sine * 20.01));
-                break;
-            case 2:
-                sprite.set_position(sprite.x() - 3, init_y + (sine * 20.01));
-                break;
-            case 3:
-                sprite.set_position(sprite.x(), sprite.y() - 3);
-                break;
+                default:
+                    sprite.set_position(sprite.x(), sprite.y() + 3);
+                    break;
+                case 1:
+                    sprite.set_position(sprite.x() + 3, init_y + (sine * 20.01));
+                    break;
+                case 2:
+                    sprite.set_position(sprite.x() - 3, init_y + (sine * 20.01));
+                    break;
+                case 3:
+                    sprite.set_position(sprite.x(), sprite.y() - 3);
+                    break;
             }
             spend--;
         }
@@ -813,7 +808,6 @@ dungeon_return rabbit_game()
         garden_bg.set_camera(camera);
 
         char buf[12];
-        char bf2[12];
         bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 12> file1_spr;
         bn::vector<bn::sprite_ptr, 12> file2_spr;
@@ -822,7 +816,6 @@ dungeon_return rabbit_game()
         bn::vector<bn::sprite_ptr, 16> chop;
 
         bool isHolding = false;
-        bool heldItem = 0;
 
         room myRoom;
 
@@ -849,8 +842,6 @@ dungeon_return rabbit_game()
         myRoom.start_y = 2;
         camera.set_position(myRoom.start_x * 32, myRoom.start_y * 32);
 
-        bool cont = false;
-        int total = 0;
         if (bn::music::playing()) bn::music::stop();
         bn::music_items_info::span[18].first.play(bn::fixed(80) / 100);
 
@@ -871,6 +862,7 @@ dungeon_return rabbit_game()
         int score_meter = 0;
         int dir = 0;
         int last_dir = 0;
+        int heldItem = 0;
         bool playing = true;
 
         while (playing)
@@ -1318,7 +1310,13 @@ dungeon_return underground()
                     if (abs(mx - bugs[t].sprite.x().integer()) + abs(my - bugs[t].sprite.y().integer()) < 16)
                     {
                         score -= 100;
-                        bn::sound_items::squeak.play();
+
+                        if (std::rand() % 2 == 0) {
+                            bn::sound_items::maple_ugh_01.play();
+                        } else {
+                            bn::sound_items::maple_ugh_02.play();
+                        }
+                        
                         forgiveness = 2000;
 
                         // Move the treasure
@@ -1331,7 +1329,7 @@ dungeon_return underground()
                         }
                         treasure.set_position(abx * 32, aby * 32);
                         treasure.set_visible(true);
-                        bool is_done = false;
+                        is_done = false;
                     }
                     if (score < 0)
                     {
@@ -1354,24 +1352,23 @@ dungeon_return underground()
                 {
                     p[t].fireball.set_z_order(1);
                     p[t].update();
-                    int mx = p[t].fireball.x().integer();
-                    int my = p[t].fireball.y().integer();
+                    int mxx = p[t].fireball.x().integer();
+                    int myy = p[t].fireball.y().integer();
                     if (p[t].fireball.visible())
                     {
-                        for (int t = 0; t < 24; t++)
+                        for (int tt = 0; tt < 24; t++)
                         {
-                            int distance = abs(bugs[t].sprite.y().integer() - my) + abs(bugs[t].sprite.x().integer() - mx);
+                            int distance = abs(bugs[tt].sprite.y().integer() - myy) + abs(bugs[tt].sprite.x().integer() - mxx);
                             if (distance < 16)
                             {
-
                                 bn::sound_items::pop.play();
 
                                 int mxx = (std::rand() % (current_room.width));
                                 int myy = (std::rand() % (current_room.height));
 
-                                bugs[t].sprite.set_position(mxx * 32, myy * 32);
-                                bugs[t].to_x = 0;
-                                bugs[t].to_y = 0;
+                                bugs[tt].sprite.set_position(mxx * 32, myy * 32);
+                                bugs[tt].to_x = 0;
+                                bugs[tt].to_y = 0;
 
                                 score += distance * 5;
                             }
@@ -1473,7 +1470,7 @@ dungeon_return underground()
             {
                 if (abs(maple.entity.x() - treasure.x()) + abs(maple.entity.y() - treasure.y()) < 16)
                 {
-                    bn::sound_items::cnaut.play();
+                    bn::sound_items::maple_alright_02.play();
                     is_done == true;
                     score += 100;
                     treasure.set_visible(false);
@@ -1534,21 +1531,21 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
 
             switch (dt.spawn_x)
             {
-            case 1:
-            {
-                dt = tree_cut();
-                break;
-            }
-            case 2:
-            {
-                dt = rabbit_game();
-                break;
-            }
-            case 3:
-            {
-                dt = underground();
-                break;
-            }
+                default:
+                {
+                    dt = tree_cut();
+                    break;
+                }
+                case 2:
+                {
+                    dt = rabbit_game();
+                    break;
+                }
+                case 3:
+                {
+                    dt = underground();
+                    break;
+                }
             };
         }
         else
@@ -1566,8 +1563,6 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
 void clear_save() {
     so.last_char_id = 0;
     so.checkpoint = 0;
-    so.island_name[16] = {0};
-    so.level_data[10] = {0};
     so.spawn_x = 0;
     so.spawn_y = 0;
     so.world_index = 0;
@@ -1582,8 +1577,8 @@ int checkpoint(int level)
 
     if (so.checkpoint < 1)
     {
-        so.checkpoint = 1;
-        level = 1;
+        so.checkpoint = 0;
+        level = 0;
     }
 
     switch (level)
@@ -1591,10 +1586,12 @@ int checkpoint(int level)
 
     // Introduction
     case 0:
-        exec_dialogue(0);
-        exec_dialogue(1);
-        exec_dialogue(2);
-        introduction();
+        //exec_dialogue(0);
+        //exec_dialogue(1);
+        //exec_dialogue(2);
+
+        core_gameplay(8, 3, 0, -1, true, 0);
+
         cutscenes(0);
         exec_dialogue(13);
         cutscenes(1);
@@ -1641,8 +1638,6 @@ int main()
 {
     bn::core::init(); // Initialize Butano libraries
 
-    //bg_test();
-
     startup();
     bn::sram::read(so);         // Read save data from cartridge
     load_save();
@@ -1650,54 +1645,6 @@ int main()
         so.checkpoint = checkpoint(so.checkpoint);
     }
 
-    /*
-    dungeon_return dt(7,3,6);
-    dt.spawn_x = 7;
-    dt.spawn_y = 3;
-    dt.world_index = 6;
-    dungeon(dt, so, false);
-    */
-
-   //victory_page(0, 100);
-   //dungeon_return dt = underground();
-
-    /*
-    while (so.checkpoint < 99) {
-        so.checkpoint = checkpoint(so.checkpoint);
-    }
-
-    /*    
-    exec_dialogue(16);
-    dungeon_return dt(0,0,0);
-    dt.spawn_x = 0;
-    dt.spawn_y = 0;
-    dt.world_index = 4;
-    dungeon_return dt2 = dungeon(dt);
-
-    /*
-    //tree_cut();
-    //rabbit_game();
-    //underground();
-    //victory_page();
-
-    /*
-    // Intro
-    startup();
-    load_save();
-
-    // Introduction
-    exec_dialogue(0);
-    exec_dialogue(1);
-    exec_dialogue(2);
-    introduction();
-    cutscenes(0);
-    exec_dialogue(13);
-    cutscenes(1);
-    exec_dialogue(14);
-    keyboard();
-    exec_dialogue(15);
-
     // Get to the end?
     bn::core::reset();
-    */
 }

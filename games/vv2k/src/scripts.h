@@ -39,6 +39,7 @@ int exec_dialogue(int x) {
         };
 
         case 1: {
+            bn::sound_items::maple_alright_03.play();
             line lc[32] = {
                 {true, true, 0, "BG: Ocean"},
                 {true, fals, 1, "MAPLE                            Alright, so where do I plug this crock-pot in at? Are there any   plugs?"},

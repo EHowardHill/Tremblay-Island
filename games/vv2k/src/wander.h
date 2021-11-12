@@ -190,62 +190,8 @@ public:
 
         bool canLeft = !(((col[4] && col[5]) ^ col[0]) || ((col[6] && col[7]) ^ col[1]));
         bool canRite = !(((col[4] && col[5]) ^ col[2]) || ((col[6] && col[7]) ^ col[3]));
-        //
-        //
-        // !(((0 && 1) ^ 1) || (1 && 1) ^ 0)
-
         bool canUp = !(((col[0] && col[1]) ^ col[4]) || ((col[2] && col[3]) ^ col[5]));
         bool canDn = !(((col[0] && col[1]) ^ col[6]) || ((col[2] && col[3]) ^ col[7]));
-
-        int block = current_room->local_tileset.at(close[0] + close[1]) - 1;
-        /*
-        BN_LOG(
-            identity,
-            " = ",
-            close[0],
-            " ",
-            close[1],
-            " ",
-            close[2],
-            " ",
-            close[3],
-            " x ",
-            current_room->local_tileset.at(close[0] + close[2]] - 1,
-            " ",
-            current_room->local_tileset.at(close[0] + close[3]] - 1,
-            " ",
-            current_room->local_tileset.at(close[1] + close[2]] - 1,
-            " ",
-            current_room->local_tileset.at(close[1] + close[3]] - 1,
-            " ",
-            current_room->local_tileset.at(close[0] + close[2] - current_room->width] - 1,
-            " ",
-            current_room->local_tileset.at(close[1] + close[2] + current_room->width] - 1,
-            " ",
-            current_room->local_tileset.at(close[0] + close[3] - current_room->width] - 1,
-            " ",
-            current_room->local_tileset.at(close[1] + close[3] + current_room->width] - 1,
-            " x ",
-            col[0],
-            " ",
-            col[1],
-            " ",
-            col[2],
-            " ",
-            col[3],
-            " ",
-            col[4],
-            " ",
-            col[5],
-            " ",
-            col[6],
-            " ",
-            col[7],
-            " ",
-            "&",
-            canRite
-        );
-        */
 
         // If following...
         if (role == 0)
@@ -259,7 +205,7 @@ public:
             bool isXTravel = false;
             if (x < entity.x() - 24)
             {
-                if (true)
+                if (canLeft)
                 {
                     isXTravel = true;
                     entity.set_x(entity.x() - 1);
@@ -272,7 +218,7 @@ public:
             }
             else if (x > entity.x() + 24)
             {
-                if (true)
+                if (canRite)
                 {
                     isXTravel = true;
                     entity.set_x(entity.x() + 1);
@@ -285,7 +231,7 @@ public:
             }
             if (y < entity.y() - 24)
             {
-                if (true)
+                if (canUp)
                 {
                     entity.set_y(entity.y() - 1);
                     if (!isXTravel)
@@ -300,7 +246,7 @@ public:
             }
             else if (y > entity.y() + 24)
             {
-                if (true)
+                if (canDn)
                 {
                     entity.set_y(entity.y() + 1);
                     if (!isXTravel)
@@ -344,7 +290,6 @@ public:
         // If main character....
         else if (role == 1)
         {
-
             if (entity.blending_enabled())
             {
                 if (bn::blending::intensity_alpha() > 0.2)
@@ -358,9 +303,9 @@ public:
             }
 
             // Keyboard controls
-            if (!bn::keypad::l_held())
+            if (true)
             {
-                if (bn::keypad::up_released() || bn::keypad::down_released() || bn::keypad::left_released() || bn::keypad::right_released())
+                if (bn::keypad::up_released() + bn::keypad::down_released() + bn::keypad::left_released() + bn::keypad::right_released() > 0)
                 {
                     if (bn::keypad::down_held())
                     {
@@ -381,19 +326,19 @@ public:
                 }
                 else
                 {
-                    if (bn::keypad::down_pressed())
+                    if (bn::keypad::down_held())
                     {
                         dir = 0;
                     }
-                    else if (bn::keypad::right_pressed())
+                    else if (bn::keypad::right_held())
                     {
                         dir = 1;
                     }
-                    else if (bn::keypad::left_pressed())
+                    else if (bn::keypad::left_held())
                     {
                         dir = 2;
                     }
-                    else if (bn::keypad::up_pressed())
+                    else if (bn::keypad::up_held())
                     {
                         dir = 3;
                     }
@@ -451,35 +396,6 @@ public:
             {
                 entity_anim.update();
             }
-            else
-            {
-                if (bn::keypad::r_pressed())
-                {
-                    switch (dir)
-                    {
-                    case 1:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 13, 3, 3, 3);
-                        break;
-                    case 2:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 14, 6, 6, 6);
-                        break;
-                    case 3:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 15, 9, 9, 9);
-                        break;
-                    default:
-                        entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 12, 00, 00, 0);
-                        break;
-                    }
-                    entity_anim.update();
-                }
-                else
-                {
-                    if (bn::keypad::r_released())
-                    {
-                        entity_anim.update();
-                    }
-                }
-            }
         }
 
         // If generic dude....
@@ -529,8 +445,11 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
 
     if (door_noise)
         bn::sound_items::door.play();
-    if (bn::music::playing())
-        bn::music::stop();
+    
+    if (so.checkpoint > 1) {
+        if (bn::music::playing())
+            bn::music::stop();
+    }
 
     // Constants
     const int w_size = 96;
@@ -557,12 +476,94 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
     // Create initial characters
     bn::vector<character, 4> chari;
 
+    switch (so.last_char_id)
+    {
+    default:
+    {
+        character default_chari(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
+        default_chari.entity.set_camera(camera);
+        default_chari.entity.set_position(sx, sy);
+        default_chari.role = 1;
+        default_chari.identity = 0;
+        chari.push_back(default_chari);
+        break;
+    }
+    case 0:
+    {
+        if (so.checkpoint < 3) {
+            character default_chari(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 0;
+            chari.push_back(default_chari);
+            break;
+        } else {
+            character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 0;
+            chari.push_back(default_chari);
+            break;
+        }
+    }
+    case 1:
+    {
+        if (so.checkpoint < 1) {
+            character default_chari(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 1;
+            chari.push_back(default_chari);
+            break;
+        } else {
+            character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 1;
+            chari.push_back(default_chari);
+            break;
+        }
+    }
+    case 2:
+    {
+        character default_chari(bn::sprite_items::aaron_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        default_chari.entity.set_camera(camera);
+        default_chari.entity.set_position(sx, sy);
+        default_chari.role = 1;
+        default_chari.identity = 2;
+        chari.push_back(default_chari);
+        break;
+    }
+    case 3:
+    {
+        character default_chari(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        default_chari.entity.set_camera(camera);
+        default_chari.entity.set_position(sx, sy);
+        default_chari.role = 1;
+        default_chari.identity = 3;
+        chari.push_back(default_chari);
+        break;
+    }
+    }
+
+
     // World generation
     switch (dt.world_index)
     {
     case 0:
     {
         current_room.init(12, 6, 8, 3);
+        std::vector<int> local_col{
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+            1, 1, 2, 40, 3, 1, 1, 1, 0, 1, 1, 0,
+            1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0,
+            1, 0, 0, 0, 0, 0, 0, 0, 39, 0, 1, 0,
+            1, 36, 0, 0, 0, 0, 0, 0, 31, 1, 1, 0,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
         std::vector<int> local{
             4, 3, 8, 11, 13, 3, 3, 3, 8, 3, 5, 0,
             2, 18, 0, 0, 0, 18, 2, 9, 0, 9, 2, 0,
@@ -571,6 +572,27 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
             17, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2, 0,
             7, 3, 3, 3, 3, 3, 3, 3, 16, 3, 6, 0};
         deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        if (so.last_char_id == 1)
+        {
+            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+            maple.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
+            maple.entity.set_camera(camera);
+            maple.role = 0;
+            maple.identity = 0;
+            chari.push_back(maple);
+        }
+
+        if (so.last_char_id < 1)
+        {
+            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+            enoki.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
+            enoki.entity.set_camera(camera);
+            enoki.role = 0;
+            enoki.identity = 1;
+            chari.push_back(enoki);
+        }
         break;
     }
     case 1:
@@ -589,7 +611,42 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
             2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
             2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2,
             7, 3, 14, 3, 12, 3, 3, 12, 3, 3, 12, 3, 13, 12, 3, 3, 12, 3, 14, 13, 6};
+        std::vector<int> local_col{
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 0, 35, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 1, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        };
         deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        if (so.last_char_id == 1)
+        {
+            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+            maple.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+            maple.entity.set_camera(camera);
+            maple.role = 0;
+            maple.identity = 0;
+            chari.push_back(maple);
+        }
+
+        if (so.last_char_id < 1)
+        {
+            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+            enoki.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+            enoki.entity.set_camera(camera);
+            enoki.role = 0;
+            enoki.identity = 1;
+            chari.push_back(enoki);
+        }
 
         anim_object fp;
         fp.entity_item = bn::sprite_items::fireplace_anim;
@@ -604,16 +661,47 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
     case 2:
     {
         current_room.init(11, 8, 9, 6);
-        std::vector<int> local{
+        std::vector<int> local {
             4, 11, 8, 12, 8, 3, 3, 3, 3, 3, 5,
             2, 18, 9, 9, 26, 27, 2, 0, 0, 0, 2,
             2, 0, 10, 10, 0, 0, 2, 19, 1, 20, 2,
             2, 0, 0, 0, 0, 0, 2, 3, 0, 0, 2,
             2, 0, 1, 1, 1, 0, 2, 0, 0, 18, 2,
-            2, 0, 1, 1, 1, 0, 2, 0, 3, 3, 12,
+            2, 0, 1, 1, 1, 0, 2, 0, 0, 3, 12,
             2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 17,
             7, 3, 3, 14, 3, 3, 3, 3, 3, 3, 6};
+        std::vector<int> local_col {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 0, 1, 1, 0, 0, 1, 1, 8, 1, 1,
+            1, 0, 10, 10, 0, 0, 1, 1, 0, 0, 1,
+            1, 0, 0, 0, 0, 0,   1, 0, 0, 1, 1,
+            1, 0, 0, 0, 0, 0,   1, 0, 0, 1, 1,
+            1, 1, 0, 34, 0, 4, 0, 0, 0, 33, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        };
         deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        if (so.last_char_id == 1)
+        {
+            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+            maple.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+            maple.entity.set_camera(camera);
+            maple.role = 0;
+            maple.identity = 0;
+            chari.push_back(maple);
+        }
+
+        if (so.last_char_id < 1)
+        {
+            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+            enoki.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+            enoki.entity.set_camera(camera);
+            enoki.role = 0;
+            enoki.identity = 1;
+            chari.push_back(enoki);
+        }
 
         anim_object aaron;
         aaron.entity.set_visible(true);
@@ -636,19 +724,54 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
     {
         current_room.init(24, 12, 22, 1);
         std::vector<int> local{
-            4, 8, 11, 12, 3, 3, 12, 11, 8, 5, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 4, 14, 5,
-            2, 18, 0, 0, 0, 0, 0, 0, 18, 2, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 2, 0, 2,
+            4, 8, 11, 12, 3, 3, 12, 11, 8, 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 4, 14, 5,
+            2, 18, 0, 0, 0, 0, 0, 0, 18, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+            2, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
             2, 0, 0, 1, 1, 1, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
             2, 0, 0, 1, 1, 1, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
             2, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 7, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 0, 2,
+            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 0, 2,
+            2, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
             2, 18, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
             7, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6};
+        std::vector<int> local_col {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 38, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 11, 11, 11, 11, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+        };
         deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        if (so.last_char_id == 1)
+        {
+            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+            maple.entity.set_position(22 * 32, 1 * 32);
+            maple.entity.set_camera(camera);
+            maple.role = 0;
+            maple.identity = 0;
+            chari.push_back(maple);
+        }
+
+        if (so.last_char_id < 1)
+        {
+            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+            enoki.entity.set_position(22 * 32, 1 * 32);
+            enoki.entity.set_camera(camera);
+            enoki.role = 0;
+            enoki.identity = 1;
+            chari.push_back(enoki);
+        }
 
         anim_object fp;
         fp.entity_item = bn::sprite_items::bookshelf;
@@ -842,50 +965,6 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
     }
     };
 
-    switch (so.last_char_id)
-    {
-    default:
-    {
-        character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = so.last_char_id;
-        chari.push_back(default_chari);
-        break;
-    }
-    case 1:
-    {
-        character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = so.last_char_id;
-        chari.push_back(default_chari);
-        break;
-    }
-    case 2:
-    {
-        character default_chari(bn::sprite_items::aaron_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = so.last_char_id;
-        chari.push_back(default_chari);
-        break;
-    }
-    case 3:
-    {
-        character default_chari(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = so.last_char_id;
-        chari.push_back(default_chari);
-        break;
-    }
-    }
-
     // A header
     bn::sprite_ptr a_notif = bn::sprite_items::a_button_2.create_sprite(0, 0);
     a_notif.set_camera(camera);
@@ -910,11 +989,11 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
     int follow_id = 0;
 
     int anim8 = 0;
-    int max_chari = chari.size();
 
     while (true)
     {
 
+        // Pause
         if (bn::keypad::start_pressed())
         {
             bn::core::update();
@@ -938,7 +1017,9 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
         // Create projectiles
         if (bn::keypad::r_pressed())
         {
-            if (chari.at(follow_id).identity == 0)
+            BN_LOG(chari.at(follow_id).identity);
+
+            if (chari.at(follow_id).identity < 1)
             {
                 bn::sound_items::fireblast.play();
                 p[p_index].active = true;
@@ -993,34 +1074,6 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
 
                 switch (possible_action)
                 {
-                case 0:
-                {
-                    line lc[8] = {
-                        {true, true, 00, "                                                                  ENOKI                            Let's go for the room with-"},
-                        {true, true, 00, "                                                                  ENOKI                            -the big bookshelf!"},
-                        {true, true, 00, "                                                                  ENOKI                            There's gotta be secrets!"},
-                        {true, true, 00, "                                                                  ENOKI                            If you want me to lead,"},
-                        {true, true, 00, "                                                                  ENOKI                            just press 'B'."},
-                        {true, true, 00, "                                                                  MAPLE                            ...Huh?"},
-                        {true, true, 00, "                                                                  ENOKI                            What?"},
-                        {true, true, 00, "COM: Endscene"}};
-                    bn::sound_item hm = bn::sound_items::heymaple;
-                    hm.play();
-                    dialogue_page_lite(lc);
-                    break;
-                };
-
-                case 1:
-                {
-                    line lc[5] = {
-                        {true, true, 00, "                                                                  You stare at the art."},
-                        {true, true, 00, "                                                                  And as such...."},
-                        {true, true, 00, "                                                                  So the art stares unto you."},
-                        {true, true, 00, "                                                                  Art is weird."},
-                        {true, true, 00, "COM: Endscene"}};
-                    dialogue_page_lite(lc);
-                    break;
-                };
 
                 case 2:
                 {
@@ -1230,8 +1283,8 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
                         dt.spawn_y = 3;
                         dt.world_index = 5;
                         return dt;
-                        break;
                     }
+                    break;
                 };
 
                 case 16:
@@ -1254,7 +1307,7 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
                     {
                         line lc[32] = {
 
-                            {true, true, 00, "                                                                  (If I knew Maple was coming so   soon I probably would'a cleaned="},
+                            {true, true, 00, "                                                                  (If I knew Maple was coming so   soon I probably would'a cleaned"},
                             {true, true, 00, "                                                                  -these up a little sooner....)"},
                             {true, true, 00, "                                                                  (Maybe I can pick 'em up now and she won't notice.)"},
                             {true, true, 00, "                                                                  (Then again, maybe she already   saw it and is already judging.)"},
@@ -1828,30 +1881,113 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
                     }
                     break;
                 };
+
+                case 31: {
+                    dt.spawn_x = 18;
+                    dt.spawn_y = 1;
+                    dt.world_index = 1;
+                    return dt;
+                };
+
+                case 32: {
+                    dt.spawn_x = 8;
+                    dt.spawn_y = 4;
+                    dt.world_index = 0;
+                    return dt;
+                };
+
+                case 33: {
+                    dt.spawn_x = 1;
+                    dt.spawn_y = 4;
+                    dt.world_index = 0;
+                    return dt;
+                };
+
+                case 34: {
+                    dt.spawn_x = 2;
+                    dt.spawn_y = 1;
+                    dt.world_index = 1;
+                    return dt;
+                };
+
+                case 35: {
+                    dt.spawn_x = 3;
+                    dt.spawn_y = 6;
+                    dt.world_index = 2;
+                    return dt;
+                };
+
+                case 36: {
+                    dt.spawn_x = 9;
+                    dt.spawn_y = 6;
+                    dt.world_index = 2;
+                    return dt;
+                };
+
+                case 37: {
+                    dt.spawn_x = 22;
+                    dt.spawn_y = 1;
+                    dt.world_index = 3;
+                    return dt;
+                };
+
+                case 38: {
+                    dt.spawn_x = 2;
+                    dt.spawn_y = 11;
+                    dt.world_index = 1;
+                    return dt;
+                };
+
+                case 39:
+                {
+                    line lc[8] = {
+                        {true, true, 00, "                                                                  ENOKI                            Let's go for the room with-"},
+                        {true, true, 00, "                                                                  ENOKI                            -the big bookshelf!"},
+                        {true, true, 00, "                                                                  ENOKI                            There's gotta be secrets!"},
+                        {true, true, 00, "                                                                  ENOKI                            If you want me to lead,"},
+                        {true, true, 00, "                                                                  ENOKI                            just press 'B'."},
+                        {true, true, 00, "                                                                  MAPLE                            ...Huh?"},
+                        {true, true, 00, "                                                                  ENOKI                            What?"},
+                        {true, true, 00, "COM: Endscene"}};
+                    bn::sound_item hm = bn::sound_items::heymaple;
+                    hm.play();
+                    dialogue_page_lite(lc);
+                    break;
+                };
+
+                case 40:
+                {
+                    line lc[5] = {
+                        {true, true, 00, "                                                                  You stare at the art."},
+                        {true, true, 00, "                                                                  And as such...."},
+                        {true, true, 00, "                                                                  So the art stares unto you."},
+                        {true, true, 00, "                                                                  Art is weird."},
+                        {true, true, 00, "COM: Endscene"}};
+                    dialogue_page_lite(lc);
+                    break;
+                };
+
                 }
             }
         }
 
         // Swap characters
-        if (max_chari > 1)
+        if (bn::keypad::b_pressed() && so.checkpoint != 1)
         {
-            if (bn::keypad::b_pressed() && so.checkpoint != 1)
-            {
-                bn::sound_items::cnaut.play();
-                bn::blending::set_intensity_alpha(1);
-                int new_chari = (follow_id + 1) % max_chari;
-                int old_role = chari.at(new_chari).role;
-                chari.at(new_chari).role = 1;
-                chari.at(new_chari).entity.set_blending_enabled(true);
-                chari.at(follow_id).role = old_role;
-                chari.at(follow_id).entity.set_blending_enabled(false);
+            bn::sound_items::cnaut.play();
+            bn::blending::set_intensity_alpha(1);
+            int new_chari = (follow_id + 1) % chari.size();
+            int old_role = chari.at(new_chari).role;
+            chari.at(new_chari).role = 1;
+            chari.at(new_chari).entity.set_blending_enabled(true);
+            chari.at(follow_id).role = old_role;
+            chari.at(follow_id).entity.set_blending_enabled(false);
 
-                so.last_char_id = chari.at(new_chari).identity;
-            }
+            so.last_char_id = chari.at(new_chari).identity;
         }
 
         // Character operations
-        for (int t = 0; t < max_chari; t++)
+        for (int t = 0; t < chari.size(); t++)
         {
 
             // Set primary camera following X/Y coordinates
@@ -1898,25 +2034,22 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
         }
 
         // Camera adjustment
-        if (camera.x().integer() > (current_room.width * 32) - (flex * 2) + 16)
+        if (camera.x().integer() > (current_room.width * 32) - 172)
         {
-            camera.set_x((current_room.width * 32) - (flex * 2) + 16);
+            camera.set_x((current_room.width * 32) - 172);
         }
-        else if (camera.x().integer() < flex + 32)
+        else if (camera.x().integer() < 106)
         {
-            camera.set_x(flex + 32);
+            camera.set_x(106);
         }
 
-        if (current_room.height > 12)
+        if (camera.y().integer() > (current_room.height * 32) - 96)
         {
-            if (camera.y().integer() > (current_room.height * 32) - (flex * 2) + 64)
-            {
-                camera.set_y((current_room.height * 32) - (flex * 2) + 64);
-            }
-            else if (camera.y().integer() < flex - 8)
-            {
-                camera.set_y(flex - 8);
-            }
+            camera.set_y((current_room.height * 32) - 96);
+        }
+        else if (camera.y().integer() < 64)
+        {
+            camera.set_y(64);
         }
 
         // Regularly update the tileset based on new camera coordinates
@@ -2094,7 +2227,42 @@ dungeon_return dungeon(dungeon_return &dt, struct save_struct &so, bool door_noi
                             {
                                 pro[t].fireball.set_visible(false);
                             }
-                            exec_dialogue(12);
+
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  MAPLE                            ...."},
+                                {true, true, 00, "                                                                  ENOKI                            Well, there's no passage."},
+                                {true, true, 00, "                                                                  MAPLE                            You don't say."},
+                                {true, true, 00, "                                                                  ENOKI                            That's weird."},
+                                {true, true, 00, "                                                                  MAPLE                            Enoki... Look here."},
+                                {true, true, 00, "                                                                  MAPLE                            I guess it doesn't make any sense"},
+                                {true, true, 00, "                                                                  MAPLE                            to be angry, so I won't be, but.."},
+                                {true, true, 00, "                                                                  MAPLE                            You need to stop being like this."},
+                                {true, true, 00, "                                                                  MAPLE                            You and Aaron just spent all this"},
+                                {true, true, 00, "                                                                  MAPLE                            money on a barely furnished"},
+                                {true, true, 00, "                                                                  MAPLE                            castle without basic faculties"},
+                                {true, true, 00, "                                                                  MAPLE                            for what? So you could play like"},
+                                {true, true, 00, "                                                                  MAPLE                            you're a princess? While I'm over"},
+                                {true, true, 00, "                                                                  MAPLE                            in Carolina, sacrificing the best"},
+                                {true, true, 00, "                                                                  MAPLE                            parts of my life for an apartment"},
+                                {true, true, 00, "                                                                  MAPLE                            with the bare essentials?"},
+                                {true, true, 00, "                                                                  MAPLE                            Enoki... Please."},
+                                {true, true, 00, "                                                                  MAPLE                            I don't want to be the bad guy."},
+                                {true, true, 00, "                                                                  MAPLE                            I know you didn't really have a"},
+                                {true, true, 00, "                                                                  MAPLE                            childhood or parents, I get it."},
+                                {true, true, 00, "                                                                  MAPLE                            That's me too."},
+                                {true, true, 00, "                                                                  MAPLE                            But you can't keep going on like"},
+                                {true, true, 00, "                                                                  MAPLE                            this. Do you understand?"},
+                                {true, true, 00, "                                                                  ENOKI                            I do understand."}, //j'ai compris?
+                                {true, true, 00, "                                                                  MAPLE                            It's 5:00 in the morning, I'm"},
+                                {true, true, 00, "                                                                  MAPLE                            going back to bed. I'll see y'all"},
+                                {true, true, 00, "                                                                  MAPLE                            in the morning, oui?"},
+                                {true, true, 00, "                                                                  ENOKI                            Oui.."},
+                                {true, true, 00, "                                                                  MAPLE                            Hey, don't beat yourself up about"},
+                                {true, true, 00, "                                                                  MAPLE                            it. S'il te plait.. Bonne nuit."},
+                                {true, true, 00, "                                                                  ENOKI                            Bonne nuit.."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+
                             dt.world_index = -1;
                             return dt;
                         }
