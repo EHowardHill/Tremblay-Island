@@ -991,7 +991,9 @@ namespace
             }
             else
             {
-                BN_ERROR("Invalid character: ", character, " (text: ", text, ")");
+                //BN_LOG("Invalid character: ", character, " (text: ", text, ")");
+                painter.paint_space();
+                ++text_index;
             }
         }
 

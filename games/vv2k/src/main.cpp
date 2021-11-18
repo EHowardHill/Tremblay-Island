@@ -83,7 +83,8 @@
 #include "bn_sprite_items_underground_tiles.h"
 #include "bn_sprite_items_cave_bat.h"
 
-static struct save_struct so;
+static save_all_struct all_save;
+static save_struct *so;
 constexpr bool fals = false;
 
 void timer(int delay)
@@ -214,46 +215,87 @@ void startup()
 
 void load_save()
 {
-
     auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
     auto ui = bn::regular_bg_items::file_select_bg.create_bg(0, 0);
     auto arrow = bn::sprite_items::arrow.create_sprite(-98, -32);
 
     bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+    bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
     bn::vector<bn::sprite_ptr, 12> file1_spr;
+    bn::vector<bn::sprite_ptr, 12> file2_spr;
+    bn::vector<bn::sprite_ptr, 12> file3_spr;
 
-    char buf[32];
+    char buf1[32];
+    char buf2[32];
+    char buf3[32];
 
-    if (so.xp == -1) so.xp = 0;
-    sprintf(buf, "Tremblay Island: %d%%", so.xp);
+    BN_LOG((int)all_save.so[0].island_name[0]);
+    if (all_save.so[0].island_name[0] < 255 && all_save.so[0].island_name[0] > 0) {
+        std::stringstream ss1;
+        for (int t = 0; t < 16; t++) {
+            if (all_save.so[0].island_name[t] < 255) {
+                ss1 << all_save.so[0].island_name[t];
+            }
+        }
+        if (all_save.so[0].xp == -1) all_save.so[0].xp = 0;
+        ss1 << ": " << all_save.so[0].xp << "%%";
+        sprintf(buf1, ss1.str().c_str());
+    } else {
+        sprintf(buf1, "Slot 1: 0%%");
+    }
 
-    file1_gen.generate(-72, -32, buf, file1_spr);
+    if (all_save.so[1].island_name[0] < 255 && all_save.so[1].island_name[0] > 0) {
+        std::stringstream ss1;
+        for (int t = 0; t < 16; t++) {
+            if (all_save.so[1].island_name[t] < 255) {
+                ss1 << all_save.so[1].island_name[t];
+            }
+        }
+        if (all_save.so[1].xp == -1) all_save.so[1].xp = 0;
+        ss1 << ": " << all_save.so[1].xp << "%%";
+        sprintf(buf2, ss1.str().c_str());
+    } else {
+        sprintf(buf2, "Slot 2: 0%%");
+    }
+
+    if (all_save.so[2].island_name[0] < 255 && all_save.so[2].island_name[0] > 0) {
+        std::stringstream ss1;
+        for (int t = 0; t < 16; t++) {
+            if (all_save.so[2].island_name[t] < 255) {
+                ss1 << all_save.so[2].island_name[t];
+            }
+        }
+        if (all_save.so[2].xp == -1) all_save.so[2].xp = 0;
+        ss1 << ": " << all_save.so[2].xp << "%%";
+        sprintf(buf3, ss1.str().c_str());
+    } else {
+        sprintf(buf3, "Slot 3: 0%%");
+    }
+
+    file1_gen.generate(-72, -32, buf1, file1_spr);
+    file2_gen.generate(-72,   0, buf2, file2_spr);
+    file3_gen.generate(-72,  32, buf3, file3_spr);
 
     auto file1_icon = bn::sprite_items::save_tiles.create_sprite(98,-34, 0);
     auto file2_icon = bn::sprite_items::save_tiles.create_sprite(98,-34 + 34,0);
     auto file3_icon = bn::sprite_items::save_tiles.create_sprite(98,-34 + 68,0);
 
-    if (so.last_char_id > -1) {
-        file1_icon = bn::sprite_items::save_tiles.create_sprite(98,-34, so.last_char_id);
-    }
+    if (all_save.so[0].last_char_id > -1) file1_icon = bn::sprite_items::save_tiles.create_sprite(98,-34, all_save.so[0].last_char_id);
+    else file1_icon.set_visible(false);
 
-    file2_icon.set_visible(false);
-    file3_icon.set_visible(false);
+    if (all_save.so[1].last_char_id > -1) file2_icon = bn::sprite_items::save_tiles.create_sprite(98,0, all_save.so[1].last_char_id);
+    else file2_icon.set_visible(false);
 
-    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 12> file2_spr;
-    file2_gen.generate(-72, 0, "Slot 2", file2_spr);
-
-    bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 12> file3_spr;
-    file3_gen.generate(-72, 32, "Slot 3", file3_spr);
+    if (all_save.so[2].last_char_id > -1) file3_icon = bn::sprite_items::save_tiles.create_sprite(98,34, all_save.so[2].last_char_id);
+    else file3_icon.set_visible(false);
 
     int t = 0;
     int c = 0;
 
     bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
 
-    while (!(bn::keypad::a_pressed() && c == 0))
+    while (!bn::keypad::a_pressed())
     {
 
         // Scrolling background
@@ -290,6 +332,8 @@ void load_save()
     bn::sound_items::firehit.play();
     bn::music::stop();
     timer(64);
+
+    so = &all_save.so[c];
 }
 
 void cutscenes(int c)
@@ -325,7 +369,7 @@ void cutscenes(int c)
             bn::sound_items::firehit.play();
             isPlayed = true;
         }
-        timer(96);
+        timer(64);
     }
 }
 
@@ -407,7 +451,7 @@ bool victory_page(int chari, int score)
         }
     }
 
-    int xp = so.xp;
+    int xp = so->xp;
     if (xp == -1) xp = 0;
 
     int new_lc = 0;
@@ -415,7 +459,7 @@ bool victory_page(int chari, int score)
     if (new_xp > 100)
         new_xp = 100;
 
-    so.xp = new_xp; // Add score to save total
+    so->xp = new_xp; // Add score to save total
 
     float new_xp_d = new_xp * 0.48;
     int new_xp_p = 0;
@@ -1498,29 +1542,29 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
 
     // Configure defaults
     dungeon_return dt(x, y, world);
-    if ((so.spawn_x < 1 && so.spawn_y < 1) || force)
+    if ((so->spawn_x < 1 && so->spawn_y < 1) || force)
     {
-        if (so.last_char_id == -1)
-            so.last_char_id = force_char;
+        if (so->last_char_id == -1)
+            so->last_char_id = force_char;
         dt.spawn_x = x;
         dt.spawn_y = y;
         dt.world_index = world;
     }
     else
     {
-        dt.spawn_x = so.spawn_x;
-        dt.spawn_y = so.spawn_y;
-        dt.world_index = so.world_index;
+        dt.spawn_x = so->spawn_x;
+        dt.spawn_y = so->spawn_y;
+        dt.world_index = so->world_index;
     }
 
     // Execute until time to leave
     do
     {
         // Random seed
-        std::srand(so.xp);
+        std::srand(so->xp);
 
         // Spring event trigger
-        if (so.checkpoint == 4 && so.xp > 99 && so.last_char_id != 4) {
+        if (so->checkpoint == 4 && so->xp > 99 && so->last_char_id != 4) {
             dt.world_index = 7;
         }
         
@@ -1555,83 +1599,83 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
             dt = dungeon(dt, so, false);
         }
 
-        bn::sram::write(so);
+        bn::sram::write(all_save);
         bn::core::update();
     } while (!(dt.world_index == until));
 }
 
 void clear_save() {
-    so.last_char_id = 0;
-    so.checkpoint = 0;
-    so.spawn_x = 0;
-    so.spawn_y = 0;
-    so.world_index = 0;
-    so.xp = 0;
-    so.spring_housewarming = 0;
+    so->last_char_id = 0;
+    so->checkpoint = 0;
+    so->spawn_x = 0;
+    so->spawn_y = 0;
+    so->world_index = 0;
+    so->xp = 0;
+    so->spring_housewarming = 0;
 
-    bn::sram::write(so);
+    bn::sram::write(all_save);
 }
 
 int checkpoint(int level)
 {
 
-    if (so.checkpoint < 1)
+    if (so->checkpoint < 1)
     {
-        so.checkpoint = 0;
+        so->checkpoint = 0;
         level = 0;
     }
 
     switch (level)
     {
 
-    // Introduction
-    case 0:
-        //exec_dialogue(0);
-        //exec_dialogue(1);
-        //exec_dialogue(2);
+        // Introduction
+        case 0:
+            //exec_dialogue(0);
+            //exec_dialogue(1);
+            //exec_dialogue(2);
+            core_gameplay(8, 3, 0, -1, true, 0);
 
-        core_gameplay(8, 3, 0, -1, true, 0);
+            cutscenes(0);
+            exec_dialogue(13);
+            cutscenes(1);
+            exec_dialogue(14);
+            keyboard(so);
+            exec_dialogue(15);
+            break;
 
-        cutscenes(0);
-        exec_dialogue(13);
-        cutscenes(1);
-        exec_dialogue(14);
-        keyboard();
-        exec_dialogue(15);
-        break;
-
-    // Spring
-    case 1:
-        exec_dialogue(16);
-        core_gameplay(9, 16, 4, 5, true);
-        break;
-    case 2:
-        bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
-        exec_dialogue(18);
-        break;
-    case 3:
-        core_gameplay(5, 3, 5, 4, true);
-        break;
-    case 4:
-        core_gameplay(9, 6, 4, 7);
-        break;
-    case 5:
-        core_gameplay(5, 8, 4, 5);
-        break;
-    case 6:
-        bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
-        exec_dialogue(17);
-        exec_dialogue(19);
-        exec_dialogue(20);
-        clear_save();
-        bn::core::reset();
-        break;
-    default:
-        return -1;
-        break;
-    }
-    bn::core::update();
-    return level + 1;
+        // Spring
+        case 1:
+            exec_dialogue(16);
+            so->last_char_id = 0;
+            core_gameplay(9, 16, 4, 5, true);
+            break;
+        case 2:
+            bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
+            exec_dialogue(18);
+            break;
+        case 3:
+            core_gameplay(5, 3, 5, 4, true);
+            break;
+        case 4:
+            core_gameplay(9, 6, 4, 7);
+            break;
+        case 5:
+            core_gameplay(5, 8, 4, 5);
+            break;
+        case 6:
+            bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
+            exec_dialogue(17);
+            exec_dialogue(19);
+            exec_dialogue(20);
+            clear_save();
+            bn::core::reset();
+            break;
+        default:
+            return -1;
+            break;
+        }
+        bn::core::update();
+        return level + 1;
 }
 
 int main()
@@ -1639,10 +1683,10 @@ int main()
     bn::core::init(); // Initialize Butano libraries
 
     startup();
-    bn::sram::read(so);         // Read save data from cartridge
+    bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
-    while (so.checkpoint < 99) {
-        so.checkpoint = checkpoint(so.checkpoint);
+    while (so->checkpoint < 99) {
+        so->checkpoint = checkpoint(so->checkpoint);
     }
 
     // Get to the end?

@@ -26,16 +26,22 @@ int countDigit(int n)
     return 1 + countDigit(n / 10);
 }
 
-struct save_struct {
-    int last_char_id = 0;
-    int checkpoint = 0;
-    char island_name[16] = {0};
-    int level_data[10] = {0};
-    int spawn_x = 0;
-    int spawn_y = 0;
-    int world_index = 0;
-    int xp = 0;
-    int spring_housewarming = 0;
+class save_struct {
+    public:
+        int last_char_id = 0;
+        int checkpoint = 0;
+        char island_name[16] = {0};
+        int level_data[10] = {0};
+        int spawn_x = 0;
+        int spawn_y = 0;
+        int world_index = 0;
+        int xp = 0;
+        int spring_housewarming = 0;
+};
+
+class save_all_struct {
+    public:
+        save_struct so[3];
 };
 
 void deep_copy(std::vector<int> &a, std::vector<int> &b) {

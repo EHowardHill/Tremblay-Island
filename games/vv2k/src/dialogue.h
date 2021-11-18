@@ -400,11 +400,14 @@ void dialogue_page(line n[32]) {
             char line4[33] = {0};
             char line5[33] = {0};
             char line6[33] = {0};
-            for (int t = 0; t < 33; t++) line1[t] = n[pos].text[t];
-            for (int t = 0; t < 33; t++) line3[t] = n[pos].text[t + 33];
-            for (int t = 0; t < 33; t++) line4[t] = n[pos].text[t + 66];
-            for (int t = 0; t < 33; t++) line5[t] = n[pos].text[t + 99];
-            for (int t = 0; t < 32; t++) line6[t] = n[pos].text[t + 132];
+
+            BN_LOG(n[pos].text);
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line1[t] = n[pos].text[t];} else {line1[t] = ' ';};
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line3[t] = n[pos].text[t + 33];} else {line3[t] = ' ';};
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line4[t] = n[pos].text[t + 66];} else {line4[t] = ' ';};
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line5[t] = n[pos].text[t + 99];} else {line5[t] = ' ';};
+            for (int t = 0; t < 32; t++) if (n[pos].text[t] < 256) {line6[t] = n[pos].text[t + 132];} else {line6[t] = ' ';};
+
             text_line0.generate(-108, 21, line1, text_sprite0);
             text_line0.generate(-108, 33, line3, text_sprite2);
             text_line0.generate(-108, 45, line4, text_sprite3);
@@ -501,11 +504,11 @@ void dialogue_page_lite(line n[32]) {
             char line4[33] = {0};
             char line5[33] = {0};
             char line6[33] = {0};
-            for (int t = 0; t < 33; t++) line1[t] = n[pos].text[t];
-            for (int t = 0; t < 33; t++) line3[t] = n[pos].text[t + 33];
-            for (int t = 0; t < 33; t++) line4[t] = n[pos].text[t + 66];
-            for (int t = 0; t < 33; t++) line5[t] = n[pos].text[t + 99];
-            for (int t = 0; t < 32; t++) line6[t] = n[pos].text[t + 132];
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line1[t] = n[pos].text[t];} else {line1[t] = ' ';};
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line3[t] = n[pos].text[t + 33];} else {line3[t] = ' ';};
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line4[t] = n[pos].text[t + 66];} else {line4[t] = ' ';};
+            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line5[t] = n[pos].text[t + 99];} else {line5[t] = ' ';};
+            for (int t = 0; t < 32; t++) if (n[pos].text[t] < 256) {line6[t] = n[pos].text[t + 132];} else {line6[t] = ' ';};
             text_line0.generate(-108, 21, line1, text_sprite0);
             text_line0.generate(-108, 33, line3, text_sprite2);
             text_line0.generate(-108, 45, line4, text_sprite3);

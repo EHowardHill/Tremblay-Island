@@ -28,6 +28,7 @@ namespace bn::music_items
     constexpr inline music_item z12_aaron_theme(20);
     constexpr inline music_item z12_overworld_night(21);
     constexpr inline music_item z13_spooky(22);
+    constexpr inline music_item z14_flame(23);
 }
 
 #endif

@@ -30,7 +30,7 @@ int exec_dialogue(int x) {
                 {fals, true, 0, "                                                                  '.....coming!'"},
                 {fals, true, 0, "S01:09"},
                 {fals, true, 0, "BG: 0"},
-                {fals, true, 0, "                                                                  Hey, Maple!!                     C'mon in, allez!"},
+                {fals, true, 0, "                                 Hey, Maple!!                     C'mon in, allez!"},
                 {fals, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
@@ -111,7 +111,7 @@ int exec_dialogue(int x) {
                 {true, true, 0, "ENOKI                            Hey- I'm feeling down and that's stupid! You wanna go on another  Maple and Enoki adventure like   old times??"},
                 {true, true, 0, "ENOKI                            Let's go explore the castle!!"},
                 {true, true, 0, "MAPLE                            Hold up, you bought this castle  and hadn't explored it all first?"},
-                {true, true, 0, "ENOKI                            Well duh, I'm taking my sweet    time with it -- it's a castle!    Allons-y, let's explore!"},
+                {true, true, 0, "ENOKI                            Well duh, I'm taking my sweet    time with it -- it's a castle!   Allons-y, let's explore!"},
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
@@ -163,27 +163,27 @@ int exec_dialogue(int x) {
             line lc[32] = {
                 {true, true, 0, "S02:02"},
                 {true, true, 0, "BG: champ"},
-                {true, true, 0, "                                                                                                   Hmm, hmm hmm hmm...."},
-                {true, true, 0, "For goodness' sake, when is that pizza going to show up? Wasn't itsupposed to be here in under     twenty minutes?"},
+                {true, true, 0, "                                 Hmm, hmm hmm hmm...."},
+                {true, true, 0, "                                 For goodness' sake, when is that pizza going to show up? Wasn't itsupposed to be here in under     twenty minutes?"},
                 {true, true, 0, "                                 Have I checked my mail today? I  probably should go ahead and     check."},
                 {true, true, 0, "S02:03"},
-                {true, true, 0, "Huh, what's this? From the       Tremblay household? I guess I    haven't heard from Aaron and     Enoki in a while."},
-                {true, true, 0, "                                                                  Can't wait to read about how muchthey want to move in with me now."},
+                {true, true, 0, "                                 Huh, what's this? From the       Tremblay household? I guess I    haven't heard from Aaron and     Enoki in a while."},
+                {true, true, 0, "                                 Can't wait to read about how muchthey want to move in with me now."},
                 {true, true, 0, "BG: fadeout"},
                 {true, true, 0, "S02:04"},
                 {true, true, 0, "                                             Hey, Maple!"},
                 {true, true, 0, "S02:05"},
-                {true, true, 0, "Hold on, got this backwards."},
+                {true, true, 0, "                                 Hold on, got this backwards."},
                 {true, true, 0, "S02:04"},
                 {true, true, 0, "BG: 0"},
                 {true, true, 0, "                                             'Hey, Maple!'"},
-                {true, true, 0, "      'We thought we'd send            you a quick letter to            give you an update.'"},
-                {true, true, 0, "      'We sold the castle and          got to make enough to            buy a nice trailer home.'"},
-                {true, true, 0, "      'However, that's not all-        we got it set up on our          new island!!'"},
+                {true, true, 0, "                                       'We thought we'd send            you a quick letter to            give you an update.'"},
+                {true, true, 0, "                                       'We sold the castle and          got to make enough to            buy a nice trailer home.'"},
+                {true, true, 0, "                                       'However, that's not all-        we got it set up on our          new island!!'"},
                 {true, true, 0, "S02:05"},
-                {true, true, 0, "I'm...                           That's it,                       I'm gonna kill 'em."},
+                {true, true, 0, "                                 I'm...                           That's it,                       I'm gonna kill 'em."},
                 {true, true, 0, "S02:04"},
-                {true, true, 0, "      'So, we've decided that          we're going to name it-..'"},
+                {true, true, 0, "                                       'So, we've decided that          we're going to name it-..'"},
                 {true, true, 0, "COM: Endscene"}
             };
             dialogue_page(lc);
