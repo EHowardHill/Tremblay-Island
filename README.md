@@ -2,7 +2,7 @@
 
 The first game by Cinemint games! A sequel to **Vous Voilà**, a novel by yours truly that you can learn a little more about [on Amazon](https://www.amazon.com/dp/B08QCQ8DNV/ref=cm_sw_em_r_mt_dp_A6BZSE5MJ3HET2N6PV8P) .
 
-Check out my Discord server over at https://discord.gg/redJjECzkv !
+**Check out my Discord server over at** https://discord.gg/redJjECzkv ! It's the best place to leave comments, talk to me directly, learn about the game / code / assets, or just hang out with other chill people.
 
 ## Download Links
 
