@@ -29,6 +29,11 @@ namespace bn::music_items
     constexpr inline music_item z12_overworld_night(21);
     constexpr inline music_item z13_spooky(22);
     constexpr inline music_item z14_flame(23);
+    constexpr inline music_item z15_flame(24);
+    constexpr inline music_item z16_boat(25);
+    constexpr inline music_item z17_ptit(26);
+    constexpr inline music_item z18_houses(27);
+    constexpr inline music_item z19_digital(28);
 }
 
 #endif

@@ -1,0 +1,3 @@
+graphics/pc_cursor.bmp
+1090
+1637655969.71

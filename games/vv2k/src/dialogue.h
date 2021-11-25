@@ -62,6 +62,8 @@
 #include "bn_regular_bg_items_castle01.h"
 #include "bn_regular_bg_items_castle02.h"
 #include "bn_regular_bg_items_castle03.h"
+#include "bn_regular_bg_items_scout_tv_01.h"
+#include "bn_regular_bg_items_scout_tv_02.h"
 #include "bn_regular_bg_items_s0101.h"
 #include "bn_regular_bg_items_s0102.h"
 #include "bn_regular_bg_items_s0103.h"
@@ -89,6 +91,7 @@
 #include "bn_regular_bg_items_s0405.h"
 #include "bn_regular_bg_items_s0406.h"
 #include "bn_regular_bg_items_s0407.h"
+#include "bn_regular_bg_items_s0501.h"
 
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
@@ -242,10 +245,20 @@ void dialogue_page(line n[32]) {
         } else if (strcmp(n[pos].text, "BG: frog") == 0) {
             int music_volume = 80;
             bn::music_items_info::span[15].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: news") == 0) {
+            int music_volume = 80;
+            bn::music_items_info::span[24].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: fadeout") == 0) {
             if (bn::music::playing()) {
                 bn::music::set_volume(0);
             }
+
+        // Sound effects
+        } else if (strcmp(n[pos].text, "SF: Hey Maple") == 0) {
+            bn::sound_items::heymaple.play();
+        // Sound effects
+        } else if (strcmp(n[pos].text, "SF: Maple Ugh") == 0) {
+            bn::sound_items::maple_ugh_01.play();
 
         // Set backgrounds
         } else if (strcmp(n[pos].text, "BG: Ocean") == 0) {
@@ -348,6 +361,15 @@ void dialogue_page(line n[32]) {
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S04:07") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0407);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S05:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0501);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S_STV_01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::scout_tv_01);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S_STV_02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::scout_tv_02);
             primary_bg.set_visible(true);
         
 

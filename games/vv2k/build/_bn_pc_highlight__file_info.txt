@@ -1,0 +1,3 @@
+graphics/pc_highlight.bmp
+246
+1637740507.98

@@ -354,6 +354,37 @@ int exec_dialogue(int x) {
             return 0;
             break;
         }
+
+        case 21: {
+            line lc[32] = {
+                {fals, fals, 0,  "BG: news"},
+                {fals, fals, 0,  "S_STV_01"},
+                {fals, fals, 0,  "                                 Hey, y'all! Scout here.                                           It's that time again!"},
+                {fals, fals, 0,  "S_STV_02"},
+                {fals, fals, 0,  "                                 It's exciting to finally have a  real audience, ladies and        gentlemen. Er.. gentleman."},
+                {fals, fals, 0,  "                                 It's April 1st, and you know     what that means!"},
+                {fals, fals, 0,  "                                 We've had Maple Tremblay come    move into the island for a whole day, now! Time flies, man."},
+                {fals, fals, 0,  "                                 That's a, uh, joke..             Cuz it's April 1st, she's been   here a month now.."},
+                {fals, fals, 0,  "                                 I'll just, uh, move on.. So..    ..Right! So I finally found out  my computer password!            That's good."},
+                {fals, fals, 0,  "                                 Oh, right- Right, the most       important bit. We have three new people moving into the village!"},
+                {fals, fals, 0,  "                                 They're named Diana, Eleanor, andOlivier, and they're moving into the new cabin to the northwest."},
+                {fals, fals, 0,  "                                 So just make sure to give them a warm welcome."},
+                {fals, fals, 0,  "S_STV_01"},
+                {fals, fals, 0,  "                                 Alright, that's all..            I suppose I'll see y'all later   today. Thanks for tuning in!"},
+                {fals, fals, 0,  "S05:01"},  
+                {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  "ENOKI                            Mmmmmm....                       I made popcorn, but I don't wannaget up to get it out of the      microwave."},
+                {fals, fals, 0,  "SF: Hey Maple"},
+                {fals, fals, 0,  "ENOKI                            Could you get it, Maple?         S'il te plait?"},
+                {fals, fals, 0,  "MAPLE                            Ugh, get a room already, you two."},
+                {fals, fals, 0,  "AARON                            Maple, this is our house."},
+                {fals, fals, 0,  "MAPLE                            Whatever."},
+                {fals, fals, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
         
         default: {
             return 1;

@@ -1,0 +1,1 @@
+scout_tv_01_bn_graphics.o: scout_tv_01_bn_graphics.s

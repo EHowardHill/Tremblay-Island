@@ -83,6 +83,16 @@
 #include "bn_sprite_items_underground_tiles.h"
 #include "bn_sprite_items_cave_bat.h"
 
+#include "bn_regular_bg_items_pc_background.h"
+#include "bn_regular_bg_items_pc_scout.h"
+#include "bn_regular_bg_items_pc_desktop.h"
+#include "bn_sprite_items_pc_cursor.h"
+#include "bn_regular_bg_items_pc_bbscreen.h"
+#include "bn_regular_bg_items_pc_folder01.h"
+#include "bn_regular_bg_items_pc_folder02.h"
+#include "bn_sprite_items_pc_highlight.h"
+#include "bn_sprite_items_bb_sprites.h"
+
 static save_all_struct all_save;
 static save_struct *so;
 constexpr bool fals = false;
@@ -230,7 +240,6 @@ void load_save()
     char buf2[32];
     char buf3[32];
 
-    BN_LOG((int)all_save.so[0].island_name[0]);
     if (all_save.so[0].island_name[0] < 255 && all_save.so[0].island_name[0] > 0) {
         std::stringstream ss1;
         for (int t = 0; t < 16; t++) {
@@ -1535,6 +1544,155 @@ dungeon_return underground()
     return dt;
 }
 
+void ball_breakout() {
+
+    while(true) {
+    bn::vector<bn::sprite_ptr, 54> tiles;
+    auto ball = bn::sprite_items::bb_sprites.create_sprite(32, 56, 6);
+    ball.set_scale(1,1);
+    auto paddle = bn::sprite_items::bb_sprites.create_sprite(32,72);
+    paddle.set_scale(2,1);
+
+    for (int x = 0; x < 9; x++) {
+        for (int y = 0; y < 5; y++) {
+            auto bb = bn::sprite_items::bb_sprites.create_sprite(x * 8, y * 8, y);
+            tiles.push_back(bb);
+        }
+    }
+
+    int d_x = 1;
+    int d_y = 1;
+
+    while (ball.y() < 80) {
+
+        ball.set_position(ball.x() + d_x, ball.y() + d_y);
+
+        if (ball.y() == 64 && (abs(ball.x() - paddle.x()) < 16)) {
+            d_y = -1;
+            if (ball.x() > paddle.x()) {
+                d_x = 1;
+            } else {
+                d_x = -1;
+            }
+            if (abs(ball.x() - paddle.x()) > 8) d_x = d_x * 2;
+            bn::sound_items::pop.play();
+        }
+        if (ball.y() < 1) d_y = 1;
+        if (ball.x() > 63) d_x = d_x * -1;
+        if (ball.x() < 1) d_x = d_x * -1;
+
+        for (int t = 0; t < tiles.size(); t++) {
+            if (tiles.at(t).visible()) {
+            if (abs(tiles.at(t).x() - ball.x()) < 4) {
+                if (abs(tiles.at(t).y().integer() - ball.y()) < 8) {
+                    d_y = 1;
+                    tiles.at(t).set_visible(false);
+                    bn::sound_items::firehit.play();
+                }
+            }
+            }
+        }
+
+        if (bn::keypad::left_held() && paddle.x() > 8) {
+            paddle.set_x(paddle.x() - 3);
+        }
+
+        if (bn::keypad::right_held() && paddle.x() < 63) {
+            paddle.set_x(paddle.x() + 3);
+        }
+
+        bn::core::update();
+    }
+
+    bn::sound_items::squeak.play();
+    }
+}
+
+dungeon_return computer() {
+    auto pc_bg = bn::regular_bg_items::pc_background.create_bg(0,0);
+    auto pc_scout = bn::regular_bg_items::pc_scout.create_bg(0,0);
+    auto pc_cursor = bn::sprite_items::pc_cursor.create_sprite(0,0,1);
+    auto b_button = bn::sprite_items::b_button.create_sprite(90,-50);
+
+    pc_bg.put_above();
+
+    pc_scout.set_blending_enabled(true);
+    bn::blending::set_transparency_alpha(0);
+    bn::sound_items::pc_whir.play();
+
+    int ticks = 0;
+    double alpha = 0;
+    int select = 0;
+    while (true) {
+
+        BN_LOG(pc_cursor.x(), " - ", pc_cursor.y());
+
+        pc_cursor.set_position(
+            pc_cursor.x().integer() + bn::keypad::right_held() - bn::keypad::left_held(),
+            pc_cursor.y().integer() + bn::keypad::down_held() - bn::keypad::up_held()
+        );
+
+        if (pc_cursor.x() < -30) pc_cursor.set_x(-30);
+        if (pc_cursor.x() > 55) pc_cursor.set_x(55);
+        if (pc_cursor.y() < -35) pc_cursor.set_y(-35);
+        if (pc_cursor.y() > 30) pc_cursor.set_y(30);
+
+        BN_LOG(pc_cursor.x(), " - ", pc_cursor.y());
+
+        if (ticks > 64) {
+            if (alpha < 1) {
+                if (alpha == 0) {
+                    bn::sound_items::pc_boot.play();
+                }
+                bn::blending::set_transparency_alpha(alpha);
+                alpha += 0.05;
+            } else {
+                bn::blending::set_transparency_alpha(bn::fixed(1));
+            }
+        }
+
+        if (ticks == 108) {
+            pc_cursor = bn::sprite_items::pc_cursor.create_sprite(0,0,0);
+            pc_scout.set_blending_enabled(false);
+            bn::blending::set_transparency_alpha(bn::fixed(0.5));
+        }
+
+        if (ticks > 108) {
+            if (bn::keypad::a_pressed() && pc_cursor.visible()) {
+                select = 0;
+                if (pc_cursor.x().integer() < -14 && pc_cursor.y().integer() < 12) {
+                    if (pc_cursor.y().integer() < -9) {
+                        pc_scout = bn::regular_bg_items::pc_folder02.create_bg(0,0);
+                        select = 1;
+                    } else {
+                        pc_scout = bn::regular_bg_items::pc_folder01.create_bg(0,0);
+                        select = 2;
+                    }
+                } else {
+                    if (pc_cursor.y() > -14 && pc_cursor.y() < 4) {
+                        if (pc_cursor.x() > 14 && pc_cursor.x() < 33) {
+                            select = 3;
+                            bn::music_items_info::span[28].first.play(bn::fixed(80) / 100);
+                            pc_scout = bn::regular_bg_items::pc_bbscreen.create_bg(0,0);
+                            pc_cursor.set_visible(false);
+                        }                        
+                    } else {
+                        pc_scout = bn::regular_bg_items::pc_desktop.create_bg(0,0);
+                    }
+                }
+            }
+        }
+
+        if (ticks == 128) {
+            pc_scout = bn::regular_bg_items::pc_desktop.create_bg(0,0);
+        }
+
+        if (ticks < 256) ticks++;
+        pc_bg.put_above();
+        bn::core::update();
+    }
+}
+
 //9,16,4
 
 void core_gameplay(int x, int y, int world, int until, bool force = false, int force_char = 0)
@@ -1630,9 +1788,9 @@ int checkpoint(int level)
 
         // Introduction
         case 0:
-            //exec_dialogue(0);
-            //exec_dialogue(1);
-            //exec_dialogue(2);
+            exec_dialogue(0);
+            exec_dialogue(1);
+            exec_dialogue(2);
             core_gameplay(8, 3, 0, -1, true, 0);
 
             cutscenes(0);
@@ -1667,9 +1825,21 @@ int checkpoint(int level)
             exec_dialogue(17);
             exec_dialogue(19);
             exec_dialogue(20);
-            clear_save();
-            bn::core::reset();
             break;
+
+        // Summer - Diana, Eleanor, and Vee
+        case 7:
+            exec_dialogue(21);
+            break;
+        case 8:
+            //BN_LOG(so->last_char_id);
+            if (so->last_char_id == 3) {
+                core_gameplay(8, 10, 7, 0, true);
+            } else {
+                core_gameplay(9, 6, 7, 0, true);
+            }
+            break;
+
         default:
             return -1;
             break;
@@ -1682,9 +1852,13 @@ int main()
 {
     bn::core::init(); // Initialize Butano libraries
 
+    ball_breakout();
+    computer();
+
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
+    so->checkpoint = 7;               // Force for dev purposes
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
     }

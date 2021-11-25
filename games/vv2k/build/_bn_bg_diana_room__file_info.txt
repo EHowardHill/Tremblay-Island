@@ -1,0 +1,3 @@
+graphics/bg_diana_room.bmp
+32882
+1637574370.71
