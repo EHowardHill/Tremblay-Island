@@ -90,6 +90,7 @@
 #include "bn_regular_bg_items_pc_bbscreen.h"
 #include "bn_regular_bg_items_pc_folder01.h"
 #include "bn_regular_bg_items_pc_folder02.h"
+#include "bn_regular_bg_items_pc_document.h"
 #include "bn_sprite_items_pc_highlight.h"
 #include "bn_sprite_items_bb_sprites.h"
 
@@ -1544,71 +1545,88 @@ dungeon_return underground()
     return dt;
 }
 
-void ball_breakout() {
+bool ball_breakout() {
+    bool leave = false;
 
-    while(true) {
-    bn::vector<bn::sprite_ptr, 54> tiles;
-    auto ball = bn::sprite_items::bb_sprites.create_sprite(32, 56, 6);
-    ball.set_scale(1,1);
-    auto paddle = bn::sprite_items::bb_sprites.create_sprite(32,72);
-    paddle.set_scale(2,1);
+    while(!leave) {
 
-    for (int x = 0; x < 9; x++) {
-        for (int y = 0; y < 5; y++) {
-            auto bb = bn::sprite_items::bb_sprites.create_sprite(x * 8, y * 8, y);
-            tiles.push_back(bb);
-        }
-    }
+        bn::camera_ptr camera = bn::camera_ptr::create(30, 42);
 
-    int d_x = 1;
-    int d_y = 1;
+        bn::vector<bn::sprite_ptr, 54> tiles;
+        auto ball = bn::sprite_items::bb_sprites.create_sprite(32, 56, 6);
+        ball.set_scale(1,1);
+        ball.set_camera(camera);
+        auto paddle = bn::sprite_items::bb_sprites.create_sprite(32,72);
+        paddle.set_scale(2,1);
+        paddle.set_camera(camera);
 
-    while (ball.y() < 80) {
-
-        ball.set_position(ball.x() + d_x, ball.y() + d_y);
-
-        if (ball.y() == 64 && (abs(ball.x() - paddle.x()) < 16)) {
-            d_y = -1;
-            if (ball.x() > paddle.x()) {
-                d_x = 1;
-            } else {
-                d_x = -1;
+        for (int x = 0; x < 9; x++) {
+            for (int y = 0; y < 5; y++) {
+                auto bb = bn::sprite_items::bb_sprites.create_sprite(x * 8, y * 8, y);
+                bb.set_camera(camera);
+                tiles.push_back(bb);
             }
-            if (abs(ball.x() - paddle.x()) > 8) d_x = d_x * 2;
-            bn::sound_items::pop.play();
         }
-        if (ball.y() < 1) d_y = 1;
-        if (ball.x() > 63) d_x = d_x * -1;
-        if (ball.x() < 1) d_x = d_x * -1;
 
-        for (int t = 0; t < tiles.size(); t++) {
-            if (tiles.at(t).visible()) {
-            if (abs(tiles.at(t).x() - ball.x()) < 4) {
-                if (abs(tiles.at(t).y().integer() - ball.y()) < 8) {
-                    d_y = 1;
-                    tiles.at(t).set_visible(false);
-                    bn::sound_items::firehit.play();
+        int d_x = 1;
+        int d_y = 1;
+
+        while (ball.y() < 75 && !leave) {
+
+            if (bn::keypad::b_pressed()) leave = true;
+
+            ball.set_position(ball.x() + d_x, ball.y() + d_y);
+
+            if (ball.y() == 64 && (abs(ball.x() - paddle.x()) < 16)) {
+                d_y = -1;
+                if (ball.x() > paddle.x()) {
+                    d_x = 1;
+                } else {
+                    d_x = -1;
+                }
+                if (abs(ball.x() - paddle.x()) > 8) d_x = d_x * 2;
+                bn::sound_items::pop.play();
+            }
+            if (ball.y() < 1) d_y = 1;
+            if (ball.x() > 63) d_x = d_x * -1;
+            if (ball.x() < 1) d_x = d_x * -1;
+
+            bool complete = true;
+            for (int t = 0; t < tiles.size(); t++) {
+                if (tiles.at(t).visible()) {
+                    complete = false;
+                    if (abs(tiles.at(t).x() - ball.x()) < 4) {
+                        if (abs(tiles.at(t).y().integer() - ball.y()) < 8) {
+                            d_y = 1;
+                            tiles.at(t).set_visible(false);
+                            bn::sound_items::firehit.play();
+                        }
+                    }
                 }
             }
+
+            if (complete) return true;
+
+            if (bn::keypad::left_held() && paddle.x() > 8) {
+                paddle.set_x(paddle.x() - 3);
             }
-        }
 
-        if (bn::keypad::left_held() && paddle.x() > 8) {
-            paddle.set_x(paddle.x() - 3);
-        }
+            if (bn::keypad::right_held() && paddle.x() < 63) {
+                paddle.set_x(paddle.x() + 3);
+            }
 
-        if (bn::keypad::right_held() && paddle.x() < 63) {
-            paddle.set_x(paddle.x() + 3);
+            bn::core::update();
         }
-
-        bn::core::update();
-    }
 
     bn::sound_items::squeak.play();
     }
+
+    return false;
 }
 
 dungeon_return computer() {
+    bn::music::stop();
+
     auto pc_bg = bn::regular_bg_items::pc_background.create_bg(0,0);
     auto pc_scout = bn::regular_bg_items::pc_scout.create_bg(0,0);
     auto pc_cursor = bn::sprite_items::pc_cursor.create_sprite(0,0,1);
@@ -1623,7 +1641,7 @@ dungeon_return computer() {
     int ticks = 0;
     double alpha = 0;
     int select = 0;
-    while (true) {
+    while (!bn::keypad::b_pressed()) {
 
         BN_LOG(pc_cursor.x(), " - ", pc_cursor.y());
 
@@ -1659,25 +1677,83 @@ dungeon_return computer() {
 
         if (ticks > 108) {
             if (bn::keypad::a_pressed() && pc_cursor.visible()) {
-                select = 0;
                 if (pc_cursor.x().integer() < -14 && pc_cursor.y().integer() < 12) {
                     if (pc_cursor.y().integer() < -9) {
                         pc_scout = bn::regular_bg_items::pc_folder02.create_bg(0,0);
-                        select = 1;
+                        select = 2;
                     } else {
                         pc_scout = bn::regular_bg_items::pc_folder01.create_bg(0,0);
-                        select = 2;
+                        select = 1;
                     }
                 } else {
                     if (pc_cursor.y() > -14 && pc_cursor.y() < 4) {
-                        if (pc_cursor.x() > 14 && pc_cursor.x() < 33) {
-                            select = 3;
-                            bn::music_items_info::span[28].first.play(bn::fixed(80) / 100);
-                            pc_scout = bn::regular_bg_items::pc_bbscreen.create_bg(0,0);
-                            pc_cursor.set_visible(false);
-                        }                        
+
+                        // Trash Folder
+                        if (select == 2) {
+                            if (pc_cursor.x() > 14 && pc_cursor.x() < 33) {
+                                pc_scout = bn::regular_bg_items::pc_document.create_bg(0,0);
+                                pc_bg.put_above();
+
+                                bn::core::update();
+                                b_button.set_visible(false);
+                                exec_dialogue(23);
+                                pc_scout = bn::regular_bg_items::pc_folder02.create_bg(0,0);
+                                b_button.set_visible(true);
+                            } else if (pc_cursor.x() > 32 && pc_cursor.x() < 51) {
+                                pc_scout = bn::regular_bg_items::pc_document.create_bg(0,0);
+                                pc_bg.put_above();
+
+                                bn::core::update();
+                                b_button.set_visible(false);
+                                exec_dialogue(24);
+                                pc_scout = bn::regular_bg_items::pc_folder02.create_bg(0,0);
+                                b_button.set_visible(true);
+                            } else if (pc_cursor.x() > 50 && pc_cursor.x() < 70) {
+                                pc_scout = bn::regular_bg_items::pc_document.create_bg(0,0);
+                                pc_bg.put_above();
+
+                                bn::core::update();
+                                b_button.set_visible(false);
+                                exec_dialogue(25);
+                                pc_scout = bn::regular_bg_items::pc_folder02.create_bg(0,0);
+                                b_button.set_visible(true);
+                            }
+                        }
+
+                        // Documents folder
+                        else if (select == 1) {
+                            if (pc_cursor.x() > 14 && pc_cursor.x() < 33) {
+                                bn::music_items_info::span[28].first.play(bn::fixed(80) / 100);
+                                pc_scout = bn::regular_bg_items::pc_bbscreen.create_bg(0,0);
+                                pc_cursor.set_visible(false);
+                                pc_bg.put_above();
+
+                                // Play breakout
+                                bool success = ball_breakout();
+
+                                bn::music::stop();
+                                pc_scout = bn::regular_bg_items::pc_folder01.create_bg(0,0);
+                                pc_cursor.set_visible(true);
+                                bn::core::update();
+                                
+                                // Play dialogue on success
+                                if (success) exec_dialogue(26);
+
+                            } else if (pc_cursor.x() > 32 && pc_cursor.x() < 51) {
+                                pc_scout = bn::regular_bg_items::pc_document.create_bg(0,0);
+                                pc_bg.put_above();
+
+                                b_button.set_visible(false);
+                                bn::core::update();
+                                exec_dialogue(22);
+                                pc_scout = bn::regular_bg_items::pc_folder01.create_bg(0,0);
+                                b_button.set_visible(true);
+                            } 
+                        }
+  
                     } else {
                         pc_scout = bn::regular_bg_items::pc_desktop.create_bg(0,0);
+                        select = 0;
                     }
                 }
             }
@@ -1691,6 +1767,9 @@ dungeon_return computer() {
         pc_bg.put_above();
         bn::core::update();
     }
+
+    dungeon_return dt(4, 7, 6);
+    return dt;
 }
 
 //9,16,4
@@ -1746,6 +1825,10 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
                 case 3:
                 {
                     dt = underground();
+                    break;
+                }
+                case 4: {
+                    dt = computer();
                     break;
                 }
             };
@@ -1851,9 +1934,6 @@ int checkpoint(int level)
 int main()
 {
     bn::core::init(); // Initialize Butano libraries
-
-    ball_breakout();
-    computer();
 
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge

@@ -526,6 +526,8 @@ void dialogue_page_lite(line n[32]) {
             char line4[33] = {0};
             char line5[33] = {0};
             char line6[33] = {0};
+
+            BN_LOG(n[pos].text);
             for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line1[t] = n[pos].text[t];} else {line1[t] = ' ';};
             for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line3[t] = n[pos].text[t + 33];} else {line3[t] = ' ';};
             for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line4[t] = n[pos].text[t + 66];} else {line4[t] = ' ';};

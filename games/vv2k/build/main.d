@@ -242,6 +242,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_bbscreen.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_folder01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_folder02.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_document.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_pc_highlight.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bb_sprites.h
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
@@ -487,5 +488,6 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_bbscreen.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_folder01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_folder02.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_document.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_pc_highlight.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bb_sprites.h:
