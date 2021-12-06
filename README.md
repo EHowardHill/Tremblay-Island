@@ -21,6 +21,6 @@ You'll want to build from within `games\vv2k`. Instructions on building Butano-b
 
 Tremblay Island is a currently in-development GameBoy Advance title built using C++ and the Butano library. You can learn a little more about Butano [here](https://github.com/GValiente/butano) if you're curious.
 
-A blurb about the story and setting can be found over on my [website](http://www.tremblayisland.com/). I've also got a minute-long [trailer](https://youtu.be/Rcy9nHeIZuc) if that's more your speed.
+A blurb about the story and setting can be found over on my [website](http://www.tremblayisland.com/). I've also got a minute-long [trailer](https://www.youtube.com/watch?v=uZlnB7BZ6iQ) if that's more your speed.
 
 **I've only got about 30 minutes of gameplay done so far!** I've had to build the engine from scratch, and I've never worked with C++ in any serious capacity before this project. However, I'm learning fast and having a lot of fun.
