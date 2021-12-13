@@ -1,5 +1,21 @@
 #include <sstream>
 
+/*
+
+Maple   0
+Enoki   1
+Aaron   2
+Scout   3
+Vee     4
+Eleanor 5
+Diana   6
+Guy     7
+la Cruz 8
+Heather 9
+Nim     10
+
+*/
+
 // Generic classes
 class line {
     public:

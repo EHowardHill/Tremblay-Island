@@ -55,6 +55,9 @@ audio/maple_ugh_01.wav
 audio/maple_ugh_02.wav
 26242
 1636430012.78
+audio/motorboat.wav
+658432
+1638763760.99
 audio/new_castle.xm
 463860
 1629764745.59
@@ -92,8 +95,8 @@ audio/ui_sfx03.wav
 11056
 1629764745.59
 audio/v01.xm
-896244
-1629764745.6
+896812
+1638017566.75
 audio/v02.mod
 227604
 1629764745.6
@@ -146,8 +149,8 @@ audio/z12_overworld_night.xm
 649387
 1636185065.65
 audio/z13_spooky.xm
-490966
-1636324058.6
+460929
+1638356175.7
 audio/z14_flame.xm
 1271960
 1636767813.49
@@ -166,3 +169,12 @@ audio/z18_houses.xm
 audio/z19_digital.xm
 154252
 1637650959.96
+audio/z20_waves.xm
+665547
+1637915199.56
+audio/z21_pools.xm
+716731
+1638085742.51
+audio/z22_cbx.xm
+448300
+1638558407.86

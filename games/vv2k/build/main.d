@@ -51,6 +51,26 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_hbe_ptr.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sram.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/../hw/include/bn_hw_sram_constants.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_mat_attributes.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_display.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed_size.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_size.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_mat_attributes.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_math.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_attributes_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pivot_position_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_mat_attributes_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pa_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pb_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pc_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pd_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dx_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dy_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pa_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pc_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dx_register_hbe_ptr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dy_register_hbe_ptr.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sound_items.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sound_item.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_music_items_info.h \
@@ -70,7 +90,6 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_alignment.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_compression_type.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_item.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_size.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_cell.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_tiles_item.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_tile.h \
@@ -92,6 +111,15 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_ptr.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_cell_info.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_trailer_home.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_affine_bg_items_bg_crystal_ball.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_item.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_map_item.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_map_cell.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_tiles_item.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_crystal01.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_affine_bg_items_bg_ocean.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bg_sky.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_affine_bg_items_bg_sky_trees.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/save.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/dialogue.h \
@@ -149,6 +177,8 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron06.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine02.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_diana01.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_nicholas01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle_floor.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle02.h \
@@ -185,6 +215,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_day_castle.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_docks.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_dialogue_bg_2.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scripts.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/wander.h \
@@ -205,12 +236,21 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron_sleep.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron_walking_spring.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_scout_walking_spring.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_vee_walking_spring.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_eleanor_walking_spring.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_diana_walking_spring.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_del_sleep.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_fireball.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_fireplace_anim.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bookshelf.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_environment_stone.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_trailer_home.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_pools_tiles.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_landry_cottage.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_diana_room.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_greenhouse_bg_01.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_greenhouse_bg_02.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_library.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_ocean_terrain.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_grassy_knoll.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_water_animation.h \
@@ -244,7 +284,13 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_folder02.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_document.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_pc_highlight.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bb_sprites.h
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bb_sprites.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_avocado.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_magic_keys.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_toutes.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_static.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_toutes_spr.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_dock.h
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -297,6 +343,26 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_hbe_ptr.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sram.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/../hw/include/bn_hw_sram_constants.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_mat_attributes.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_display.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed_size.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_size.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_mat_attributes.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_math.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_attributes_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pivot_position_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_mat_attributes_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pa_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pb_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pc_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pd_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dx_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dy_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pa_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_pc_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dx_register_hbe_ptr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_dy_register_hbe_ptr.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sound_items.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sound_item.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_music_items_info.h:
@@ -316,7 +382,6 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_alignment.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_compression_type.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_item.h:
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_size.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_cell.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_tiles_item.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_tile.h:
@@ -338,6 +403,15 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_ptr.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_regular_bg_map_cell_info.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_trailer_home.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_affine_bg_items_bg_crystal_ball.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_item.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_map_item.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_map_cell.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_affine_bg_tiles_item.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_crystal01.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_affine_bg_items_bg_ocean.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bg_sky.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_affine_bg_items_bg_sky_trees.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/objects.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/save.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/dialogue.h:
@@ -395,6 +469,8 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron06.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_delphine02.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_diana01.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_nicholas01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle_floor.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle02.h:
@@ -431,6 +507,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_day_castle.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_docks.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_dialogue_bg_2.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/scripts.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/wander.h:
@@ -451,12 +528,21 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron_sleep.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_aaron_walking_spring.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_scout_walking_spring.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_vee_walking_spring.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_eleanor_walking_spring.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_diana_walking_spring.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_del_sleep.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_fireball.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_fireplace_anim.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bookshelf.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_environment_stone.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_trailer_home.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_pools_tiles.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_landry_cottage.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_diana_room.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_greenhouse_bg_01.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_greenhouse_bg_02.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_library.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_ocean_terrain.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_grassy_knoll.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_water_animation.h:
@@ -491,3 +577,9 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_pc_document.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_pc_highlight.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_bb_sprites.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_avocado.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_magic_keys.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_toutes.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_static.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_sprite_items_toutes_spr.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_bg_dock.h:

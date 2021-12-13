@@ -57,6 +57,8 @@
 #include "bn_sprite_items_aaron06.h"
 #include "bn_sprite_items_delphine01.h"
 #include "bn_sprite_items_delphine02.h"
+#include "bn_sprite_items_diana01.h"
+#include "bn_sprite_items_nicholas01.h"
 
 #include "bn_regular_bg_items_castle_floor.h"
 #include "bn_regular_bg_items_castle01.h"
@@ -96,6 +98,7 @@
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
 #include "bn_regular_bg_items_day_castle.h"
+#include "bn_regular_bg_items_bg_docks.h"
 
 #include "bn_sprite_items_dialogue_bg_2.h"
 
@@ -185,6 +188,13 @@ void set_sprite(bn::sprite_ptr chari, int value) {
         case 27:
             chari.set_item(bn::sprite_items::aaron06);
             break;
+        case 28:
+            chari.set_item(bn::sprite_items::nicholas01);
+            break;
+        case 29:
+            chari.set_item(bn::sprite_items::diana01);
+            break;
+
         default:
             break;
     }
@@ -371,6 +381,10 @@ void dialogue_page(line n[32]) {
         } else if (strcmp(n[pos].text, "S_STV_02") == 0) {
             primary_bg.set_item(bn::regular_bg_items::scout_tv_02);
             primary_bg.set_visible(true);
+
+        } else if (strcmp(n[pos].text, "S_DOCKS") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::bg_docks);
+            primary_bg.set_visible(true);
         
 
         // End dialogue
@@ -417,11 +431,11 @@ void dialogue_page(line n[32]) {
             bn::vector<bn::sprite_ptr, 33> text_sprite3;
             bn::vector<bn::sprite_ptr, 33> text_sprite4;
             bn::vector<bn::sprite_ptr, 33> text_sprite5;
-            char line1[33] = {0};
-            char line3[33] = {0};
-            char line4[33] = {0};
-            char line5[33] = {0};
-            char line6[33] = {0};
+            char line1[42] = {0};
+            char line3[42] = {0};
+            char line4[42] = {0};
+            char line5[42] = {0};
+            char line6[42] = {0};
 
             BN_LOG(n[pos].text);
             for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line1[t] = n[pos].text[t];} else {line1[t] = ' ';};

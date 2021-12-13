@@ -37,6 +37,9 @@ namespace bn::music_items_info
         make_pair(music_item(26), string_view("z17_ptit")),
         make_pair(music_item(27), string_view("z18_houses")),
         make_pair(music_item(28), string_view("z19_digital")),
+        make_pair(music_item(29), string_view("z20_waves")),
+        make_pair(music_item(30), string_view("z21_pools")),
+        make_pair(music_item(31), string_view("z22_cbx")),
     };
 
     constexpr inline span<const pair<music_item, string_view>> span(array);

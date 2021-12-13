@@ -34,6 +34,9 @@ namespace bn::music_items
     constexpr inline music_item z17_ptit(26);
     constexpr inline music_item z18_houses(27);
     constexpr inline music_item z19_digital(28);
+    constexpr inline music_item z20_waves(29);
+    constexpr inline music_item z21_pools(30);
+    constexpr inline music_item z22_cbx(31);
 }
 
 #endif

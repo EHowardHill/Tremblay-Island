@@ -22,6 +22,14 @@
 #include "bn_rect_window_actions.h"
 #include "bn_rect_window_boundaries_hbe_ptr.h"
 #include "bn_sram.h"
+#include "bn_affine_bg_mat_attributes.h"
+#include "bn_affine_bg_attributes_hbe_ptr.h"
+#include "bn_affine_bg_pivot_position_hbe_ptr.h"
+#include "bn_affine_bg_mat_attributes_hbe_ptr.h"
+#include "bn_affine_bg_pa_register_hbe_ptr.h"
+#include "bn_affine_bg_pc_register_hbe_ptr.h"
+#include "bn_affine_bg_dx_register_hbe_ptr.h"
+#include "bn_affine_bg_dy_register_hbe_ptr.h"
 
 #include "bn_sound_items.h"
 #include "bn_music_items_info.h"
@@ -49,6 +57,12 @@
 #include "bn_regular_bg_map_cell_info.h"
 
 #include "bn_regular_bg_items_bg_trailer_home.h"
+
+#include "bn_affine_bg_items_bg_crystal_ball.h"
+#include "bn_regular_bg_items_bg_crystal01.h"
+#include "bn_affine_bg_items_bg_ocean.h"
+#include "bn_sprite_items_bg_sky.h"
+#include "bn_affine_bg_items_bg_sky_trees.h"
 
 // Extended headers
 #include "objects.h"
@@ -93,6 +107,14 @@
 #include "bn_regular_bg_items_pc_document.h"
 #include "bn_sprite_items_pc_highlight.h"
 #include "bn_sprite_items_bb_sprites.h"
+#include "bn_sprite_items_avocado.h"
+
+#include "bn_sprite_items_magic_keys.h"
+
+#include "bn_regular_bg_items_bg_toutes.h"
+#include "bn_regular_bg_items_bg_static.h"
+#include "bn_sprite_items_toutes_spr.h"
+#include "bn_regular_bg_items_bg_dock.h"
 
 static save_all_struct all_save;
 static save_struct *so;
@@ -1772,6 +1794,609 @@ dungeon_return computer() {
     return dt;
 }
 
+void victory_toutes(int emotion, int total) {
+
+    bn::music_items_info::span[16].first.play(bn::fixed(80) / 100);
+    so->xp += (total / 10);
+
+    bn::rect_window external_window = bn::rect_window::external();
+    auto bg = bn::regular_bg_items::bg_toutes.create_bg(0,0);
+    auto bg_static = bn::regular_bg_items::bg_static.create_bg(0,0);
+    auto face = bn::sprite_items::toutes_spr.create_sprite(-80,-38,1);
+    auto food = bn::sprite_items::toutes_spr.create_sprite(24,-92,emotion+3);
+
+    bg_static.set_blending_enabled(true);
+    bn::blending::set_transparency_alpha(0.4);
+
+    external_window.set_show_bg(bg, true);
+    external_window.set_show_bg(bg_static, false);
+    external_window.set_boundaries(-80, -120, 80, 120);
+
+    int w = 0;
+    bn::rect_window internal_window = bn::rect_window::internal();
+    internal_window.set_show_bg(bg, true);
+    internal_window.set_show_bg(bg_static, true);
+    internal_window.set_boundaries(-130, 36 - w - 12, 130, 36 + w - 12);
+
+    char buf[36];
+    char bf2[36];
+
+    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 12> file1_spr;
+    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 12> file2_spr;
+
+    auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64);
+    auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 64);
+    dg_bg1.set_scale(2,1);
+    dg_bg2.set_scale(2,1);
+    dg_bg1.set_visible(false);
+    dg_bg2.set_visible(false);
+
+    auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
+    b_button.set_visible(false);
+
+    /*
+        bn::rect_window external_window = bn::rect_window::external();
+        external_window.set_show_bg(back_floor, false);
+        external_window.set_show_bg(back_black, true);
+        external_window.set_show_sprites(false);
+        external_window.set_boundaries(-80, -120, 80, 120);
+
+        bn::rect_window internal_window = bn::rect_window::internal();
+        internal_window.set_show_bg(back_floor, true);
+        internal_window.set_show_bg(back_black, false);
+        internal_window.set_show_sprites(true);
+        internal_window.set_camera(camera);
+    */
+
+    bool ready = false;
+    while (!bn::keypad::b_pressed()) {
+
+        if (w < 36) {
+            internal_window.set_boundaries(-130, 36 - w - 12, 130, 36 + w - 12);
+            w++;
+        }
+
+        if (food.y().integer() < -24) {
+            food.set_y(food.y() + 1);
+        }
+
+        if (food.y().integer() == -24 && !ready) {
+            ready = true;
+            bn::sound_items::start.play();
+            face = bn::sprite_items::toutes_spr.create_sprite(-80,-38,emotion);
+
+            switch(emotion) {
+                case 2: {
+                    sprintf(buf, "You've got a... smelly sock.");
+                    file1_gen.generate(-96, 48, buf, file1_spr);
+                    break;
+                }
+                case 1: {
+                    sprintf(buf, "You've got... chocolate mousse!");
+                    file1_gen.generate(-96, 48, buf, file1_spr);
+                    break;
+                }
+                case 0: {
+                    sprintf(buf, "You've got a twenty!");
+                    file1_gen.generate(-96, 48, buf, file1_spr);
+                    break;
+                }
+            }
+
+            sprintf(bf2, "Your XP is now: %d", so->xp);
+            file2_gen.generate(-96, 60, bf2, file2_spr);
+
+            dg_bg1.set_visible(true);
+            dg_bg2.set_visible(true);
+            b_button.set_visible(true);
+        }
+
+        bg_static.set_position((bg_static.x().integer() + 2) % 256, (bg_static.y().integer() + 1) % 256);
+
+        bn::core::update();
+    }
+}
+
+dungeon_return crystal_ball() {
+
+    int score = 0;
+    int total = 0;
+
+    if (true) {
+    bn::vector<bn::sprite_ptr, 16> buttons;
+    bn::vector<int, 16> buttons_n;
+    bn::random random;
+
+    bn::regular_bg_ptr crystal_bg = bn::regular_bg_items::bg_crystal01.create_bg(0,0);
+    bn::affine_bg_ptr crystal_rot = bn::affine_bg_items::bg_crystal_ball.create_bg(0,0);
+    crystal_rot.put_above();
+
+    bn::array<bn::fixed, bn::display::height()> horizontal_deltas;
+    bn::affine_bg_pivot_position_hbe_ptr horizontal_hbe =
+            bn::affine_bg_pivot_position_hbe_ptr::create_horizontal(crystal_rot, horizontal_deltas);
+
+    bn::fixed base_degrees_angle;
+
+    bn::music_items_info::span[22].first.play(bn::fixed(80) / 100);
+
+    char buf[12];
+    char bf2[12];
+
+    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 12> file1_spr;
+    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 12> file2_spr;
+
+    buttons.push_back(bn::sprite_items::magic_keys.create_sprite(96,0,0));
+    buttons_n.push_back(0);
+
+    auto b_button = bn::sprite_items::b_button.create_sprite(90,50);
+    b_button.set_visible(true);
+
+    for (int t = 0; t < 4; t++) {
+        int nb = (random.get() % 7);
+        int wd = 16;
+
+        if (buttons.size() > 0) wd = buttons.at(buttons.size() - 1).x().integer() + 36;
+
+        buttons.push_back(bn::sprite_items::magic_keys.create_sprite(wd,0 - pow(wd/5,2) / 5,nb));
+        buttons_n.push_back(nb);
+    }
+
+    int tick = 0;
+    int angle = 0;
+
+    while(!bn::keypad::b_pressed()) {
+
+        base_degrees_angle += 4;
+
+        if(base_degrees_angle >= 360)
+        {
+            base_degrees_angle -= 360;
+        }
+
+        bn::fixed degrees_angle = base_degrees_angle;
+
+        for(int index = 0, limit = bn::display::height() / 2; index < limit; ++index)
+        {
+            degrees_angle += 16;
+
+            if(degrees_angle >= 360)
+            {
+                degrees_angle -= 360;
+            }
+
+            bn::fixed desp = bn::degrees_lut_sin(degrees_angle) * 8;
+            horizontal_deltas[(bn::display::height() / 2) + index] = desp;
+            horizontal_deltas[(bn::display::height() / 2) - index - 1] = desp;
+        }
+
+        horizontal_hbe.reload_deltas_ref();
+
+        crystal_rot.set_rotation_angle(angle);
+        angle = (angle + 1) % 360;
+
+        tick++;
+        if (tick == 10) {
+            tick = 0;
+            if (score > 0) score--;
+        }
+
+        sprintf(buf, "Score: %d", score);
+        file1_spr.clear();
+        file1_gen.generate(-114, -70, buf, file1_spr);
+
+        sprintf(bf2, "Total: %d", total);
+        file2_spr.clear();
+        file2_gen.generate(-114, -58, bf2, file2_spr);
+
+        if (total < score) total = score;
+
+        int s = 0;
+        if (bn::keypad::a_pressed())        s = 1;
+        if (bn::keypad::r_pressed())        s = 2;
+        if (bn::keypad::l_pressed())        s = 3;
+        if (bn::keypad::up_pressed())       s = 4;
+        if (bn::keypad::left_pressed())     s = 5;
+        if (bn::keypad::right_pressed())    s = 6;
+        if (bn::keypad::down_pressed())     s = 7;
+
+        if (s > 0) {
+            if (s - 1== buttons_n.at(0)) {
+                bn::sound_items::ding.play();
+                score += 5;
+            } else {
+                bn::sound_items::firehit.play();
+                score = 0;
+            }
+
+            buttons.erase(buttons.begin());
+            buttons_n.erase(buttons_n.begin());
+
+            int nb = (random.get() % 7);
+            int wd = 16;
+
+            if (buttons.size() > 0) wd = buttons.at(buttons.size() - 1).x().integer() + 36;
+
+            buttons.push_back(bn::sprite_items::magic_keys.create_sprite(wd,0 - pow(wd/5,2) / 5,nb));
+            buttons_n.push_back(nb);
+        }
+
+        if (buttons.at(0).x() > 0) {
+            for (int t = 0; t < buttons.size(); t++) {
+                int nw = buttons.at(t).x().integer() - 4;
+                buttons.at(t).set_position(nw, 0 - pow(nw/5,2) / 5);
+            }
+        }
+
+        bn::core::update();
+    }
+    }
+
+    int emotion = 2;
+    if (total > 100) emotion = 1;
+    if (total > 200) emotion = 0;
+
+    bn::core::update();
+    victory_toutes(emotion, total);
+
+    dungeon_return dt(2, 1, 12);
+    return dt;
+}
+
+struct boat_camera
+{
+    bn::fixed x = 440;
+    bn::fixed y = 128;
+    bn::fixed z = 320;
+    int phi = 10;
+    int cos = 0;
+    int sin = 0;
+};
+
+struct rock {
+    bn::sprite_ptr entity = bn::sprite_items::avocado.create_sprite(0,-20,5);
+    float size = 0.01;
+    float m_y = -48;
+    int speed = 0;
+};
+
+dungeon_return boat_game() {
+
+    int score = 0;
+    int total = 0;
+
+    if (true) {
+        int phi = 10;
+        int cos = 0;
+        int sin = 0;
+        bn::random random;
+
+        char buf[12];
+        char bf2[12];
+        char bf3[12]; 
+
+        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 12> file1_spr;
+        bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 12> file2_spr;
+        bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 12> file3_spr;
+
+        if (bn::music::playing()) bn::music::stop();
+        bn::music_items_info::span[30].first.play(bn::fixed(80) / 100);
+
+        boat_camera camera;
+        camera.y = 300;
+        //camera.y += bn::fixed::from_data(8192 * 256);
+        bn::affine_bg_ptr bg = bn::affine_bg_items::bg_ocean.create_bg(-376, -336);
+        bn::affine_bg_ptr bg_trees = bn::affine_bg_items::bg_sky_trees.create_bg(0, -276); // -212
+
+        auto boat = bn::sprite_items::avocado.create_sprite(0, 112);
+        auto wave = bn::sprite_items::avocado.create_sprite(0, 112, 3);
+        auto wave_anim = bn::create_sprite_animate_action_forever(wave, 2, bn::sprite_items::avocado.tiles_item(), 3, 4, 3, 4);
+        boat.set_blending_enabled(true);
+
+        std::vector<bn::sprite_ptr> sky_ptr;
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16,-132,0)); // -68
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 64,-132,1));
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 128,-132,2));
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 192,-132,3));
+
+        bg.set_z_order(1);
+        bg_trees.set_z_order(0);
+
+        int16_t pa_values[bn::display::height()];
+        bn::affine_bg_pa_register_hbe_ptr pa_hbe = bn::affine_bg_pa_register_hbe_ptr::create(bg, pa_values);
+
+        int16_t pc_values[bn::display::height()];
+        bn::affine_bg_pc_register_hbe_ptr pc_hbe = bn::affine_bg_pc_register_hbe_ptr::create(bg, pc_values);
+
+        int dx_values[bn::display::height()];
+        bn::affine_bg_dx_register_hbe_ptr dx_hbe = bn::affine_bg_dx_register_hbe_ptr::create(bg, dx_values);
+
+        int dy_values[bn::display::height()];
+        bn::affine_bg_dy_register_hbe_ptr dy_hbe = bn::affine_bg_dy_register_hbe_ptr::create(bg, dy_values);
+
+        float x_offset = 0;
+
+        // Rocks
+        rock rs[8] = {};
+        for (int t = 0; t < 8; t++) {
+            rock r;
+            rs[t] = r;
+        }
+
+        int isMoving = 0;
+        float boat_transparency = 1;
+
+        bn::sound_items::motorboat.play();
+        int distance = 32;
+        int tick = 0;
+
+        bool completed = false;
+        float completed_size = 0.48;
+
+        while(completed_size > 0.02) {
+
+            if (distance < 1) completed = true;
+
+            sprintf(buf, "Score: %d", score);
+            file1_spr.clear();
+            file1_gen.generate(-114, -58, buf, file1_spr);
+
+            sprintf(bf2, "Total: %d", total);
+            file2_spr.clear();
+            file2_gen.generate(-114, -46, bf2, file2_spr);
+
+            if (distance < 0) distance = 0;
+
+            sprintf(bf3, "Distance: %d", distance);
+            file3_spr.clear();
+            file3_gen.generate(-114, -34, bf3, file3_spr);
+
+            if (total < score) total = score;
+
+            bn::blending::set_transparency_alpha(boat_transparency);
+
+            if (boat_transparency < 1) {
+                boat_transparency += 0.02;
+            }
+
+            if (boat_transparency > 1) {
+                boat_transparency = 1;
+            }
+
+            if (!completed) {
+                isMoving = !bn::keypad::down_held();
+                if (bn::keypad::down_released()) bn::sound_items::fireblast.play();
+                if (bn::keypad::up_pressed()) bn::sound_items::fireblast.play();
+                if (bn::keypad::up_held()) isMoving = 2;
+            } else {
+                isMoving = 0;
+            }
+
+            tick++;
+            if (tick > 256) {
+                tick = 0;
+                distance -= isMoving;
+            }
+
+            for (int t = 0; t < 8; t++) {
+
+                if (abs(rs[t].entity.x() - boat.x()) < 24 && abs(rs[t].entity.y() - boat.y()) < 24) {
+                    rs[t].m_y += 96;
+                    boat_transparency = 0.25;
+                    bn::sound_items::firehit.play();
+                    score = score / 10;
+                }
+
+                if (rs[t].m_y > 128) {
+                    if (random.get() % 36 == 0) {
+                        rs[t].size = 0.01;
+                        rs[t].entity.set_scale(rs[t].size);
+                        rs[t].entity.set_x((random.get() % 120) - 60);
+                        rs[t].speed = rs[t].entity.x().integer() / 10;
+
+                        if (random.get() % 2 == 0) {
+                            rs[t].entity.set_visible(false);
+                            rs[t].m_y = (0 - (random.get() % 1280));
+                            rs[t].entity.set_y(rs[t].m_y);
+                        } else {
+                            score++;
+                            rs[t].entity.set_visible(true);
+                            rs[t].m_y = -48;
+                            rs[t].entity.put_above();
+                        }
+                    } else {
+                        rs[t].entity.set_y(rs[t].m_y);
+                        rs[t].m_y += 1;
+                    }
+                } else {
+                    rs[t].entity.set_scale(rs[t].size);
+                    rs[t].entity.set_y(rs[t].m_y);
+
+                    if (isMoving == 1) {
+                        rs[t].entity.set_x(rs[t].entity.x() + rs[t].speed);
+                        rs[t].m_y += 1;
+                        if (rs[t].size < 1) {
+                            rs[t].size += 0.01;
+                        }
+                    } else if (isMoving == 2) {
+                        rs[t].entity.set_x(rs[t].entity.x() + (rs[t].speed * 2));
+                        rs[t].m_y += 2;
+                        if (rs[t].size < 1) {
+                            rs[t].size += 0.02;
+                        }
+                    }
+                }
+            }
+
+            int camera_x = camera.x.data();
+            int camera_y = camera.y.data() >> 4;
+            int camera_z = camera.z.data();
+            int camera_cos = camera.cos;
+            int camera_sin = camera.sin;
+            int y_shift = 160;
+            bn::fixed dir_x = 0;
+            bn::fixed dir_z = bn::fixed::from_data(-64); //-30
+
+            if (isMoving == 0) {
+                dir_z = bn::fixed::from_data(-1);
+                wave.set_visible(false);
+            } else if (isMoving == 2) {
+                dir_z = bn::fixed::from_data(-196);
+            }else {
+                wave.set_visible(true);
+            }
+
+            wave_anim.update();
+            wave = wave_anim.sprite();
+            boat.put_above();
+
+            // Intro animation
+            int sky_y = sky_ptr.at(0).y().integer();
+            if (sky_y < -68) {
+                if (sky_y > -92) camera.y = camera.y - 3;
+                for (int t = 0; t < sky_ptr.size(); t++) {
+                    sky_ptr.at(t).set_y(sky_y + 1);
+                }
+                bg_trees.set_y(bg_trees.y().integer() + 1);
+                boat.set_y(boat.y().integer() - 1);
+                wave.set_y(wave.y().integer() - 1);
+            } else {
+                boat = bn::sprite_items::avocado.create_sprite(0, 48, 0);
+                if (isMoving > 0) {
+                    if (bn::keypad::left_held()) {
+                        x_offset += 0.01;
+                        dir_x -= bn::fixed::from_data(32);
+                        boat = bn::sprite_items::avocado.create_sprite(0, 48, 2);
+                        
+                        for (int t = 0; t < 8; t++) {
+                            rs[t].entity.set_x(rs[t].entity.x().integer() + 1);
+                        }
+                    }
+                    else if (bn::keypad::right_held()) {
+                        x_offset -= 0.01;
+                        dir_x += bn::fixed::from_data(32);
+                        boat = bn::sprite_items::avocado.create_sprite(0, 48, 1);
+
+                        for (int t = 0; t < 8; t++) {
+                            rs[t].entity.set_x(rs[t].entity.x().integer() - 1);
+                        }
+                    }
+                }
+            }
+
+            bg_trees.set_x(x_offset);
+
+            camera.cos = bn::lut_cos(camera.phi).data() >> 4;
+            camera.sin = bn::lut_sin(camera.phi).data() >> 4;
+            camera.x += (dir_x * camera.cos) - (dir_z * camera.sin);
+            camera.z += (dir_x * camera.sin) + (dir_z * camera.cos);
+
+            for(int index = 0; index < bn::display::height(); ++index)
+            {
+                int reciprocal = bn::reciprocal_lut[index].data() >> 4;
+                int lam = camera_y * reciprocal >> 12;
+                int lcf = lam * camera_cos >> 8;
+                int lsf = lam * camera_sin >> 8;
+
+                pa_values[index] = int16_t(lcf >> 4);
+                pc_values[index] = int16_t(lsf >> 4);
+
+                int lxr = (bn::display::width() / 2) * lcf;
+                int lyr = y_shift * lsf;
+                dx_values[index] = (camera_x - lxr + lyr) >> 4;
+
+                lxr = (bn::display::width() / 2) * lsf;
+                lyr = y_shift * lcf;
+                dy_values[index] = (camera_z - lxr - lyr) >> 4;
+            }
+
+            pa_hbe.reload_values_ref();
+            pc_hbe.reload_values_ref();
+            dx_hbe.reload_values_ref();
+            dy_hbe.reload_values_ref();
+
+            for (int t = 0; t < sky_ptr.size(); t++) {
+                sky_ptr.at(t).put_above();
+            }
+
+            if (completed) {
+                boat.set_y(boat.y().integer() - 64);
+                wave.set_y(wave.y().integer() - 64);
+                for (int t = 0; t < 8; t++) {
+                    rs[t].entity.set_visible(false);
+                }
+                boat.set_scale(completed_size);
+                wave.set_scale(completed_size);
+                float new_completed_size = completed_size - 0.02;
+                if (new_completed_size > 0) {
+                    completed_size = new_completed_size;
+                }
+            }
+
+            bn::core::update();
+        }
+
+    }
+
+    if (true) {
+        char buf[36] = {0};
+        char bf2[36] = {0};
+        char bf3[36] = {0};
+
+        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 32> file1_spr;
+        bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 32> file2_spr;
+        bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
+        bn::vector<bn::sprite_ptr, 32> file3_spr;
+
+        auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
+        b_button.set_visible(false);
+        so->xp = 100;
+        so->xp += (total / 4.675);
+
+        bn::music::stop();
+        sprintf(buf, "'Well done! I'll take the");
+        file1_gen.generate(-96, -12, buf, file1_spr);
+        sprintf(bf3, "boat on the way back.'");
+        file3_gen.generate(-96, 0, bf3, file3_spr);
+
+        int xp_count = 1;
+        int sfx_play = 0;
+
+        while(!bn::keypad::b_pressed()) {
+            auto docks = bn::regular_bg_items::bg_dock.create_bg(0,0);
+
+            if ((xp_count - 1) < so->xp) {
+                sfx_play = (sfx_play + 1) % 8;
+                if (sfx_play == 1) bn::sound_items::ding.play();
+                xp_count++;
+            }
+
+            if (xp_count == so->xp - 1) {
+                xp_count++;
+                b_button.set_visible(true);
+                bn::music_items_info::span[16].first.play(bn::fixed(80) / 100);
+            }
+
+            sprintf(buf, "XP: %d", xp_count - 1);
+            file2_spr.clear();
+            file2_gen.generate(-96, 48, buf, file2_spr);
+
+            bn::core::update();
+        }
+    }
+
+    dungeon_return dt(9, 17, 4);
+    return dt;
+}
+
 //9,16,4
 
 void core_gameplay(int x, int y, int world, int until, bool force = false, int force_char = 0)
@@ -1829,6 +2454,15 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
                 }
                 case 4: {
                     dt = computer();
+                    break;
+                }
+                case 5: {
+                    dt = crystal_ball();
+                    break;
+                }
+                case 6: {
+                    exec_dialogue(27);
+                    dt = boat_game();
                     break;
                 }
             };
@@ -1917,9 +2551,11 @@ int checkpoint(int level)
         case 8:
             //BN_LOG(so->last_char_id);
             if (so->last_char_id == 3) {
-                core_gameplay(8, 10, 7, 0, true);
+                core_gameplay(8, 10, 4, 0, true);
+            } else if (so->last_char_id < 3) {
+                core_gameplay(9, 6, 4, 0, true);
             } else {
-                core_gameplay(9, 6, 7, 0, true);
+                core_gameplay(10, 6, 8, 0, true);
             }
             break;
 
@@ -1938,7 +2574,7 @@ int main()
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
-    so->checkpoint = 7;               // Force for dev purposes
+    //so->checkpoint = 7;               // Force for dev purposes
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
     }

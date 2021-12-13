@@ -367,6 +367,7 @@ int exec_dialogue(int x) {
                 {fals, fals, 0,  "                                 That's a, uh, joke..             Cuz it's April 1st, she's been   here a month now.."},
                 {fals, fals, 0,  "                                 I'll just, uh, move on.. So..    ..Right! So I finally found out  my computer password!            That's good."},
                 {fals, fals, 0,  "                                 Oh, right- Right, the most       important bit. We have three new people moving into the village!"},
+                {fals, fals, 0,  "                                 I'm not sure we'll be able to    find any new potential islanders from Craigslist, though."},
                 {fals, fals, 0,  "                                 They're named Diana, Eleanor, andOlivier, and they're moving into the new cabin to the northwest."},
                 {fals, fals, 0,  "                                 So just make sure to give them a warm welcome."},
                 {fals, fals, 0,  "S_STV_01"},
@@ -504,6 +505,20 @@ int exec_dialogue(int x) {
                 {fals, fals, 0, "COM: Endscene"}
             };
             dialogue_page_lite(lc);
+            return 0;
+            break;
+        }
+
+        case 27: {
+            line lc[32] = {
+                {fals, fals, 0, "S_DOCKS"},
+                {true, true, 28, "CAP'N NICHOLAS                                                    Ahoy there, lass! Are ye ready   fer yer a voyage?"},
+                {true, fals, 29, "DIANA                                                             Aye aye, Captain!"},
+                {fals, true, 28, "CAP'N NICHOLAS                                                    Just remember what I told ye' -  watch out fer the rocks, and     watch yer speed!"},
+                {fals, fals, 29, "DIANA                                                             Aye aye, sir!"},
+                {fals, fals, 0, "COM: Endscene"}
+            };
+            dialogue_page(lc);
             return 0;
             break;
         }
