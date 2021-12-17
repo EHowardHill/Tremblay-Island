@@ -213,6 +213,7 @@ void dialogue_page(line n[32]) {
     chari_r.set_visible(false);
     chari_r.set_horizontal_flip(true);
     primary_bg.set_visible(false);
+    bn::blending::set_intensity_alpha(0);
 
     bn::regular_bg_ptr dialogue_bg = bn::regular_bg_items::dialogue_bg.create_bg(0, 0);
     dialogue_bg.set_visible(false);
@@ -266,9 +267,12 @@ void dialogue_page(line n[32]) {
         // Sound effects
         } else if (strcmp(n[pos].text, "SF: Hey Maple") == 0) {
             bn::sound_items::heymaple.play();
-        // Sound effects
         } else if (strcmp(n[pos].text, "SF: Maple Ugh") == 0) {
             bn::sound_items::maple_ugh_01.play();
+        } else if (strcmp(n[pos].text, "SF: Rufus Squeak") == 0) {
+            bn::sound_items::rufus_01.play();
+        } else if (strcmp(n[pos].text, "SF: Rufus Laugh") == 0) {
+            bn::sound_items::rufus_02.play();
 
         // Set backgrounds
         } else if (strcmp(n[pos].text, "BG: Ocean") == 0) {
@@ -513,6 +517,7 @@ void dialogue_page_lite(line n[32]) {
     dg_bg1.set_blending_enabled(true);
     dg_bg2.set_blending_enabled(true);
     float bg_alpha = 0.0;
+    bn::blending::set_intensity_alpha(0);
 
     // While dialogue is going,
     int pos = 0;

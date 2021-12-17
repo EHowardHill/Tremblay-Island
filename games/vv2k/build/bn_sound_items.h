@@ -25,13 +25,15 @@ namespace bn::sound_items
     constexpr inline sound_item pc_boot(34);
     constexpr inline sound_item pc_whir(35);
     constexpr inline sound_item pop(36);
-    constexpr inline sound_item shortclip(37);
-    constexpr inline sound_item squeak(38);
-    constexpr inline sound_item start(39);
-    constexpr inline sound_item ui_sfx01(48);
-    constexpr inline sound_item ui_sfx02(49);
-    constexpr inline sound_item ui_sfx03(50);
-    constexpr inline sound_item z08_rain(100);
+    constexpr inline sound_item rufus_01(37);
+    constexpr inline sound_item rufus_02(38);
+    constexpr inline sound_item shortclip(39);
+    constexpr inline sound_item squeak(40);
+    constexpr inline sound_item start(41);
+    constexpr inline sound_item ui_sfx01(50);
+    constexpr inline sound_item ui_sfx02(51);
+    constexpr inline sound_item ui_sfx03(52);
+    constexpr inline sound_item z08_rain(102);
 }
 
 #endif

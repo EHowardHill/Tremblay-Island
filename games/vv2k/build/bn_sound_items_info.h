@@ -28,13 +28,15 @@ namespace bn::sound_items_info
         make_pair(sound_item(34), string_view("pc_boot")),
         make_pair(sound_item(35), string_view("pc_whir")),
         make_pair(sound_item(36), string_view("pop")),
-        make_pair(sound_item(37), string_view("shortclip")),
-        make_pair(sound_item(38), string_view("squeak")),
-        make_pair(sound_item(39), string_view("start")),
-        make_pair(sound_item(48), string_view("ui_sfx01")),
-        make_pair(sound_item(49), string_view("ui_sfx02")),
-        make_pair(sound_item(50), string_view("ui_sfx03")),
-        make_pair(sound_item(100), string_view("z08_rain")),
+        make_pair(sound_item(37), string_view("rufus_01")),
+        make_pair(sound_item(38), string_view("rufus_02")),
+        make_pair(sound_item(39), string_view("shortclip")),
+        make_pair(sound_item(40), string_view("squeak")),
+        make_pair(sound_item(41), string_view("start")),
+        make_pair(sound_item(50), string_view("ui_sfx01")),
+        make_pair(sound_item(51), string_view("ui_sfx02")),
+        make_pair(sound_item(52), string_view("ui_sfx03")),
+        make_pair(sound_item(102), string_view("z08_rain")),
     };
 
     constexpr inline span<const pair<sound_item, string_view>> span(array);

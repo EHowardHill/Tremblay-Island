@@ -67,12 +67,12 @@
 // Extended headers
 #include "objects.h"
 #include "save.h"
+#include "bn_sprite_items_b_button.h"
+
 #include "dialogue.h"
 #include "scripts.h"
 #include "wander.h"
 #include "keyboard.h"
-
-#include "bn_sprite_items_b_button.h"
 
 // tree cut
 #include "bn_sprite_items_horizontal_bar.h"
@@ -1432,7 +1432,7 @@ dungeon_return underground()
                     int myy = p[t].fireball.y().integer();
                     if (p[t].fireball.visible())
                     {
-                        for (int tt = 0; tt < 24; t++)
+                        for (int tt = 0; tt < 24; tt++)
                         {
                             int distance = abs(bugs[tt].sprite.y().integer() - myy) + abs(bugs[tt].sprite.x().integer() - mxx);
                             if (distance < 16)
@@ -2358,7 +2358,6 @@ dungeon_return boat_game() {
 
         auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
         b_button.set_visible(false);
-        so->xp = 100;
         so->xp += (total / 4.675);
 
         bn::music::stop();

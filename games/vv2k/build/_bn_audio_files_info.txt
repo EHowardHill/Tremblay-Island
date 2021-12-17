@@ -70,6 +70,12 @@ audio/pc_whir.wav
 audio/pop.wav
 1178
 1629764745.59
+audio/rufus_01.wav
+13924
+1639719215.49
+audio/rufus_02.wav
+127570
+1639719230.33
 audio/shortclip.wav
 72748
 1629764745.59
@@ -178,3 +184,6 @@ audio/z21_pools.xm
 audio/z22_cbx.xm
 448300
 1638558407.86
+audio/z23_diana.xm
+46379
+1639388310.61

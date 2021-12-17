@@ -10,9 +10,6 @@ Vee     4
 Eleanor 5
 Diana   6
 Guy     7
-la Cruz 8
-Heather 9
-Nim     10
 
 */
 

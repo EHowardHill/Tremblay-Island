@@ -312,6 +312,7 @@ int exec_dialogue(int x) {
                 {fals, fals, 0,  "S04:04"},
                 {fals, fals, 0,  "MAPLE                            HEY! IDENTIFY YOURSELF, OR I'LL  BURN YOUR FACE OFF!"},
                 {fals, fals, 0,  "S04:05"},
+                {fals, fals, 0,  "SF: Rufus Squeak"},
                 {fals, fals, 0,  "                                 AHHHH?!"},
                 {fals, fals, 0,  "                                 AH, UH.. UH, RUFUS!              RUFUS THIBODEAUX!"},
                 {fals, fals, 0,  "                                 DON'T BURN MY FACE OFF, I NEED   THAT!"},
