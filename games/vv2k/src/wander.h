@@ -2543,7 +2543,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        else if (me == 4) {
+                        } else if (me == 4) {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  SCOUT                            Bonjour! Are you Olivier?"},
                                 {true, true, 00, "                                                                  OLIVIER                          Oui! And you're Scout?"},
@@ -2565,7 +2565,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        else if (me == 5) {
+                        } else if (me == 5) {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  ELEANOR                          Bonjour, monsieur!"},
                                 {true, true, 00, "                                                                  SCOUT                            Bonjour! Are you Eleanor?"},
@@ -2588,7 +2588,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        else if (me == 6) {
+                        } else if (me == 6) {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  DIANA                            Bonjour! Hey, are you Scout?"},
                                 {true, true, 00, "                                                                  SCOUT                            Bonjour! Are you Diana?"},
