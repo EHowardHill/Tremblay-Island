@@ -523,6 +523,74 @@ int exec_dialogue(int x) {
             return 0;
             break;
         }
+
+        case 28: {
+            line lc[32] = {
+                {fals, fals, 0,  "BG: news"},
+                {fals, fals, 0,  "S_STV_01"},
+                {fals, fals, 0,  "                                 Hey, y'all! Scout here.                                           It's that time again!"},
+                {fals, fals, 0,  "S_STV_02"},
+                {fals, fals, 0,  "                                 Scout TV is a regular thing goingon! Check it out, I feel like a  real reporter now!"},
+                {fals, fals, 0,  "                                 We've all been on this island forthree good months, now. I can't  decide if it feels more like a   day or a million years long."},
+                {fals, fals, 0,  "                                 Well, it's taken a while, but it looks like we're getting two new islanders!"},
+                {fals, fals, 0,  "                                 We've got a certain Cesar de la  Cruz on special invitation from  our very own Queen Enoki."},
+                {fals, fals, 0,  "                                 He was apparently a famous lawyerwho's decided that he wants a newstart."},
+                {fals, fals, 0,  "                                 We've also got a guy moving in   whose name is.. Guy. I'm not     kidding - his name is Guy."},
+                {fals, fals, 0,  "                                 I'm looking forward to seeing    what he cooks up, literally! He'sa cook and apparently makes a    mean jumbalaya."},
+                {fals, fals, 0,  "                                 Now, we're getting ever closer tothe Scout Expo, and it's only a  matter of time before it's all   ready."},
+                {fals, fals, 0,  "                                 I've also managed to order a     bunch of new Time Raiders comic, cuz I know a bunch of islanders  have really been getting into-"},
+                {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  "S_STV_03"},  
+                {fals, fals, 0,  "                                 . . . ."},
+                {fals, fals, 0,  "BG: rain"},
+                {fals, fals, 0,  "S_STV_04"},
+                {fals, fals, 0,  "                                 I, er- hmm.. Yes, good evening,  island neighbors. It is I, Rufus Thibodeaux, and if you do not    know me, you soon will."},
+                {fals, fals, 0,  "                                 I have interrupted this broadcastto let you know that I am giving you an ultimatum. Either you     submit your island to me, or-!"},
+                {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  "S_STV_03"},  
+                {fals, fals, 0,  "                                 . . . ."},
+                {fals, fals, 0,  "S_STV_01"},
+                {fals, fals, 0,  "                                 -and that's all, folks! See y'allnext time!"},
+                {fals, fals, 0,  "S05:02"},
+                {fals, fals, 0,  "ENOKI                            Aw, I missed the end of the Scoutbroadcast. I was looking forward to it."},
+                {fals, fals, 0,  "MAPLE                            Hey, isn't that twerp Del's      nephew? He, uh, stopped by the   island a few months ago, I think."},
+                {fals, fals, 0,  "AARON                            What a strange broadcast."},
+                {fals, fals, 0,  "ENOKI                            I'm gonna get a soda."},
+                {fals, fals, 0,  "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
+
+        case 29: {
+            line lc[32] = {
+                {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  ". . ."},
+                {fals, fals, 0,  "BG: 1"},
+                {fals, fals, 0,  "ENOKI                            Hey, Aaron?"},
+                {fals, fals, 0,  "AARON                            *yawn* Yeah?"},
+                {fals, fals, 0,  "ENOKI                            Are you happy?"},
+                {fals, fals, 0,  "AARON                            Of course I am, Noke."},
+                {fals, fals, 0,  "ENOKI                            No, I mean.. Are you really,     actually happy?                  I worry about you."},
+                {fals, fals, 0,  "AARON                            I guess I'm just a little        melancholy about it, that's all."},
+                {fals, fals, 0,  "ENOKI                            What d'you mean?"},
+                {fals, fals, 0,  "AARON                            I think you know. Maple is right,we're only able to be here       because of that money you won."},
+                {fals, fals, 0,  "AARON                            We gambled it all, so if anythinghappens to this place, we've got absolutely nothing."},
+                {fals, fals, 0,  "ENOKI                            You know me though, I'm lucky,   we'll be okay. And besides, I gotyou! That's enough."},
+                {fals, fals, 0,  "AARON                            You might not feel like that whenyou're hungry. You don't know    what it's like to be hungry."},
+                {fals, fals, 0,  "ENOKI                            I don't wanna think about this.. it'll keep me up."},
+                {fals, fals, 0,  "ENOKI                            Can we just be happy now and talkabout these things later?"},  
+                {fals, fals, 0,  "AARON                            I guess so. Goodnight, Noke."},
+                {fals, fals, 0,  "ENOKI                            Goodnight, Aire."},
+                {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  ". . ."},
+                {fals, fals, 0,  "COM: Endscene"}
+            };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
         
         default: {
             return 1;

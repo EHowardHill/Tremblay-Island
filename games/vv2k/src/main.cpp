@@ -2428,7 +2428,12 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
         if (so->checkpoint == 4 && so->xp > 99 && so->last_char_id != 4) {
             dt.world_index = 7;
         }
-        
+
+        if (so->checkpoint == 8 && so->xp > 199) {
+            so->checkpoint == 9;
+            break;
+        }
+
         // if minigame....
         else if (dt.world_index == 99)
         {
@@ -2548,7 +2553,6 @@ int checkpoint(int level)
             exec_dialogue(21);
             break;
         case 8:
-            //BN_LOG(so->last_char_id);
             if (so->last_char_id == 3) {
                 core_gameplay(8, 10, 4, 0, true);
             } else if (so->last_char_id < 3) {
@@ -2556,6 +2560,11 @@ int checkpoint(int level)
             } else {
                 core_gameplay(10, 6, 8, 0, true);
             }
+            break;
+
+        case 9:
+            exec_dialogue(29);
+            exec_dialogue(28);
             break;
 
         default:

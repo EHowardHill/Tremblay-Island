@@ -186,6 +186,8 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle03.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_02.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_03.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_04.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0101.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0103.h \
@@ -213,6 +215,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0406.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0407.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0501.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0502.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_day_castle.h \
@@ -480,6 +483,8 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_castle03.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_02.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_03.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_scout_tv_04.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0101.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0102.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0103.h:
@@ -507,6 +512,7 @@ main.o: /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/src/main.cpp \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0406.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0407.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0501.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_s0502.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_mountain.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_ocean.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/build/bn_regular_bg_items_day_castle.h:

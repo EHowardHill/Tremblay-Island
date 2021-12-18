@@ -494,7 +494,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     int sy = current_room.start_y * 32;
 
     bn::camera_ptr camera = bn::camera_ptr::create(sx, sy);
-    bn::regular_bg_ptr primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
+    bn::regular_bg_ptr primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
     primary_bg.set_camera(camera);
     bn::vector<anim_object, 3> anim_objects;
 

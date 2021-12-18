@@ -1,3 +1,6 @@
 /games/vv2k/build/*
 /Demo Build01.sav
 /Demo Build02(only).sav
+games/vv2k/build/main.d
+games/vv2k/build/main.o
+games/vv2k/build/vv2k.map
