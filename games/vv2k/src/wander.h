@@ -1411,7 +1411,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             }
             else if (chari.at(follow_id).identity == 4) {
                 bn::sound_items::firecrackle.play();
-                so->xp++;
+
+                if (so->checkpoint == 8 && so->xp < 201) {
+                    so->xp++;
+                } else if (so->checkpoint == 10 && so->xp < 301) {
+                    so->xp++;
+                }
+                
             } else
             {
                 bn::sound_items::squeak.play();

@@ -2567,6 +2567,16 @@ int checkpoint(int level)
             exec_dialogue(28);
             break;
 
+        case 10:
+            if (so->last_char_id == 3) {
+                core_gameplay(8, 10, 4, 0, true);
+            } else if (so->last_char_id < 3) {
+                core_gameplay(9, 6, 4, 0, true);
+            } else {
+                core_gameplay(10, 6, 8, 0, true);
+            }
+            break;
+
         default:
             return -1;
             break;
@@ -2582,6 +2592,7 @@ int main()
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
+    so->checkpoint = 6;
     //so->checkpoint = 7;               // Force for dev purposes
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
