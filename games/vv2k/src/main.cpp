@@ -2512,6 +2512,7 @@ int checkpoint(int level)
             exec_dialogue(0);
             exec_dialogue(1);
             exec_dialogue(2);
+            exec_dialogue(3);
             core_gameplay(8, 3, 0, -1, true, 0);
 
             cutscenes(0);
@@ -2592,8 +2593,10 @@ int main()
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
-    so->checkpoint = 6;
-    //so->checkpoint = 7;               // Force for dev purposes
+
+    so->xp = 0;
+    so->checkpoint = 0;
+
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
     }

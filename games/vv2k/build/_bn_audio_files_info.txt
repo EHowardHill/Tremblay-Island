@@ -187,3 +187,6 @@ audio/z22_cbx.xm
 audio/z23_diana.xm
 46379
 1639388310.61
+audio/z24_cruz.xm
+716662
+1640000086.86

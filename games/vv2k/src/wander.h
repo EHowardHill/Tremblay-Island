@@ -16,6 +16,7 @@
 #include "bn_sprite_items_eleanor_walking_spring.h"
 #include "bn_sprite_items_diana_walking_spring.h"
 #include "bn_sprite_items_del_sleep.h"
+#include "bn_sprite_items_guy_walking_spring.h"
 
 // Items
 #include "bn_sprite_items_fireball.h"
@@ -32,6 +33,7 @@
 #include "bn_regular_bg_items_greenhouse_bg_01.h"
 #include "bn_regular_bg_items_greenhouse_bg_02.h"
 #include "bn_regular_bg_items_bg_library.h"
+#include "bn_regular_bg_items_bg_guy_house.h"
 
 #include "bn_sprite_items_ocean_terrain.h"
 #include "bn_regular_bg_items_grassy_knoll.h"
@@ -500,32 +502,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
     // Create initial characters
     bn::vector<character, 4> chari;
-
     switch (so->last_char_id)
     {
-    default:
-    {
-        if (dt.world_index < 4) {
-        character default_chari(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = 0;
-        chari.push_back(default_chari);
-        break;
-        } else {
-            character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-            default_chari.entity.set_camera(camera);
-            default_chari.entity.set_position(sx, sy);
-            default_chari.role = 1;
-            default_chari.identity = 0;
-            chari.push_back(default_chari);
-            break;
-        }
-    }
-    case 0:
-    {
-        if (dt.world_index < 4) {
+        default:
+        {
+            if (dt.world_index < 4) {
             character default_chari(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
             default_chari.entity.set_camera(camera);
             default_chari.entity.set_position(sx, sy);
@@ -533,809 +514,890 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             default_chari.identity = 0;
             chari.push_back(default_chari);
             break;
-        } else {
-            character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            } else {
+                character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+                default_chari.entity.set_camera(camera);
+                default_chari.entity.set_position(sx, sy);
+                default_chari.role = 1;
+                default_chari.identity = 0;
+                chari.push_back(default_chari);
+                break;
+            }
+        }
+        case 0:
+        {
+            if (dt.world_index < 4) {
+                character default_chari(bn::sprite_items::maple_walking, current_room, current_room.start_x, current_room.start_y, false);
+                default_chari.entity.set_camera(camera);
+                default_chari.entity.set_position(sx, sy);
+                default_chari.role = 1;
+                default_chari.identity = 0;
+                chari.push_back(default_chari);
+                break;
+            } else {
+                character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+                default_chari.entity.set_camera(camera);
+                default_chari.entity.set_position(sx, sy);
+                default_chari.role = 1;
+                default_chari.identity = 0;
+                chari.push_back(default_chari);
+                break;
+            }
+        }
+        case 1:
+        {
+            if (so->checkpoint < 1) {
+                character default_chari(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x, current_room.start_y, false);
+                default_chari.entity.set_camera(camera);
+                default_chari.entity.set_position(sx, sy);
+                default_chari.role = 1;
+                default_chari.identity = 1;
+                chari.push_back(default_chari);
+                break;
+            } else {
+                character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+                default_chari.entity.set_camera(camera);
+                default_chari.entity.set_position(sx, sy);
+                default_chari.role = 1;
+                default_chari.identity = 1;
+                chari.push_back(default_chari);
+                break;
+            }
+        }
+        case 2:
+        {
+            character default_chari(bn::sprite_items::aaron_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
             default_chari.entity.set_camera(camera);
             default_chari.entity.set_position(sx, sy);
             default_chari.role = 1;
-            default_chari.identity = 0;
+            default_chari.identity = 2;
             chari.push_back(default_chari);
             break;
         }
-    }
-    case 1:
-    {
-        if (so->checkpoint < 1) {
-            character default_chari(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x, current_room.start_y, false);
+        case 3:
+        {
+            character default_chari(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
             default_chari.entity.set_camera(camera);
             default_chari.entity.set_position(sx, sy);
             default_chari.role = 1;
-            default_chari.identity = 1;
-            chari.push_back(default_chari);
-            break;
-        } else {
-            character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-            default_chari.entity.set_camera(camera);
-            default_chari.entity.set_position(sx, sy);
-            default_chari.role = 1;
-            default_chari.identity = 1;
+            default_chari.identity = 3;
             chari.push_back(default_chari);
             break;
         }
-    }
-    case 2:
-    {
-        character default_chari(bn::sprite_items::aaron_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = 2;
-        chari.push_back(default_chari);
-        break;
-    }
-    case 3:
-    {
-        character default_chari(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = 3;
-        chari.push_back(default_chari);
-        break;
-    }
-    case 4:
-    {
-        character default_chari(bn::sprite_items::vee_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = 4;
-        chari.push_back(default_chari);
-        break;
-    }
-    case 5:
-    {
-        character default_chari(bn::sprite_items::eleanor_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = 5;
-        chari.push_back(default_chari);
-        break;
-    }
-    case 6:
-    {
-        character default_chari(bn::sprite_items::diana_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
-        default_chari.entity.set_camera(camera);
-        default_chari.entity.set_position(sx, sy);
-        default_chari.role = 1;
-        default_chari.identity = 6;
-        chari.push_back(default_chari);
-        break;
-    }
+        case 4:
+        {
+            character default_chari(bn::sprite_items::vee_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 4;
+            chari.push_back(default_chari);
+            break;
+        }
+        case 5:
+        {
+            character default_chari(bn::sprite_items::eleanor_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 5;
+            chari.push_back(default_chari);
+            break;
+        }
+        case 6:
+        {
+            character default_chari(bn::sprite_items::diana_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 6;
+            chari.push_back(default_chari);
+            break;
+        }
+        case 7:
+        {
+            character default_chari(bn::sprite_items::guy_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 7;
+            chari.push_back(default_chari);
+            break;
+        }
     }
 
     // World generation
     switch (dt.world_index)
     {
-    case 0:
-    {
-        current_room.init(12, 6, 8, 3);
-        std::vector<int> local_col{
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-            1, 1, 2, 40, 3, 1, 1, 1, 0, 1, 1, 0,
-            1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0,
-            1, 0, 0, 0, 0, 0, 0, 0, 39, 0, 1, 0,
-            1, 36, 0, 0, 0, 0, 0, 0, 31, 1, 1, 0,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
-        std::vector<int> local{
-            4, 3, 8, 11, 13, 3, 3, 3, 8, 3, 5, 0,
-            2, 18, 0, 0, 0, 18, 2, 9, 0, 9, 2, 0,
-            2, 0, 0, 0, 0, 0, 2, 10, 0, 10, 2, 0,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0,
-            17, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2, 0,
-            7, 3, 3, 3, 3, 3, 3, 3, 16, 3, 6, 0};
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id == 1)
+        case 0:
         {
-            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
-            maple.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
-            maple.entity.set_camera(camera);
-            maple.role = 0;
-            maple.identity = 0;
-            chari.push_back(maple);
-        }
+            current_room.init(12, 6, 8, 3);
+            std::vector<int> local_col{
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                1, 1, 2, 40, 3, 1, 1, 1, 0, 1, 1, 0,
+                1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0,
+                1, 0, 0, 0, 0, 0, 0, 0, 39, 0, 1, 0,
+                1, 36, 0, 0, 0, 0, 0, 0, 31, 1, 1, 0,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
+            std::vector<int> local{
+                4, 3, 8, 11, 13, 3, 3, 3, 8, 3, 5, 0,
+                2, 18, 0, 0, 0, 18, 2, 9, 0, 9, 2, 0,
+                2, 0, 0, 0, 0, 0, 2, 10, 0, 10, 2, 0,
+                2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0,
+                17, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2, 0,
+                7, 3, 3, 3, 3, 3, 3, 3, 16, 3, 6, 0};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
 
-        if (so->last_char_id < 1)
-        {
-            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
-            enoki.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
-            enoki.entity.set_camera(camera);
-            enoki.role = 0;
-            enoki.identity = 1;
-            chari.push_back(enoki);
-        }
-        break;
-    }
-    case 1:
-    {
-        current_room.init(21, 12, 18, 1);
-        std::vector<int> local{
-            4, 3, 3, 16, 12, 3, 13, 12, 3, 8, 12, 8, 3, 12, 3, 3, 12, 13, 16, 3, 5,
-            2, 18, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            12, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            12, 1, 1, 1, 1, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            12, 1, 1, 1, 1, 1, 1, 0, 0, 21, 23, 0, 0, 0, 0, 1, 1, 1, 1, 1, 17,
-            12, 1, 1, 1, 1, 1, 0, 0, 25, 22, 24, 25, 0, 0, 1, 1, 1, 1, 1, 1, 17,
-            12, 1, 1, 1, 1, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            12, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2,
-            7, 3, 14, 3, 12, 3, 3, 12, 3, 3, 12, 3, 13, 12, 3, 3, 12, 3, 14, 13, 6};
-        std::vector<int> local_col{
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 0, 35, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-        };
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id == 1)
-        {
-            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
-            maple.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
-            maple.entity.set_camera(camera);
-            maple.role = 0;
-            maple.identity = 0;
-            chari.push_back(maple);
-        }
-
-        if (so->last_char_id < 1)
-        {
-            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
-            enoki.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
-            enoki.entity.set_camera(camera);
-            enoki.role = 0;
-            enoki.identity = 1;
-            chari.push_back(enoki);
-        }
-
-        anim_object fp;
-        fp.entity_item = bn::sprite_items::fireplace_anim;
-        fp.entity = fp.entity_item.create_sprite(0, 0);
-        fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 00, 1, 00, 2);
-        fp.entity.set_visible(false);
-        fp.entity.set_camera(camera);
-        fp.entity.set_position(304, 176);
-        anim_objects.push_back(fp);
-        break;
-    }
-    case 2:
-    {
-        current_room.init(11, 8, 9, 6);
-        std::vector<int> local {
-            4, 11, 8, 12, 8, 3, 3, 3, 3, 3, 5,
-            2, 18, 9, 9, 26, 27, 2, 0, 0, 0, 2,
-            2, 0, 10, 10, 0, 0, 2, 19, 1, 20, 2,
-            2, 0, 0, 0, 0, 0, 2, 3, 0, 0, 2,
-            2, 0, 1, 1, 1, 0, 2, 0, 0, 18, 2,
-            2, 0, 1, 1, 1, 0, 2, 0, 0, 3, 12,
-            2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 17,
-            7, 3, 3, 14, 3, 3, 3, 3, 3, 3, 6};
-        std::vector<int> local_col {
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 1, 1, 0, 0, 1, 1, 8, 1, 1,
-            1, 0, 10, 10, 0, 0, 1, 1, 0, 0, 1,
-            1, 0, 0, 0, 0, 0,   1, 0, 0, 1, 1,
-            1, 0, 0, 0, 0, 0,   1, 0, 0, 1, 1,
-            1, 1, 0, 34, 0, 4, 0, 0, 0, 33, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-        };
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id == 1)
-        {
-            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
-            maple.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
-            maple.entity.set_camera(camera);
-            maple.role = 0;
-            maple.identity = 0;
-            chari.push_back(maple);
-        }
-
-        if (so->last_char_id < 1)
-        {
-            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
-            enoki.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
-            enoki.entity.set_camera(camera);
-            enoki.role = 0;
-            enoki.identity = 1;
-            chari.push_back(enoki);
-        }
-
-        anim_object aaron;
-        aaron.entity.set_visible(true);
-        aaron.entity.set_camera(camera);
-        aaron.entity.set_position(64, 48);
-        anim_objects.push_back(aaron);
-
-        anim_object del;
-        del.id = 1;
-        del.entity_item = bn::sprite_items::del_sleep;
-        del.entity = del.entity_item.create_sprite(0, 0);
-        del.entity_anim = bn::create_sprite_animate_action_forever(del.entity, 20, del.entity_item.tiles_item(), 00, 1, 00, 0);
-        del.entity.set_visible(true);
-        del.entity.set_camera(camera);
-        del.entity.set_position(256, 48);
-        anim_objects.push_back(del);
-        break;
-    }
-    case 3:
-    {
-        current_room.init(24, 12, 22, 1);
-        std::vector<int> local{
-            4, 8, 11, 12, 3, 3, 12, 11, 8, 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 4, 14, 5,
-            2, 18, 0, 0, 0, 0, 0, 0, 18, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 1, 1, 1, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 1, 1, 1, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 18, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
-            7, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6};
-        std::vector<int> local_col {
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 38, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 11, 11, 11, 11, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
-        };
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id == 1)
-        {
-            character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
-            maple.entity.set_position(22 * 32, 1 * 32);
-            maple.entity.set_camera(camera);
-            maple.role = 0;
-            maple.identity = 0;
-            chari.push_back(maple);
-        }
-
-        if (so->last_char_id < 1)
-        {
-            character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
-            enoki.entity.set_position(22 * 32, 1 * 32);
-            enoki.entity.set_camera(camera);
-            enoki.role = 0;
-            enoki.identity = 1;
-            chari.push_back(enoki);
-        }
-
-        anim_object fp;
-        fp.entity_item = bn::sprite_items::bookshelf;
-        fp.entity = fp.entity_item.create_sprite(0, 0);
-        fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 00, 00, 00, 0);
-        fp.entity.set_visible(true);
-        fp.entity.set_camera(camera);
-        fp.entity.set_position(144, 16);
-        anim_objects.push_back(fp);
-
-        //character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
-        /*
-            if (current_room.local_tileset.at((current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
-                enoki.entity.set_position(4 + current_room.start_x * 32, current_room.start_y * 32);
-                maple.entity.set_position(-4 + current_room.start_x * 32, (current_room.start_y * 32));
+            if (so->last_char_id == 1)
+            {
+                character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+                maple.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
+                maple.entity.set_camera(camera);
+                maple.role = 0;
+                maple.identity = 0;
+                chari.push_back(maple);
             }
-            */
 
-        for (int t = 0; t < 2; t++)
+            if (so->last_char_id < 1)
+            {
+                character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+                enoki.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 1;
+                chari.push_back(enoki);
+            }
+            
+            primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
+        }
+        case 1:
         {
-            chari.at(t).entity.set_camera(camera);
-        }
-
-        break;
-    }
-    case 4:
-    {
-        if (so->checkpoint == 5) {
-            bn::music_items_info::span[21].first.play(bn::fixed(80) / 100);
-        } else {
-            bn::music_items_info::span[11].first.play(bn::fixed(80) / 100);
-        }
-        
-        current_room.init(20, 20, 9, 17);
-
-        if (so->checkpoint < 7) {
-            std::vector<int> local_col{
-                00, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-                00, 1, 1, 1, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
-                00, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-                00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-                00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
-                00, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-                00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
+            current_room.init(21, 12, 18, 1);
             std::vector<int> local{
-                39,1,27,27,39,27,27,27,44,0,27,27,27,27,27,42,43,42,12,13,
-                1,27,0,0,0,0,0,0,0,0,0,0,0,0,0,43,3,43,11,26,
-                39,1,0,0,0,0,0,0,0,0,0,0,1,0,0,5,2,3,12,26,
-                38,27,0,0,0,15,18,18,18,18,18,18,18,23,0,4,3,2,11,26,
-                39,47,44,0,1,16,19,19,19,19,19,19,19,24,1,5,2,3,12,26,
-                38,0,0,0,27,17,20,21,20,22,20,21,20,25,27,4,3,2,11,26,
-                39,1,0,0,0,0,0,0,0,3,0,0,0,0,0,4,2,3,12,26,
-                38,27,1,0,0,0,0,0,0,2,0,0,0,0,0,5,3,2,11,26,
-                39,1,27,0,0,0,0,0,40,3,42,0,0,0,0,4,2,3,12,26,
-                0,27,44,0,0,0,0,1,41,2,43,1,0,14,7,6,3,2,11,26,
-                0,0,0,0,0,0,0,27,2,3,3,27,0,4,2,3,2,3,12,26,
-                38,0,1,0,0,0,0,0,2,2,3,0,0,5,3,2,3,2,11,26,
-                39,1,27,0,0,0,0,14,42,3,42,8,7,6,2,3,2,3,12,26,
-                38,27,0,0,0,0,14,6,43,2,43,2,3,2,3,2,3,46,45,26,
-                39,0,0,0,0,0,5,2,3,3,2,3,2,46,9,10,9,45,13,26,
-                42,7,8,7,8,7,6,3,3,2,3,2,46,45,13,26,26,26,26,26,
-                43,2,3,2,3,2,3,46,42,3,42,10,45,26,26,26,26,26,26,26,
-                42,10,9,10,9,10,9,45,43,2,43,26,26,26,26,26,26,0,0,0,
-                43,26,26,26,13,26,26,26,26,10,26,26,26,26,26,26,26,0,0,0,
-                26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,0,0,0};
-
+                4, 3, 3, 16, 12, 3, 13, 12, 3, 8, 12, 8, 3, 12, 3, 3, 12, 13, 16, 3, 5,
+                2, 18, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2,
+                2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                12, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                12, 1, 1, 1, 1, 0, 0, 0, 0, 25, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                12, 1, 1, 1, 1, 1, 1, 0, 0, 21, 23, 0, 0, 0, 0, 1, 1, 1, 1, 1, 17,
+                12, 1, 1, 1, 1, 1, 0, 0, 25, 22, 24, 25, 0, 0, 1, 1, 1, 1, 1, 1, 17,
+                12, 1, 1, 1, 1, 0, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                12, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2,
+                7, 3, 14, 3, 12, 3, 3, 12, 3, 3, 12, 3, 13, 12, 3, 3, 12, 3, 14, 13, 6};
+            std::vector<int> local_col{
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 0, 35, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 1, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+            };
             deep_copy(local, current_room.local_tileset);
             deep_copy(local_col, current_room.collisions);
 
-        } else {
-            std::vector<int> local_col{
-                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-                01,42,41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
-                01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-                00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-                00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
-                00, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
-                01, 0, 0, 0, 0, 0, 0, 1, 1, 61, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
-                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-                00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+            if (so->last_char_id == 1)
+            {
+                character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+                maple.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+                maple.entity.set_camera(camera);
+                maple.role = 0;
+                maple.identity = 0;
+                chari.push_back(maple);
+            }
 
-            std::vector<int> local{
-                39,27,44,27,27,27,27,27,44,0,27,27,27,27,27,42,43,42,12,13,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,3,43,11,26,
-                1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,5,2,3,12,26,
-                27,27,0,0,0,15,18,18,18,18,18,18,18,23,0,4,3,2,11,26,
-                39,47,44,0,1,16,19,19,19,19,19,19,19,24,1,5,2,3,12,26,
-                38,0,0,0,27,17,20,21,20,22,20,21,20,25,27,4,3,2,11,26,
-                39,1,0,0,0,0,0,0,0,3,0,0,0,0,0,4,2,3,12,26,
-                38,27,1,0,0,0,0,0,0,2,0,0,0,0,0,5,3,2,11,26,
-                39,1,27,0,0,0,0,0,40,3,42,0,0,0,0,4,2,3,12,26,
-                0,27,44,0,0,0,0,1,41,2,43,1,0,14,7,6,3,2,11,26,
-                0,0,0,0,0,0,0,27,2,3,3,27,0,4,2,3,2,3,12,26,
-                38,0,1,0,0,0,0,0,2,2,3,0,0,5,3,2,3,2,11,26,
-                39,1,27,0,0,0,0,14,42,3,42,8,7,6,2,3,2,3,12,26,
-                38,27,0,0,0,0,14,6,43,2,43,2,3,2,3,2,3,46,45,26,
-                39,0,0,0,0,0,5,2,3,3,2,3,2,46,9,10,9,45,13,26,
-                42,7,8,7,8,7,6,3,3,2,3,2,46,45,13,26,26,26,26,26,
-                43,2,3,2,3,2,3,46,42,3,42,10,45,26,26,26,26,26,26,26,
-                42,10,9,10,9,10,9,45,43,2,43,26,26,26,26,26,26,0,0,0,
-                43,26,26,26,13,26,26,26,52,10,26,26,26,26,26,26,26,0,0,0,
-                26,26,26,26,26,26,26,26,53,26,26,26,26,26,26,26,26,0,0,0};
+            if (so->last_char_id < 1)
+            {
+                character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+                enoki.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 1;
+                chari.push_back(enoki);
+            }
 
+            anim_object fp;
+            fp.entity_item = bn::sprite_items::fireplace_anim;
+            fp.entity = fp.entity_item.create_sprite(0, 0);
+            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 00, 1, 00, 2);
+            fp.entity.set_visible(false);
+            fp.entity.set_camera(camera);
+            fp.entity.set_position(304, 176);
+            anim_objects.push_back(fp);
+
+            primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
+        }
+        case 2:
+        {
+            current_room.init(11, 8, 9, 6);
+            std::vector<int> local {
+                4, 11, 8, 12, 8, 3, 3, 3, 3, 3, 5,
+                2, 18, 9, 9, 26, 27, 2, 0, 0, 0, 2,
+                2, 0, 10, 10, 0, 0, 2, 19, 1, 20, 2,
+                2, 0, 0, 0, 0, 0, 2, 3, 0, 0, 2,
+                2, 0, 1, 1, 1, 0, 2, 0, 0, 18, 2,
+                2, 0, 1, 1, 1, 0, 2, 0, 0, 3, 12,
+                2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 17,
+                7, 3, 3, 14, 3, 3, 3, 3, 3, 3, 6};
+            std::vector<int> local_col {
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 0, 1, 1, 0, 0, 1, 1, 8, 1, 1,
+                1, 0, 10, 10, 0, 0, 1, 1, 0, 0, 1,
+                1, 0, 0, 0, 0, 0,   1, 0, 0, 1, 1,
+                1, 0, 0, 0, 0, 0,   1, 0, 0, 1, 1,
+                1, 1, 0, 34, 0, 4, 0, 0, 0, 33, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+            };
             deep_copy(local, current_room.local_tileset);
             deep_copy(local_col, current_room.collisions);
-        }
 
-        primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
+            if (so->last_char_id == 1)
+            {
+                character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+                maple.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+                maple.entity.set_camera(camera);
+                maple.role = 0;
+                maple.identity = 0;
+                chari.push_back(maple);
+            }
 
-        if (so->checkpoint == 5) primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
-        primary_bg.set_camera(camera);
-        break;
-    }
-    case 5:
-    {
-        bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
+            if (so->last_char_id < 1)
+            {
+                character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+                enoki.entity.set_position(chari.at(0).entity.x(), chari.at(0).entity.y());
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 1;
+                chari.push_back(enoki);
+            }
 
-        current_room.init(11, 5, 5, 3);
-        std::vector<int> local_col{
-            01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            01, 1, 0, 0, 17, 0, 18, 0, 0, 0, 1,
-            01, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1,
-            01, 1, 16, 1, 1, 13, 0, 1, 0, 1, 1,
-            01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        std::vector<int> local{
-            1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 51,
-            2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 52,
-            3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 53,
-            4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 54,
-            5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 55};
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        primary_bg = bn::regular_bg_items::bg_trailer_home.create_bg(0, 0);
-        primary_bg.set_camera(camera);
-
-        if (so->last_char_id != 0)
-        {
-            character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
-            maple.entity.set_position(5 * 32, 1 * 32);
-            maple.entity.set_camera(camera);
-            maple.role = 2;
-            maple.identity = 0;
-            chari.push_back(maple);
-        }
-
-        if (so->last_char_id != 1)
-        {
-            character enoki(bn::sprite_items::enoki_walking_spring, current_room, 6, 2, false);
-            enoki.entity.set_position(6 * 32, 2 * 32);
-            enoki.entity.set_camera(camera);
-            enoki.role = 2;
-            enoki.identity = 1;
-            chari.push_back(enoki);
-        }
-
-        if (so->last_char_id != 2)
-        {
-            character aaron(bn::sprite_items::aaron_walking_spring, current_room, 4, 1, false);
-            aaron.entity.set_position(4 * 32, 1 * 32);
+            anim_object aaron;
+            aaron.entity.set_visible(true);
             aaron.entity.set_camera(camera);
-            aaron.role = 2;
-            aaron.identity = 2;
-            chari.push_back(aaron);
+            aaron.entity.set_position(64, 48);
+            anim_objects.push_back(aaron);
+
+            anim_object del;
+            del.id = 1;
+            del.entity_item = bn::sprite_items::del_sleep;
+            del.entity = del.entity_item.create_sprite(0, 0);
+            del.entity_anim = bn::create_sprite_animate_action_forever(del.entity, 20, del.entity_item.tiles_item(), 00, 1, 00, 0);
+            del.entity.set_visible(true);
+            del.entity.set_camera(camera);
+            del.entity.set_position(256, 48);
+            anim_objects.push_back(del);
+
+            primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
         }
-
-        break;
-    }
-    case 6:
-    {
-        bn::music_items_info::span[17].first.play(bn::fixed(80) / 100);
-        current_room.init(9, 11, 7, 3);
-        std::vector<int> local{
-            00, 0, 0, 0, 0, 0, 0, 12, 0,
-            00, 0, 0, 0, 0, 0, 0, 12, 0,
-            00, 0, 0, 0, 0, 0, 1, 12, 1,
-            00, 0, 0, 0, 0, 0, 1, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 2, 4, 8, 9, 11, 0, 0, 1,
-            1, 3, 5, 0, 10, 0, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 6, 0, 0, 0, 13, 14, 0, 1,
-            1, 7, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1};
-        std::vector<int> local_col{
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 1, 1, 1,
-            0, 0, 0, 0, 0, 0, 1, 1, 1,
-            0, 0, 0, 0, 0, 0, 1, 19, 1,
-            1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 1, 1, 1, 0, 0, 1,
-            1, 1, 28, 0, 29, 0, 0, 0, 1,
-            1, 0, 0, 0, 30, 0, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 1, 0, 1,
-            1, 1, 27, 0, 30, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1};
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id != 3)
+        case 3:
         {
-            character scout(bn::sprite_items::scout_walking_spring, current_room, 4, 8, false);
-            scout.entity.set_position(4 * 32, 8 * 32);
-            scout.entity.set_camera(camera);
-            scout.role = 2;
-            scout.identity = 3;
-            chari.push_back(scout);
+            current_room.init(24, 12, 22, 1);
+            std::vector<int> local{
+                4, 8, 11, 12, 3, 3, 12, 11, 8, 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 4, 14, 5,
+                2, 18, 0, 0, 0, 0, 0, 0, 18, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 0, 0, 1, 1, 1, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 0, 0, 1, 1, 1, 1, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 0, 0, 0, 1, 1, 0, 0, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 0, 2,
+                2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 0, 2,
+                2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                2, 18, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
+                7, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6};
+            std::vector<int> local_col {
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 38, 1,
+                1, 0, 0, 11, 11, 11, 11, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 0, 0, 11, 11, 11, 11, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1
+            };
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->last_char_id == 1)
+            {
+                character maple(bn::sprite_items::maple_walking, current_room, 8, 3, false);
+                maple.entity.set_position(22 * 32, 1 * 32);
+                maple.entity.set_camera(camera);
+                maple.role = 0;
+                maple.identity = 0;
+                chari.push_back(maple);
+            }
+
+            if (so->last_char_id < 1)
+            {
+                character enoki(bn::sprite_items::enoki_walking_pj, current_room, 8, 3, false);
+                enoki.entity.set_position(22 * 32, 1 * 32);
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 1;
+                chari.push_back(enoki);
+            }
+
+            anim_object fp;
+            fp.entity_item = bn::sprite_items::bookshelf;
+            fp.entity = fp.entity_item.create_sprite(0, 0);
+            fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 00, 00, 00, 0);
+            fp.entity.set_visible(true);
+            fp.entity.set_camera(camera);
+            fp.entity.set_position(144, 16);
+            anim_objects.push_back(fp);
+
+            //character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
+            /*
+                if (current_room.local_tileset.at((current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
+                    enoki.entity.set_position(4 + current_room.start_x * 32, current_room.start_y * 32);
+                    maple.entity.set_position(-4 + current_room.start_x * 32, (current_room.start_y * 32));
+                }
+                */
+
+            for (int t = 0; t < 2; t++)
+            {
+                chari.at(t).entity.set_camera(camera);
+            }
+
+            primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
         }
-
-        primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
-        primary_bg.set_camera(camera);
-        break;
-    }
-    case 8:
-    {
-        bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
-
-        current_room.init(20, 20, 9, 17);
-        std::vector<int> local_col{
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-            1,0,0,0,0,0,0,0,0,54,52,0,0,0,0,0,0,0,43,1,
-            1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
-            1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
-            1,1,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,1,1,
-            1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,1,1,
-            1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,1,1,
-            1,1,0,0,0,1,48,0,0,0,0,0,1,1,1,1,44,0,1,1,
-            1,1,0,0,0,45,0,0,0,0,0,0,1,1,1,1,0,0,1,1,
-            1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-            1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,
-            1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-            1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,
-            1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,
-            1,1,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,1,
-            1,1,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,1,
-            1,1,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,1,
-            1,1,0,46,0,0,50,0,0,0,0,0,0,0,0,0,47,0,1,1,
-            1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
-
-        std::vector<int> local{
-            35,35,35,35,35,35,35,35,35,44,0,35,35,35,35,35,35,39,27,27,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,8,8,
-            27,1,0,0,28,28,33,28,28,0,14,8,7,7,7,7,7,6,42,1,
-            1,27,0,0,29,29,48,29,29,0,4,0,0,0,0,0,0,4,1,27,
-            27,1,0,0,30,30,49,30,30,0,5,0,42,42,42,42,0,4,27,1,
-            1,27,0,1,31,31,50,31,31,0,4,0,43,10,9,43,0,4,1,27,
-            27,1,0,27,32,32,51,32,32,0,5,0,42,26,26,42,44,4,27,1,
-            1,27,0,0,0,44,0,0,0,0,4,0,43,26,26,43,0,4,1,27,
-            27,1,0,0,0,0,0,0,0,0,5,0,43,43,43,43,0,4,27,1,
-            1,27,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,4,1,27,
-            27,1,0,0,0,0,0,0,0,0,42,7,7,7,7,7,7,6,27,1,
-            1,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,27,
-            27,1,0,0,28,28,33,28,28,0,0,28,28,33,28,28,0,0,27,1,
-            1,27,0,0,29,29,48,29,29,0,0,29,29,48,29,29,0,0,1,27,
-            27,1,0,1,30,30,49,30,30,0,0,30,30,49,30,30,1,0,27,1,
-            1,27,0,27,31,31,50,31,31,0,0,31,31,50,31,31,27,0,1,27,
-            27,1,0,44,32,32,51,32,32,0,0,32,32,51,32,32,44,0,27,1,
-            1,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,27,
-            27,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,27,1,
-            1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27};
-
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
-
-        if (so->checkpoint == 5) primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
-        primary_bg.set_camera(camera);
-        break;
-    }
-    case 9:
-    {
-        bn::music_items_info::span[26].first.play(bn::fixed(80) / 100);
-        chari.at(0).entity.set_position(3 * 32,5 * 32);
-
-        current_room.init(7, 7, 3, 5);
-        std::vector<int> local_col{
-            1,1,1,1,1,1,1,
-            1,1,1,57,0,1,1,
-            1,1,1,0,0,1,1,
-            1,1,1,0,0,0,1,
-            1,1,1,55,0,0,1,
-            1,1,1,49,1,1,1,
-            1,1,1,1,1,1,1};
-
-        std::vector<int> local{
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0};;
-
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id != 4)
+        case 4:
         {
-            character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
-            vee.entity.set_position(3 * 32, 2 * 32);
-            vee.entity.set_camera(camera);
-            vee.role = 2;
-            vee.identity = 4;
-            chari.push_back(vee);
-        }
+            if (so->checkpoint == 5) {
+                bn::music_items_info::span[21].first.play(bn::fixed(80) / 100);
+            } else {
+                bn::music_items_info::span[11].first.play(bn::fixed(80) / 100);
+            }
+            
+            current_room.init(20, 20, 9, 17);
 
-        if (so->last_char_id != 5)
+            if (so->checkpoint < 7) {
+                std::vector<int> local_col{
+                    00, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+                    00, 1, 1, 1, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+                    00, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+                    00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+                    00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+                    00, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                    00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+                std::vector<int> local{
+                    39,1,27,27,39,27,27,27,44,0,27,27,27,27,27,42,43,42,12,13,
+                    1,27,0,0,0,0,0,0,0,0,0,0,0,0,0,43,3,43,11,26,
+                    39,1,0,0,0,0,0,0,0,0,0,0,1,0,0,5,2,3,12,26,
+                    38,27,0,0,0,15,18,18,18,18,18,18,18,23,0,4,3,2,11,26,
+                    39,47,44,0,1,16,19,19,19,19,19,19,19,24,1,5,2,3,12,26,
+                    38,0,0,0,27,17,20,21,20,22,20,21,20,25,27,4,3,2,11,26,
+                    39,1,0,0,0,0,0,0,0,3,0,0,0,0,0,4,2,3,12,26,
+                    38,27,1,0,0,0,0,0,0,2,0,0,0,0,0,5,3,2,11,26,
+                    39,1,27,0,0,0,0,0,40,3,42,0,0,0,0,4,2,3,12,26,
+                    0,27,44,0,0,0,0,1,41,2,43,1,0,14,7,6,3,2,11,26,
+                    0,0,0,0,0,0,0,27,2,3,3,27,0,4,2,3,2,3,12,26,
+                    38,0,1,0,0,0,0,0,2,2,3,0,0,5,3,2,3,2,11,26,
+                    39,1,27,0,0,0,0,14,42,3,42,8,7,6,2,3,2,3,12,26,
+                    38,27,0,0,0,0,14,6,43,2,43,2,3,2,3,2,3,46,45,26,
+                    39,0,0,0,0,0,5,2,3,3,2,3,2,46,9,10,9,45,13,26,
+                    42,7,8,7,8,7,6,3,3,2,3,2,46,45,13,26,26,26,26,26,
+                    43,2,3,2,3,2,3,46,42,3,42,10,45,26,26,26,26,26,26,26,
+                    42,10,9,10,9,10,9,45,43,2,43,26,26,26,26,26,26,26,0,0,
+                    43,26,26,26,13,26,26,26,26,10,26,26,26,26,26,26,26,0,0,0,
+                    26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,26,0,0,0};
+
+                deep_copy(local, current_room.local_tileset);
+                deep_copy(local_col, current_room.collisions);
+
+            } else {
+                std::vector<int> local_col{
+                    01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+                    01,42,41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+                    01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+                    00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+                    00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+                    00, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+                    01, 0, 0, 0, 0, 0, 0, 1, 1, 61, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+                    01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                    00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+                std::vector<int> local{
+                    39,27,44,27,27,27,27,27,44,0,27,27,27,27,27,42,43,42,12,13,
+                    0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,43,3,43,11,26,
+                    1,1,0,0,0,0,0,0,0,0,0,0,1,0,0,5,2,3,12,26,
+                    27,27,0,0,0,15,18,18,18,18,18,18,18,23,0,4,3,2,11,26,
+                    39,47,44,0,1,16,19,19,19,19,19,19,19,24,1,5,2,3,12,26,
+                    38,0,0,0,27,17,20,21,20,22,20,21,20,25,27,4,3,2,11,26,
+                    39,1,0,0,0,0,0,0,0,3,0,0,0,0,0,4,2,3,12,26,
+                    38,27,1,0,0,0,0,0,0,2,0,0,0,0,0,5,3,2,11,26,
+                    39,1,27,0,0,0,0,0,40,3,42,0,0,0,0,4,2,3,12,26,
+                    0,27,44,0,0,0,0,1,41,2,43,1,0,14,7,6,3,2,11,26,
+                    0,0,0,0,0,0,0,27,2,3,3,27,0,4,2,3,2,3,12,26,
+                    38,0,1,0,0,0,0,0,2,2,3,0,0,5,3,2,3,2,11,26,
+                    39,1,27,0,0,0,0,14,42,3,42,8,7,6,2,3,2,3,12,26,
+                    38,27,0,0,0,0,14,6,43,2,43,2,3,2,3,2,3,46,45,26,
+                    39,0,0,0,0,0,5,2,3,3,2,3,2,46,9,10,9,45,13,26,
+                    42,7,8,7,8,7,6,3,3,2,3,2,46,45,13,26,26,26,26,26,
+                    43,2,3,2,3,2,3,46,42,3,42,10,45,26,26,26,26,26,26,26,
+                    42,10,9,10,9,10,9,45,43,2,43,26,26,26,26,26,26,26,0,0,
+                    43,26,26,26,13,26,26,26,52,10,26,26,26,26,26,26,26,0,0,0,
+                    26,26,26,26,26,26,26,26,53,26,26,26,26,26,26,26,26,0,0,0};
+
+                deep_copy(local, current_room.local_tileset);
+                deep_copy(local_col, current_room.collisions);
+            }
+
+            primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
+
+            if (so->checkpoint == 5) primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
+            primary_bg.set_camera(camera);
+            break;
+        }
+        case 5:
         {
-            character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
-            eleanor.entity.set_position(4 * 32, 4 * 32);
-            eleanor.entity.set_camera(camera);
-            eleanor.role = 2;
-            eleanor.identity = 5;
-            chari.push_back(eleanor);
+            bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
+
+            current_room.init(11, 5, 5, 3);
+            std::vector<int> local_col{
+                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                01, 1, 0, 0, 17, 0, 18, 0, 0, 0, 1,
+                01, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1,
+                01, 1, 16, 1, 1, 13, 0, 1, 0, 1, 1,
+                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+            std::vector<int> local{
+                1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 51,
+                2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 52,
+                3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 53,
+                4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 54,
+                5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 55};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            primary_bg = bn::regular_bg_items::bg_trailer_home.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+
+            if (so->last_char_id != 0)
+            {
+                character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
+                maple.entity.set_position(5 * 32, 1 * 32);
+                maple.entity.set_camera(camera);
+                maple.role = 2;
+                maple.identity = 0;
+                chari.push_back(maple);
+            }
+
+            if (so->last_char_id != 1)
+            {
+                character enoki(bn::sprite_items::enoki_walking_spring, current_room, 6, 2, false);
+                enoki.entity.set_position(6 * 32, 2 * 32);
+                enoki.entity.set_camera(camera);
+                enoki.role = 2;
+                enoki.identity = 1;
+                chari.push_back(enoki);
+            }
+
+            if (so->last_char_id != 2)
+            {
+                character aaron(bn::sprite_items::aaron_walking_spring, current_room, 4, 1, false);
+                aaron.entity.set_position(4 * 32, 1 * 32);
+                aaron.entity.set_camera(camera);
+                aaron.role = 2;
+                aaron.identity = 2;
+                chari.push_back(aaron);
+            }
+
+            break;
         }
-
-        primary_bg = bn::regular_bg_items::bg_landry_cottage.create_bg(0, 0);
-        primary_bg.set_camera(camera);
-        break;
-    }
-    case 10:
-    {
-        bn::music_items_info::span[5].first.play(bn::fixed(80) / 100);
-        chari.at(0).entity.set_position(3 * 32,5 * 32);
-
-        current_room.init(7, 7, 3, 5);
-        std::vector<int> local_col{
-            1,1,1,1,1,1,1,
-            1,1,0,0,0,1,1,
-            1,1,0,0,0,1,1,
-            1,1,0,62,0,1,1,
-            1,1,0,0,0,1,1,
-            1,1,0,60,1,1,1,
-            1,1,1,1,1,1,1};
-
-        std::vector<int> local{
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0};;
-
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id != 6)
+        case 6:
         {
-            character vee(bn::sprite_items::diana_walking_spring, current_room, 3, 2, false);
-            vee.entity.set_position(3 * 32, 2 * 32);
-            vee.entity.set_camera(camera);
-            vee.role = 2;
-            vee.identity = 6;
-            chari.push_back(vee);
+            bn::music_items_info::span[17].first.play(bn::fixed(80) / 100);
+            current_room.init(9, 11, 7, 3);
+            std::vector<int> local{
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 1, 12, 1,
+                00, 0, 0, 0, 0, 0, 1, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 2, 4, 8, 9, 11, 0, 0, 1,
+                1, 3, 5, 0, 10, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 6, 0, 0, 0, 13, 14, 0, 1,
+                1, 7, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            std::vector<int> local_col{
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 19, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 1, 0, 1, 1, 1, 0, 0, 1,
+                1, 1, 28, 0, 29, 0, 0, 0, 1,
+                1, 0, 0, 0, 30, 0, 0, 0, 1,
+                1, 1, 0, 0, 0, 1, 1, 0, 1,
+                1, 1, 27, 0, 30, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->last_char_id != 3)
+            {
+                character scout(bn::sprite_items::scout_walking_spring, current_room, 4, 8, false);
+                scout.entity.set_position(4 * 32, 8 * 32);
+                scout.entity.set_camera(camera);
+                scout.role = 2;
+                scout.identity = 3;
+                chari.push_back(scout);
+            }
+
+            primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
         }
-
-        primary_bg = bn::regular_bg_items::bg_diana_room.create_bg(0, 0);
-        primary_bg.set_camera(camera);
-        break;
-    }
-    case 11:
-    {
-        bn::music_items_info::span[12].first.play(bn::fixed(80) / 100);
-        chari.at(0).entity.set_position(15 * 32,22 * 32);
-
-        current_room.init(24, 24, 15, 22);
-        std::vector<int> local_col{
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
-            1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1,
-            1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1,
-            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,53,0,0,0,0,0,0,0,1,
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-        };
-
-        std::vector<int> local{
-            2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
-            2,3,0,0,0,3,0,0,0,3,0,0,0,3,0,3,0,0,0,0,0,0,0,2,
-            2,4,0,1,0,4,0,1,0,4,0,1,0,11,0,3,20,24,24,24,24,24,0,2,
-            2,5,0,0,0,5,0,0,0,5,0,0,0,12,0,3,21,28,30,28,30,25,0,2,
-            2,6,0,0,0,6,0,0,0,6,0,0,0,13,0,3,20,29,31,29,31,22,0,2,
-            2,7,0,0,0,7,0,0,0,7,0,0,0,14,0,3,21,28,30,28,30,23,0,2,
-            2,8,0,0,0,8,0,0,0,8,0,0,0,15,0,3,20,29,31,29,31,22,0,2,
-            2,9,0,1,0,9,0,1,0,9,0,1,0,16,0,3,21,26,26,26,26,26,0,2,
-            2,10,0,0,0,10,0,0,0,10,0,0,0,17,0,3,2,27,27,27,27,27,0,2,
-            2,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,
-            2,5,0,0,0,12,0,0,0,5,0,0,0,12,0,3,20,24,24,24,24,24,0,2,
-            2,6,0,1,0,13,0,1,0,6,0,1,0,13,0,3,21,28,30,28,30,25,0,2,
-            2,7,0,0,0,14,0,0,0,7,0,0,0,14,0,3,20,29,31,29,31,22,0,2,
-            2,8,0,0,0,15,0,0,0,8,0,0,0,15,0,3,21,28,30,28,30,23,0,2,
-            2,9,0,0,0,16,0,0,0,9,0,0,0,16,0,3,20,29,31,29,31,22,0,2,
-            2,10,0,1,0,17,0,1,0,10,0,1,0,17,0,3,21,26,26,26,26,26,0,2,
-            2,11,0,0,0,11,0,0,0,4,0,0,0,11,0,3,2,27,27,27,27,27,2,2,
-            2,12,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,
-            2,13,0,0,0,13,0,0,0,6,0,0,0,13,0,3,0,0,0,0,0,0,0,2,
-            2,14,0,1,0,14,0,1,0,7,0,1,0,14,0,3,0,4,0,7,11,15,0,2,
-            2,15,0,0,0,15,0,0,0,8,0,0,0,15,0,3,0,5,0,8,12,16,0,2,
-            2,16,0,1,0,16,0,1,0,9,0,1,0,16,0,3,0,6,0,9,10,17,0,2,
-            2,3,0,0,0,3,0,0,0,3,0,0,0,3,0,3,0,0,0,0,0,0,0,2,
-            2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2
-        };
-
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
-
-        if (so->last_char_id != 4)
+        case 8:
         {
-            character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
-            vee.entity.set_position(14 * 32, 20 * 32);
-            vee.entity.set_camera(camera);
-            vee.role = 2;
-            vee.identity = 4;
-            chari.push_back(vee);
+            bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
+
+            current_room.init(20, 20, 9, 17);
+            std::vector<int> local_col{
+                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+                1,0,0,0,0,0,0,0,0,54,52,0,0,0,0,0,0,0,43,1,
+                1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
+                1,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,1,1,
+                1,1,0,0,1,1,1,1,1,0,0,0,1,1,1,1,0,0,1,1,
+                1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1,0,0,1,1,
+                1,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,0,1,1,
+                1,1,0,0,0,1,48,0,0,0,0,0,1,1,1,1,44,0,1,1,
+                1,1,0,0,0,45,0,0,0,0,0,0,1,1,1,1,0,0,1,1,
+                1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+                1,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,1,
+                1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+                1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,
+                1,1,0,0,1,1,1,1,1,0,0,1,1,1,1,1,0,0,1,1,
+                1,1,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,1,
+                1,1,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,1,
+                1,1,0,1,1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,1,
+                1,1,0,46,0,0,50,0,0,0,0,0,0,64,0,0,47,0,1,1,
+                1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,
+                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+
+            std::vector<int> local{
+                35,35,35,35,35,35,35,35,35,44,0,35,35,35,35,35,35,39,27,27,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,14,8,8,
+                27,1,0,0,28,28,33,28,28,0,14,8,7,7,7,7,7,6,42,1,
+                1,27,0,0,29,29,48,29,29,0,4,0,0,0,0,0,0,4,1,27,
+                27,1,0,0,30,30,49,30,30,0,5,0,42,42,42,42,0,4,27,1,
+                1,27,0,1,31,31,50,31,31,0,4,0,43,10,9,43,0,4,1,27,
+                27,1,0,27,32,32,51,32,32,0,5,0,42,26,26,42,44,4,27,1,
+                1,27,0,0,0,44,0,0,0,0,4,0,43,26,26,43,0,4,1,27,
+                27,1,0,0,0,0,0,0,0,0,5,0,43,43,43,43,0,4,27,1,
+                1,27,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,4,1,27,
+                27,1,0,0,0,0,0,0,0,0,42,7,7,7,7,7,7,6,27,1,
+                1,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,27,
+                27,1,0,0,28,28,33,28,28,0,0,28,28,33,28,28,0,0,27,1,
+                1,27,0,0,29,29,48,29,29,0,0,29,29,48,29,29,0,0,1,27,
+                27,1,0,1,30,30,49,30,30,0,0,30,30,49,30,30,1,0,27,1,
+                1,27,0,27,31,31,50,31,31,0,0,31,31,50,31,31,27,0,1,27,
+                27,1,0,44,32,32,51,32,32,0,0,32,32,51,32,32,44,0,27,1,
+                1,27,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,27,
+                27,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,27,1,
+                1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27,1,27};
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
+
+            if (so->checkpoint == 5) primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
+            primary_bg.set_camera(camera);
+            break;
         }
+        case 9:
+        {
+            bn::music_items_info::span[26].first.play(bn::fixed(80) / 100);
+            chari.at(0).entity.set_position(3 * 32,5 * 32);
 
-        primary_bg = bn::regular_bg_items::greenhouse_bg_01.create_bg(0, 0);
-        primary_bg.set_camera(camera);
-        break;
-    }
-    case 12:
-    {
-        if (bn::music::playing()) bn::music::stop();
+            current_room.init(7, 7, 3, 5);
+            std::vector<int> local_col{
+                1,1,1,1,1,1,1,
+                1,1,1,57,0,1,1,
+                1,1,1,0,0,1,1,
+                1,1,1,0,0,0,1,
+                1,1,1,55,0,0,1,
+                1,1,1,49,1,1,1,
+                1,1,1,1,1,1,1};
 
-        current_room.init(7, 7, 3, 5);
-        std::vector<int> local_col{
-            1,1,1,1,1,1,1,
-            1,0,59,0,0,0,1,
-            1,0,1,1,1,0,1,
-            1,0,1,1,1,0,1,
-            1,0,1,1,1,0,1,
-            1,0,0,58,0,0,1,
-            1,1,1,1,1,1,1};
+            std::vector<int> local{
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0};;
 
-        std::vector<int> local{
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0};;
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
 
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
+            if (so->last_char_id != 4)
+            {
+                character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                vee.entity.set_position(3 * 32, 2 * 32);
+                vee.entity.set_camera(camera);
+                vee.role = 2;
+                vee.identity = 4;
+                chari.push_back(vee);
+            }
 
-        primary_bg = bn::regular_bg_items::bg_library.create_bg(0, 0);
-        primary_bg.set_camera(camera);
-        break;
-    }
-    default:
-    {
-        break;
-    }
-    
+            if (so->last_char_id != 5)
+            {
+                character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
+                eleanor.entity.set_position(4 * 32, 4 * 32);
+                eleanor.entity.set_camera(camera);
+                eleanor.role = 2;
+                eleanor.identity = 5;
+                chari.push_back(eleanor);
+            }
+
+            primary_bg = bn::regular_bg_items::bg_landry_cottage.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
+        }
+        case 10:
+        {
+            bn::music_items_info::span[5].first.play(bn::fixed(80) / 100);
+            chari.at(0).entity.set_position(3 * 32,5 * 32);
+
+            current_room.init(7, 7, 3, 5);
+            std::vector<int> local_col{
+                1,1,1,1,1,1,1,
+                1,1,0,0,0,1,1,
+                1,1,0,0,0,1,1,
+                1,1,0,62,0,1,1,
+                1,1,0,0,0,1,1,
+                1,1,0,60,1,1,1,
+                1,1,1,1,1,1,1};
+
+            std::vector<int> local{
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0};;
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->last_char_id != 6)
+            {
+                character vee(bn::sprite_items::diana_walking_spring, current_room, 3, 2, false);
+                vee.entity.set_position(3 * 32, 2 * 32);
+                vee.entity.set_camera(camera);
+                vee.role = 2;
+                vee.identity = 6;
+                chari.push_back(vee);
+            }
+
+            primary_bg = bn::regular_bg_items::bg_diana_room.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
+        }
+        case 11:
+        {
+            bn::music_items_info::span[12].first.play(bn::fixed(80) / 100);
+            chari.at(0).entity.set_position(15 * 32,22 * 32);
+
+            current_room.init(24, 24, 15, 22);
+            std::vector<int> local_col{
+                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,1,
+                1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1,
+                1,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,1,1,1,0,1,
+                1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,53,0,0,0,0,0,0,0,1,
+                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+            };
+
+            std::vector<int> local{
+                2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+                2,3,0,0,0,3,0,0,0,3,0,0,0,3,0,3,0,0,0,0,0,0,0,2,
+                2,4,0,1,0,4,0,1,0,4,0,1,0,11,0,3,20,24,24,24,24,24,0,2,
+                2,5,0,0,0,5,0,0,0,5,0,0,0,12,0,3,21,28,30,28,30,25,0,2,
+                2,6,0,0,0,6,0,0,0,6,0,0,0,13,0,3,20,29,31,29,31,22,0,2,
+                2,7,0,0,0,7,0,0,0,7,0,0,0,14,0,3,21,28,30,28,30,23,0,2,
+                2,8,0,0,0,8,0,0,0,8,0,0,0,15,0,3,20,29,31,29,31,22,0,2,
+                2,9,0,1,0,9,0,1,0,9,0,1,0,16,0,3,21,26,26,26,26,26,0,2,
+                2,10,0,0,0,10,0,0,0,10,0,0,0,17,0,3,2,27,27,27,27,27,0,2,
+                2,4,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,
+                2,5,0,0,0,12,0,0,0,5,0,0,0,12,0,3,20,24,24,24,24,24,0,2,
+                2,6,0,1,0,13,0,1,0,6,0,1,0,13,0,3,21,28,30,28,30,25,0,2,
+                2,7,0,0,0,14,0,0,0,7,0,0,0,14,0,3,20,29,31,29,31,22,0,2,
+                2,8,0,0,0,15,0,0,0,8,0,0,0,15,0,3,21,28,30,28,30,23,0,2,
+                2,9,0,0,0,16,0,0,0,9,0,0,0,16,0,3,20,29,31,29,31,22,0,2,
+                2,10,0,1,0,17,0,1,0,10,0,1,0,17,0,3,21,26,26,26,26,26,0,2,
+                2,11,0,0,0,11,0,0,0,4,0,0,0,11,0,3,2,27,27,27,27,27,2,2,
+                2,12,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,
+                2,13,0,0,0,13,0,0,0,6,0,0,0,13,0,3,0,0,0,0,0,0,0,2,
+                2,14,0,1,0,14,0,1,0,7,0,1,0,14,0,3,0,4,0,7,11,15,0,2,
+                2,15,0,0,0,15,0,0,0,8,0,0,0,15,0,3,0,5,0,8,12,16,0,2,
+                2,16,0,1,0,16,0,1,0,9,0,1,0,16,0,3,0,6,0,9,10,17,0,2,
+                2,3,0,0,0,3,0,0,0,3,0,0,0,3,0,3,0,0,0,0,0,0,0,2,
+                2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,0,2,2,2,2,2,2,2,2
+            };
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->last_char_id != 4)
+            {
+                character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                vee.entity.set_position(14 * 32, 20 * 32);
+                vee.entity.set_camera(camera);
+                vee.role = 2;
+                vee.identity = 4;
+                chari.push_back(vee);
+            }
+
+            primary_bg = bn::regular_bg_items::greenhouse_bg_01.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
+        }
+        case 12:
+        {
+            if (bn::music::playing()) bn::music::stop();
+
+            current_room.init(7, 7, 3, 5);
+            std::vector<int> local_col{
+                1,1,1,1,1,1,1,
+                1,0,59,0,0,0,1,
+                1,0,1,1,1,0,1,
+                1,0,1,1,1,0,1,
+                1,0,1,1,1,0,1,
+                1,0,0,58,0,0,1,
+                1,1,1,1,1,1,1};
+
+            std::vector<int> local{
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0};;
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            primary_bg = bn::regular_bg_items::bg_library.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
+        }
+        case 13:
+        {
+            bn::music_items_info::span[25].first.play(bn::fixed(80) / 100);
+            chari.at(0).entity.set_position(3 * 32,5 * 32);
+
+            current_room.init(7, 7, 3, 5);
+            std::vector<int> local_col{
+                1,1,1,1,1,1,1,
+                1,1,0,0,1,1,1,
+                1,1,0,1,0,1,1,
+                1,1,0,1,0,1,1,
+                1,1,0,0,0,1,1,
+                1,1,1,65,1,1,1,
+                1,1,1,1,1,1,1};
+
+            std::vector<int> local{
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0};;
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->last_char_id != 7)
+            {
+                character guy(bn::sprite_items::guy_walking_spring, current_room, 2, 2, false);
+                guy.entity.set_position(2 * 32, 2 * 32);
+                guy.entity.set_camera(camera);
+                guy.role = 2;
+                guy.identity = 7;
+                chari.push_back(guy);
+            }
+
+            primary_bg = bn::regular_bg_items::bg_guy_house.create_bg(0, 0);
+            primary_bg.set_camera(camera);
+            break;
+        }
+        default:
+        {
+            break;
+        }
     };
 
     // A header
@@ -1363,6 +1425,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
     int anim8 = 0;
 
+    // corinne be like
     auto corinne = bn::sprite_items::corinne.create_sprite(0,0);
     corinne.set_camera(camera);
     corinne.set_visible(false);
@@ -2502,7 +2565,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 0, "                                                                  AARON                            wood I'd be chopping."},
                                 {true, true, 0, "                                                                  AARON                            I'm making boards, too. I plan on"},
                                 {true, true, 0, "                                                                  AARON                            having some houses up and about a"},
-                                {true, true, 0, "                                                                  AARON                            quarter of the woods leveled."},
+                                {true, true, 0, "                                                                  AARON                            quarter of the woods levelled."},
                                 {true, true, 0, "                                                                  SCOUT                            How many people are coming here,"},
                                 {true, true, 0, "                                                                  SCOUT                            do you think?"},
                                 {true, true, 0, "                                                                  AARON                            I don't know.. maybe eight? Nine?"},
@@ -2687,22 +2750,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     bn::sound_items::door.play(); return dt;
                 };
 
-                case 39:
-                {
-                    line lc[8] = {
-                        {true, true, 00, "                                                                  ENOKI                            Let's go for the room with-"},
-                        {true, true, 00, "                                                                  ENOKI                            -the big bookshelf!"},
-                        {true, true, 00, "                                                                  ENOKI                            There's gotta be secrets!"},
-                        {true, true, 00, "                                                                  ENOKI                            If you want me to lead,"},
-                        {true, true, 00, "                                                                  ENOKI                            just press 'B'."},
-                        {true, true, 00, "                                                                  MAPLE                            ...Huh?"},
-                        {true, true, 00, "                                                                  ENOKI                            What?"},
-                        {true, true, 00, "COM: Endscene"}};
-                    bn::sound_item hm = bn::sound_items::heymaple;
-                    hm.play();
-                    dialogue_page_lite(lc);
-                    break;
-                };
+                // 39
 
                 case 40:
                 {
@@ -3245,6 +3293,20 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     corinne.set_visible(false);
                     break;
                 }
+
+                case 64: {
+                    dt.spawn_x = 3;
+                    dt.spawn_y = 5;
+                    dt.world_index = 13;
+                    return dt;
+                };
+
+                case 65: {
+                    dt.spawn_x = 13;
+                    dt.spawn_y = 17;
+                    dt.world_index = 8;
+                    return dt;
+                };
             }
         }
 

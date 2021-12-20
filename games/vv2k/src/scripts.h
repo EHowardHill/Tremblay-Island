@@ -119,6 +119,23 @@ int exec_dialogue(int x) {
 			break;
         };
 
+        case 3: {
+            line lc[32] = {
+                {fals, fals, 00, "BG: Moody"},
+                {true, true, 30, "ENOKI                                                             I wanna explore the big          bookshelf room first!"},
+                {true, fals, 02, "MAPLE                                                             Sure, whatever."},
+                {fals, true, 31, "ENOKI                                                             I think you're gonna see why     when we get there."},
+                {fals, true, 30, "ENOKI                                                             If you want me to lead,          just press 'B'."},
+                {fals, fals, 03, "MAPLE                                                             ...Huh?"},
+                {fals, true, 30, "ENOKI                                                             What?"},
+                {fals, fals, 00, "COM: Endscene"}};
+            bn::sound_item hm = bn::sound_items::heymaple;
+            hm.play();
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
+
         case 13: {
             line lc[32] = {
                 {true, true, 0, "S01:13"},

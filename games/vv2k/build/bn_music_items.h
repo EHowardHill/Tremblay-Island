@@ -38,6 +38,7 @@ namespace bn::music_items
     constexpr inline music_item z21_pools(30);
     constexpr inline music_item z22_cbx(31);
     constexpr inline music_item z23_diana(32);
+    constexpr inline music_item z24_cruz(33);
 }
 
 #endif

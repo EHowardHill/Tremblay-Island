@@ -49,6 +49,8 @@
 #include "bn_sprite_items_enoki07.h"
 #include "bn_sprite_items_enoki08.h"
 #include "bn_sprite_items_enoki09.h"
+#include "bn_sprite_items_enoki10.h"
+#include "bn_sprite_items_enoki11.h"
 #include "bn_sprite_items_aaron01.h"
 #include "bn_sprite_items_aaron02.h"
 #include "bn_sprite_items_aaron03.h"
@@ -103,6 +105,7 @@
 #include "bn_regular_bg_items_ocean.h"
 #include "bn_regular_bg_items_day_castle.h"
 #include "bn_regular_bg_items_bg_docks.h"
+#include "bn_regular_bg_items_bg_moody.h"
 
 #include "bn_sprite_items_dialogue_bg_2.h"
 
@@ -199,6 +202,13 @@ void set_sprite(bn::sprite_ptr chari, int value) {
             chari.set_item(bn::sprite_items::diana01);
             break;
 
+        case 30:
+            chari.set_item(bn::sprite_items::enoki10);
+            break;
+        case 31:
+            chari.set_item(bn::sprite_items::enoki11);
+            break;
+
         default:
             break;
     }
@@ -288,6 +298,9 @@ void dialogue_page(line n[32]) {
         } else if (strcmp(n[pos].text, "BG: Forest") == 0) {
             primary_bg.set_item(bn::regular_bg_items::mountain);
             primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "BG: Moody") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::bg_moody);
+            primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "BG: Trailer Home") == 0) {
             primary_bg.set_item(bn::regular_bg_items::bg_trailer_home);
             primary_bg.set_visible(true);
@@ -361,7 +374,6 @@ void dialogue_page(line n[32]) {
         } else if (strcmp(n[pos].text, "S03:02") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0302);
             primary_bg.set_visible(true);
-
         } else if (strcmp(n[pos].text, "S04:01") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0401);
             primary_bg.set_visible(true);
@@ -493,7 +505,7 @@ void dialogue_page(line n[32]) {
                 } else {
 
                     // Handle dialogue background sprite box
-                    if (bg_alpha < 0.9) {
+                    if (bg_alpha < 0.9 && text_sprite0.size() > 0) {
                         bg_alpha += 0.05;
                         bn::blending::set_transparency_alpha(bg_alpha);
                     }
