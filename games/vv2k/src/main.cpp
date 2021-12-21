@@ -2594,8 +2594,9 @@ int main()
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
 
-    so->xp = 0;
-    so->checkpoint = 0;
+    so->xp = 201;
+    so->checkpoint = 10;
+    so->last_char_id = 1;
 
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);

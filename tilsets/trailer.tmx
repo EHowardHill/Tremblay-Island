@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="11" height="5" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="trailer_home" tilewidth="32" tileheight="32" tilecount="55" columns="1">
+  <image source="../../Documents/GitHub/vv2k/games/vv2k/graphics/trailer_home.bmp" width="32" height="1760"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="11" height="5">
+  <data encoding="csv">
+1,6,0,0,0,0,0,0,0,0,51,
+2,7,0,0,0,0,0,0,0,0,52,
+3,8,0,0,0,0,0,0,0,0,53,
+4,9,0,0,0,0,0,0,0,0,54,
+5,10,0,0,0,0,0,0,0,0,55
+</data>
+ </layer>
+</map>

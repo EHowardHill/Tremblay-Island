@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="9" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="scout_lab" tilewidth="32" tileheight="32" tilecount="14" columns="1">
+  <image source="../../Documents/GitHub/vv2k/games/vv2k/graphics/scout_lab.bmp" width="32" height="448"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="9" height="12">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,12,0,
+0,0,0,0,0,0,0,12,0,
+0,0,0,0,0,0,1,12,1,
+0,0,0,0,0,0,1,0,1,
+1,1,1,1,1,1,1,0,1,
+1,2,4,8,9,11,0,0,1,
+1,3,5,0,10,0,0,0,1,
+1,0,0,0,0,0,0,0,1,
+1,6,0,0,0,13,14,0,1,
+1,7,0,0,0,0,0,0,1,
+1,1,1,1,1,1,1,1,1
+</data>
+ </layer>
+</map>

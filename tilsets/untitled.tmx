@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.5" tiledversion="1.7.2" orientation="orthogonal" renderorder="right-down" width="12" height="6" tilewidth="32" tileheight="32" infinite="0" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" name="environment_stone" tilewidth="32" tileheight="32" tilecount="28" columns="1">
+  <image source="../../Documents/GitHub/vv2k/games/vv2k/graphics/environment_stone.bmp" width="32" height="896"/>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="12" height="6">
+  <data encoding="csv">
+4,3,8,11,13,3,3,3,8,3,5,0,
+2,18,0,0,0,18,2,9,0,9,2,0,
+2,0,0,0,0,0,2,10,0,10,2,0,
+2,3,3,2,0,0,2,0,0,0,2,0,
+17,0,0,0,0,0,0,0,0,18,2,0,
+7,3,3,3,3,3,3,3,16,3,6,0
+</data>
+ </layer>
+</map>
