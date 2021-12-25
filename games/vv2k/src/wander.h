@@ -44,6 +44,8 @@
 
 #include "bn_regular_bg_items_dialogue_bg.h"
 
+#include "bn_sprite_items_funny_items.h"
+
 // Projectiles
 class projectile
 {
@@ -472,6 +474,8 @@ public:
 
 dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
 {
+
+
 
     if (so->checkpoint > 1) {
         if (bn::music::playing())
@@ -1442,8 +1446,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             break;
         }
         case 14: {
-            BN_LOG("Loaded 14!");
-
             bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
             
             current_room.init(12, 20, 7, 18);
@@ -1457,8 +1459,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 01,01,01,01,01,01,00,00,00,01,01,01,
                 01,01,01,01,01,01,00,00,00,01,01,01,
                 01,01,01,01,01,00,00,00,00,01,01,01,
-                01,01,01,00,00,00,00,01,00,01,01,01,
-                01,01,00,00,00,00,00,00,00,01,01,01,
+                01,01,01,68,00,00,00,01,00,01,01,01,
+                01,01,69,00,00,00,00,00,00,01,01,01,
                 01,01,00,00,00,00,00,00,00,01,01,01,
                 01,01,00,00,00,00,00,00,00,01,01,01,
                 01,01,00,00,00,00,00,00,00,01,01,01,
@@ -1535,9 +1537,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     corinne.set_camera(camera);
     corinne.set_visible(false);
 
+    // funny hat be like
+    auto hat = bn::sprite_items::funny_items.create_sprite(0,0,0);
+    hat.set_camera(camera);
+    hat.set_visible(false);
+    bool active_hat = false;
+    for (int t = 0; t < chari.size(); t++) {
+        if (so->hat_char == chari.at(t).identity) active_hat = true;
+    }
+    if (so->hat_world == dt.world_index) active_hat = true;
+    if (active_hat) hat.set_visible(true);
+
+    auto l_button = bn::sprite_items::l_button.create_sprite(-90,14);
+    l_button.set_visible(false);
+
     bn::blending::set_transparency_alpha(bn::fixed(1));
 
-    BN_LOG("Loading up ", dt.world_index);
     while (true)
     {
         // Pause
@@ -1617,9 +1632,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         if (possible_action > 1)
         {
             a_notif.set_visible(true);
-            a_notif.put_above();
-            a_notif.set_x(follow_x);
-            a_notif.set_y(follow_y - 28);
+            a_notif = bn::sprite_items::a_button_2.create_sprite(follow_x, follow_y - 28, 0);
+            a_notif.set_camera(camera);
+            //a_notif.set_x(follow_x);
+            //a_notif.set_y(follow_y - 28);
+
             if (bn::keypad::a_pressed())
             {
 
@@ -3431,9 +3448,66 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     dt.world_index = 4;
                     return dt;
                 }
+
+                case 68: {
+                    dt.spawn_x = 7;
+                    dt.spawn_y = 0;
+                    dt.world_index = 99;
+                    return dt;
+                }
+
+                case 69: {
+                    line lc[32] = {
+                    {true, true, 00, "                                                                  CESAR'S BIZAAR                   'WE ONLY HAVE TWO ITEMS,         DEAL WITH IT'"},
+                    {true, true, 00, "COM: Endscene"}};
+                    dialogue_page_lite(lc);
+                    corinne.set_visible(false);
+                    break;
+                }
             }
         }
 
+        }
+
+        // Hat logic
+        if (active_hat) {
+            if (so->hat_char > -1) {
+                int my_id = 0;
+                for (int i = 0; i < chari.size(); i++) {
+                    if (chari.at(i).identity == so->hat_char) my_id = i;
+                }
+
+                hat.set_position(chari.at(my_id).entity.x().integer(), chari.at(my_id).entity.y().integer() - 22);
+                l_button.set_visible(true);
+
+                if (bn::keypad::l_pressed()) {
+                    bn::sound_items::pop.play();
+                    so->hat_x = chari.at(my_id).entity.x().integer();
+                    so->hat_y = chari.at(my_id).entity.y().integer() + 1;
+                    so->hat_world = dt.world_index;
+                    so->hat_char = -1;
+                    l_button.set_visible(false);
+                }
+            } else {
+                hat.set_position(so->hat_x, so->hat_y);
+
+                if (so->hat_y > chari.at(follow_id).entity.y()) {
+                    hat.put_above();
+                } else {
+                    hat.put_below();
+                }
+
+                if (abs(so->hat_x - chari.at(follow_id).entity.x().integer()) + abs(so->hat_y - chari.at(follow_id).entity.y().integer()) < 32) {
+                    a_notif = bn::sprite_items::a_button_2.create_sprite(so->hat_x, so->hat_y - 28, 1);
+                    a_notif.set_camera(camera);
+                    a_notif.set_visible(true);
+                }
+
+                if (bn::keypad::l_pressed()) {
+                    bn::sound_items::squeak.play();
+                    so->hat_char = chari.at(follow_id).identity;
+                }
+            }
         }
 
         // Swap characters
@@ -3479,8 +3553,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         chari.at(follow_id).entity.set_z_order(2);
 
-
-
         // Camera follows primary player
         if (current_room.width > 7) {
             if (camera.x() > follow_x + 30)
@@ -3522,8 +3594,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         {
             camera.set_y(64);
         }
-
-        BN_LOG("Loc 03");
 
         // Regularly update the tileset based on new camera coordinates
         if (update_counter == 0)
@@ -3615,7 +3685,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         if (update_counter > 16)
             update_counter = 0;
 
+        hat.put_above();
         a_notif.put_above();
+        l_button.put_above();
         bn::core::update();
 
         // World-specific special events
@@ -3746,10 +3818,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 int s_x = (corinne.x().integer() + 16) / 32;
                 int s_y = (corinne.y().integer() + 16) / 32;
                 corinne.set_position(s_x * 32, s_y * 32);
-
-                BN_LOG(chari.at(follow_id).entity.x().integer() / 32);
-                BN_LOG(chari.at(follow_id).entity.y().integer() / 32);
-                BN_LOG(current_room.collisions.at(s_x + (current_room.width * s_y)), " - ", s_x + (current_room.width * s_y), " = ", s_x, " x ", s_y);
 
                 if (current_room.collisions.at(s_x + (current_room.width * (s_y + 1))) == 0) {
                     current_room.collisions.at(s_x + (current_room.width * (s_y + 1))) = 63;

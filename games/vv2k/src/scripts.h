@@ -387,6 +387,7 @@ int exec_dialogue(int x) {
                 {fals, fals, 0,  "                                 Oh, right- Right, the most       important bit. We have three new people moving into the village!"},
                 {fals, fals, 0,  "                                 I'm not sure we'll be able to    find any new potential islanders from Craigslist, though."},
                 {fals, fals, 0,  "                                 They're named Diana, Eleanor, andOlivier, and they're moving into the new cabin to the northwest."},
+                {fals, fals, 0,  "                                 Olivier has a greenhose up north,and Diana is actually an aspiringsailor! She'll be taking over    boat piloting."},
                 {fals, fals, 0,  "                                 So just make sure to give them a warm welcome."},
                 {fals, fals, 0,  "S_STV_01"},
                 {fals, fals, 0,  "                                 Alright, that's all..            I suppose I'll see y'all later   today. Thanks for tuning in!"},
@@ -604,6 +605,42 @@ int exec_dialogue(int x) {
                 {fals, fals, 0,  ". . ."},
                 {fals, fals, 0,  "COM: Endscene"}
             };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
+
+        case 30: {
+                line lc[32] = {
+                    {fals, fals, 0,  "BG: CRUZ01"},
+                    {fals, fals, 0,  "                                 Oh! Hey, nice to meet you!       You must be one of the locals.   You can call me Cesar."},
+                    {fals, fals, 0,  "                                 Believe it or not, I used to be  a lawyer, you know. I wasn't a   very good one, though."},
+                    {fals, fals, 0,  "BG: CRUZ02"},
+                    {fals, fals, 0,  "                                 Then again, I hadn't even passed the BAR and there I was, winning court cases one after the other."},
+                    {fals, fals, 0,  "BG: CRUZ01"},
+                    {fals, fals, 0,  "                                 But that's neither here nor      there. I'm fulfilling my dream ofbeing a quiet shopkeep."},
+                    {fals, fals, 0,  "                                 If any angry former clients of   mine decide to stop by, just let me know so I can.. er.. hide.    Merci!"},
+                    {fals, fals, 0,  "                                 Anyway, what might I interest youin today?"},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
+
+        case 31: {
+                line lc[32] = {
+                    {fals, fals, 0,  "BG: CRUZ01"},
+                    {fals, fals, 0,  "                                 Enoki Ramirez! Er... Tremblay nowis it? Anyway, thank you so much for letting me come here."},
+                    {fals, fals, 0,  "                                 I promise I won't cause any      trouble, but those last clients  of mine..."},
+                    {fals, fals, 0,  "BG: CRUZ02"},
+                    {fals, fals, 0,  "                                 Look, it's not MY fault that I   was able to act as a lawyer      despite having failed the BAR,   you know?"},
+                    {fals, fals, 0,  "BG: CRUZ01"},
+                    {fals, fals, 0,  "                                 I know you understand. Just let  me know if they arrive so I can, you know, er.. hide."},
+                    {fals, fals, 0,  "                                 It's been a childhood dream of   mine to be a shopkeep in some    little village, and I don't have a lot to sell,"},
+                    {fals, fals, 0,  "                                 But I'll do my best! Anyway, how can I help you today?"},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
             dialogue_page(lc);
             return 0;
             break;

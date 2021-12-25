@@ -63,6 +63,7 @@
 #include "bn_affine_bg_items_bg_ocean.h"
 #include "bn_sprite_items_bg_sky.h"
 #include "bn_affine_bg_items_bg_sky_trees.h"
+#include "bn_sprite_items_l_button.h"
 
 // Extended headers
 #include "objects.h"
@@ -488,8 +489,11 @@ bool victory_page(int chari, int score)
 
     int new_lc = 0;
     float new_xp = xp + (modifier * score);
-    if (new_xp > 100)
-        new_xp = 100;
+    if (so->checkpoint < 8) {
+        if (new_xp > 100) new_xp = 100;
+    } else if(so->checkpoint < 10) {
+        if (new_xp > 200) new_xp = 100;
+    }
 
     so->xp = new_xp; // Add score to save total
 
@@ -2396,6 +2400,99 @@ dungeon_return boat_game() {
     return dt;
 }
 
+dungeon_return store() {
+
+    auto bg = bn::regular_bg_items::cruz_01.create_bg(0,0);
+
+    int item = -1;
+    auto b_button = bn::sprite_items::b_button.create_sprite(90,-50);
+    auto item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 0);
+    auto item_bal = bn::sprite_items::funny_items.create_sprite(80, 32, 2);
+
+    if (so->hat_world > -1) item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 2);
+
+    item_hat.set_scale(2,2);
+    item_bal.set_scale(2,2);
+
+    char xp_val[8];
+    char item_name[16];
+    char description[16];
+    char status[8];
+
+    bn::sprite_text_generator text_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 8> xp_spr;
+    bn::vector<bn::sprite_ptr, 16> item_spr;
+    bn::vector<bn::sprite_ptr, 16> desc_spr;
+    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+    bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
+
+    sprintf(xp_val, "XP: %d", so->xp);
+    file1_gen.generate(64, -48, xp_val, xp_spr);
+    int skip = 0;
+    bn::core::update();
+
+    while(!bn::keypad::b_pressed()) {
+
+        if (bn::keypad::a_pressed()) {
+            xp_spr.clear();
+            sprintf(xp_val, "XP: %d", so->xp);
+            file1_gen.generate(64, -48, xp_val, xp_spr);
+
+            if (so->hat_world == -1 && item == -1 && so->xp >= 75) {
+                bn::sound_items::ching.play();
+                item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 2);
+                item_hat.set_scale(2,2);
+                so->xp -= 75;
+                so->hat_char = so->last_char_id;
+                so->hat_world = 14;
+
+                bn::core::update();
+
+                line lc[32] = {
+                    {true, true, 00, "                                                                  Merci!!                          I know you'll love it!"},
+                    {true, true, 00, "COM: Endscene"}};
+                dialogue_page_lite(lc);
+
+            } else {
+                bn::sound_items::firehit.play();
+            }
+        }
+
+        if (bn::keypad::left_pressed() || bn::keypad::right_pressed()) {
+            bn::sound_items::pop.play();
+            item = item * -1;
+        }
+
+        if (item == -1) {
+            item_spr.clear();
+            file2_gen.generate(-114, -58, "BANANA HAT", item_spr);
+            desc_spr.clear();
+            file3_gen.generate(-114, -70, "Price: 75 XP", desc_spr);
+
+            if (item_hat.y() > 32 - 8) item_hat.set_y(item_hat.y() - 1);
+            if (item_bal.y() <  32) item_bal.set_y(item_bal.y() + 1);
+        } else {
+            item_spr.clear();
+            file2_gen.generate(-114, -58, "COMING SOON ITEM", item_spr);
+            desc_spr.clear();
+            file3_gen.generate(-114, -70, "Price: N/A", desc_spr);
+
+            if (item_bal.y() > 32 - 8) item_bal.set_y(item_bal.y() - 1);
+            if (item_hat.y() <  32) item_hat.set_y(item_hat.y() + 1);
+        }
+
+        bn::core::update();
+    }
+
+    dungeon_return dt(3, 8, 14);
+    return dt;
+}
+
+dungeon_return kitchen() {
+
+}
+
 //9,16,4
 
 void core_gameplay(int x, int y, int world, int until, bool force = false, int force_char = 0)
@@ -2424,13 +2521,15 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
         // Random seed
         std::srand(so->xp);
 
-        // Spring event trigger
+        // March event
         if (so->checkpoint == 4 && so->xp > 99 && so->last_char_id != 4) {
-            dt.world_index = 7;
+            so->checkpoint = 5;
+            break;
         }
 
+        // June event
         if (so->checkpoint == 8 && so->xp > 199) {
-            so->checkpoint == 9;
+            so->checkpoint = 9;
             break;
         }
 
@@ -2469,6 +2568,17 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
                     dt = boat_game();
                     break;
                 }
+                case 7: {
+                    bn::music_items_info::span[33].first.play(bn::fixed(80) / 100);
+                    if (so->hat_world == -1) {
+                        if (so->last_char_id == 1) {
+                            exec_dialogue(31);
+                        } else {
+                            exec_dialogue(30);
+                        }
+                    }
+                    dt = store();
+                }
             };
         }
         else
@@ -2481,18 +2591,6 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
         bn::sram::write(all_save);
         bn::core::update();
     } while (!(dt.world_index == until));
-}
-
-void clear_save() {
-    so->last_char_id = 0;
-    so->checkpoint = 0;
-    so->spawn_x = 0;
-    so->spawn_y = 0;
-    so->world_index = 0;
-    so->xp = 0;
-    so->spring_housewarming = 0;
-
-    bn::sram::write(all_save);
 }
 
 int checkpoint(int level)
@@ -2593,10 +2691,9 @@ int main()
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
+    so->xp = 101;
 
-    so->xp = 201;
-    so->checkpoint = 10;
-    so->last_char_id = 1;
+    BN_LOG(so->checkpoint);
 
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);

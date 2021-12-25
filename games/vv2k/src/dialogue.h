@@ -109,6 +109,9 @@
 
 #include "bn_sprite_items_dialogue_bg_2.h"
 
+#include "bn_regular_bg_items_cruz_01.h"
+#include "bn_regular_bg_items_cruz_02.h"
+
 // Set pointer by integer reference
 void set_sprite(bn::sprite_ptr chari, int value) {
     switch(value) {
@@ -301,6 +304,13 @@ void dialogue_page(line n[32]) {
         } else if (strcmp(n[pos].text, "BG: Moody") == 0) {
             primary_bg.set_item(bn::regular_bg_items::bg_moody);
             primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "BG: CRUZ01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::cruz_01);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "BG: CRUZ02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::cruz_02);
+            primary_bg.set_visible(true);
+
         } else if (strcmp(n[pos].text, "BG: Trailer Home") == 0) {
             primary_bg.set_item(bn::regular_bg_items::bg_trailer_home);
             primary_bg.set_visible(true);

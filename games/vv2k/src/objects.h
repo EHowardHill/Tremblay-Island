@@ -44,12 +44,20 @@ class save_struct {
         int last_char_id = 0;
         int checkpoint = 0;
         char island_name[16] = {0};
-        int level_data[10] = {0};
         int spawn_x = 0;
         int spawn_y = 0;
         int world_index = 0;
         int xp = 0;
-        int spring_housewarming = 0;
+
+        int hat_x = 0;
+        int hat_y = 0;
+        int hat_world = 0;
+        int hat_char = 0;
+
+        int ball_x = 0;
+        int ball_y = 0;
+        int ball_world = 0;
+        int ball_char = 0;
 };
 
 class save_all_struct {
