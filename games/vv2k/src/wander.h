@@ -2312,7 +2312,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             dialogue_page_lite(lc);
                             break;
                         }
-                    } else {
+                    } else if (so->checkpoint < 10) {
                         if (me == 0)
                         {
                             line lc[32] = {
@@ -2417,22 +2417,25 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         break;
                     }
                     
-                    } else {
+                    } else if (so->checkpoint < 10) {
 
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Is this one new?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah! Just got it in."},
-                                {true, true, 00, "                                                                  MAPLE                            Hmm. Well.. Enoki seemed to"},
-                                {true, true, 00, "                                                                  MAPLE                            like the series."},
-                                {true, true, 00, "                                                                  SCOUT                            It's probably not your speed,"},
-                                {true, true, 00, "                                                                  SCOUT                            but you never know..."},
-                                {true, true, 00, "                                                                  SCOUT                            You might like it!"},
-                                {true, true, 00, "                                                                  MAPLE                            It looks like it's in-progress."},
-                                {true, true, 00, "                                                                  MAPLE                            You still reading it?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah, but I'm almost done."},
-                                {true, true, 00, "                                                                  MAPLE                            Sweet."},
+                                {true, true, 00, "                                                                  SCOUT                            Hey, you know, you like to read"},
+                                {true, true, 00, "                                                                  SCOUT                            a lot, right?"},
+                                {true, true, 00, "                                                                  MAPLE                            Sure thing."},
+                                {true, true, 00, "                                                                  SCOUT                            Do you think that maybe I could"},
+                                {true, true, 00, "                                                                  SCOUT                            borrow some of your books?"},
+                                {true, true, 00, "                                                                  MAPLE                            You wouldn't like them."},
+                                {true, true, 00, "                                                                  SCOUT                            I'm sure I could try."},
+                                {true, true, 00, "                                                                  MAPLE                            You like romance?"},
+                                {true, true, 00, "                                                                  MAPLE                            Steamy romance?"},
+                                {true, true, 00, "                                                                  SCOUT                            I... do you have anything else?"},
+                                {true, true, 00, "                                                                  MAPLE                            No, that's what I like."},
+                                {true, true, 00, "                                                                  MAPLE                            What, it make you uncomfortable?"},
+                                {true, true, 00, "                                                                  SCOUT                            ..Maybe a bit."},
+                                {true, true, 00, "                                                                  MAPLE                            Yeah, stick to your comic books."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -2440,14 +2443,29 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 1)
                             {
                                 line lc[32] = {
-                                    {true, true, 00, "                                                                  ENOKI                            Is this a new one??"},
-                                    {true, true, 00, "                                                                  SCOUT                            Yep! Just got it in!"},
-                                    {true, true, 00, "                                                                  ENOKI                            Y'know, Maple's been peeking"},
-                                    {true, true, 00, "                                                                  ENOKI                            Over at my reading."},
-                                    {true, true, 00, "                                                                  SCOUT                            You think she's interested?"},
-                                    {true, true, 00, "                                                                  ENOKI                            She's prolly just bored, haha."},
-                                    {true, true, 00, "                                                                  ENOKI                            But maybe, maybe."},
-                                    {true, true, 00, "                                                                  SCOUT                            I guess I can hope."},
+                                    {true, true, 00, "                                                                  SCOUT                            Hey, Enoki?"},
+                                    {true, true, 00, "                                                                  ENOKI                            Yuh-huh?"},
+                                    {true, true, 00, "                                                                  SCOUT                            Can we talk about Maple?"},
+                                    {true, true, 00, "                                                                  ENOKI                            Oooh, what about her?"},
+                                    {true, true, 00, "                                                                  ENOKI                            You LIKE her, don't you?"},
+                                    {true, true, 00, "                                                                  SCOUT                            What's not to like?"},
+                                    {true, true, 00, "                                                                  ENOKI                            We all already know, hehe."},
+                                    {true, true, 00, "                                                                  SCOUT                            Aw crap, it's obvious."},
+                                    {true, true, 00, "                                                                  ENOKI                            She's hard to get."},
+                                    {true, true, 00, "                                                                  ENOKI                            I tried to set her up once."},
+                                    {true, true, 00, "                                                                  SCOUT                            You did?"},
+                                    {true, true, 00, "                                                                  ENOKI                            They even dated for a bit."},
+                                    {true, true, 00, "                                                                  ENOKI                            He just got on her nerves."},
+                                    {true, true, 00, "                                                                  ENOKI                            You gotta be perfect for her."},
+                                    {true, true, 00, "                                                                  SCOUT                            And I'm not."},
+                                    {true, true, 00, "                                                                  ENOKI                            I don't know what perfect is."},
+                                    {true, true, 00, "                                                                  SCOUT                            Well, I can dream I guess."},
+                                    {true, true, 00, "                                                                  ENOKI                            But hey, don't change yourself."},
+                                    {true, true, 00, "                                                                  ENOKI                            Just be the best 'you'."},
+                                    {true, true, 00, "                                                                  SCOUT                            I guess you're right."},
+                                    {true, true, 00, "                                                                  ENOKI                            The right girl'll come in time."},
+                                    {true, true, 00, "                                                                  SCOUT                            Right. Merci, Enoki."},
+                                    {true, true, 00, "                                                                  ENOKI                            De rien!"},
                                     {true, true, 00, "COM: Endscene"}};
                                 dialogue_page_lite(lc);
                                 break;
@@ -2455,16 +2473,33 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 2)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            Where you getting these from?"},
-                                {true, true, 00, "                                                                  SCOUT                            Diana! She's brought a few."},
-                                {true, true, 00, "                                                                  AARON                            Does she read them?"},
-                                {true, true, 00, "                                                                  SCOUT                            Nah, I just figured that since"},
-                                {true, true, 00, "                                                                  SCOUT                            they were coming from inland,"},
-                                {true, true, 00, "                                                                  SCOUT                            they could bring a few copies."},
-                                {true, true, 00, "                                                                  AARON                            Ah rats, I'd have asked for a few"},
-                                {true, true, 00, "                                                                  AARON                            things or two."},
-                                {true, true, 00, "                                                                  SCOUT                            Hey, when we get new islanders.."},
-                                {true, true, 00, "                                                                  AARON                            Alright!"},
+                                {true, true, 00, "                                                                  SCOUT                            Hey, bro, so, how'd you, er.."},
+                                {true, true, 00, "                                                                  SCOUT                            How'd you first ask Enoki out?"},
+                                {true, true, 00, "                                                                  AARON                            I just invited her to coffee."},
+                                {true, true, 00, "                                                                  SCOUT                            Coffee, coffee, right.."},
+                                {true, true, 00, "                                                                  SCOUT                            We don't uh, hmm.. No coffee.."},
+                                {true, true, 00, "                                                                  AARON                            You want to ask Maple out?"},
+                                {true, true, 00, "                                                                  SCOUT                            Well, I.. Yeah, I do."},
+                                {true, true, 00, "                                                                  AARON                            I'd tell you to give up, but at"},
+                                {true, true, 00, "                                                                  AARON                            the same time, you never know."},
+                                {true, true, 00, "                                                                  AARON                            No one's good enough for her."},
+                                {true, true, 00, "                                                                  SCOUT                            I figured it wasn't worth it."},
+                                {true, true, 00, "                                                                  AARON                            Absolutely no pleasing her."},
+                                {true, true, 00, "                                                                  AARON                            Trust me, I know."},
+                                {true, true, 00, "                                                                  SCOUT                            What do you mean?"},
+                                {true, true, 00, "                                                                  AARON                            Her type is those losers who"},
+                                {true, true, 00, "                                                                  AARON                            they're way cooler than they"},
+                                {true, true, 00, "                                                                  AARON                            are. Now, I'll give her some"},
+                                {true, true, 00, "                                                                  AARON                            credit, though. She puts up"},
+                                {true, true, 00, "                                                                  AARON                            with a lot of the other kind"},
+                                {true, true, 00, "                                                                  AARON                            of loser, too. Just..."},
+                                {true, true, 00, "                                                                  AARON                            Work on yourself. Maybe try"},
+                                {true, true, 00, "                                                                  AARON                            to be a bit more confident and"},
+                                {true, true, 00, "                                                                  AARON                            socially-aware, right?"},
+                                {true, true, 00, "                                                                  SCOUT                            Right. That's a good start."},
+                                {true, true, 00, "                                                                  AARON                            Good luck, man."},
+                                {true, true, 00, "                                                                  SCOUT                            Merci."},
+                                {true, true, 00, " "}
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -2479,55 +2514,35 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             dialogue_page_lite(lc);
                             break;
                         }
-
-                        else if (me == 4)
+                        else if (me == 7)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ELEANOR                          What's this? Is it a book?"},
-                                {true, true, 00, "                                                                  SCOUT                            Oh! That's Time Raiders."},
-                                {true, true, 00, "                                                                  SCOUT                            It's my favorite comic."},
-                                {true, true, 00, "                                                                  ELEANOR                          ...comic?"},
-                                {true, true, 00, "                                                                  SCOUT                            Oh, you don't? I... huh."},
-                                {true, true, 00, "                                                                  SCOUT                            Well, I have some older ones"},
-                                {true, true, 00, "                                                                  SCOUT                            You can borrow if you want."},
-                                {true, true, 00, "                                                                  ELEANOR                          Merci!! The art looks so"},
-                                {true, true, 00, "                                                                  ELEANOR                          Unusual!"},
+                                {true, true, 00, "                                                                  GUY                              You like Time Raiders?"},
+                                {true, true, 00, "                                                                  SCOUT                            Yeah, a bit."},
+                                {true, true, 00, "                                                                  GUY                              How often you get new ones?"},
+                                {true, true, 00, "                                                                  SCOUT                            Diana ships in new ones weekly."},
+                                {true, true, 00, "                                                                  GUY                              Ah okay, I didn't wanna move"},
+                                {true, true, 00, "                                                                  GUY                              here and have to give it up."},
+                                {true, true, 00, "                                                                  SCOUT                            There is a bit of a waiting"},
+                                {true, true, 00, "                                                                  SCOUT                            list, though. You gotta go"},
+                                {true, true, 00, "                                                                  SCOUT                            after Enoki, she likes em."},
+                                {true, true, 00, "                                                                  GUY                              Nah, I'll just take em first."},
+                                {true, true, 00, "                                                                  SCOUT                            Look, you take that up with her."},
+                                {true, true, 00, "                                                                  GUY                              Will do."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
                         }
-                        else if (me == 5)
+                        else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          You into Time Raiders?"},
-                                {true, true, 00, "                                                                  SCOUT                            Absolutely!"},
-                                {true, true, 00, "                                                                  OLIVIER                          Do you remember the movie?"},
-                                {true, true, 00, "                                                                  SCOUT                            Haven't seen it in years."},
-                                {true, true, 00, "                                                                  OLIVIER                          Grand-pere had it on tape."},
-                                {true, true, 00, "                                                                  OLIVIER                          I'd go to his house on"},
-                                {true, true, 00, "                                                                  OLIVIER                          weekends, and we'd make some"},
-                                {true, true, 00, "                                                                  OLIVIER                          popcorn and watch it on TV."},
-                                {true, true, 00, "                                                                  SCOUT                            Aw, that sounds wonderful."},
-                                {true, true, 00, "                                                                  OLIVIER                          If you ever get your hands on"},
-                                {true, true, 00, "                                                                  OLIVIER                          that tape, would you please"},
-                                {true, true, 00, "                                                                  OLIVIER                          let me know?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah, of course!"},
+                                {true, true, 00, "                                                                  (Last month's comic books remain lying on the floor.)"},
+                                {true, true, 00, "                                                                  (Slowly collecting dust.)"}
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
                         }
-                        else if (me == 6)
-                        {
-                            line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            (Comic books?)"},
-                                {true, true, 00, "                                                                  DIANA                            (Yeah, that checks out.)"},
-                                {true, true, 00, "COM: Endscene"}};
-                            dialogue_page_lite(lc);
-                            break;
-                        }
-
                     }
-
                     break;
                 };
 
@@ -2611,8 +2626,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             };
                         }
                     }
-
-
                     break;
                 };
 
@@ -2726,7 +2739,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             break;
                         }
                         break;
-                    } else {
+                    } else if (so->checkpoint < 10) {
                         if (me < 3) {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  SCOUT                            Careful!!"},
@@ -2814,6 +2827,43 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             dialogue_page_lite(lc);
                             break;
                         }
+                    }
+                    } else if (so->checkpoint < 12) {
+                        if (me < 7) {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  SCOUT                            Careful!!"},
+                                {true, true, 00, "                                                                  SCOUT                            Some of this stuff is"},
+                                {true, true, 00, "                                                                  SCOUT                            SUPER SUPER toxic!"},
+                                {true, true, 00, "                                                                  SCOUT                            Oh, well you already knew that."},
+                                {true, true, 00, "                                                                  SCOUT                            At least I hope so."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        } else {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  SCOUT                            Bonjour! You're Guy, right?"},
+                                {true, true, 00, "                                                                  GUY                              Oui. So you're Scout?"},
+                                {true, true, 00, "                                                                  SCOUT                            Bienvenu! You like your cabin?"},
+                                {true, true, 00, "                                                                  GUY                              You weren't kidding about the"},
+                                {true, true, 00, "                                                                  GUY                              kitchen, huh?"},
+                                {true, true, 00, "                                                                  SCOUT                            Not a bit!"},
+                                {true, true, 00, "                                                                  GUY                              There don't seem to be too many"},
+                                {true, true, 00, "                                                                  GUY                              people here, and you know that"},
+                                {true, true, 00, "                                                                  GUY                              I ain't gonna be making a ton of"},
+                                {true, true, 00, "                                                                  GUY                              food without customers."},
+                                {true, true, 00, "                                                                  GUY                              How soon it is gonna be before we"},
+                                {true, true, 00, "                                                                  GUY                              get a ton of new people here?"},
+                                {true, true, 00, "                                                                  SCOUT                            Oh, it shouldn't be too long."},
+                                {true, true, 00, "                                                                  GUY                              And I can hold you to that?"},
+                                {true, true, 00, "                                                                  SCOUT                            Sans doute."},
+                                {true, true, 00, "                                                                  GUY                              Tres bien alors."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+                    
+                    } else {
+
                     }
                 };
 

@@ -2692,9 +2692,7 @@ int main()
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
     so->xp = 101;
-
-    BN_LOG(so->checkpoint);
-
+    
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
     }
