@@ -1,3 +1,0 @@
-graphics/bg_diana_room.json
-32
-1629764745.89

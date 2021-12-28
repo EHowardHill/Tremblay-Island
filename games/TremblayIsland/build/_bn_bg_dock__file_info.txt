@@ -1,0 +1,3 @@
+graphics/bg_dock.bmp
+32858
+1639372234.36

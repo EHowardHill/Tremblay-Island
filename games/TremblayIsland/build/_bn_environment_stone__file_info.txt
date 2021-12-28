@@ -1,0 +1,3 @@
+graphics/environment_stone.bmp
+14454
+1630927337.35

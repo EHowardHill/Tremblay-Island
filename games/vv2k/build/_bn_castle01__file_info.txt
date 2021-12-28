@@ -1,3 +1,0 @@
-graphics/castle01.bmp
-32886
-1631020041.27

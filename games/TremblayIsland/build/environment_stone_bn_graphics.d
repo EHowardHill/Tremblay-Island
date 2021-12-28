@@ -1,0 +1,1 @@
+environment_stone_bn_graphics.o: environment_stone_bn_graphics.s

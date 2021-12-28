@@ -1,3 +1,0 @@
-graphics/tree_stump.bmp
-1650
-1635906355.44

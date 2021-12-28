@@ -1,3 +1,0 @@
-graphics/bg_sky.bmp
-8306
-1638507564.54

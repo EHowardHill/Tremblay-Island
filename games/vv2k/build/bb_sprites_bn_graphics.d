@@ -1,1 +1,0 @@
-bb_sprites_bn_graphics.o: bb_sprites_bn_graphics.s

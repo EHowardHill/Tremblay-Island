@@ -1,1 +1,0 @@
-fun_background_bn_graphics.o: fun_background_bn_graphics.s

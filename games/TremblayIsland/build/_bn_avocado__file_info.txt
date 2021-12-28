@@ -1,0 +1,3 @@
+graphics/avocado.bmp
+12402
+1638652123.44

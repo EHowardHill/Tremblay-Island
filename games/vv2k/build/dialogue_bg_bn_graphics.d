@@ -1,1 +1,0 @@
-dialogue_bg_bn_graphics.o: dialogue_bg_bn_graphics.s

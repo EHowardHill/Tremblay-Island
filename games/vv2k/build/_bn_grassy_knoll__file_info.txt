@@ -1,3 +1,0 @@
-graphics/grassy_knoll.bmp
-32882
-1633843450.9

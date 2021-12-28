@@ -1,1 +1,0 @@
-day_castle_bn_graphics.o: day_castle_bn_graphics.s

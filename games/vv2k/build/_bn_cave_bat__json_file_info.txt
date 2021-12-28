@@ -1,3 +1,0 @@
-graphics/cave_bat.json
-44
-1636080369.13

@@ -1,0 +1,1 @@
+toutes_spr_bn_graphics.o: toutes_spr_bn_graphics.s

@@ -1,0 +1,3 @@
+graphics/corinne.bmp
+594
+1639702128.57

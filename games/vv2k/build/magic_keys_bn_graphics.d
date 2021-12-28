@@ -1,1 +1,0 @@
-magic_keys_bn_graphics.o: magic_keys_bn_graphics.s

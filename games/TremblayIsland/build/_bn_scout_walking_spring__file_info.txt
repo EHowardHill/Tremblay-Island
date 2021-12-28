@@ -1,0 +1,3 @@
+graphics/scout_walking_spring.bmp
+7794
+1635730922.11

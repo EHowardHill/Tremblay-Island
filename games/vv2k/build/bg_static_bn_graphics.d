@@ -1,1 +1,0 @@
-bg_static_bn_graphics.o: bg_static_bn_graphics.s

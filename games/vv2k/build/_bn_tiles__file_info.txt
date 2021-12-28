@@ -1,3 +1,0 @@
-graphics/tiles.bmp
-32886
-1627711511.21

@@ -1,0 +1,3 @@
+graphics/maple_walking.bmp
+8290
+1630926637.75

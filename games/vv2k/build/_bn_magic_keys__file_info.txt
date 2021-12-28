@@ -1,3 +1,0 @@
-graphics/magic_keys.bmp
-3698
-1638277489.16

@@ -1,1 +1,0 @@
-flashlight_bn_graphics.o: flashlight_bn_graphics.s

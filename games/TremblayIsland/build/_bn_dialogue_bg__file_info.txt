@@ -1,0 +1,3 @@
+graphics/dialogue_bg.bmp
+32842
+1634525499.58

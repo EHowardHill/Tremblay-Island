@@ -1,3 +1,0 @@
-graphics/pc_cursor.json
-44
-1637655887.65

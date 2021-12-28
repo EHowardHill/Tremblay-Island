@@ -1,3 +1,0 @@
-graphics/bookshelf.bmp
-4198
-1631016136.39

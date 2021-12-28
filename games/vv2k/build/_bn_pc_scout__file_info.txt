@@ -1,3 +1,0 @@
-graphics/pc_scout.bmp
-32882
-1637653503.5

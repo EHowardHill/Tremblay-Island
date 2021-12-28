@@ -1,3 +1,0 @@
-graphics/bg_sky_trees.bmp
-32882
-1638508632.76

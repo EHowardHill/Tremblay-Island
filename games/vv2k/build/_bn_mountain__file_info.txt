@@ -1,3 +1,0 @@
-graphics/mountain.bmp
-66614
-1629764745.89

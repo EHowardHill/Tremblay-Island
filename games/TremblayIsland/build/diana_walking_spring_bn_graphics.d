@@ -1,0 +1,1 @@
+diana_walking_spring_bn_graphics.o: diana_walking_spring_bn_graphics.s

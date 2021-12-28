@@ -1,0 +1,3 @@
+graphics/pc_desktop.bmp
+32886
+1637655052.79

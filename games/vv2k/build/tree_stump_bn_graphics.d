@@ -1,1 +1,0 @@
-tree_stump_bn_graphics.o: tree_stump_bn_graphics.s

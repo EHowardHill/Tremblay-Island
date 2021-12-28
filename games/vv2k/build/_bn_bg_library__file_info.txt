@@ -1,3 +1,0 @@
-graphics/bg_library.bmp
-32882
-1638938874.82

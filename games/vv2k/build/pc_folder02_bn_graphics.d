@@ -1,1 +1,0 @@
-pc_folder02_bn_graphics.o: pc_folder02_bn_graphics.s

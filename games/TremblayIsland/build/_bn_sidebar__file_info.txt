@@ -1,0 +1,3 @@
+graphics/sidebar.bmp
+32882
+1634503020.68

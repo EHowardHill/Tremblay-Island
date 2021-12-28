@@ -1,1 +1,0 @@
-pc_bbscreen_bn_graphics.o: pc_bbscreen_bn_graphics.s

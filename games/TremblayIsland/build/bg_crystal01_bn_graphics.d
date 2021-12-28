@@ -1,0 +1,1 @@
+bg_crystal01_bn_graphics.o: bg_crystal01_bn_graphics.s

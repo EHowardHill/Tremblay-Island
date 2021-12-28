@@ -1,0 +1,3 @@
+graphics/water_animation.bmp
+4210
+1634190477.3

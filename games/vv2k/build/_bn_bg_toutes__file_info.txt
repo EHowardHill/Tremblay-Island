@@ -1,3 +1,0 @@
-graphics/bg_toutes.bmp
-32882
-1638855595.21
