@@ -1,6 +1,6 @@
 common_info.o: \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/../../common/src/common_info.cpp \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/../../common/include/common_info.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/src/common_info.cpp \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_info.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_vector.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_assert.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_type_traits.h \
@@ -50,7 +50,7 @@ common_info.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_memory.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_power_of_two.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_unordered_map_fwd.h
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/vv2k/../../common/include/common_info.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_info.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_vector.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_assert.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_type_traits.h:

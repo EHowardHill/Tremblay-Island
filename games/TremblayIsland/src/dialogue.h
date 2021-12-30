@@ -560,6 +560,12 @@ void dialogue_page_lite(line n[32]) {
     // While dialogue is going,
     int pos = 0;
     bool cont = true;
+
+    int enoki_spoken = false;
+    int maple_spoken = false;
+    int aaron_spoken = false;
+    int scout_spoken = false;
+
     while (cont) {
 
         // End dialogue
@@ -578,11 +584,11 @@ void dialogue_page_lite(line n[32]) {
             bn::vector<bn::sprite_ptr, 33> text_sprite3;
             bn::vector<bn::sprite_ptr, 33> text_sprite4;
             bn::vector<bn::sprite_ptr, 33> text_sprite5;
-            char line1[33] = {0};
-            char line3[33] = {0};
-            char line4[33] = {0};
-            char line5[33] = {0};
-            char line6[33] = {0};
+            char line1[48] = {0};
+            char line3[48] = {0};
+            char line4[48] = {0};
+            char line5[48] = {0};
+            char line6[48] = {0};
 
             BN_LOG(n[pos].text);
             for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line1[t] = n[pos].text[t];} else {line1[t] = ' ';};
@@ -595,6 +601,30 @@ void dialogue_page_lite(line n[32]) {
             text_line0.generate(-108, 45, line4, text_sprite3);
             text_line0.generate(-108, 57, line5, text_sprite4);
             text_line0.generate(-108, 69, line6, text_sprite5);
+
+            if (!enoki_spoken && strncmp(line4, "ENOKI", 5) == 0) {
+                bn::sound_items::enoki_hey.play();
+                enoki_spoken = true;
+            }
+
+            if (!maple_spoken && strncmp(line4, "MAPLE", 5) == 0) {
+                bn::sound_items::maple_hey_01.play();
+                maple_spoken = true;
+            }
+
+            if (!aaron_spoken && strncmp(line4, "AARON", 5) == 0) {
+                if (pos < 2) {
+                    bn::sound_items::aaron_hey_01.play();
+                } else {
+                    bn::sound_items::aaron_hey_02.play();
+                }
+                aaron_spoken = true;
+            }
+
+            if (!scout_spoken && strncmp(line4, "SCOUT", 5) == 0) {
+                bn::sound_items::scout_hey_01.play();
+                scout_spoken = true;
+            }
 
             // Process visual effects
             while(!bn::keypad::a_pressed()) {

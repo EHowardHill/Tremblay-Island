@@ -21,11 +21,11 @@ namespace bn::music_items
     constexpr inline music_item z05_victory(13);
     constexpr inline music_item z06_dangerous(14);
     constexpr inline music_item z07_frog(15);
-    constexpr inline music_item z08_rain(16);
+    constexpr inline music_item z08_award(16);
     constexpr inline music_item z09_scout_lab(17);
     constexpr inline music_item z10_enoki_theme(18);
     constexpr inline music_item z11_maple_theme(19);
-    constexpr inline music_item z12_aaron_theme(20);
+    constexpr inline music_item z12_groovy(20);
     constexpr inline music_item z12_overworld_night(21);
     constexpr inline music_item z13_spooky(22);
     constexpr inline music_item z14_flame(23);
@@ -39,6 +39,7 @@ namespace bn::music_items
     constexpr inline music_item z22_cbx(31);
     constexpr inline music_item z23_diana(32);
     constexpr inline music_item z24_cruz(33);
+    constexpr inline music_item z25_funky(34);
 }
 
 #endif

@@ -112,7 +112,7 @@ public:
         }
         else
         {
-            BN_ERROR("Invalid UTF-8 character");
+            //BN_ERROR("Invalid UTF-8 character");
         }
 
         _size = src - &text_ref;

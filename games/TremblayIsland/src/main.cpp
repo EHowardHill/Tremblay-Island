@@ -421,19 +421,26 @@ bool victory_page(int chari, int score)
                                                                                             0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26);
             victory_anim2 = bn::create_sprite_animate_action_forever(victory_spr2, 5, bn::sprite_items::maple_victory_anim.tiles_item(),
                                                                                             1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27, 27);
-            break;
 
             bn::sound_items::maple_alright_01.play();
             bn::sound_items::fireblast.play();
+            break;
         }
         case 2: {
             victory_anim = bn::create_sprite_animate_action_forever(victory_spr, 3, bn::sprite_items::aaron_victory_anim.tiles_item(),
                                                                                             0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 30, 30, 30, 30, 30, 30, 30, 30);
             victory_anim2 = bn::create_sprite_animate_action_forever(victory_spr2, 3, bn::sprite_items::aaron_victory_anim.tiles_item(),
                                                                                             1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 25, 27, 29, 31, 31, 31, 31, 31, 31, 31, 31, 31);
+            
+            if (so->xp == 69) {
+                bn::sound_items::aaron_yeah_03.play();
+            } else {
+                bn::sound_items::aaron_yeah_02.play();
+            }
             break;
         }
         default: {
+            bn::sound_items::enoki_whoo.play();
             break;
         }
     }
@@ -503,7 +510,7 @@ bool victory_page(int chari, int score)
 
     auto a_button = bn::sprite_items::a_button.create_sprite(48,48);
 
-    bn::music_items_info::span[13].first.play(bn::fixed(80) / 100);
+    bn::music_items_info::span[13].first.play(bn::fixed(40) / 100);
 
     int music_int = 0;
     while (!bn::keypad::a_pressed())
@@ -583,7 +590,7 @@ bool victory_page(int chari, int score)
 
 dungeon_return tree_cut()
 {
-    bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
+    bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
     int score = 0;
     int total = 0;
     bool can_have_sp = false;
@@ -682,7 +689,7 @@ dungeon_return tree_cut()
             }
 
             if (!can_have_sp && score > 100) {
-                bn::sound_items::squeak.play();
+                bn::sound_items::aaron_yeah_01.play();
                 b_button.set_visible(true);
                 can_have_sp = true;
             }
@@ -751,10 +758,47 @@ dungeon_return tree_cut()
                 if (left)
                 {
                     cursor.set_scale(0.9);
+                    bool penalty = false;
                     for (int t = 0; t < max_chop; t++)
                     {
-                        if (chop.at(t).visible())
+                        if (chop.at(t).visible()) {
+                            penalty = true;
                             score = score / 2;
+                        }
+                    }
+
+                    if (penalty) {
+                        int ugh = std::rand() % 7;
+                        BN_LOG("UGH ", ugh);
+                        switch (ugh) {
+                            case 0:
+                                bn::sound_items::aaron_ugh_01.play();
+                                break;
+                            case 1:
+                                bn::sound_items::aaron_ugh_02.play();
+                                break;
+                            case 2:
+                                bn::sound_items::aaron_ugh_03.play();
+                                break;
+                            case 3:
+                                bn::sound_items::aaron_ugh_04.play();
+                                break;
+                            case 4:
+                                bn::sound_items::aaron_ugh_05.play();
+                                break;
+                            case 5:
+                                bn::sound_items::aaron_ugh_06.play();
+                                break;
+                            case 6:
+                                bn::sound_items::aaron_ugh_07.play();
+                                break;
+                            default:
+
+                                // we do not have an entry for aaron_ugh_08
+                                // but i can't bring myself to delete it
+
+                                break;
+                        }
                     }
 
                     hits = 1;

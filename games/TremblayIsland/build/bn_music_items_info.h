@@ -24,11 +24,11 @@ namespace bn::music_items_info
         make_pair(music_item(13), string_view("z05_victory")),
         make_pair(music_item(14), string_view("z06_dangerous")),
         make_pair(music_item(15), string_view("z07_frog")),
-        make_pair(music_item(16), string_view("z08_rain")),
+        make_pair(music_item(16), string_view("z08_award")),
         make_pair(music_item(17), string_view("z09_scout_lab")),
         make_pair(music_item(18), string_view("z10_enoki_theme")),
         make_pair(music_item(19), string_view("z11_maple_theme")),
-        make_pair(music_item(20), string_view("z12_aaron_theme")),
+        make_pair(music_item(20), string_view("z12_groovy")),
         make_pair(music_item(21), string_view("z12_overworld_night")),
         make_pair(music_item(22), string_view("z13_spooky")),
         make_pair(music_item(23), string_view("z14_flame")),
@@ -42,6 +42,7 @@ namespace bn::music_items_info
         make_pair(music_item(31), string_view("z22_cbx")),
         make_pair(music_item(32), string_view("z23_diana")),
         make_pair(music_item(33), string_view("z24_cruz")),
+        make_pair(music_item(34), string_view("z25_funky")),
     };
 
     constexpr inline span<const pair<music_item, string_view>> span(array);
