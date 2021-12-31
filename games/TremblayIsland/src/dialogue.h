@@ -565,6 +565,10 @@ void dialogue_page_lite(line n[32]) {
     int maple_spoken = false;
     int aaron_spoken = false;
     int scout_spoken = false;
+    int vee_spoken = false;
+    int el_spoken = false;
+    int diana_spoken = false;
+    int guy_spoken = false;
 
     while (cont) {
 
@@ -624,6 +628,26 @@ void dialogue_page_lite(line n[32]) {
             if (!scout_spoken && strncmp(line4, "SCOUT", 5) == 0) {
                 bn::sound_items::scout_hey_01.play();
                 scout_spoken = true;
+            }
+
+            if (!vee_spoken && strncmp(line4, "OLIVIER", 7) == 0) {
+                bn::sound_items::vee_hey_01.play();
+                vee_spoken = true;
+            }
+
+            if (!el_spoken && strncmp(line4, "ELEANOR", 7) == 0) {
+                bn::sound_items::eleanor_hey_01.play();
+                el_spoken = true;
+            }
+
+            if (!diana_spoken && strncmp(line4, "DIANA", 5) == 0) {
+                bn::sound_items::diana_hey_01.play();
+                diana_spoken = true;
+            }
+
+            if (!guy_spoken && strncmp(line4, "GUY", 3) == 0) {
+                bn::sound_items::guy_hey_01.play();
+                guy_spoken = true;
             }
 
             // Process visual effects

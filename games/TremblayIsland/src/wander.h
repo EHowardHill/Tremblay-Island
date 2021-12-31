@@ -2263,13 +2263,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me < 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            So, it looks like I've read 'em all."},
-                                {true, true, 00, "                                                                  AARON                            We haven't gone to town in a while."},
+                                {true, true, 00, "                                                                  MAPLE                            So, it looks like I've read 'em  all."},
+                                {true, true, 00, "                                                                  AARON                            We haven't gone to town in a     while."},
                                 {true, true, 00, "                                                                  MAPLE                            I wonder what's going on outside."},
                                 {true, true, 00, "                                                                  ENOKI                            If anything was bad, you know"},
                                 {true, true, 00, "                                                                  ENOKI                            Scout woulda' said something."},
                                 {true, true, 00, "                                                                  ENOKI                            He's got that internet thing."},
-                                {true, true, 00, "                                                                  MAPLE                            I wonder if I can get new books that way."},
+                                {true, true, 00, "                                                                  MAPLE                            I wonder if I can get new books  that way."},
                                 {true, true, 00, "                                                                  AARON                            That would sure be nice."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
@@ -2588,7 +2588,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     break;
                 };
 
-                // le Tremblay Fridge
+                // le Scout comic book bit
                 case 28:
                 {
                     if (so->checkpoint < 7)
@@ -2992,6 +2992,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "                                                                  (This looks really expensive...)"},
                                 {true, true, 00, "                                                                  (I probably shouldn't touch.)"},
                                 {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
                         }
                     }
                     break;
@@ -3478,8 +3479,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  MAPLE                            Oh, hey. So you're Eleanor?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui! Enchanté de faire votre     connaissance."},
-                                {true, true, 00, "                                                                  MAPLE                            Également. You seem...           No offense,"},
+                                {true, true, 00, "                                                                  ELEANOR                          Oui! Enchante de faire votre     connaissance."},
+                                {true, true, 00, "                                                                  MAPLE                            Egalement. You seem...           No offense,"},
                                 {true, true, 00, "                                                                  MAPLE                            A little old-fashioned?"},
                                 {true, true, 00, "                                                                  ELEANOR                          Oh, it's just what we're used to."},
                                 {true, true, 00, "                                                                  ELEANOR                          It's so nice to be so far away"},
@@ -3497,7 +3498,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "                                                                  ELEANOR                          You do? She was going to drain   all his blood for a ritual."},
                                 {true, true, 00, "                                                                  MAPLE                            I... Hmm, well, alright then.    That's.. not what I expected."},
                                 {true, true, 00, "                                                                  MAPLE                            Nice to meet y'all, I guess?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Bien sûr! I'm baking your family a pie right now as our 'merci'."},
+                                {true, true, 00, "                                                                  ELEANOR                          Bien sur! I'm baking your family a pie right now as our 'merci'."},
                                 {true, true, 00, "                                                                  MAPLE                            C'est bon, just no, uh, weird    ingredients, haha."},
                                 {true, true, 00, "                                                                  MAPLE                            (What was Scout thinking invitingthese weirdos??)"},
                                 {true, true, 00, "COM: Endscene"}};
@@ -3509,7 +3510,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  ENOKI                            Bienvenue, y'all!! Je suis Enoki!Ravie de vous-autres rencontrer!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Bonjour! Enchanté de faire votre connaissance."},
+                                {true, true, 00, "                                                                  ELEANOR                          Bonjour! Enchante de faire votre connaissance."},
                                 {true, true, 00, "                                                                  OLIVIER                          Bonjour!"},
                                 {true, true, 00, "                                                                  ELEANOR                          I'm Eleanor, and this is my      husband Olivier."},
                                 {true, true, 00, "                                                                  ENOKI                            I love your dress!! Where did youget it from?"},
@@ -3522,7 +3523,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "                                                                  ENOKI                            You guys wanna be a duke and     duchess?"},
                                 {true, true, 00, "                                                                  ELEANOR                          I.. no thank you, I don't think  I know what those are."},
                                 {true, true, 00, "                                                                  OLIVIER                          Merci, en tout cas."},
-                                {true, true, 00, "                                                                  ENOKI                            Bien sûr! N'importe quand!"},
+                                {true, true, 00, "                                                                  ENOKI                            Bien sur! N'importe quand!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -3560,7 +3561,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  SCOUT                            Hey, y'all! I'm Scout, from      online?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Ah! Enchanté de faire votre      connaissance."},
+                                {true, true, 00, "                                                                  OLIVIER                          Ah! Enchante de faire votre      connaissance."},
                                 {true, true, 00, "                                                                  ELEANOR                          Oh... But from your picture, I   thought that you..."},
                                 {true, true, 00, "                                                                  SCOUT                            You thought that I what?"},
                                 {true, true, 00, "                                                                  ELEANOR                          I thought you were a skeleton."},
@@ -3616,7 +3617,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "                                                                  OLIVIER                          Maybe it'll be the same with us. Let's just be patient."},
                                 {true, true, 00, "                                                                  ELEANOR                          It'll be strange to have married friends our age. Do you think"},
                                 {true, true, 00, "                                                                  ELEANOR                          Diana will be jealous?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I think she'll have a great time here. S'il te plait détends-toi!"},
+                                {true, true, 00, "                                                                  OLIVIER                          I think she'll have a great time here. S'il te plait detends-toi!"},
                                 {true, true, 00, "                                                                  ELEANOR                          Je suppose que tu as raison, Vee."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
@@ -3714,26 +3715,27 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 2:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            Bienvenu! Olivier and Eleanor,   I presume?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui oui!"},
-                                {true, true, 00, "                                                                  OLIVIER                          So, I take it that you're 'king' of this island?"},
-                                {true, true, 00, "                                                                  AARON                            Is that what Scout told you?     I suppose you could say that."},
-                                {true, true, 00, "                                                                  AARON                            I never graduated high school,   so I'm not cut out for anything"},
-                                {true, true, 00, "                                                                  AARON                            but work like this, but I didn't want to spend my life in a"},
-                                {true, true, 00, "                                                                  AARON                            factory. So, my wife Enoki and I had the idea to spend our savings"},
-                                {true, true, 00, "                                                                  AARON                            on some land and live off the    grid. The 'royalty' thing was"},
-                                {true, true, 00, "                                                                  AARON                            her idea, and she was very cute  about it, so I had to say yes."},
-                                {true, true, 00, "                                                                  AARON                            She's probably offered           aristocratic roles to y'all."},
-                                {true, true, 00, "                                                                  OLIVIER                          Oh - Aaron, was it? Thank you forclearing out the area for the"},
-                                {true, true, 00, "                                                                  OLIVIER                          greenhouse. I'll be able to grow all sorts of things to share."},
-                                {true, true, 00, "                                                                  ELEANOR                          And I adore this cabin! In a goodway, it reminds me of home."},
-                                {true, true, 00, "                                                                  ELEANOR                          Vee and I were so excited to hearabout this island."},
-                                {true, true, 00, "                                                                  AARON                            Well, we're all very happy to    have you as well!"},
-                                {true, true, 00, "                                                                  AARON                            If my little sister gives either of you a hard time,"},
-                                {true, true, 00, "                                                                  AARON                            She doesn't mean anything by it, I promise."},
-                                {true, true, 00, "                                                                  AARON                            Hop on by to trailer tonight,    we'll have some dinner ready."},
-                                {true, true, 00, "                                                                  OLIVIER                          Encore une fois, je vous remerciesincerement."},
-                                {true, true, 00, "                                                                  AARON                            We're family, now - please, 'tu' is plenty."},
+                                {true, true, 00, "                                                                  AARON                            Salut! I heard that you wanted tohave a game night tonight?"},
+                                {true, true, 00, "                                                                  ELEANOR                          Oui oui! Although, we would like to have it outside under a tree."},
+                                {true, true, 00, "                                                                  ELEANOR                          I made a quilt that should be bigenough for all of us."},
+                                {true, true, 00, "                                                                  AARON                            Outside just in case Maple gets..upset this time, oui?"},
+                                {true, true, 00, "                                                                  OLIVIER                          Oui, haha."},
+                                {true, true, 00, "                                                                  ELEANOR                          We made some stew if you want    some."},
+                                {true, true, 00, "                                                                  AARON                            I already had some of Maple's    leftover gumbo, but merci!"},
+                                {true, true, 00, "                                                                  AARON                            Speaking of, Guy has been pretty reserved, but he seems nice."},
+                                {true, true, 00, "                                                                  AARON                            I'm just excited to have more    people on the island."},
+                                {true, true, 00, "                                                                  OLIVIER                          We're becoming a proper little   village, aren't we?"},
+                                {true, true, 00, "                                                                  AARON                            Yeah, yeah I guess so."},
+                                {true, true, 00, "                                                                  OLIVIER                          Are you alright, Aaron? You look long in the face."},
+                                {true, true, 00, "                                                                  AARON                            Yes, I'm just thinking. Maple andI aren't doing so well."},
+                                {true, true, 00, "                                                                  OLIVIER                          What do you mean?"},
+                                {true, true, 00, "                                                                  AARON                            Well, she doesn't want to move   out, but she needs to."},
+                                {true, true, 00, "                                                                  OLIVIER                          Can't you just ask her to? Aren'tyou king or something?"},
+                                {true, true, 00, "                                                                  AARON                            I can. Maybe I should. She's justlike this."},
+                                {true, true, 00, "                                                                  AARON                            She goes back and forth between  being super independent, and"},
+                                {true, true, 00, "                                                                  AARON                            then the next day, she's clingy."},
+                                {true, true, 00, "                                                                  OLIVIER                          This sounds like something you   should take up with her, not us."},
+                                {true, true, 00, "                                                                  AARON                            You're right, you're right."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -3742,26 +3744,23 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 3:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, y'all! I'm Scout, from      online?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Ah! Enchanté de faire votre      connaissance."},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh... But from your picture, I   thought that you..."},
-                                {true, true, 00, "                                                                  SCOUT                            You thought that I what?"},
-                                {true, true, 00, "                                                                  ELEANOR                          I thought you were a skeleton."},
-                                {true, true, 00, "                                                                  SCOUT                            Oh- Well, that's just 'cuz I use the photo of a character I like."},
-                                {true, true, 00, "                                                                  SCOUT                            There's this skeleton from a     comic named Seemore."},
-                                {true, true, 00, "                                                                  SCOUT                            He's got magic powers and a- wellmaybe I should just let you"},
-                                {true, true, 00, "                                                                  SCOUT                            read the comic, it's a ton of    fun."},
-                                {true, true, 00, "                                                                  ELEANOR                          What's a comic?"},
-                                {true, true, 00, "                                                                  SCOUT                            I... huh, I've never had to      answer that question before."},
-                                {true, true, 00, "                                                                  SCOUT                            They're like books, but they've  got pictures, but-"},
-                                {true, true, 00, "                                                                  ELEANOR                          Those sound so cool!"},
-                                {true, true, 00, "                                                                  OLIVIER                          Eleanor was raised in a cult, so she doesn't know much about"},
-                                {true, true, 00, "                                                                  OLIVIER                          the outside world. That's one of the reasons we wanted to move"},
-                                {true, true, 00, "                                                                  OLIVIER                          here, so we could have a little  break from her extended family."},
-                                {true, true, 00, "                                                                  SCOUT                            Oh.. Well, crap. Welcome to the  island, I guess."},
-                                {true, true, 00, "                                                                  SCOUT                            Queen Enoki's got dibs on my     latest Time Raiders,"},
-                                {true, true, 00, "                                                                  SCOUT                            But when she's done, I'll        definitely get you the copy."},
-                                {true, true, 00, "                                                                  ELEANOR                          Merci!!"},
+                                {true, true, 00, "                                                                  SCOUT                            Hey, y'all! Scout here."},
+                                {true, true, 00, "                                                                  ELEANOR                          Salut! Would you like some stew?"},
+                                {true, true, 00, "                                                                  SCOUT                            Merci, but I ate just.. uh.. holdon, the last time I ate.."},
+                                {true, true, 00, "                                                                  SCOUT                            Holy cow, I haven't eaten yet.   I'd love some stew!"},
+                                {true, true, 00, "                                                                  ELEANOR                          Hehe, of course."},
+                                {true, true, 00, "                                                                  SCOUT                            You guys catch my Scout TV reportthis morning?"},
+                                {true, true, 00, "                                                                  ELEANOR                          Oh, we don't have a television."},
+                                {true, true, 00, "                                                                  SCOUT                            Right, right.. Forgot about that,I'm sorry."},
+                                {true, true, 00, "                                                                  SCOUT                            Anyway, apparently my broadcast  was hacked."},
+                                {true, true, 00, "                                                                  OLIVIER                          Hacked? By whom?"},
+                                {true, true, 00, "                                                                  SCOUT                            No clue. The Tremblays aren't    worried about it, though."},
+                                {true, true, 00, "                                                                  ELEANOR                          Will you be coming to our game   night tonight?"},
+                                {true, true, 00, "                                                                  SCOUT                            I'll do my best, there's stuff I gotta do for work."},
+                                {true, true, 00, "                                                                  SCOUT                            We'll see how that goes."},
+                                {true, true, 00, "                                                                  OLIVIER                          Well, we'll save you a seat."},
+                                {true, true, 00, "                                                                  SCOUT                            Merci!"},
+                                {true, true, 00, "                                                                  ELEANOR                          De rien!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -3775,32 +3774,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 5:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          Eleanor, why'd you turn the stoveon? Aren't we eating with"},
-                                {true, true, 00, "                                                                  OLIVIER                          the Tremblays tonight?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh, yes yes, I just couldn't helpmyself."},
-                                {true, true, 00, "                                                                  ELEANOR                          I haven't seen a stove like this since I was so little."},
-                                {true, true, 00, "                                                                  ELEANOR                          I wanted to try and make some    toast."},
-                                {true, true, 00, "                                                                  OLIVIER                          What do you think of this place?"},
-                                {true, true, 00, "                                                                  OLIVIER                          There aren't many people, are yougoing to get lonely?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Well, are you going to be lonely?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I just wish my grandfather could see us, now."},
-                                {true, true, 00, "                                                                  OLIVIER                          I think he'd be so proud of you."},
-                                {true, true, 00, "                                                                  ELEANOR                          Maybe he can see us from heaven."},
-                                {true, true, 00, "                                                                  ELEANOR                          Maybe mama has changed in heaven and thinks well of you, now."},
-                                {true, true, 00, "                                                                  OLIVIER                          I don't suppose either of us can know, but I won't be lonely."},
-                                {true, true, 00, "                                                                  OLIVIER                          I haven't really been lonely     since I got to know you."},
-                                {true, true, 00, "                                                                  ELEANOR                          Vee, I hope that we don't ever   feel differently."},
-                                {true, true, 00, "                                                                  ELEANOR                          I've seen how my parents became. I already feel older."},
-                                {true, true, 00, "                                                                  ELEANOR                          I know that once we have our own enfants..."},
-                                {true, true, 00, "                                                                  OLIVIER                          How is your sister doing?"},
-                                {true, true, 00, "                                                                  ELEANOR                          She's always exhausted. She jokesabout grey hair, but I think"},
-                                {true, true, 00, "                                                                  ELEANOR                          she really does have grey hairs. But she's different."},
-                                {true, true, 00, "                                                                  ELEANOR                          The things she was so upset aboutare meaningless, now."},
-                                {true, true, 00, "                                                                  OLIVIER                          Maybe it'll be the same with us. Let's just be patient."},
-                                {true, true, 00, "                                                                  ELEANOR                          It'll be strange to have married friends our age. Do you think"},
-                                {true, true, 00, "                                                                  ELEANOR                          Diana will be jealous?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I think she'll have a great time here. S'il te plait détends-toi!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Je suppose que tu as raison, Vee."},
+                                {true, true, 00, "                                                                  OLIVIER                          So, your birthday is coming up ina week..."},
+                                {true, true, 00, "                                                                  ELEANOR                          Oui?"},
+                                {true, true, 00, "                                                                  OLIVIER                          I would surprise you, but I don'twant to disappoint you with-"},
+                                {true, true, 00, "                                                                  ELEANOR                          ..."},
+                                {true, true, 00, "                                                                  OLIVIER                          ...Do you want me to just        surprise you?"},
+                                {true, true, 00, "                                                                  OLIVIER                          ..."},
+                                {true, true, 00, "                                                                  OLIVIER                          Are you still thinking about thatceremony?"},
+                                {true, true, 00, "                                                                  ELEANOR                          I'm never going to forget that   night, not ever."},
+                                {true, true, 00, "                                                                  ELEANOR                          I can't decide if it's a good or a bad feeling."},
+                                {true, true, 00, "                                                                  ELEANOR                          You gave me enough of a birthday gift for the rest of my life."},
+                                {true, true, 00, "                                                                  OLIVIER                          But you wouldn't complain if I   got you a new sewing machine."},
+                                {true, true, 00, "                                                                  ELEANOR                          ..."},
+                                {true, true, 00, "                                                                  OLIVIER                          Not saying that it's what I'm    going to get for sure, but.."},
+                                {true, true, 00, "                                                                  ELEANOR                          Don't you have some vegetables toprune? I need to get started"},
+                                {true, true, 00, "                                                                  ELEANOR                          on canning for the winter."},
+                                {true, true, 00, "                                                                  OLIVIER                          Right, right, just uh-...        Yeah, nevermind."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -3809,22 +3798,44 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 6:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Aw, super! I love it, it's so    cozy in here."},
-                                {true, true, 00, "                                                                  DIANA                            I hope y'all don't mind me spend-ing ungodly amounts of time here."},
-                                {true, true, 00, "                                                                  ELEANOR                          Of course not! As long as you    don't mind helping sometimes."},
-                                {true, true, 00, "                                                                  OLIVIER                          Remember, living like this means that we're going to work hard."},
-                                {true, true, 00, "                                                                  OLIVIER                          I'll probably be spending most ofmy time chopping wood, or"},
-                                {true, true, 00, "                                                                  OLIVIER                          working out in the garden pullingweeds and watering."},
-                                {true, true, 00, "                                                                  ELEANOR                          You said that you were interestedin working for the boat captain?"},
-                                {true, true, 00, "                                                                  DIANA                            Oh, yes. I'll be going down to   the docks today, in fact."},
-                                {true, true, 00, "                                                                  DIANA                            Maybe I'll be a proper boat      captain before too long!"},
-                                {true, true, 00, "                                                                  ELEANOR                          I know you'll do great, Diana!"},
-                                {true, true, 00, "                                                                  OLIVIER                          This isn't what you thought you'dbe doing at 22, huh?"},
-                                {true, true, 00, "                                                                  DIANA                            Well, I guess I didn't know what I thought I'd be doing."},
-                                {true, true, 00, "                                                                  DIANA                            Y'all didn't think you'd be      moving here, huh?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I supposed I'd probably still be working with plants, that's it."},
-                                {true, true, 00, "                                                                  ELEANOR                          I'm still alive and so is Vee,   and that's all I could want."},
-                                {true, true, 00, "                                                                  DIANA                            Yeah.. Please stay that way, why don't you two?"},
+                                {true, true, 00, "                                                                  DIANA                            Alright, guys, we have to talk."},
+                                {true, true, 00, "                                                                  OLIVIER                          What's up?"},
+                                {true, true, 00, "                                                                  DIANA                            Some dude hacked Scout's TV      program this morning."},
+                                {true, true, 00, "                                                                  DIANA                            He was a Mons d'Plonj, I think?  He was threatening the island."},
+                                {true, true, 00, "                                                                  ELEANOR                          O-Oh.. Oh no.. He wasn't with thewitches, was he?"},
+                                {true, true, 00, "                                                                  ELEANOR                          Vee, have they found us?"},
+                                {true, true, 00, "                                                                  DIANA                            No, he looked like some twerp.   Apparently Maple knows him?"},
+                                {true, true, 00, "                                                                  DIANA                            The Tremblays aren't worried."},
+                                {true, true, 00, "                                                                  ELEANOR                          Oh.. Thank goodness.."},
+                                {true, true, 00, "                                                                  DIANA                            Have you met that new guy up     north, though? Cesar?"},
+                                {true, true, 00, "                                                                  DIANA                            He seems shady, but Enoki trust  him. He has a shop or something."},
+                                {true, true, 00, "                                                                  DIANA                            That new Guy.. er.. guy, he seemsfine. He makes good food."},
+                                {true, true, 00, "                                                                  OLIVIER                          Hey, El, calm down, you're going to hyperventilate."},
+                                {true, true, 00, "                                                                  ELEANOR                          I'm sorry.. I'm sorry.."},
+                                {true, true, 00, "                                                                  DIANA                            Hey, Eleanor, it's going to be   okay. Wanna come to my place?"},
+                                {true, true, 00, "                                                                  DIANA                            We can relax and eat snacks I    imported from inland."},
+                                {true, true, 00, "                                                                  DIANA                            Yes, that sounds like fun.       Merci."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+
+                        case 7:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  ELEANOR                          Bonjour! You must be Guy."},
+                                {true, true, 00, "                                                                  GUY                              Oui. The name's Guy. Guy Pizza."},
+                                {true, true, 00, "                                                                  ELEANOR                          Guy... Pizza?"},
+                                {true, true, 00, "                                                                  GUY                              It was funnier when I was a pizzaguy."},
+                                {true, true, 00, "                                                                  OLIVIER                          Well, welcome to the island!"},
+                                {true, true, 00, "                                                                  GUY                              Nice to meet y'all. I'm gonna go back and finish setting up."},
+                                {true, true, 00, "                                                                  GUY                              I've always wanted a full-size   kitchen, and I'm gonna make good"},
+                                {true, true, 00, "                                                                  GUY                              use of it, you'll see."},
+                                {true, true, 00, "                                                                  ELEANOR                          We're having a game night tonightand we were wondering,"},
+                                {true, true, 00, "                                                                  ELEANOR                          Would you like to join us?"},
+                                {true, true, 00, "                                                                  GUY                              I would, but I'm too excited     about this kitchen."},
+                                {true, true, 00, "                                                                  ELEANOR                          I.. see. I hope you have fun withyour kitchen."},
+                                {true, true, 00, "                                                                  GUY                              Oh, I will. I will."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -3946,7 +3957,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  ENOKI                            Hey!! Are you Diana?             I'm Enoki Tremblay!"},
-                                {true, true, 00, "                                                                  DIANA                            Enchanté de faire votre          connaissance!"},
+                                {true, true, 00, "                                                                  DIANA                            Enchante de faire votre          connaissance!"},
                                 {true, true, 00, "                                                                  ENOKI                            Is everything comfortable for youso far?"},
                                 {true, true, 00, "                                                                  DIANA                            Dude, I'm still not sure if I'm  dreaming or not."},
                                 {true, true, 00, "                                                                  DIANA                            This feels way too good to be    real, it's crazy."},
@@ -3954,7 +3965,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "                                                                  ENOKI                            Things tend to turn out, and I   wanted this to turn out."},
                                 {true, true, 00, "                                                                  ENOKI                            I heard you've got somethin' withCapt. Nicholas?"},
                                 {true, true, 00, "                                                                  DIANA                            Yeah! He's looking for someone totake over this area."},
-                                {true, true, 00, "                                                                  DIANA                            I'll eventually be ferrying      across Supérieur."},
+                                {true, true, 00, "                                                                  DIANA                            I'll eventually be ferrying      across Superieur."},
                                 {true, true, 00, "                                                                  ENOKI                            Aw, fun!! You gotta take us in a ride sometime."},
                                 {true, true, 00, "                                                                  ENOKI                            If you ever need us for anything,you let us know, alright?"},
                                 {true, true, 00, "                                                                  DIANA                            D'accord!"},
@@ -4077,6 +4088,206 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     }
                     else if (so->checkpoint < 12)
                     {
+                        switch (me)
+                        {
+                        default:
+                        {
+                            break;
+                        }
+
+                        case 0:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  MAPLE                            Diana! Hey!"},
+                                {true, true, 00, "                                                                  DIANA                            Hey, Maple!                      How's it shakin', bacon?"},
+                                {true, true, 00, "                                                                  MAPLE                            Not bad, just a little bored."},
+                                {true, true, 00, "                                                                  DIANA                            Dude, you see that broadcast thismorning?"},
+                                {true, true, 00, "                                                                  MAPLE                            With Rufus hijacking it? He's a  twerp, we're fine."},
+                                {true, true, 00, "                                                                  MAPLE                            He probably thinks he's a super  villain or something."},
+                                {true, true, 00, "                                                                  DIANA                            Boys like that just crack me up, seriously haha."},
+                                {true, true, 00, "                                                                  MAPLE                            Talk about it. But let me know ifyou spot him."},
+                                {true, true, 00, "                                                                  MAPLE                            Fried alligator's pretty tasty   this time of year."},
+                                {true, true, 00, "                                                                  DIANA                            Will do."},
+                                {true, true, 00, "                                                                  DIANA                            So what've you been up to lately?"},
+                                {true, true, 00, "                                                                  MAPLE                            You seen Scout? Poor guy, he's   definitely got a crush on me."},
+                                {true, true, 00, "                                                                  MAPLE                            It's kind of sweet right now, butI'm eventually going to have to"},
+                                {true, true, 00, "                                                                  MAPLE                            let him know he's really not my  type."},
+                                {true, true, 00, "                                                                  DIANA                            Girl, I don't envy you, haha.    So, what is your type?"},
+                                {true, true, 00, "                                                                  MAPLE                            I want someone who makes me      excited and.. is loose, y'know?"},
+                                {true, true, 00, "                                                                  MAPLE                            All these boys act like I'm a    goddess or something and it's"},
+                                {true, true, 00, "                                                                  MAPLE                            kind of patronizing. I could makeem into a barbeque if I wanted."},
+                                {true, true, 00, "                                                                  DIANA                            Maybe that's why they treat you  like that, they're scared, hehe."},
+                                {true, true, 00, "                                                                  MAPLE                            I need to find another fire elf  somewhere, probably."},
+                                {true, true, 00, "                                                                  DIANA                            There aren't very many this far  southeast."},
+                                {true, true, 00, "                                                                  MAPLE                            Yeah, I'll keep looking then, I  guess, but it's a small island."},
+                                {true, true, 00, "                                                                  DIANA                            That it is, haha. You care care  of yourself, Maple."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+
+                        case 1:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  ENOKI                            Hey, girl!"},
+                                {true, true, 00, "                                                                  DIANA                            Enoki, ma cherie! You want some  snacks?"},
+                                {true, true, 00, "                                                                  ENOKI                            I always want snacks."},
+                                {true, true, 00, "                                                                  DIANA                            Haha, of course. So what's your  day been like?"},
+                                {true, true, 00, "                                                                  ENOKI                            Good, good, but I'm a little     worried."},
+                                {true, true, 00, "                                                                  DIANA                            Aw, how come?"},
+                                {true, true, 00, "                                                                  ENOKI                            Well, it's about Aaron and Maple.They've been fighting."},
+                                {true, true, 00, "                                                                  DIANA                            That's not good! Do tell."},
+                                {true, true, 00, "                                                                  ENOKI                            Well, Aaron's always bottled up  how he feels about things,"},
+                                {true, true, 00, "                                                                  ENOKI                            While Maple tells you to your    face and hurts feelings."},
+                                {true, true, 00, "                                                                  DIANA                            That's not a good combination."},
+                                {true, true, 00, "                                                                  ENOKI                            It always blows over, but it     makes me sad in the meantime."},
+                                {true, true, 00, "                                                                  DIANA                            I don't have siblings, but that'sjust how it goes, right?"},
+                                {true, true, 00, "                                                                  ENOKI                            You a lonely only too? Yeah, I   always wanted a little sister."},
+                                {true, true, 00, "                                                                  DIANA                            Little bro for me. Less drama."},
+                                {true, true, 00, "                                                                  ENOKI                            True, true."},
+                                {true, true, 00, "                                                                  DIANA                            Keep me up to date, k?"},
+                                {true, true, 00, "                                                                  ENOKI                            K."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+
+                        case 2:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  DIANA                            Hey, Aaron!                      What can I do you for?"},
+                                {true, true, 00, "                                                                  AARON                            Nothing much, you know about the game night tonight?"},
+                                {true, true, 00, "                                                                  DIANA                            Yeah! I'm definitely coming. Hey,you saw that broadcast?"},
+                                {true, true, 00, "                                                                  AARON                            I talked to Maple, and she seems to have known the Plonj guy."},
+                                {true, true, 00, "                                                                  AARON                            She's not worried about it."},
+                                {true, true, 00, "                                                                  DIANA                            Oh, thank goodness.              See ya tonight?"},
+                                {true, true, 00, "                                                                  AARON                            Sure thing!"},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+
+                        case 3:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  SCOUT                            Hey! It's me, Scout."},
+                                {true, true, 00, "                                                                  DIANA                            Hey Scout! What're you on about?"},
+                                {true, true, 00, "                                                                  SCOUT                            It looks like this month's Scout TV is a wrap."},
+                                {true, true, 00, "                                                                  SCOUT                            Now I've just gotta worry about  the Scout Expo next month."},
+                                {true, true, 00, "                                                                  DIANA                            You keep bringing that up, what  is that exactly?"},
+                                {true, true, 00, "                                                                  SCOUT                            Oh, it's this thing where I take all my inventions and I"},
+                                {true, true, 00, "                                                                  SCOUT                            show em off. I usually take a    video and put it on the"},
+                                {true, true, 00, "                                                                  SCOUT                            world wide web, but now I've     actually got friends to show"},
+                                {true, true, 00, "                                                                  SCOUT                            the stuff off to!"},
+                                {true, true, 00, "                                                                  DIANA                            Aw, that sounds like fun! What'veyou got, for example?"},
+                                {true, true, 00, "                                                                  SCOUT                            No spoilers! Gotta wait for the  expo, you know."},
+                                {true, true, 00, "                                                                  DIANA                            Of course, of course.            That was a test."},
+                                {true, true, 00, "                                                                  SCOUT                            ...ok, so I made this device-"},
+                                {true, true, 00, "                                                                  DIANA                            No, you can't tell me, remember?"},
+                                {true, true, 00, "                                                                  SCOUT                            But I- I... hmm... okay, fine.   This is hard."},
+                                {true, true, 00, "                                                                  DIANA                            I figured it would be, hehe."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+
+                        // Fall-through to the next bit
+                        case 4:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  DIANA                            Hey, Vee! How'd you be?"},
+                                {true, true, 00, "                                                                  OLIVIER                          Good, good."},
+                                {true, true, 00, "                                                                  DIANA                            You're not here to ask if I can  host the game night here, right?"},
+                                {true, true, 00, "                                                                  OLIVIER                          No, no! Goodness.. We're doing itoutside."},
+                                {true, true, 00, "                                                                  OLIVIER                          If all goes well, we won't burn  down the island, haha."},
+                                {true, true, 00, "                                                                  OLIVIER                          Is everyone doing well back on   shore?"},
+                                {true, true, 00, "                                                                  DIANA                            Wonderful! My parents want to    come up and visit sometime."},
+                                {true, true, 00, "                                                                  DIANA                            I need to clean up though.. maybeI pretend your place is mine."},
+                                {true, true, 00, "                                                                  OLIVIER                          In your dreams, haha."},
+                                {true, true, 00, "                                                                  OLIVIER                          I need to invite Eleanor and my  family up here sometime."},
+                                {true, true, 00, "                                                                  DIANA                            Oh, they'd love this place."},
+                                {true, true, 00, "                                                                  DIANA                            Hopefully nothing goes horribly  wrong."},
+                                {true, true, 00, "                                                                  OLIVIER                          Of course, of course haha."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+
+                        case 5:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  ELEANOR                          Bonjour!"},
+                                {true, true, 00, "                                                                  DIANA                            Salut, ma charie! Quoi de neuf?"},
+                                {true, true, 00, "                                                                  ELEANOR                          Oh, is that sourdough I smell?"},
+                                {true, true, 00, "                                                                  DIANA                            It shouldn't be, haha. I really  need to pick up my room..."},
+                                {true, true, 00, "                                                                  DIANA                            How've you been lately? Any news?"},
+                                {true, true, 00, "                                                                  ELEANOR                          Oh, nothing much. I've been      sewing a new quilt."},
+                                {true, true, 00, "                                                                  DIANA                            Fancy. What are you making it    out of?"},
+                                {true, true, 00, "                                                                  ELEANOR                          I took all of my clothes from my home village to the island."},
+                                {true, true, 00, "                                                                  ELEANOR                          They're ready to retire, but I   can't bear to part from them."},
+                                {true, true, 00, "                                                                  ELEANOR                          They're so much of who I am, so  I'm making a quilt."},
+                                {true, true, 00, "                                                                  DIANA                            Aw, that's wonderful."},
+                                {true, true, 00, "                                                                  DIANA                            You been making any art lately?"},
+                                {true, true, 00, "                                                                  ELEANOR                          A bit, a bit! There are so many  pretty landscapes here."},
+                                {true, true, 00, "                                                                  DIANA                            Oui. I could play guitar by the  ocean for the rest of my life."},
+                                {true, true, 00, "                                                                  DIANA                            Well, I say ocean, I mean lake.  Same difference."},
+                                {true, true, 00, "                                                                  DIANA                            Eleanor, I think I'm meant for   the sea."},
+                                {true, true, 00, "                                                                  ELEANOR                          That sounds like a fun life."},
+                                {true, true, 00, "                                                                  DIANA                            Arrrrrrrg, it's pirate time."},
+                                {true, true, 00, "                                                                  DIANA                            But it'll be okay, I'll visit allthe time when I'm sailing!"},
+                                {true, true, 00, "                                                                  ELEANOR                          S'il vous plait!"},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+
+                        case 6:
+                        {
+                            auto b_button = bn::sprite_items::b_button.create_sprite(90, -50);
+                            auto uke_anim = bn::create_sprite_animate_action_forever(chari.at(follow_id).entity, 12, bn::sprite_items::diana_uke.tiles_item(), 0, 1, 2, 3);
+                            bn::music::stop();
+                            bn::music_items_info::span[32].first.play(bn::fixed(80) / 100);
+
+                            while (!bn::keypad::b_pressed())
+                            {
+                                bn::core::update();
+
+                                uke_anim.update();
+                                chari.at(follow_id).entity = uke_anim.sprite();
+                            }
+
+                            bn::music::stop();
+                            bn::music_items_info::span[5].first.play(bn::fixed(80) / 100);
+                        }
+
+                        case 7:
+                        {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  DIANA                            Hey! Guy, was it? You that guy?"},
+                                {true, true, 00, "                                                                  GUY                              Yeah, that's me. This your place?"},
+                                {true, true, 00, "                                                                  DIANA                            You bet. It's not much. you like your place?"},
+                                {true, true, 00, "                                                                  GUY                              Ever since I was a kid, it's beena dream to have my very own"},
+                                {true, true, 00, "                                                                  GUY                              Industrial-sized kitchen that I  can roll out of bed to."},
+                                {true, true, 00, "                                                                  DIANA                            That's a pretty hyper-specific   dream, but I get it."},
+                                {true, true, 00, "                                                                  GUY                              You don't even have a kitchen, doyou?"},
+                                {true, true, 00, "                                                                  DIANA                            I mean, I've got a stovetop and  a mini-fridge, haha."},
+                                {true, true, 00, "                                                                  DIANA                            I do all the importing here, so  I eat pre-packaged a lot."},
+                                {true, true, 00, "                                                                  GUY                              That's not super healthy y'know."},
+                                {true, true, 00, "                                                                  DIANA                            Yeah, I'll worry about that laterwhen it matters."},
+                                {true, true, 00, "                                                                  DIANA                            Everyone gets old and fat        someday, y'know."},
+                                {true, true, 00, "                                                                  GUY                              Not me. I'll be old and thin."},
+                                {true, true, 00, "                                                                  DIANA                            We'll catch up in fifty and see  how that's going, huh?"},
+                                {true, true, 00, "                                                                  GUY                              You bet."},
+                                {true, true, 00, "                                                                  DIANA                            We're having game night tonight, you coming?"},
+                                {true, true, 00, "                                                                  GUY                              Nah, I'll be messing with my     kitchen tonight."},
+                                {true, true, 00, "                                                                  DIANA                            Ah.. I see, I see. Fair enough."},
+                                {true, true, 00, "                                                                  DIANA                            You do you, dude."},
+                                {true, true, 00, "                                                                  GUY                              Will do."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+                        }
                     }
                     break;
                 }
