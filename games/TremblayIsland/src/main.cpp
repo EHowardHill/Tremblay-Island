@@ -2535,6 +2535,12 @@ dungeon_return store() {
 
 dungeon_return kitchen() {
 
+    while(true) {
+        bn::core::update();
+    }
+
+    dt = dungeon_return();
+    return dt;
 }
 
 //9,16,4
