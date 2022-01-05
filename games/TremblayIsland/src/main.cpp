@@ -2866,7 +2866,6 @@ dungeon_return kitchen() {
         }
     }
 
-
     if (true) {
         file1_gen.generate(-104, -72, "", file1_spr);
 
@@ -2905,9 +2904,9 @@ dungeon_return kitchen() {
             bn::core::update();
         }
     }
-}
 
-//9,16,4
+    dungeon_return dt(4, 4, 13);
+}
 
 void core_gameplay(int x, int y, int world, int until, bool force = false, int force_char = 0)
 {
@@ -2992,6 +2991,9 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
                         }
                     }
                     dt = store();
+                }
+                case 8: {
+                    dt = kitchen();
                 }
             };
         }
