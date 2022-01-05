@@ -58,9 +58,12 @@ audio/cnaut.wav
 audio/desktop.ini
 46
 1634502077.95
+audio/diana_alright_01.wav
+23748
+1641348289.87
 audio/diana_hey_01.wav
-13814
-1640895987.52
+22260
+1641350367.89
 audio/ding.wav
 80856
 1634501883.71
@@ -70,6 +73,9 @@ audio/door.wav
 audio/eleanor_hey_01.wav
 19510
 1640897751.15
+audio/eleanor_merci_01.wav
+45788
+1641348417.94
 audio/enoki_aw.wav
 27200
 1640886349.33
@@ -142,6 +148,9 @@ audio/rufus_02.wav
 audio/scout_hey_01.wav
 11826
 1640887947.36
+audio/scout_nice_01.wav
+19890
+1641349102.24
 audio/shortclip.wav
 72748
 1629764745.59
@@ -175,6 +184,9 @@ audio/v02.mod
 audio/v02_b.xm
 226033
 1629764745.6
+audio/vee_alright_01.wav
+21852
+1641348625.82
 audio/vee_hey_01.wav
 23406
 1640896937.05

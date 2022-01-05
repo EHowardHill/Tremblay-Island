@@ -117,6 +117,13 @@
 #include "bn_sprite_items_toutes_spr.h"
 #include "bn_regular_bg_items_bg_dock.h"
 
+#include "bn_sprite_items_gumbo.h"
+#include "bn_sprite_items_gumbo_mons.h"
+#include "bn_regular_bg_items_bg_cooking_01.h"
+#include "bn_regular_bg_items_bg_cooking_02.h"
+#include "bn_regular_bg_items_bg_monch.h"
+#include "bn_sprite_items_bg_monch_face.h"
+
 static save_all_struct all_save;
 static save_struct *so;
 constexpr bool fals = false;
@@ -2533,14 +2540,371 @@ dungeon_return store() {
     return dt;
 }
 
+class ingredient {
+    public:
+    bn::sprite_ptr entity = bn::sprite_items::gumbo.create_sprite(0,0,0);
+    int type = 0;
+};
+
 dungeon_return kitchen() {
 
-    while(true) {
-        bn::core::update();
+    int score = 0;
+
+    char buf[36] = {0};
+    char bf2[36] = {0};
+    char bf3[36] = {0};
+
+    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 32> file1_spr;
+    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 32> file2_spr;
+    bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
+    bn::vector<bn::sprite_ptr, 32> file3_spr;
+
+    bn::music_items_info::span[34].first.play(bn::fixed(80) / 100);
+
+    char buf1[32] = {};
+    char buf2[32] = {};
+
+    if (true) {
+        auto tr_bg = bn::regular_bg_items::axe_game_bg.create_bg(0,0);
+        auto pc_bg = bn::regular_bg_items::bg_cooking_01.create_bg(8,0);
+        int chari = 0;
+
+        bn::sprite_ptr hand = bn::sprite_items::gumbo.create_sprite(0,0,14);
+
+        while(chari < 7) {
+            int je_veus_de = 8 + std::rand() % 4;
+
+            switch(chari) {
+                case 0:
+                    bn::sound_items::maple_hey_01.play();
+                    break;
+                case 1:
+                    bn::sound_items::enoki_hey.play();
+                    break;
+                case 2:
+                    bn::sound_items::aaron_hey_02.play();
+                    break;
+                case 3:
+                    bn::sound_items::scout_hey_01.play();
+                    break;
+                case 4:
+                    bn::sound_items::vee_hey_01.play();
+                    break;
+                case 5:
+                    bn::sound_items::eleanor_hey_01.play();
+                    break;
+                case 6:
+                    bn::sound_items::diana_hey_01.play();
+                    break;
+            }
+
+            ingredient food[6];
+            bn::sprite_ptr je_veus_de_food = bn::sprite_items::gumbo.create_sprite(40, -52, je_veus_de);
+
+            food[0].entity = bn::sprite_items::gumbo.create_sprite(-42,-39 + 48,13); // Knife
+            food[1].entity = bn::sprite_items::gumbo.create_sprite(-10,-39 + 38,0);
+            food[2].entity = bn::sprite_items::gumbo.create_sprite(-10,-39 + 57,1);
+            food[3].entity = bn::sprite_items::gumbo.create_sprite(-10,-39 + 76,4);
+
+            food[4].entity = bn::sprite_items::gumbo.create_sprite(32,-39 + 38,12); // Bowl
+            food[5].entity = bn::sprite_items::gumbo.create_sprite(-78,-24,5);      // Spices
+            
+            for (int t = 0; t < 5; t++) {
+                food[t].type = 0;
+            }
+
+            int sel = -1;
+            int counter = 0;
+
+            bn::sprite_ptr chari_mons = bn::sprite_items::gumbo_mons.create_sprite(102,-57, chari * 2);
+            chari_mons.put_below();
+            chari_mons.set_blending_enabled(true);
+            bool done = false;
+            bool ready = false;
+            bool ready_freddy = false;
+            float blend_value = 0;
+
+            bn::blending::set_transparency_alpha(0);
+
+            while(!done) {
+                hand.put_above();
+
+                while(blend_value < 1 && !ready_freddy) {
+                    float new_value = blend_value + 0.05;
+                    if (new_value > 1) new_value = 1;
+                    blend_value = new_value;
+                    bn::blending::set_transparency_alpha(blend_value);
+                }
+
+                while(blend_value > 0 && ready_freddy) {
+                    float new_value = blend_value - 0.05;
+                    if (new_value < 0) new_value = 0;
+                    blend_value = new_value;
+                    bn::blending::set_transparency_alpha(blend_value);
+                }
+
+                if (blend_value < 0.05 && ready_freddy) {
+                    done = true;
+                }
+
+                //BN_LOG(hand.x(), " x ", hand.y());
+
+                if (food[4].type == je_veus_de && !ready) {
+
+                    switch(chari) {
+                        case 0:
+                            bn::sound_items::maple_alright_04.play();
+                            break;
+                        case 1:
+                            bn::sound_items::enoki_whoo.play();
+                            break;
+                        case 2:
+                            bn::sound_items::aaron_yeah_01.play();
+                            break;
+                        case 3:
+                            bn::sound_items::scout_nice_01.play();
+                            break;
+                        case 4:
+                            bn::sound_items::vee_alright_01.play();
+                            break;
+                        case 5:
+                            bn::sound_items::eleanor_merci_01.play();
+                            break;
+                        case 6:
+                            bn::sound_items::diana_alright_01.play();
+                            break;
+                    }
+
+                    ready = true;
+                    chari_mons = bn::sprite_items::gumbo_mons.create_sprite(102,-57, (chari * 2) + 1);
+                    chari_mons.set_blending_enabled(true);
+                    chari_mons.put_below();
+                }
+
+                counter++;
+                if (counter > 5) {
+                    if (score > 0) score--;
+                    counter = 0;
+                }
+
+                file1_spr.clear();
+                file2_spr.clear();
+                file1_gen.generate(-104, -72, buf1, file1_spr);
+                file2_gen.generate(-104, -60,  buf2, file2_spr);
+                sprintf(buf1, "");
+                sprintf(buf2, "Score: %d", score);
+
+                for (int t = 0; t < 6; t++) {
+                    if (food[t].entity.y() < -24 && t != sel) {
+                        food[t].entity.set_y(food[t].entity.y() + 2);
+                    }
+                    if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16) {
+                        switch(t-1) {
+                            case 0:
+                                sprintf(buf1, "Holy Trinity");
+                                break;
+                            case 1:
+                                sprintf(buf1, "Proteins");
+                                break;
+                            case 2:
+                                sprintf(buf1, "Roux");
+                                break;
+                            case 3:
+                                switch(food[t].type) {
+                                    case 1:
+                                        sprintf(buf1, "Rice Bowl");
+                                        break;
+                                    case 8:
+                                        sprintf(buf1, "Jumbalaya");
+                                        break;
+                                    case 9:
+                                        sprintf(buf1, "Gumbo");
+                                        break;
+                                    case 10:
+                                        sprintf(buf1, "Gumbo + Rice");
+                                        break;
+                                    case 11:
+                                        sprintf(buf1, "Ettoufee");
+                                        break;
+                                    default:
+                                        sprintf(buf1, "Empty Bowl");
+                                        break;
+                                }
+                                break;
+                            case 4:
+                                sprintf(buf1, "Spices");
+                                break;
+                        }
+                    }
+                }
+
+                //BN_LOG(hand.x(), " - ", hand.y());
+
+                if (bn::keypad::a_pressed()) {
+                    bn::sound_items::pop.play();
+
+                    for (int t = 0; t < 6; t++) {
+                        if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16) {
+                            sel = t;
+                        }
+                    }
+                }
+
+                if (sel > -1) {
+                    food[sel].entity.set_position(hand.x(), hand.y());
+                }
+
+                if (bn::keypad::a_released()) {
+                    bn::sound_items::fireblast.play();
+
+                    if (sel == 0) {
+                        for (int t = 1; t < 3; t++) {
+                            if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16) {
+                                food[t].entity = bn::sprite_items::gumbo.create_sprite(food[t].entity.x(),food[t].entity.y(),t + 1);
+                                food[t].type = 1;
+                                score += 50;
+                            }
+                        }
+                    } else if ((sel > 0 && sel < 3 && food[sel].type == 1) || sel == 3) {
+                        if (abs(food[4].entity.x() - hand.x()) + abs(food[4].entity.y() - hand.y()) < 16) {
+                            BN_LOG(sel, " - ", food[4].type, " - ", food[sel].type);
+                            switch(food[4].type) {
+                                case 1:
+                                    if (sel == 1) {
+                                        food[4].type = 7;
+                                        food[4].entity = bn::sprite_items::gumbo.create_sprite(food[4].entity.x(),food[4].entity.y(),7);
+                                        food[1].entity.set_visible(false);
+                                        score += 50;
+                                    }
+                                    break;
+                                case 7:
+                                    if (sel == 2) {
+                                        food[4].type = 8;
+                                        food[4].entity = bn::sprite_items::gumbo.create_sprite(food[4].entity.x(),food[4].entity.y(),8);
+                                        food[2].entity.set_visible(false);
+                                        score += 50;
+                                    }
+                                    break;
+                                case 8:
+                                    if (sel == 3) {
+                                        food[4].type = 9;
+                                        food[4].entity = bn::sprite_items::gumbo.create_sprite(food[4].entity.x(),food[4].entity.y(),9);
+                                        food[3].entity.set_y(food[3].entity.y().integer() + 16);
+                                        score += 50;
+                                    }
+                                    break;
+                                case 9:
+                                    if (sel == 3) {
+                                        food[4].type = 11;
+                                        food[4].entity = bn::sprite_items::gumbo.create_sprite(food[4].entity.x(),food[4].entity.y(),11);
+                                        food[3].entity.set_visible(false);
+                                        score += 50;
+                                    }
+                                    break;
+                            }
+                        }
+
+                    } else if (sel == 4) {
+                        if (abs(-105 - hand.x()) + abs(-30 - hand.y()) < 16) {
+                            if (food[4].type == 0) {
+                                food[4].type = 1;
+                                food[4].entity = bn::sprite_items::gumbo.create_sprite(food[4].entity.x(),food[4].entity.y(),6);
+                                score += 50;
+                            } else if (food[4].type == 9) {
+                                food[4].type = 10;
+                                food[4].entity = bn::sprite_items::gumbo.create_sprite(food[4].entity.x(),food[4].entity.y(),10);
+                                score += 50;
+                            }
+                        } else if (hand.x().integer() > 84 && hand.y().integer() < -33) {
+                            ready_freddy = true;
+                            if (food[4].type == je_veus_de) {
+                                score += 100;
+                                bn::sound_items::cnaut.play();
+                            } else {
+                                score = score / 2;
+                                bn::sound_items::firecrackle.play();
+                            }
+                        }
+                    } else if (sel == 5) {
+                        if (abs(food[4].entity.x() - hand.x()) + abs(food[4].entity.y() - hand.y()) < 16) {
+                            food[5].entity.set_visible(false);
+                            score += std::rand() % 100;
+                        }
+                    }
+
+                    sel = -1;
+                }
+
+                if (bn::keypad::a_held()) {
+                    hand = bn::sprite_items::gumbo.create_sprite(hand.x(),hand.y(),15);
+                } else {
+                    hand = bn::sprite_items::gumbo.create_sprite(hand.x(),hand.y(),14);
+                }
+
+                if (bn::keypad::up_held()) {
+                    hand.set_y(hand.y().integer() - 1);
+                }
+
+                if (bn::keypad::down_held()) {
+                    hand.set_y(hand.y().integer() + 1);
+                }
+
+                if (bn::keypad::left_held()) {
+                    hand.set_x(hand.x().integer() - 1);
+                }
+
+                if (bn::keypad::right_held()) {
+                    hand.set_x(hand.x().integer() + 1);
+                }
+
+                bn::core::update();
+            }
+        
+            chari++;
+        }
     }
 
-    dt = dungeon_return();
-    return dt;
+
+    if (true) {
+        file1_gen.generate(-104, -72, "", file1_spr);
+
+        bn::music::stop();
+        bn::core::update();
+
+        auto face_spr = bn::sprite_items::bg_monch_face.create_sprite(8, -43);
+        auto face_b_like = bn::create_sprite_animate_action_forever(face_spr, 4, bn::sprite_items::bg_monch_face.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7);
+        auto pc_bg = bn::regular_bg_items::bg_monch.create_bg(0,0);
+
+        auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
+        b_button.set_visible(false);
+        so->xp += (score / 22);
+        int xp_count = 1;
+        int sfx_play = 0;
+        while(!bn::keypad::b_pressed()) {
+
+            if ((xp_count - 1) < so->xp) {
+                sfx_play = (sfx_play + 1) % 8;
+                if (sfx_play == 1) bn::sound_items::ding.play();
+                xp_count++;
+            }
+
+            if (xp_count == so->xp - 1) {
+                xp_count++;
+                b_button.set_visible(true);
+                bn::music_items_info::span[16].first.play(bn::fixed(80) / 100);
+            }
+
+            sprintf(buf, "XP: %d", xp_count - 1);
+            file2_spr.clear();
+            file2_gen.generate(-84, 32, buf, file2_spr);
+            face_b_like.update();
+            face_spr = face_b_like.sprite();
+
+            bn::core::update();
+        }
+    }
 }
 
 //9,16,4
@@ -2737,6 +3101,8 @@ int checkpoint(int level)
 int main()
 {
     bn::core::init(); // Initialize Butano libraries
+
+    kitchen();
 
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
