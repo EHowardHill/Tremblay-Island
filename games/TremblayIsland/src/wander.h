@@ -146,6 +146,9 @@ public:
     bool done = false;
     bool is_walking = false;
     bool event = false;
+
+    int last_x, last_y;
+
     bn::sprite_item entity_item = bn::sprite_items::maple_walking;
     bn::sprite_ptr entity = entity_item.create_sprite(0, 0);
     bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 00, 1, 00, 2);
@@ -205,6 +208,14 @@ public:
         bool canUp = !(((col[0] && col[1]) ^ col[4]) || ((col[2] && col[3]) ^ col[5]));
         bool canDn = !(((col[0] && col[1]) ^ col[6]) || ((col[2] && col[3]) ^ col[7]));
 
+        if (canLeft || canRite) {
+            last_x = entity.x().integer();
+        }
+
+        if (canUp || canDn) {
+            last_y = entity.y().integer();
+        }
+
         // If following...
         if (role == 0)
         {
@@ -214,8 +225,10 @@ public:
             is_walking = false;
 
             // Follow player
+            int dist = abs(x - entity.x().integer()) + abs(y - entity.y().integer());
+
             bool isXTravel = false;
-            if (x < entity.x() - 24)
+            if (x < entity.x() - 24 || (x < entity.x() && dist > 72))
             {
                 if (canLeft)
                 {
@@ -228,7 +241,7 @@ public:
                     is_walking = true;
                 }
             }
-            else if (x > entity.x() + 24)
+            else if (x > entity.x() + 24 || (x > entity.x() && dist > 72))
             {
                 if (canRite)
                 {
@@ -241,7 +254,7 @@ public:
                     is_walking = true;
                 }
             }
-            if (y < entity.y() - 24)
+            if (y < entity.y() - 24 || (y < entity.y() && dist > 72))
             {
                 if (canUp)
                 {
@@ -256,7 +269,7 @@ public:
                     }
                 }
             }
-            else if (y > entity.y() + 24)
+            else if (y > entity.y() + 24 || (y > entity.y() && dist > 72))
             {
                 if (canDn)
                 {
@@ -458,6 +471,8 @@ public:
         }
 
         // Handle update
+        if (!canLeft && !canRite) entity.set_x(last_x);
+        if (!canUp && !canDn) entity.set_y(last_y);
         entity = entity_anim.sprite();
         //entity.set_camera(camera);
     }
