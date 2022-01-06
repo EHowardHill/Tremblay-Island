@@ -476,6 +476,8 @@ public:
 dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
 {
 
+    BN_LOG("Loading in : " , dt.world_index);
+
     if (so->checkpoint > 1)
     {
         if (bn::music::playing())
@@ -638,6 +640,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         break;
     }
     }
+
+    BN_LOG("Checkpoint A");
 
     // World generation
     switch (dt.world_index)
@@ -1483,7 +1487,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             1, 1, 0, 0, 1, 1, 1,
             1, 1, 0, 1, 0, 1, 1,
             1, 1, 0, 1, 0, 1, 1,
-            1, 1, 0, 0, 0, 1, 1,
+            1, 1, 0, 0, 70, 1, 1,
             1, 1, 1, 65, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1};
 
@@ -1577,6 +1581,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     };
 
+    BN_LOG("Checkpoint B");
+
     // A header
     bn::sprite_ptr a_notif = bn::sprite_items::a_button_2.create_sprite(0, 0);
     a_notif.set_camera(camera);
@@ -1626,6 +1632,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     l_button.set_visible(false);
 
     bn::blending::set_transparency_alpha(bn::fixed(1));
+
+    BN_LOG("Checkpoint C");
 
     while (true)
     {
@@ -4373,10 +4381,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     break;
                 }
 
-                // make-a da gumbo
+                // i make-a da gumbo
                 case 70: {
                     switch (me) {
-                        case 0:
+                        case 0: {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  MAPLE                            So... Guy, you, uh.. put tomatoesin your Jumbalaya?"},
                                 {true, true, 00, "                                                                  GUY                              Just as God intended."},
@@ -4397,7 +4405,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        case 0:
+                        }
+                        case 1: {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  ENOKI                            Ooooooo... I love your kitchen!! It's so big!"},
                                 {true, true, 00, "                                                                  GUY                              Merci. I'm pretty keen on rollingout of bed to some cornbread."},
@@ -4412,7 +4421,30 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        case 0:
+                        }
+                        case 2: {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  AARON                            It smells so nice in here!"},
+                                {true, true, 00, "                                                                  GUY                              Oui, as it ought to."},
+                                {true, true, 00, "                                                                  AARON                            So, uh.. I heard that you moved  in because you want customers?"},
+                                {true, true, 00, "                                                                  GUY                              Right."},
+                                {true, true, 00, "                                                                  AARON                            Well, uh.. Obviously we're not a huge group of people here.."},
+                                {true, true, 00, "                                                                  AARON                            And I'm obviously doing my best  to make this place a good home.."},
+                                {true, true, 00, "                                                                  GUY                              Uh huh?"},
+                                {true, true, 00, "                                                                  AARON                            I just, uh, hope you know that wearen't quite big enough to have"},
+                                {true, true, 00, "                                                                  AARON                            Our own currency yet, and a few  of don't really keep cash.."},
+                                {true, true, 00, "                                                                  GUY                              I charge five dollars per meal,  and I expect customers."},
+                                {true, true, 00, "                                                                  AARON                            I'll tell you what. This cabin iswhat, ten thousand? Twenty?"},
+                                {true, true, 00, "                                                                  AARON                            I can't do math in my head, I    never graduated high school."},
+                                {true, true, 00, "                                                                  AARON                            Enoki can do crazy math in her   head, but she isn't here."},
+                                {true, true, 00, "                                                                  AARON                            How about free food for all of usfor the rest of the year,"},
+                                {true, true, 00, "                                                                  AARON                            And that'll pay for the food.    C'est bon?"},
+                                {true, true, 00, "                                                                  GUY                              ...I'll think about it."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                            break;
+                        }
+                        case 3: {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
                                 {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
@@ -4433,97 +4465,79 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        case 0:
+                        }
+                        case 4: {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-                                {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-                                {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
-                                {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+                                {true, true, 00, "                                                                  OLIVIER                          Bonjour!"},
+                                {true, true, 00, "                                                                  GUY                              Oui. J'suppose you're the garden boy?"},
+                                {true, true, 00, "                                                                  GUY                              You grow lots of celery, onions, and bell peppers?"},
+                                {true, true, 00, "                                                                  OLIVIER                          Well of course!"},
+                                {true, true, 00, "                                                                  GUY                              I'll tell you what. You continue to give me fresh supply,"},
+                                {true, true, 00, "                                                                  GUY                              And I'll get you free gumbo."},
+                                {true, true, 00, "                                                                  OLIVIER                          What about my wife?"},
+                                {true, true, 00, "                                                                  GUY                              She the one with the Wendy's hairor the Wendy's outfit?"},
+                                {true, true, 00, "                                                                  OLIVIER                          ...she's the one with the brown  hair."},
+                                {true, true, 00, "                                                                  GUY                              Got it, Dave."},
+                                {true, true, 00, "                                                                  OLIVIER                          ...Olivier. Olivier Landry."},
+                                {true, true, 00, "                                                                  OLIVIER                          Isn't your name Guy?"},
+                                {true, true, 00, "                                                                  GUY                              Correct."},
+                                {true, true, 00, "                                                                  OLIVIER                          Don't you go by 'Guy Pizza'?"},
+                                {true, true, 00, "                                                                  GUY                              It's more of a joke, but don't   tell no one, you hear?"},
+                                {true, true, 00, "                                                                  OLIVIER                          I hear, I hear."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        case 0:
+                        }
+                        case 5: {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-                                {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-                                {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
-                                {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+                                {true, true, 00, "                                                                  ELEANOR                          Bonjour! Comment allez-vous?"},
+                                {true, true, 00, "                                                                  GUY                              C'est bon, how are you?"},
+                                {true, true, 00, "                                                                  ELEANOR                          This place makes me pretty       hungry, it smells great!"},
+                                {true, true, 00, "                                                                  GUY                              Oh yeah?"},
+                                {true, true, 00, "                                                                  ELEANOR                          I prefer baking to cooking, but  this is a wonderful kitchen."},
+                                {true, true, 00, "                                                                  GUY                              Yeah, what you make?"},
+                                {true, true, 00, "                                                                  ELEANOR                          My favorite thing to make is key lime pie, but sometimes I"},
+                                {true, true, 00, "                                                                  ELEANOR                          just need to make a lot of pecan praline. Do you like praline?"},
+                                {true, true, 00, "                                                                  GUY                              Like praline?"},
+                                {true, true, 00, "                                                                  GUY                              LIKE praline?"},
+                                {true, true, 00, "                                                                  GUY                              Yeah, it's pretty good."},
+                                {true, true, 00, "                                                                  GUY                              You get me some praline, and I'llget you free food, how's that?"},
+                                {true, true, 00, "                                                                  ELEANOR                          It's a deal!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        case 0:
+                        }
+                        case 6: {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-                                {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-                                {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
-                                {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+                                {true, true, 00, "                                                                  DIANA                            Hey, there! Guy Pizza, is it?"},
+                                {true, true, 00, "                                                                  GUY                              Guy Pizza, the one and only."},
+                                {true, true, 00, "                                                                  DIANA                            I can see why, haha. You Italian?"},
+                                {true, true, 00, "                                                                  GUY                              Nah, I'm from Donaldsonville.    New name, new life."},
+                                {true, true, 00, "                                                                  DIANA                            And so you chose 'pizza'?"},
+                                {true, true, 00, "                                                                  GUY                              People called me 'pizza guy' for ages, and my name's Guy..."},
+                                {true, true, 00, "                                                                  GUY                              It was just natural. Plus, it    makes folks hungry."},
+                                {true, true, 00, "                                                                  DIANA                            Yeah, for pizza. Do you make     pizza often?"},
+                                {true, true, 00, "                                                                  GUY                              Not often, no."},
+                                {true, true, 00, "                                                                  DIANA                            I guess it's not too late to     change your mind, you know."},
+                                {true, true, 00, "                                                                  GUY                              You got any suggestions?"},
+                                {true, true, 00, "                                                                  DIANA                            Guy... Mysterious. That sounds   mysterious."},
+                                {true, true, 00, "                                                                  GUY                              I'm not a magician."},
+                                {true, true, 00, "                                                                  DIANA                            You're also not a pizza."},
+                                {true, true, 00, "                                                                  GUY                              Fair play."},
+                                {true, true, 00, "                                                                  GUY                              I'll take your suggestion into   account, we'll just say that."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
-                        case 0:
-                            line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-                                {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-                                {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
-                                {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-                                {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
-                                {true, true, 00, "COM: Endscene"}};
-                            dialogue_page_lite(lc);
-                            break;
-                        case 7:
+                        }
+                        case 7: {
                             dt.spawn_x = 8;
                             dt.spawn_y = 0;
                             dt.world_index = 99;
                             return dt;
                             break;
+                        }
                     }
+                    break;
                 }
 
                 }
@@ -4938,5 +4952,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         {
         }
         }
+    
+        BN_LOG("Checkpoint D");
     }
 }

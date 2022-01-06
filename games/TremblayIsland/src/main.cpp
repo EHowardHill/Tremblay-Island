@@ -776,7 +776,6 @@ dungeon_return tree_cut()
 
                     if (penalty) {
                         int ugh = std::rand() % 7;
-                        BN_LOG("UGH ", ugh);
                         switch (ugh) {
                             case 0:
                                 bn::sound_items::aaron_ugh_01.play();
@@ -1720,8 +1719,6 @@ dungeon_return computer() {
     int select = 0;
     while (!bn::keypad::b_pressed()) {
 
-        BN_LOG(pc_cursor.x(), " - ", pc_cursor.y());
-
         pc_cursor.set_position(
             pc_cursor.x().integer() + bn::keypad::right_held() - bn::keypad::left_held(),
             pc_cursor.y().integer() + bn::keypad::down_held() - bn::keypad::up_held()
@@ -1731,8 +1728,6 @@ dungeon_return computer() {
         if (pc_cursor.x() > 55) pc_cursor.set_x(55);
         if (pc_cursor.y() < -35) pc_cursor.set_y(-35);
         if (pc_cursor.y() > 30) pc_cursor.set_y(30);
-
-        BN_LOG(pc_cursor.x(), " - ", pc_cursor.y());
 
         if (ticks > 64) {
             if (alpha < 1) {
@@ -2566,6 +2561,7 @@ dungeon_return kitchen() {
     char buf1[32] = {};
     char buf2[32] = {};
 
+    // Cooking bit
     if (true) {
         auto tr_bg = bn::regular_bg_items::axe_game_bg.create_bg(0,0);
         auto pc_bg = bn::regular_bg_items::bg_cooking_01.create_bg(8,0);
@@ -2574,6 +2570,7 @@ dungeon_return kitchen() {
         bn::sprite_ptr hand = bn::sprite_items::gumbo.create_sprite(0,0,14);
 
         while(chari < 7) {
+
             int je_veus_de = 8 + std::rand() % 4;
 
             switch(chari) {
@@ -2620,7 +2617,6 @@ dungeon_return kitchen() {
 
             bn::sprite_ptr chari_mons = bn::sprite_items::gumbo_mons.create_sprite(102,-57, chari * 2);
             chari_mons.put_below();
-            chari_mons.set_blending_enabled(true);
             bool done = false;
             bool ready = false;
             bool ready_freddy = false;
@@ -2630,20 +2626,6 @@ dungeon_return kitchen() {
 
             while(!done) {
                 hand.put_above();
-
-                while(blend_value < 1 && !ready_freddy) {
-                    float new_value = blend_value + 0.05;
-                    if (new_value > 1) new_value = 1;
-                    blend_value = new_value;
-                    bn::blending::set_transparency_alpha(blend_value);
-                }
-
-                while(blend_value > 0 && ready_freddy) {
-                    float new_value = blend_value - 0.05;
-                    if (new_value < 0) new_value = 0;
-                    blend_value = new_value;
-                    bn::blending::set_transparency_alpha(blend_value);
-                }
 
                 if (blend_value < 0.05 && ready_freddy) {
                     done = true;
@@ -2679,7 +2661,6 @@ dungeon_return kitchen() {
 
                     ready = true;
                     chari_mons = bn::sprite_items::gumbo_mons.create_sprite(102,-57, (chari * 2) + 1);
-                    chari_mons.set_blending_enabled(true);
                     chari_mons.put_below();
                 }
 
@@ -2859,6 +2840,11 @@ dungeon_return kitchen() {
                     hand.set_x(hand.x().integer() + 1);
                 }
 
+                if (bn::keypad::b_pressed()) {
+                    chari = 7;
+                    done = true;
+                }
+
                 bn::core::update();
             }
         
@@ -2866,8 +2852,13 @@ dungeon_return kitchen() {
         }
     }
 
+    // Reward screen
     if (true) {
-        file1_gen.generate(-104, -72, "", file1_spr);
+        sprintf(buf1, "");
+        file1_spr.clear();
+        file3_spr.clear();
+        file1_gen.generate(-104, -72, buf1, file1_spr);
+        file3_gen.generate(-104, -72, buf1, file3_spr);
 
         bn::music::stop();
         bn::core::update();
@@ -2906,6 +2897,7 @@ dungeon_return kitchen() {
     }
 
     dungeon_return dt(4, 4, 13);
+    return dt;
 }
 
 void core_gameplay(int x, int y, int world, int until, bool force = false, int force_char = 0)
@@ -2982,6 +2974,7 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
                     break;
                 }
                 case 7: {
+                    bn::blending::set_transparency_alpha(0);
                     bn::music_items_info::span[33].first.play(bn::fixed(80) / 100);
                     if (so->hat_world == -1) {
                         if (so->last_char_id == 1) {
@@ -2991,9 +2984,11 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
                         }
                     }
                     dt = store();
+                    break;
                 }
                 case 8: {
                     dt = kitchen();
+                    break;
                 }
             };
         }
@@ -3104,12 +3099,13 @@ int main()
 {
     bn::core::init(); // Initialize Butano libraries
 
-    kitchen();
-
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
     
+    so->xp = 250;
+    so->checkpoint = 10;
+
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
     }
