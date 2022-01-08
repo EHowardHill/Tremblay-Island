@@ -6,7 +6,7 @@
 
 *Welcome to island life!*
 
-Maple Trmeblay is just about done with her older brother Aaron and his wife Enoki; while Maple's life is grounded and somewhat planned, albeit miserable, Aaron and Enoki constantly go out on a limb to make the most of their lives.
+Maple Tremblay is just about done with her older brother Aaron and his wife Enoki; while Maple's life is grounded and somewhat planned, albeit miserable, Aaron and Enoki constantly go out on a limb to make the most of their lives.
 
 Frustrated, Maple tries to convince the two to settle down, only for her plans to backfire when she inadvertently gives them the idea to start their own sovereign nation on a tiny island.
 
