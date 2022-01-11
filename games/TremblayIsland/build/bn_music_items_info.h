@@ -43,6 +43,7 @@ namespace bn::music_items_info
         make_pair(music_item(32), string_view("z23_diana")),
         make_pair(music_item(33), string_view("z24_cruz")),
         make_pair(music_item(34), string_view("z25_funky")),
+        make_pair(music_item(35), string_view("z26_zip")),
     };
 
     constexpr inline span<const pair<music_item, string_view>> span(array);

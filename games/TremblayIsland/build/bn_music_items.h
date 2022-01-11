@@ -40,6 +40,7 @@ namespace bn::music_items
     constexpr inline music_item z23_diana(32);
     constexpr inline music_item z24_cruz(33);
     constexpr inline music_item z25_funky(34);
+    constexpr inline music_item z26_zip(35);
 }
 
 #endif

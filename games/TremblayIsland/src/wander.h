@@ -9,6 +9,7 @@
 #include "bn_sprite_items_maple_walking_spring.h"
 #include "bn_sprite_items_enoki_walking_pj.h"
 #include "bn_sprite_items_enoki_walking_spring.h"
+#include "bn_sprite_items_enoki_walking_oo.h"
 #include "bn_sprite_items_aaron_sleep.h"
 #include "bn_sprite_items_aaron_walking_spring.h"
 #include "bn_sprite_items_scout_walking_spring.h"
@@ -143,9 +144,11 @@ public:
     int identity = 0;
     int dir = 0;
     int last_dir = 0;
+    int follow_id = -1;
     bool done = false;
     bool is_walking = false;
     bool event = false;
+    bool can_follow = true;
 
     int last_x, last_y;
 
@@ -522,7 +525,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     bn::vector<anim_object, 3> anim_objects;
 
     // Create initial characters
-    bn::vector<character, 4> chari;
+    bn::vector<character, 7> chari;
     switch (so->last_char_id)
     {
     default:
@@ -583,9 +586,17 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             chari.push_back(default_chari);
             break;
         }
-        else
+        else if (so->checkpoint < 12)
         {
             character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 1;
+            chari.push_back(default_chari);
+            break;
+        } else {
+            character default_chari(bn::sprite_items::enoki_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
             default_chari.entity.set_camera(camera);
             default_chari.entity.set_position(sx, sy);
             default_chari.role = 1;
@@ -655,8 +666,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         break;
     }
     }
-
-    BN_LOG("Checkpoint A");
 
     // World generation
     switch (dt.world_index)
@@ -920,9 +929,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         {
             bn::music_items_info::span[21].first.play(bn::fixed(80) / 100);
         }
-        else
+        else if (so->checkpoint < 12)
         {
             bn::music_items_info::span[11].first.play(bn::fixed(80) / 100);
+        } else if (so->checkpoint < 14) {
+            bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
         }
 
         current_room.init(20, 20, 9, 17);
@@ -1074,6 +1085,153 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             deep_copy(local, current_room.local_tileset);
             deep_copy(local_col, current_room.collisions);
         }
+        else if (so->checkpoint == 12) {
+            std::vector<int> local_col{
+                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+                01, 42, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+                01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+                00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+                00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+                00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+            std::vector<int> local{
+                39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
+                39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
+                38, 27, 0, 0, 0, 15, 18, 18, 18, 18, 18, 18, 18, 23, 0, 4, 3, 2, 11, 26,
+                39, 47, 44, 0, 1, 16, 19, 19, 19, 19, 19, 19, 19, 24, 1, 5, 2, 3, 12, 26,
+                38, 0, 0, 0, 27, 17, 20, 21, 20, 22, 20, 21, 20, 25, 27, 4, 3, 2, 11, 26,
+                39, 1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 4, 2, 3, 12, 26,
+                38, 27, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 5, 3, 2, 11, 26,
+                39, 1, 27, 0, 0, 0, 0, 0, 40, 3, 42, 0, 0, 0, 0, 4, 2, 3, 12, 26,
+                0, 27, 44, 0, 0, 0, 0, 1, 41, 2, 43, 1, 0, 14, 7, 6, 3, 2, 11, 26,
+                0, 0, 0, 0, 0, 0, 0, 27, 2, 3, 3, 27, 0, 4, 2, 3, 2, 3, 12, 26,
+                38, 0, 1, 0, 0, 0, 0, 0, 2, 2, 3, 0, 0, 5, 3, 2, 3, 2, 11, 26,
+                39, 1, 27, 0, 0, 0, 0, 14, 42, 3, 42, 8, 7, 6, 2, 3, 2, 3, 12, 26,
+                38, 27, 0, 0, 0, 0, 14, 6, 43, 2, 43, 2, 3, 2, 3, 2, 3, 46, 45, 26,
+                39, 0, 0, 0, 0, 0, 5, 2, 3, 3, 2, 3, 2, 46, 9, 10, 9, 45, 13, 26,
+                42, 7, 8, 7, 8, 7, 6, 3, 3, 2, 3, 2, 46, 45, 13, 26, 26, 26, 26, 26,
+                43, 2, 3, 2, 3, 2, 3, 46, 42, 3, 42, 10, 45, 26, 26, 26, 26, 26, 26, 26,
+                42, 10, 9, 10, 9, 10, 9, 45, 43, 2, 43, 26, 26, 26, 26, 26, 26, 26, 26, 0,
+                43, 26, 26, 26, 13, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0,
+                26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0};
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            chari.at(0).can_follow = false;
+
+            character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
+            maple.entity.set_position(10 * 32, 6 * 32);
+            maple.entity.set_camera(camera);
+            maple.role = 0;
+            maple.identity = 0;
+            maple.follow_id = 2;
+            chari.push_back(maple);
+
+            character enoki(bn::sprite_items::enoki_walking_oo, current_room, 6, 2, false);
+            enoki.entity.set_position(11 * 32, 6 * 32);
+            enoki.entity.set_camera(camera);
+            enoki.role = 0;
+            enoki.identity = 1;
+            enoki.follow_id = 1;
+            chari.push_back(enoki);
+
+        } else if (so->checkpoint == 13) {
+            std::vector<int> local_col{
+                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
+                01, 0, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+                01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+                00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+                00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+                00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+                01, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+                01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+                00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+            std::vector<int> local{
+                39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
+                39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
+                38, 27, 0, 0, 0, 15, 18, 18, 18, 18, 18, 18, 18, 23, 0, 4, 3, 2, 11, 26,
+                39, 47, 44, 0, 1, 16, 19, 19, 19, 19, 19, 19, 19, 24, 1, 5, 2, 3, 12, 26,
+                38, 0, 0, 0, 27, 17, 20, 21, 20, 22, 20, 21, 20, 25, 27, 4, 3, 2, 11, 26,
+                39, 1, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 4, 2, 3, 12, 26,
+                38, 27, 1, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 5, 3, 2, 11, 26,
+                39, 1, 27, 0, 0, 0, 0, 0, 40, 3, 42, 0, 0, 0, 0, 4, 2, 3, 12, 26,
+                0, 27, 44, 0, 0, 0, 0, 1, 41, 2, 43, 1, 0, 14, 7, 6, 3, 2, 11, 26,
+                0, 0, 0, 0, 0, 0, 0, 27, 2, 3, 3, 27, 0, 4, 2, 3, 2, 3, 12, 26,
+                38, 0, 1, 0, 0, 0, 0, 0, 2, 2, 3, 0, 0, 5, 3, 2, 3, 2, 11, 26,
+                39, 1, 27, 0, 0, 0, 0, 14, 42, 3, 42, 8, 7, 6, 2, 3, 2, 3, 12, 26,
+                38, 27, 0, 0, 0, 0, 14, 6, 43, 2, 43, 2, 3, 2, 3, 2, 3, 46, 45, 26,
+                39, 0, 0, 0, 0, 0, 5, 2, 3, 3, 2, 3, 2, 46, 9, 10, 9, 45, 13, 26,
+                42, 7, 8, 7, 8, 7, 6, 3, 3, 2, 3, 2, 46, 45, 13, 26, 26, 26, 26, 26,
+                43, 2, 3, 2, 3, 2, 3, 46, 42, 3, 42, 10, 45, 26, 26, 26, 26, 26, 26, 26,
+                42, 10, 9, 10, 9, 10, 9, 45, 43, 2, 43, 26, 26, 26, 26, 26, 26, 26, 26, 0,
+                43, 26, 26, 26, 13, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0,
+                26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0};
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->last_char_id != 2)
+            {
+                character vee(bn::sprite_items::aaron_walking_spring, current_room, 3, 2, false);
+                vee.entity.set_position(1 * 32, 1 * 32);
+                vee.entity.set_camera(camera);
+                vee.role = 0;
+                vee.follow_id = 2;
+                vee.identity = 2;
+                chari.push_back(vee);
+            }
+
+            if (so->last_char_id != 4)
+            {
+                character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                vee.entity.set_position(2 * 32, 1 * 32);
+                vee.entity.set_camera(camera);
+                vee.role = 0;
+                vee.follow_id = 0;
+                vee.identity = 4;
+                chari.push_back(vee);
+            }
+
+            if (so->last_char_id != 5)
+            {
+                character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
+                eleanor.entity.set_position(3 * 32, 1 * 32);
+                eleanor.entity.set_camera(camera);
+                eleanor.role = 0;
+                eleanor.follow_id = 1;
+                eleanor.identity = 5;
+                chari.push_back(eleanor);
+            }
+        }
 
         primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
 
@@ -1139,34 +1297,164 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     case 6:
     {
-        bn::music_items_info::span[17].first.play(bn::fixed(80) / 100);
+        if (so->checkpoint < 12) {
+            bn::music_items_info::span[17].first.play(bn::fixed(80) / 100);
+        }
         current_room.init(9, 11, 7, 3);
-        std::vector<int> local{
-            00, 0, 0, 0, 0, 0, 0, 12, 0,
-            00, 0, 0, 0, 0, 0, 0, 12, 0,
-            00, 0, 0, 0, 0, 0, 1, 12, 1,
-            00, 0, 0, 0, 0, 0, 1, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 2, 4, 8, 9, 11, 0, 0, 1,
-            1, 3, 5, 0, 10, 0, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 6, 0, 0, 0, 13, 14, 0, 1,
-            1, 7, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1};
-        std::vector<int> local_col{
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 1, 1, 1,
-            0, 0, 0, 0, 0, 0, 1, 1, 1,
-            0, 0, 0, 0, 0, 0, 1, 19, 1,
-            1, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 1, 1, 1, 0, 0, 1,
-            1, 1, 28, 0, 29, 0, 0, 0, 1,
-            1, 0, 0, 0, 30, 0, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 1, 0, 1,
-            1, 1, 27, 0, 30, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1};
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
+
+        if (so->checkpoint == 12) {
+            std::vector<int> local{
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 1, 12, 1,
+                00, 0, 0, 0, 0, 0, 1, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 2, 4, 8, 9, 11, 0, 0, 1,
+                1, 3, 5, 0, 10, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 6, 0, 0, 0, 13, 14, 0, 1,
+                1, 7, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            std::vector<int> local_col{
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 1, 0, 1, 1, 1, 0, 0, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 30, 0, 0, 0, 1,
+                1, 1, 0, 0, 0, 1, 1, 0, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if  (so->last_char_id != 0) {
+                character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
+                maple.entity.set_position(7 * 32, 4 * 32);
+                maple.entity.set_camera(camera);
+                maple.role = 0;
+                maple.identity = 0;
+                maple.follow_id = -1;
+                chari.push_back(maple);
+            }
+
+            if (so->last_char_id != 1) {
+                character enoki(bn::sprite_items::enoki_walking_oo, current_room, 6, 2, false);
+                enoki.entity.set_position(7 * 32, 3 * 32);
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 1;
+                enoki.follow_id = -1;
+                chari.push_back(enoki);
+            }
+        }
+        else if (so->checkpoint == 13) {
+            std::vector<int> local{
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 1, 12, 1,
+                00, 0, 0, 0, 0, 0, 1, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 2, 4, 8, 9, 11, 0, 0, 1,
+                1, 3, 5, 0, 10, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 6, 0, 0, 0, 13, 14, 0, 1,
+                1, 7, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            std::vector<int> local_col{
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 1, 0, 1, 1, 1, 0, 0, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 1,
+                1, 0, 0, 0, 30, 0, 0, 0, 1,
+                1, 1, 0, 0, 0, 1, 1, 0, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->last_char_id != 0) {
+                character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
+                maple.entity.set_position(4 * 32, 7 * 32);
+                maple.entity.set_camera(camera);
+                maple.role = 0;
+                maple.identity = 0;
+                maple.follow_id = chari.size() - 1;
+                chari.push_back(maple);
+            }
+
+            if (so->last_char_id != 1) {
+                character enoki(bn::sprite_items::enoki_walking_oo, current_room, 6, 2, false);
+                enoki.entity.set_position(4 * 32, 8 * 32);
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 1;
+                enoki.follow_id = chari.size() - 1;
+                chari.push_back(enoki);
+            }
+
+            if (so->last_char_id != 2) {
+                character maple(bn::sprite_items::aaron_walking_spring, current_room, 5, 1, false);
+                maple.entity.set_position(7 * 32, 4 * 32);
+                maple.entity.set_camera(camera);
+                maple.role = 0;
+                maple.identity = 2;
+                maple.follow_id = chari.size() - 1;
+                chari.push_back(maple);
+            }
+
+            if (so->last_char_id != 4) {
+                character enoki(bn::sprite_items::vee_walking_spring, current_room, 6, 2, false);
+                enoki.entity.set_position(7 * 32, 5 * 32);
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 4;
+                enoki.follow_id = chari.size() - 1;
+                chari.push_back(enoki);
+            }
+
+            if (so->last_char_id != 5) {
+                character enoki(bn::sprite_items::eleanor_walking_spring, current_room, 6, 2, false);
+                enoki.entity.set_position(7 * 32, 6 * 32);
+                enoki.entity.set_camera(camera);
+                enoki.role = 0;
+                enoki.identity = 5;
+                enoki.follow_id = chari.size() - 1;
+                chari.push_back(enoki);
+            }
+        } else {
+            std::vector<int> local{
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 0, 12, 0,
+                00, 0, 0, 0, 0, 0, 1, 12, 1,
+                00, 0, 0, 0, 0, 0, 1, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 2, 4, 8, 9, 11, 0, 0, 1,
+                1, 3, 5, 0, 10, 0, 0, 0, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 1,
+                1, 6, 0, 0, 0, 13, 14, 0, 1,
+                1, 7, 0, 0, 0, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            std::vector<int> local_col{
+                0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 1, 19, 1,
+                1, 1, 1, 1, 1, 1, 1, 0, 1,
+                1, 1, 0, 1, 1, 1, 0, 0, 1,
+                1, 1, 28, 0, 29, 0, 0, 0, 1,
+                1, 0, 0, 0, 30, 0, 0, 0, 1,
+                1, 1, 0, 0, 0, 1, 1, 0, 1,
+                1, 1, 27, 0, 30, 0, 0, 0, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+        }
 
         if (so->last_char_id != 3)
         {
@@ -1186,7 +1474,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     // Additional housing area
     case 8:
     {
-        bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
+        if (so->checkpoint < 12) {
+            bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
+        } else {
+            bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
+        }
         current_room.init(20, 20, 9, 17);
 
         if (so->checkpoint < 10) {
@@ -1279,6 +1571,131 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27};
             deep_copy(local, current_room.local_tileset);
             deep_copy(local_col, current_room.collisions);
+        } else if (so->checkpoint == 12) {
+            std::vector<int> local_col{
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 43, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 0, 0, 1, 48, 0, 0, 0, 0, 0, 1, 1, 1, 1, 44, 0, 1, 1,
+                1, 1, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 46, 0, 0, 71, 0, 0, 0, 0, 0, 0, 71, 0, 0, 47, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+            std::vector<int> local{
+                35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 0, 35, 35, 35, 35, 35, 35, 39, 27, 27,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 8, 8,
+                27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 14, 8, 7, 7, 7, 7, 7, 6, 42, 1,
+                1, 27, 0, 0, 29, 29, 48, 29, 29, 0, 4, 0, 0, 0, 0, 0, 0, 4, 1, 27,
+                27, 1, 0, 0, 30, 30, 49, 30, 30, 0, 5, 0, 42, 42, 42, 42, 0, 4, 27, 1,
+                1, 27, 0, 1, 31, 31, 50, 31, 31, 0, 4, 0, 43, 10, 9, 43, 0, 4, 1, 27,
+                27, 1, 0, 27, 32, 32, 51, 32, 32, 0, 5, 0, 42, 26, 26, 42, 44, 4, 27, 1,
+                1, 27, 0, 0, 0, 44, 0, 0, 0, 0, 4, 0, 43, 26, 26, 43, 0, 4, 1, 27,
+                27, 1, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 43, 43, 43, 43, 0, 4, 27, 1,
+                1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 4, 1, 27,
+                27, 1, 0, 0, 0, 0, 0, 0, 0, 0, 42, 7, 7, 7, 7, 7, 7, 6, 27, 1,
+                1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 27,
+                27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 0, 28, 28, 33, 28, 28, 0, 0, 27, 1,
+                1, 27, 0, 0, 29, 29, 48, 29, 29, 0, 0, 29, 29, 48, 29, 29, 0, 0, 1, 27,
+                27, 1, 0, 1, 30, 30, 49, 30, 30, 0, 0, 30, 30, 49, 30, 30, 1, 0, 27, 1,
+                1, 27, 0, 27, 31, 31, 50, 31, 31, 0, 0, 31, 31, 50, 31, 31, 27, 0, 1, 27,
+                27, 1, 0, 44, 32, 32, 51, 32, 32, 0, 0, 32, 32, 51, 32, 32, 44, 0, 27, 1,
+                1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 27,
+                27, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 27, 1,
+                1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+        } else if (so->checkpoint == 13) {
+            std::vector<int> local_col{
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 43, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 44, 0, 1, 1,
+                1, 1, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                1, 1, 0, 46, 0, 0, 71, 0, 0, 0, 0, 0, 0, 71, 0, 0, 47, 0, 1, 1,
+                1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
+                1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+            std::vector<int> local{
+                35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 0, 35, 35, 35, 35, 35, 35, 39, 27, 27,
+                1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 8, 8,
+                27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 14, 8, 7, 7, 7, 7, 7, 6, 42, 1,
+                1, 27, 0, 0, 29, 29, 48, 29, 29, 0, 4, 0, 0, 0, 0, 0, 0, 4, 1, 27,
+                27, 1, 0, 0, 30, 30, 49, 30, 30, 0, 5, 0, 42, 42, 42, 42, 0, 4, 27, 1,
+                1, 27, 0, 1, 31, 31, 50, 31, 31, 0, 4, 0, 43, 10, 9, 43, 0, 4, 1, 27,
+                27, 1, 0, 27, 32, 32, 51, 32, 32, 0, 5, 0, 42, 26, 26, 42, 44, 4, 27, 1,
+                1, 27, 0, 0, 0, 44, 0, 0, 0, 0, 4, 0, 43, 26, 26, 43, 0, 4, 1, 27,
+                27, 1, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 43, 43, 43, 43, 0, 4, 27, 1,
+                1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 4, 1, 27,
+                27, 1, 0, 0, 0, 0, 0, 0, 0, 0, 42, 7, 7, 7, 7, 7, 7, 6, 27, 1,
+                1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 27,
+                27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 0, 28, 28, 33, 28, 28, 0, 0, 27, 1,
+                1, 27, 0, 0, 29, 29, 48, 29, 29, 0, 0, 29, 29, 48, 29, 29, 0, 0, 1, 27,
+                27, 1, 0, 1, 30, 30, 49, 30, 30, 0, 0, 30, 30, 49, 30, 30, 1, 0, 27, 1,
+                1, 27, 0, 27, 31, 31, 50, 31, 31, 0, 0, 31, 31, 50, 31, 31, 27, 0, 1, 27,
+                27, 1, 0, 44, 32, 32, 51, 32, 32, 0, 0, 32, 32, 51, 32, 32, 44, 0, 27, 1,
+                1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 27,
+                27, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 27, 1,
+                1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27};
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+        }
+
+        if (so->checkpoint == 13) {
+            if (so->last_char_id != 2)
+            {
+                character aaron(bn::sprite_items::aaron_walking_spring, current_room, 3, 2, false);
+                aaron.entity.set_position(6 * 32, 7 * 32);
+                aaron.entity.set_camera(camera);
+                aaron.role = 0;
+                aaron.follow_id = 2;
+                aaron.identity = 2;
+                chari.push_back(aaron);
+            }
+
+            if (so->last_char_id != 4)
+            {
+                character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                vee.entity.set_position(7 * 32, 7 * 32);
+                vee.entity.set_camera(camera);
+                vee.role = 0;
+                vee.follow_id = 0;
+                vee.identity = 4;
+                chari.push_back(vee);
+            }
+
+            if (so->last_char_id != 5)
+            {
+                character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
+                eleanor.entity.set_position(8 * 32, 7 * 32);
+                eleanor.entity.set_camera(camera);
+                eleanor.role = 0;
+                eleanor.follow_id = 1;
+                eleanor.identity = 5;
+                chari.push_back(eleanor);
+            }
         }
 
         primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
@@ -1290,50 +1707,121 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     case 9:
     {
-        bn::music_items_info::span[26].first.play(bn::fixed(80) / 100);
+        if (so->checkpoint < 12) {
+            bn::music_items_info::span[26].first.play(bn::fixed(80) / 100);
+        }
         chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
-        current_room.init(7, 7, 3, 5);
-        std::vector<int> local_col{
-            1, 1, 1, 1, 1, 1, 1,
-            1, 1, 1, 57, 0, 1, 1,
-            1, 1, 1, 0, 0, 1, 1,
-            1, 1, 1, 0, 0, 0, 1,
-            1, 1, 1, 55, 0, 0, 1,
-            1, 1, 1, 49, 1, 1, 1,
-            1, 1, 1, 1, 1, 1, 1};
+        if (so->checkpoint < 12) {
+            current_room.init(7, 7, 3, 5);
+            std::vector<int> local_col{
+                1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 57, 0, 1, 1,
+                1, 1, 1, 0, 0, 1, 1,
+                1, 1, 1, 0, 0, 0, 1,
+                1, 1, 1, 55, 0, 0, 1,
+                1, 1, 1, 49, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1};
 
-        std::vector<int> local{
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0};
-        ;
+            std::vector<int> local{
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0};
 
-        deep_copy(local, current_room.local_tileset);
-        deep_copy(local_col, current_room.collisions);
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
 
-        if (so->last_char_id != 4)
-        {
-            character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
-            vee.entity.set_position(3 * 32, 2 * 32);
-            vee.entity.set_camera(camera);
-            vee.role = 2;
-            vee.identity = 4;
-            chari.push_back(vee);
-        }
+            if (so->last_char_id != 4)
+            {
+                character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                vee.entity.set_position(3 * 32, 2 * 32);
+                vee.entity.set_camera(camera);
+                vee.role = 2;
+                vee.identity = 4;
+                chari.push_back(vee);
+            }
 
-        if (so->last_char_id != 5)
-        {
-            character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
-            eleanor.entity.set_position(4 * 32, 4 * 32);
-            eleanor.entity.set_camera(camera);
-            eleanor.role = 2;
-            eleanor.identity = 5;
-            chari.push_back(eleanor);
+            if (so->last_char_id != 5)
+            {
+                character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
+                eleanor.entity.set_position(4 * 32, 4 * 32);
+                eleanor.entity.set_camera(camera);
+                eleanor.role = 2;
+                eleanor.identity = 5;
+                chari.push_back(eleanor);
+            }
+        } else {
+            current_room.init(7, 7, 3, 5);
+            std::vector<int> local_col{
+                1, 1, 1, 1, 1, 1, 1,
+                1, 1, 1, 0, 0, 1, 1,
+                1, 1, 1, 0, 0, 1, 1,
+                1, 1, 1, 0, 0, 0, 1,
+                1, 1, 1, 55, 0, 0, 1,
+                1, 1, 1, 49, 1, 1, 1,
+                1, 1, 1, 1, 1, 1, 1};
+
+            std::vector<int> local{
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0};
+
+            deep_copy(local, current_room.local_tileset);
+            deep_copy(local_col, current_room.collisions);
+
+            if (so->checkpoint < 12) {
+                if (so->last_char_id != 4)
+                {
+                    character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                    vee.entity.set_position(3 * 32, 2 * 32);
+                    vee.entity.set_camera(camera);
+                    vee.role = 2;
+                    vee.follow_id = 0;
+                    vee.identity = 4;
+                    chari.push_back(vee);
+                }
+
+                if (so->last_char_id != 5)
+                {
+                    character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
+                    eleanor.entity.set_position(4 * 32, 4 * 32);
+                    eleanor.entity.set_camera(camera);
+                    eleanor.role = 2;
+                    eleanor.follow_id = 1;
+                    eleanor.identity = 5;
+                    chari.push_back(eleanor);
+                }
+            } else {
+                if (so->last_char_id != 4)
+                {
+                    character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                    vee.entity.set_position(3 * 32, 2 * 32);
+                    vee.entity.set_camera(camera);
+                    vee.role = 0;
+                    vee.follow_id = 0;
+                    vee.identity = 4;
+                    chari.push_back(vee);
+                }
+
+                if (so->last_char_id != 5)
+                {
+                    character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
+                    eleanor.entity.set_position(4 * 32, 2 * 32);
+                    eleanor.entity.set_camera(camera);
+                    eleanor.role = 0;
+                    eleanor.follow_id = 1;
+                    eleanor.identity = 5;
+                    chari.push_back(eleanor);
+                }
+            }
         }
 
         primary_bg = bn::regular_bg_items::bg_landry_cottage.create_bg(0, 0);
@@ -1596,8 +2084,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     };
 
-    BN_LOG("Checkpoint B");
-
     // A header
     bn::sprite_ptr a_notif = bn::sprite_items::a_button_2.create_sprite(0, 0);
     a_notif.set_camera(camera);
@@ -1648,10 +2134,12 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
     bn::blending::set_transparency_alpha(bn::fixed(1));
 
-    BN_LOG("Checkpoint C");
-
     while (true)
     {
+        // set camera follow point
+        follow_x = chari.at(follow_id).entity.x().integer();
+        follow_y = chari.at(follow_id).entity.y().integer();
+
         // Pause
         if (bn::keypad::start_pressed())
         {
@@ -2355,11 +2843,20 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 };
                 case 20:
                 {
-                    dt.spawn_x = 7;
-                    dt.spawn_y = 3;
-                    dt.world_index = 6;
-                    bn::sound_items::door.play();
-                    return dt;
+                    if (so->checkpoint < 12 || chari.at(follow_id).identity != 2 || so->checkpoint == 13) {
+                        dt.spawn_x = 7;
+                        dt.spawn_y = 3;
+                        dt.world_index = 6;
+                        bn::sound_items::door.play();
+                        return dt;
+                    } else {
+                        line lc[32] = {
+                            {true, true, 00, "                                                                  AARON                            I need to check on the others."},
+                            {true, true, 00, "COM: Endscene"},
+                        };
+                        dialogue_page_lite(lc);
+                        break;
+                    }
                     break;
                 };
                 case 21:
@@ -3274,9 +3771,127 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             break;
                         }
                     }
-                    else
+                    else if (so->checkpoint == 12)
                     {
+                        so->checkpoint = 13;
+                        line lc[32] = {
+                            {true, true, 00, "                                                                  ENOKI                            Salut? Scout, you down here?    "},
+                            {true, true, 00, "                                                                  SCOUT                            Yeah! We're here! Where's        Aaron?"},
+                            {true, true, 00, "                                                                  ENOKI                            He's out trying to check on      the others."},
+                            {true, true, 00, "                                                                  SCOUT                            Thank goodness. Hey, Maple-      are you feeling alright? You    "},
+                            {true, true, 00, "                                                                  SCOUT                            look really tired."},
+                            {true, true, 00, "                                                                  MAPLE                            You shut up about me being       tired, I've had ENOUGH of that  "},
+                            {true, true, 00, "                                                                  MAPLE                            this morning."},
+                            {true, true, 00, "                                                                  SCOUT                            Oh- Okay, sure."},
+                            {true, true, 00, "                                                                  SCOUT                            Hey Enoki, what's it look        like up there?"},
+                            {true, true, 00, "                                                                  ENOKI                            There's all these, like...       robot things all over the       "},
+                            {true, true, 00, "                                                                  ENOKI                            island. They look like- oh no."},
+                            {true, true, 00, "                                                                  SCOUT                            What do mean 'oh no'?"},
+                            {true, true, 00, "                                                                  ENOKI                            Remember those fly swatter       bat robot things you talked     "},
+                            {true, true, 00, "                                                                  ENOKI                            about? The Batula, right?"},
+                            {true, true, 00, "                                                                  SCOUT                            I actually think it was          called something a little       "},
+                            {true, true, 00, "                                                                  SCOUT                            different but that sounds way    more natural."},
+                            {true, true, 00, "                                                                  ENOKI                            He's got those, and they're      all over the place."},
+                            {true, true, 00, "                                                                  SCOUT                            I... I can't believe it. That    dag nab gator stole my idea,    "},
+                            {true, true, 00, "                                                                  SCOUT                            didn't he?"},
+                            {true, true, 00, "                                                                  ENOKI                            I'm afraid so."},
+                            {true, true, 00, "                                                                  SCOUT                            I... I could sue for this."},
+                            {true, true, 00, "                                                                  ENOKI                            Don't tell Cesar. Please.        He'll be beginning to file      "},
+                            {true, true, 00, "                                                                  ENOKI                            charges and represent you in     court, and he needs to avoid    "},
+                            {true, true, 00, "                                                                  ENOKI                            those if he knows what's good    for him."},
+                            {true, true, 00, "COM: Endscene"}};
+                        dialogue_page_lite(lc);
+
+                        character aaron(bn::sprite_items::aaron_walking_spring, current_room, 3, 2, false);
+                        aaron.entity.set_position(7 * 32, 3 * 32);
+                        aaron.entity.set_camera(camera);
+                        aaron.role = 0;
+                        aaron.follow_id = chari.size() - 1;
+                        aaron.identity = 2;
+                        chari.push_back(aaron);
+
+                        character vee(bn::sprite_items::vee_walking_spring, current_room, 3, 2, false);
+                        vee.entity.set_position(7 * 32, 3 * 32);
+                        vee.entity.set_camera(camera);
+                        vee.role = 0;
+                        vee.follow_id = chari.size() - 1;
+                        vee.identity = 4;
+                        chari.push_back(vee);
+
+                        character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, 4, 4, false);
+                        eleanor.entity.set_position(7 * 32, 3 * 32);
+                        eleanor.entity.set_camera(camera);
+                        eleanor.role = 0;
+                        eleanor.follow_id = chari.size() - 1;
+                        eleanor.identity = 5;
+                        chari.push_back(eleanor);
+                        break;
                     }
+                    else if (so->checkpoint == 13) {
+                        if (true) {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  AARON                            What the heck is going           on outside?"},
+                                {true, true, 00, "                                                                  SCOUT                            It's Rufus. I think he ate       something weird."},
+                                {true, true, 00, "                                                                  ENOKI                            Hehe, I get like that after      some of Guy's cooking, too.     "},
+                                {true, true, 00, "                                                                  SCOUT                            No, I'm being serious. It has to do with my research."},
+                                {true, true, 00, "                                                                  AARON                            Oh, so we finally get to know    what the mysterious bunker      "},
+                                {true, true, 00, "                                                                  AARON                            scientist has been doing for     the past few months?"},
+                                {true, true, 00, "                                                                  SCOUT                            I'm a dirt scientist, but I'm    also something else..."},
+                                {true, true, 00, "                                                                  SCOUT                            I'm a plant scientist."},
+                                {true, true, 00, "                                                                  ENOKI                            Say it ain't so!"},
+                                {true, true, 00, "                                                                  OLIVIER                          And you didn't tell me?"},
+                                {true, true, 00, "                                                                  SCOUT                            No, it was confidential."},
+                                {true, true, 00, "                                                                  SCOUT                            See, there's this... plant. It   grows natively to these"},
+                                {true, true, 00, "                                                                  SCOUT                            islands, and many people         believe it to be magic. It      "},
+                                {true, true, 00, "                                                                  SCOUT                            makes you see things."},
+                                {true, true, 00, "                                                                  ENOKI                            Like mushrooms?"},
+                                {true, true, 00, "                                                                  SCOUT                            Mushrooms make everyone see      different things. This flower   "},
+                                {true, true, 00, "                                                                  SCOUT                            makes everyone see the SAME      thing. That's why we're"},
+                                {true, true, 00, "                                                                  SCOUT                            studying it. It's not just a     trip, there's something going   "},
+                                {true, true, 00, "                                                                  SCOUT                            on."},
+                                {true, true, 00, "                                                                  SCOUT                            Everyone who takes one acts      differently, but it's not       "},
+                                {true, true, 00, "                                                                  SCOUT                            because of a chemical            imbalance. It's as if what they "},
+                                {true, true, 00, "                                                                  SCOUT                            see is so troubling, so          life-shattering, that they're   "},
+                                {true, true, 00, "                                                                  SCOUT                            different people on the other    end."},
+                                {true, true, 00, "                                                                  ELEANOR                          What do they see, then?"},
+                                {true, true, 00, "                                                                  SCOUT                            Nobody knows. They never tell    anyone anything."},
+                                {true, true, 00, "                                                                  SCOUT                            Everyone who takes it gets a     small blue ring around their    "},
+                                {true, true, 00, "                                                                  SCOUT                            eyes. They don't seem to last    forever, but it's how you can   "},
+                                {true, true, 00, "                                                                  SCOUT                            tell. I was looking at that      footage of Rufus, and sure      "},
+                                {true, true, 00, "                                                                  SCOUT                            enough... blue ring."},
+                                {true, true, 00, "                                                                  AARON                            And so he's decided to become    a supervillain or something?    "},
+                                {true, true, 00, "                                                                  SCOUT                            I don't know. Rufus isn't        very.. big, you know? So maybe- "},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                        }
+
+                        if (true) {
+                            bn::sound_items::fireblast.play();
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  SCOUT                            That doesn't sound good.        "},
+                                {true, true, 00, "                                                                  AARON                            I've got my axe."},
+                                {true, true, 00, "                                                                  SCOUT                            Hey, I tell you guys what.       You know that bunker maker that "},
+                                {true, true, 00, "                                                                  SCOUT                            I have?"},
+                                {true, true, 00, "                                                                  AARON                            Yeah...?"},
+                                {true, true, 00, "                                                                  SCOUT                            I'll tell y'all what. Why        don't we bunker our way away    "},
+                                {true, true, 00, "                                                                  SCOUT                            from the island? I was already   planning on making a tunnel to  "},
+                                {true, true, 00, "                                                                  SCOUT                            shore."},
+                                {true, true, 00, "                                                                  ELEANOR                          Is that safe?"},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                        }
+
+                        if (true) {
+                            bn::sound_items::pc_whir.play();
+
+                            line lc[3] = {
+                                {true, true, 00, "                                                                  SCOUT                            Actually let's just go."},
+                                {true, true, 00, "                                                                  ENOKI                            Allons-zi?"},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                        }
+                        break;
+                    };
                 };
 
                 case 31:
@@ -3367,10 +3982,18 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 };
                 case 42:
                 {
-                    dt.spawn_x = 18;
-                    dt.spawn_y = 1;
-                    dt.world_index = 8;
-                    return dt;
+                    if (so->checkpoint < 12 || chari.at(follow_id).identity == 2) {
+                        dt.spawn_x = 18;
+                        dt.spawn_y = 1;
+                        dt.world_index = 8;
+                        return dt;
+                    } else {
+                        line lc[5] = {
+                            {true, true, 00, "                                                                  MAPLE                            Probably should go to Scout's."},
+                            {true, true, 00, "COM: Endscene"}};
+                        dialogue_page_lite(lc);
+                        break;
+                    }
                 };
                 case 43:
                 {
@@ -3443,6 +4066,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 };
                 case 49:
                 {
+                    if (so->checkpoint == 12) {
+                        so->checkpoint = 13;
+                    }
+
                     dt.spawn_x = 6;
                     dt.spawn_y = 7;
                     dt.world_index = 8;
@@ -3865,8 +4492,33 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         }
                         }
                         break;
+                    } else if (so->checkpoint < 14) {
+
+                        if (true) {
+                            line lc[32] = {
+                                {true, true, 00, "                                                                  ELEANOR                          What's going on outside?"},
+                                {true, true, 00, "                                                                  AARON                            I don't know, but follow me,     we're going to wait this out in "},
+                                {true, true, 00, "                                                                  AARON                            Scout's bunker until we can get  things sorted."},
+                                {true, true, 00, "                                                                  AARON                            Where's Diana?"},
+                                {true, true, 00, "                                                                  OLIVIER                          She's out boating with Guy today and won't be back for hours."},
+                                {true, true, 00, "                                                                  AARON                            Thank goodness. Follow me, I'll  get us out of here."},
+                                {true, true, 00, "COM: Endscene"}};
+                            dialogue_page_lite(lc);
+                        }
+
+                        if (so->checkpoint == 12) {
+                            so->checkpoint = 13;
+                        }
+
+                        dt.spawn_x = 6;
+                        dt.spawn_y = 7;
+                        dt.world_index = 8;
+                        return dt;
+                        break;
                     }
-                }
+
+                    break;
+                };
 
                 // Eleanor's room
                 case 57:
@@ -4555,6 +5207,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     break;
                 }
 
+                case 71: {
+                    line lc[5] = {
+                        {true, true, 00, "                                                                  AARON                            Huh.. No one seems to be home."},
+                        {true, true, 00, "COM: Endscene"}};
+                    dialogue_page_lite(lc);
+                    break;
+                };
+
                 }
             }
         }
@@ -4618,14 +5278,37 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             bn::sound_items::cnaut.play();
             bn::blending::set_intensity_alpha(1);
             int new_chari = (follow_id + 1) % chari.size();
-            int old_role = chari.at(new_chari).role;
-            chari.at(new_chari).role = 1;
-            chari.at(new_chari).entity.set_blending_enabled(true);
-            chari.at(follow_id).role = old_role;
+
+            // If there's a scripted character, use that one
+            /*
+            for (int t = 0; t < chari.size(); t++) {
+                if (chari.at(t).identity == chari.at(follow_id).follow_id) {
+                    new_chari = t;
+                }
+            }
+            */
+            
             chari.at(follow_id).entity.set_blending_enabled(false);
+            for (int t = 0; t < chari.size(); t++) {
+                if (t != new_chari) {
+                    if (chari.at(t).can_follow) {
+                        chari.at(t).role = 0;
+                    } else {
+                        chari.at(t).role = 2;
+                    }
+                }
+            }
+
+            chari.at(new_chari).entity.set_blending_enabled(true);
+            chari.at(new_chari).role = 1;
 
             so->last_char_id = chari.at(new_chari).identity;
         }
+
+        for (int t = 0; t < chari.size(); t++) {
+            BN_LOG(t, " is actually ", chari.at(t).identity, " and will be following ", chari.at(t).follow_id);
+        }
+        BN_LOG("-");
 
         // Character operations
         for (int t = 0; t < chari.size(); t++)
@@ -4636,13 +5319,24 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             if (chari.at(t).role == 1)
             {
                 chari.at(t).update();
-                follow_x = chari.at(t).entity.x().integer();
-                follow_y = chari.at(t).entity.y().integer();
                 follow_id = t;
             }
-            else
+            else if (chari.at(t).role == 0)
             {
-                chari.at(t).update(follow_x, follow_y);
+                int my_follow_at = chari.at(t).follow_id;
+                
+                if (my_follow_at == -1) {
+                    my_follow_at = (t + 1) % chari.size();
+                }
+
+                bool is_close = false;
+                for (int tt = 0; tt < t; tt++) {
+                    if (abs(chari.at(tt).entity.x().integer() - chari.at(t).entity.x().integer()) + abs(chari.at(tt).entity.y().integer() - chari.at(t).entity.y().integer()) < 24) {
+                        is_close = true;
+                    }
+                }
+
+                if (!is_close) chari.at(t).update(chari.at(my_follow_at).entity.x().integer(), chari.at(my_follow_at).entity.y().integer());
             }
 
             // Z-Order followers

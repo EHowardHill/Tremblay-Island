@@ -89,7 +89,6 @@
 #include "bn_regular_bg_items_s0208.h"
 #include "bn_regular_bg_items_s0301.h"
 #include "bn_regular_bg_items_s0302.h"
-
 #include "bn_regular_bg_items_s0401.h"
 #include "bn_regular_bg_items_s0402.h"
 #include "bn_regular_bg_items_s0403.h"
@@ -97,9 +96,11 @@
 #include "bn_regular_bg_items_s0405.h"
 #include "bn_regular_bg_items_s0406.h"
 #include "bn_regular_bg_items_s0407.h"
-
 #include "bn_regular_bg_items_s0501.h"
 #include "bn_regular_bg_items_s0502.h"
+#include "bn_regular_bg_items_s0601.h"
+#include "bn_regular_bg_items_s0602.h"
+#include "bn_regular_bg_items_s0603.h"
 
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
@@ -410,6 +411,15 @@ void dialogue_page(line n[32]) {
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S05:02") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0502);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S06:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0601);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S06:02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0602);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S06:03") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0603);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S_STV_01") == 0) {
             primary_bg.set_item(bn::regular_bg_items::scout_tv_01);

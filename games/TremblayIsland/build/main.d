@@ -220,6 +220,9 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0407.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0501.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0502.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0601.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0602.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0603.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_mountain.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_ocean.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_day_castle.h \
@@ -244,6 +247,7 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_spring.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki_walking_pj.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki_walking_spring.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki_walking_oo.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_aaron_sleep.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_aaron_walking_spring.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_scout_walking_spring.h \
@@ -532,6 +536,9 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0407.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0501.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0502.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0601.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0602.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0603.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_mountain.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_ocean.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_day_castle.h:
@@ -556,6 +563,7 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_spring.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki_walking_pj.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki_walking_spring.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki_walking_oo.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_aaron_sleep.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_aaron_walking_spring.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_scout_walking_spring.h:

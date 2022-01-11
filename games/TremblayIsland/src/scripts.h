@@ -650,6 +650,44 @@ int exec_dialogue(int x) {
             break;
         }
         
+        case 32: {
+            line lc[32] = {
+                {fals, fals, 0,  "S_STV_03"},  
+                {fals, fals, 0,  "                                 . . . ."},
+                {fals, fals, 0,  "BG: rain"},
+                {fals, fals, 0,  "S_STV_04"},
+                {true, true, 00, "RUFUS                            Good evening, everyone.          It seems as if my warning was    not enough for you, as no one   "},
+                {true, true, 00, "RUFUS                            has shown even the tiniest hint  of fear over the past month.     This is a dreadful mistake,      for you see, I have concocted a "},
+                {true, true, 00, "RUFUS                            plan to overwhelm your defenses  and take your island for         myself."},
+                {fals, fals, 00, "S06:01"},
+                {true, true, 00, "MAPLE                            ...Ugggh, shut up, Rufus, I'm    trying to sleep."},
+                {true, true, 00, "RUFUS                            I have developed a-"},
+                {fals, fals, 00, "S06:02"},
+                {true, true, 00, "ENOKI                            I don't remember turning the     TV on this morning, you do       that, Maple?"},
+                {true, true, 00, "MAPLE                            ..."},
+                {fals, fals, 00, "S06:03"},
+                {true, true, 00, "AARON                            Maybe I accidentally pushed      something. Should I turn it      off?"},
+                {true, true, 00, "MAPLE                            ...mmmrff... tv... turn          off... saturday..."},
+                {true, true, 00, "RUFUS                            In exactly T-Minus thirty        seconds, I will unleash my-"},
+                {fals, fals, 0,  "BG: fadeout"},
+                {true, true, 00, "AARON                            Okay, it's off now."},
+                {true, true, 00, "ENOKI                            What's he always on about?"},
+                {true, true, 00, "AARON                            I don't know, Noke."},
+                {true, true, 00, "MAPLE                            ..."},
+                {true, true, 00, "ENOKI                            Hey, what's that noise?"},
+                {true, true, 00, "AARON                            I don't like that, it sounds     like... Hey, Maple, maybe you    should get up."},
+                {true, true, 00, "MAPLE                            ...grr, I'm gonna kill that      gator..."},
+                {true, true, 00, "ENOKI                            What the- oh no.."},
+                {true, true, 00, "AARON                            Enoki, you and Maple go to       Scout's bunker, I'm going to     check on everyone out west."},
+                {true, true, 00, "MAPLE                            Excusez-moi, I can take care     of-"},
+                {true, true, 00, "AARON                            You go to the bunker and get     some more sleep."},
+                {true, true, 00, "MAPLE                            Hey, no need to be               passive-aggressive about it."},
+                {fals, fals, 0,  "COM: Endscene"}
+            };
+        dialogue_page(lc);
+        return 0;
+        }
+
         default: {
             return 1;
             break;
