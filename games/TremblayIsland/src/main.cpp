@@ -96,7 +96,6 @@
 #include "bn_sprite_items_tree_stump.h"
 #include "bn_regular_bg_items_underground_bg.h"
 #include "bn_sprite_items_underground_tiles.h"
-#include "bn_sprite_items_cave_bat.h"
 
 #include "bn_regular_bg_items_pc_background.h"
 #include "bn_regular_bg_items_pc_scout.h"
@@ -1152,104 +1151,6 @@ dungeon_return rabbit_game()
     dungeon_return dt(1, 10, 4);
     return dt;
 }
-
-class creepy_crawly
-{
-public:
-    bn::sprite_ptr sprite = bn::sprite_items::cave_bat.create_sprite(0, 0);
-    bn::sprite_animate_action<4> sprite_anim = bn::create_sprite_animate_action_forever(sprite, 1, bn::sprite_items::cave_bat.tiles_item(), 0, 1, 0, 1);
-    bool moving = true;
-    bool carry = false;
-    int spend = 0;
-    int dir = 0;
-    int x_vector = 1;
-    int y_vector = 1;
-    int to_x = 0;
-    int to_y = 0;
-    int init_y = 0;
-    bool enabled = true;
-    room *current_room;
-    creepy_crawly() {}
-
-    void update()
-    {
-        int flap = std::rand() % 2;
-        if (flap == 0) {
-            sprite_anim.update();
-            sprite = sprite_anim.sprite();
-        }
-
-        int mx = sprite.x().integer() / 32;
-        int my = sprite.y().integer() / 32;
-        int mz = mx + (my * current_room->width);
-
-        if (mx == to_x && my == to_y)
-        {
-            to_x = 0;
-            to_y = 0;
-        }
-
-        if (to_x == 0 && to_y == 0)
-        {
-            int dir = std::rand() % 4;
-            switch (dir)
-            {
-            case 0:
-                if (current_room->local_tileset[mz + 1] == 0)
-                {
-                    to_x = mx + 1;
-                    to_y = my;
-                }
-                break;
-            case 1:
-                if (current_room->local_tileset[mz + current_room->width] == 0)
-                {
-                    to_y = my + 1;
-                    to_x = mx;
-                }
-                break;
-            case 2:
-                if (current_room->local_tileset[mz - 1] == 0)
-                {
-                    to_x = mx - 1;
-                    to_y = my;
-                }
-                break;
-            case 3:
-                if (current_room->local_tileset[mz - current_room->width] == 0)
-                {
-                    to_y = my - 1;
-                    to_x = mx;
-                }
-                break;
-            }
-        }
-        else
-        {
-            int vector_x = 0;
-            if (mx < to_x)
-            {
-                vector_x++;
-            }
-            else if (mx > to_x)
-            {
-                vector_x--;
-            }
-
-            int vector_y = 0;
-            if (my < to_y)
-            {
-                vector_y++;
-            }
-            else if (my > to_y)
-            {
-                vector_y--;
-            }
-
-            sprite.set_position(sprite.x().integer() + (vector_x * 2), sprite.y().integer() + (vector_y * 2));
-        }
-    }
-};
 
 dungeon_return underground()
 {

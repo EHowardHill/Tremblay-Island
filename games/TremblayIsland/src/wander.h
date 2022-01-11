@@ -23,6 +23,7 @@
 #include "bn_sprite_items_fireball.h"
 #include "bn_sprite_items_fireplace_anim.h"
 #include "bn_sprite_items_bookshelf.h"
+#include "bn_sprite_items_cave_bat.h"
 
 // Backgrounds
 #include "bn_sprite_items_environment_stone.h"
@@ -491,6 +492,203 @@ public:
     bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 18, entity_item.tiles_item(), 00, 00, 00, 1);
 };
 
+// Bats and flying bits
+class creepy_crawly
+{
+public:
+    bn::sprite_ptr sprite = bn::sprite_items::cave_bat.create_sprite(0, 0);
+    bn::sprite_animate_action<4> sprite_anim = bn::create_sprite_animate_action_forever(sprite, 1, bn::sprite_items::cave_bat.tiles_item(), 0, 1, 0, 1);
+    bool moving = true;
+    bool carry = false;
+    int spend = 0;
+    int dir = 0;
+    int x_vector = 1;
+    int y_vector = 1;
+    int to_x = 0;
+    int to_y = 0;
+    int init_y = 0;
+    bool enabled = true;
+    room *current_room;
+    creepy_crawly() {}
+
+    void update()
+    {
+        int flap = std::rand() % 2;
+        if (flap == 0) {
+            sprite_anim.update();
+            sprite = sprite_anim.sprite();
+        }
+
+        int mx = sprite.x().integer() / 32;
+        int my = sprite.y().integer() / 32;
+        int mz = mx + (my * current_room->width);
+
+        if (mx == to_x && my == to_y)
+        {
+            to_x = 0;
+            to_y = 0;
+        }
+
+        if (to_x == 0 && to_y == 0)
+        {
+            int dir = std::rand() % 4;
+            switch (dir)
+            {
+            case 0:
+                if (current_room->local_tileset[mz + 1] == 0)
+                {
+                    to_x = mx + 1;
+                    to_y = my;
+                }
+                break;
+            case 1:
+                if (current_room->local_tileset[mz + current_room->width] == 0)
+                {
+                    to_y = my + 1;
+                    to_x = mx;
+                }
+                break;
+            case 2:
+                if (current_room->local_tileset[mz - 1] == 0)
+                {
+                    to_x = mx - 1;
+                    to_y = my;
+                }
+                break;
+            case 3:
+                if (current_room->local_tileset[mz - current_room->width] == 0)
+                {
+                    to_y = my - 1;
+                    to_x = mx;
+                }
+                break;
+            }
+        }
+        else
+        {
+            int vector_x = 0;
+            if (mx < to_x)
+            {
+                vector_x++;
+            }
+            else if (mx > to_x)
+            {
+                vector_x--;
+            }
+
+            int vector_y = 0;
+            if (my < to_y)
+            {
+                vector_y++;
+            }
+            else if (my > to_y)
+            {
+                vector_y--;
+            }
+
+            sprite.set_position(sprite.x().integer() + (vector_x * 2), sprite.y().integer() + (vector_y * 2));
+        }
+    }
+};
+
+class creepy_crawly_but_spatula
+{
+public:
+    bn::sprite_ptr sprite = bn::sprite_items::cave_bat.create_sprite(0, 0);
+    bn::sprite_animate_action<4> sprite_anim = bn::create_sprite_animate_action_forever(sprite, 1, bn::sprite_items::cave_bat.tiles_item(), 2, 3, 2, 3);
+    bool moving = true;
+    bool carry = false;
+    int spend = 0;
+    int dir = 0;
+    int x_vector = 1;
+    int y_vector = 1;
+    int to_x = 0;
+    int to_y = 0;
+    int init_y = 0;
+    bool enabled = true;
+    room *current_room;
+    creepy_crawly_but_spatula() {}
+
+    void update()
+    {
+        int flap = std::rand() % 2;
+        if (flap == 0) {
+            sprite_anim.update();
+            sprite = sprite_anim.sprite();
+        }
+
+        int mx = sprite.x().integer() / 32;
+        int my = sprite.y().integer() / 32;
+        int mz = mx + (my * current_room->width);
+
+        if (mx == to_x && my == to_y)
+        {
+            to_x = 0;
+            to_y = 0;
+        }
+
+        if (to_x == 0 && to_y == 0)
+        {
+            int dir = std::rand() % 4;
+            switch (dir)
+            {
+            case 0:
+                if (current_room->local_tileset[mz + 1] == 0)
+                {
+                    to_x = mx + 1;
+                    to_y = my;
+                }
+                break;
+            case 1:
+                if (current_room->local_tileset[mz + current_room->width] == 0)
+                {
+                    to_y = my + 1;
+                    to_x = mx;
+                }
+                break;
+            case 2:
+                if (current_room->local_tileset[mz - 1] == 0)
+                {
+                    to_x = mx - 1;
+                    to_y = my;
+                }
+                break;
+            case 3:
+                if (current_room->local_tileset[mz - current_room->width] == 0)
+                {
+                    to_y = my - 1;
+                    to_x = mx;
+                }
+                break;
+            }
+        }
+        else
+        {
+            int vector_x = 0;
+            if (mx < to_x)
+            {
+                vector_x++;
+            }
+            else if (mx > to_x)
+            {
+                vector_x--;
+            }
+
+            int vector_y = 0;
+            if (my < to_y)
+            {
+                vector_y++;
+            }
+            else if (my > to_y)
+            {
+                vector_y--;
+            }
+
+            sprite.set_position(sprite.x().integer() + (vector_x * 2), sprite.y().integer() + (vector_y * 2));
+        }
+    }
+};
+
 dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
 {
 
@@ -523,6 +721,21 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     bn::regular_bg_ptr primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
     primary_bg.set_camera(camera);
     bn::vector<anim_object, 3> anim_objects;
+    bn::vector<creepy_crawly_but_spatula, 4> bats;
+
+    if (so->checkpoint > 11) {
+        for (int t = 0; t < 4; t++) {
+            creepy_crawly_but_spatula bat;
+            bat.sprite.set_camera(camera);
+            int mx = (120 - (std::rand() % 240));
+            int my = (80 - (std::rand() % 160));
+            bat.sprite.set_position(mx, my);
+            bat.to_x = (120 - (std::rand() % 240)) / 32;
+            bat.to_y = (80 - (std::rand() % 160)) / 32;
+            bat.current_room = &current_room;
+            bats.push_back(bat);
+        }
+    }
 
     // Create initial characters
     bn::vector<character, 7> chari;
@@ -2136,6 +2349,17 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
     while (true)
     {
+        if (so->checkpoint > 11) {
+            for (int t = 0; t < 4; t++) {
+
+                bats.at(t).update();
+                if (std::rand() % 50 == 0) {
+                    bats.at(t).to_x = (chari.at(follow_id).entity.x().integer() + 120 - (std::rand() % 240)) / 32;
+                    bats.at(t).to_y = (chari.at(follow_id).entity.y().integer() + 80 - (std::rand() % 160)) / 32;
+                }
+            }
+        }
+
         // set camera follow point
         follow_x = chari.at(follow_id).entity.x().integer();
         follow_y = chari.at(follow_id).entity.y().integer();
