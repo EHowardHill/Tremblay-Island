@@ -7,11 +7,13 @@
 // Characters
 #include "bn_sprite_items_maple_walking.h"
 #include "bn_sprite_items_maple_walking_spring.h"
+#include "bn_sprite_items_maple_walking_oo.h"
 #include "bn_sprite_items_enoki_walking_pj.h"
 #include "bn_sprite_items_enoki_walking_spring.h"
 #include "bn_sprite_items_enoki_walking_oo.h"
 #include "bn_sprite_items_aaron_sleep.h"
 #include "bn_sprite_items_aaron_walking_spring.h"
+#include "bn_sprite_items_aaron_walking_oo.h"
 #include "bn_sprite_items_scout_walking_spring.h"
 #include "bn_sprite_items_vee_walking_spring.h"
 #include "bn_sprite_items_eleanor_walking_spring.h"
@@ -27,6 +29,7 @@
 
 // Backgrounds
 #include "bn_sprite_items_environment_stone.h"
+#include "bn_sprite_items_underground_tiles.h"
 #include "bn_sprite_items_trailer_home.h"
 #include "bn_sprite_items_pools_tiles.h"
 #include "bn_regular_bg_items_castle_floor.h"
@@ -150,6 +153,7 @@ public:
     bool is_walking = false;
     bool event = false;
     bool can_follow = true;
+    bool is_npc = false;
 
     int last_x, last_y;
 
@@ -690,10 +694,8 @@ public:
 };
 
 dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
+
 {
-
-    BN_LOG("Loading in : " , dt.world_index);
-
     if (so->checkpoint > 1)
     {
         if (bn::music::playing())
@@ -721,8 +723,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     bn::regular_bg_ptr primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
     primary_bg.set_camera(camera);
     bn::vector<anim_object, 3> anim_objects;
-    bn::vector<creepy_crawly_but_spatula, 4> bats;
+    //bn::vector<creepy_crawly_but_spatula, 4> bats;
 
+    /*
     if (so->checkpoint > 11) {
         for (int t = 0; t < 4; t++) {
             creepy_crawly_but_spatula bat;
@@ -736,6 +739,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             bats.push_back(bat);
         }
     }
+    */
 
     // Create initial characters
     bn::vector<character, 7> chari;
@@ -753,9 +757,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             chari.push_back(default_chari);
             break;
         }
-        else
+        else if (so->checkpoint < 12)
         {
             character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 0;
+            chari.push_back(default_chari);
+            break;
+        }
+        else
+        {
+            character default_chari(bn::sprite_items::maple_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
             default_chari.entity.set_camera(camera);
             default_chari.entity.set_position(sx, sy);
             default_chari.role = 1;
@@ -776,9 +790,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             chari.push_back(default_chari);
             break;
         }
-        else
+        else if (dt.world_index < 12)
         {
             character default_chari(bn::sprite_items::maple_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+            default_chari.entity.set_camera(camera);
+            default_chari.entity.set_position(sx, sy);
+            default_chari.role = 1;
+            default_chari.identity = 0;
+            chari.push_back(default_chari);
+            break;
+        }
+        else
+        {
+            character default_chari(bn::sprite_items::maple_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
             default_chari.entity.set_camera(camera);
             default_chari.entity.set_position(sx, sy);
             default_chari.role = 1;
@@ -809,7 +833,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             chari.push_back(default_chari);
             break;
         } else {
-            character default_chari(bn::sprite_items::enoki_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+            character default_chari(bn::sprite_items::enoki_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
             default_chari.entity.set_camera(camera);
             default_chari.entity.set_position(sx, sy);
             default_chari.role = 1;
@@ -1348,7 +1372,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             chari.at(0).can_follow = false;
 
-            character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
+            character maple(bn::sprite_items::maple_walking_oo, current_room, 5, 1, false);
             maple.entity.set_position(10 * 32, 6 * 32);
             maple.entity.set_camera(camera);
             maple.role = 0;
@@ -1414,7 +1438,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             if (so->last_char_id != 2)
             {
-                character vee(bn::sprite_items::aaron_walking_spring, current_room, 3, 2, false);
+                character vee(bn::sprite_items::aaron_walking_oo, current_room, 3, 2, false);
                 vee.entity.set_position(1 * 32, 1 * 32);
                 vee.entity.set_camera(camera);
                 vee.role = 0;
@@ -1544,7 +1568,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             deep_copy(local_col, current_room.collisions);
 
             if  (so->last_char_id != 0) {
-                character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
+                character maple(bn::sprite_items::maple_walking_oo, current_room, 5, 1, false);
                 maple.entity.set_position(7 * 32, 4 * 32);
                 maple.entity.set_camera(camera);
                 maple.role = 0;
@@ -1592,7 +1616,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             deep_copy(local_col, current_room.collisions);
 
             if (so->last_char_id != 0) {
-                character maple(bn::sprite_items::maple_walking_spring, current_room, 5, 1, false);
+                character maple(bn::sprite_items::maple_walking_oo, current_room, 5, 1, false);
                 maple.entity.set_position(4 * 32, 7 * 32);
                 maple.entity.set_camera(camera);
                 maple.role = 0;
@@ -1612,7 +1636,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             }
 
             if (so->last_char_id != 2) {
-                character maple(bn::sprite_items::aaron_walking_spring, current_room, 5, 1, false);
+                character maple(bn::sprite_items::aaron_walking_oo, current_room, 5, 1, false);
                 maple.entity.set_position(7 * 32, 4 * 32);
                 maple.entity.set_camera(camera);
                 maple.role = 0;
@@ -2349,6 +2373,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
     while (true)
     {
+        /*
         if (so->checkpoint > 11) {
             for (int t = 0; t < 4; t++) {
 
@@ -2359,6 +2384,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 }
             }
         }
+        */
 
         // set camera follow point
         follow_x = chari.at(follow_id).entity.x().integer();
@@ -4008,21 +4034,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             {true, true, 00, "                                                                  MAPLE                            this morning."},
                             {true, true, 00, "                                                                  SCOUT                            Oh- Okay, sure."},
                             {true, true, 00, "                                                                  SCOUT                            Hey Enoki, what's it look        like up there?"},
-                            {true, true, 00, "                                                                  ENOKI                            There's all these, like...       robot things all over the       "},
-                            {true, true, 00, "                                                                  ENOKI                            island. They look like- oh no."},
-                            {true, true, 00, "                                                                  SCOUT                            What do mean 'oh no'?"},
-                            {true, true, 00, "                                                                  ENOKI                            Remember those fly swatter       bat robot things you talked     "},
-                            {true, true, 00, "                                                                  ENOKI                            about? The Batula, right?"},
-                            {true, true, 00, "                                                                  SCOUT                            I actually think it was          called something a little       "},
-                            {true, true, 00, "                                                                  SCOUT                            different but that sounds way    more natural."},
-                            {true, true, 00, "                                                                  ENOKI                            He's got those, and they're      all over the place."},
-                            {true, true, 00, "                                                                  SCOUT                            I... I can't believe it. That    dag nab gator stole my idea,    "},
-                            {true, true, 00, "                                                                  SCOUT                            didn't he?"},
-                            {true, true, 00, "                                                                  ENOKI                            I'm afraid so."},
-                            {true, true, 00, "                                                                  SCOUT                            I... I could sue for this."},
-                            {true, true, 00, "                                                                  ENOKI                            Don't tell Cesar. Please.        He'll be beginning to file      "},
-                            {true, true, 00, "                                                                  ENOKI                            charges and represent you in     court, and he needs to avoid    "},
-                            {true, true, 00, "                                                                  ENOKI                            those if he knows what's good    for him."},
+                            {true, true, 00, "                                                                  ENOKI                            Fine, it's just... there's this  weird, loud noise."},
+                            {true, true, 00, "                                                                  ENOKI                            Aaron got spooked and wanted us  to be safe."},
+                            {true, true, 00, "                                                                  SCOUT                            I trust his intuition."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
 
@@ -4090,9 +4104,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         }
 
                         if (true) {
-                            bn::sound_items::fireblast.play();
+                            bn::sound_items::knock.play();
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            That doesn't sound good.        "},
+                                {true, true, 00, "                                                                  SCOUT                            Uhh.... I think something's at   the door."},
                                 {true, true, 00, "                                                                  AARON                            I've got my axe."},
                                 {true, true, 00, "                                                                  SCOUT                            Hey, I tell you guys what.       You know that bunker maker that "},
                                 {true, true, 00, "                                                                  SCOUT                            I have?"},
@@ -4106,7 +4120,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         }
 
                         if (true) {
-                            bn::sound_items::pc_whir.play();
+                            bn::sound_items::knock.play();
+                            bn::sound_items::boom.play();
 
                             line lc[3] = {
                                 {true, true, 00, "                                                                  SCOUT                            Actually let's just go."},
@@ -5529,15 +5544,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             so->last_char_id = chari.at(new_chari).identity;
         }
 
-        for (int t = 0; t < chari.size(); t++) {
-            BN_LOG(t, " is actually ", chari.at(t).identity, " and will be following ", chari.at(t).follow_id);
-        }
-        BN_LOG("-");
-
         // Character operations
         for (int t = 0; t < chari.size(); t++)
         {
-
             // Set primary camera following X/Y coordinates
 
             if (chari.at(t).role == 1)
@@ -5553,14 +5562,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     my_follow_at = (t + 1) % chari.size();
                 }
 
-                bool is_close = false;
-                for (int tt = 0; tt < t; tt++) {
-                    if (abs(chari.at(tt).entity.x().integer() - chari.at(t).entity.x().integer()) + abs(chari.at(tt).entity.y().integer() - chari.at(t).entity.y().integer()) < 24) {
-                        is_close = true;
-                    }
-                }
-
-                if (!is_close) chari.at(t).update(chari.at(my_follow_at).entity.x().integer(), chari.at(my_follow_at).entity.y().integer());
+                chari.at(t).update(chari.at(my_follow_at).entity.x().integer(), chari.at(my_follow_at).entity.y().integer());
             }
 
             // Z-Order followers
@@ -5885,7 +5887,1117 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         {
         }
         }
-    
-        BN_LOG("Checkpoint D");
+    }
+}
+
+class moving_block {
+    public:
+    bn::sprite_ptr entity = bn::sprite_items::underground_tiles.create_sprite(0,0,15);
+    bool is_moving = true;
+    int moving_x = 0;
+    int moving_y = 0;
+    moving_block() {};
+};
+
+class gem {
+    public:
+    bn::sprite_ptr entity = bn::sprite_items::underground_tiles.create_sprite(0,0,1);
+};
+
+class xy {
+    public:
+    int x = 0;
+    int y = 0;
+};
+
+class button {
+    public:
+    bool toggled = false;
+    bool short_toggle = false;
+    int x = 0;
+    int y = 0;
+};
+
+class gate {
+    public:
+    int triggered_by = 0;
+    int x = 0;
+    int y = 0;
+};
+
+dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
+{
+    if (!bn::music::playing()) {
+        bn::music_items_info::span[29].first.play(bn::fixed(80) / 100);
+    }
+
+    // Constants
+    const int w_size = 96;
+    stone local_walls[w_size];
+    int local_walls_p = 0;
+    static room current_room;
+
+    // If different than default, reset
+    if (dt.spawn_x > 0 && dt.spawn_y > 0)
+    {
+        current_room.start_x = dt.spawn_x;
+        current_room.start_y = dt.spawn_y;
+    }
+
+    // Camera setup
+    int sx = current_room.start_x * 32;
+    int sy = current_room.start_y * 32;
+
+    bn::camera_ptr camera = bn::camera_ptr::create(sx, sy);
+    bn::regular_bg_ptr primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
+    primary_bg.set_camera(camera);
+    bn::vector<anim_object, 3> anim_objects;
+
+    // Create initial characters
+    bn::vector<character, 6> chari;
+
+    if (dt.world_index == 0) {
+        character maple(bn::sprite_items::maple_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        maple.entity.set_camera(camera);
+        maple.entity.set_position(sx, sy);
+        maple.role = 0;
+        maple.identity = 0;
+        maple.follow_id = 5;
+        chari.push_back(maple);
+
+        character scout(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        scout.entity.set_camera(camera);
+        scout.entity.set_position(sx, sy);
+        scout.role = 0;
+        scout.identity = 3;
+        scout.follow_id = 0;
+        chari.push_back(scout);
+
+        character enoki(bn::sprite_items::enoki_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        enoki.entity.set_camera(camera);
+        enoki.entity.set_position(sx, sy);
+        enoki.role = 0;
+        enoki.identity = 1;
+        enoki.follow_id = 1;
+        chari.push_back(enoki);
+
+        character aaron(bn::sprite_items::aaron_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        aaron.entity.set_camera(camera);
+        aaron.entity.set_position(sx, sy);
+        aaron.role = 0;
+        aaron.identity = 2;
+        aaron.follow_id = 2;
+        chari.push_back(aaron);
+
+        character vee(bn::sprite_items::vee_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        vee.entity.set_camera(camera);
+        vee.entity.set_position(sx, sy);
+        vee.role = 0;
+        vee.identity = 4;
+        vee.follow_id = 3;
+        chari.push_back(vee);
+
+        character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        eleanor.entity.set_camera(camera);
+        eleanor.entity.set_position(sx, sy);
+        eleanor.role = 0;
+        eleanor.identity = 5;
+        eleanor.follow_id = 4;
+        chari.push_back(eleanor);
+    } else {
+        character maple(bn::sprite_items::maple_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        maple.entity.set_camera(camera);
+        maple.entity.set_position(sx, sy);
+        maple.role = 0;
+        maple.identity = 0;
+        maple.follow_id = 1;
+        chari.push_back(maple);
+
+        character scout(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        scout.entity.set_camera(camera);
+        scout.entity.set_position(sx, sy);
+        scout.role = 0;
+        scout.identity = 3;
+        scout.follow_id = 0;
+        chari.push_back(scout);
+    }
+
+    chari.at(0).role = 1;
+
+    // World generation
+    switch (dt.world_index)
+    {
+    case 0:
+    {
+        current_room.init(64, 24, 1, 9);
+        std::vector<int> local_col{
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,4,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,1,0,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,3,3,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,
+            1,0,0,0,6,0,1,1,1,0,0,1,1,1,1,1,0,1,0,0,0,0,0,0,0,2,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,0,0,0,6,0,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,5,5,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        std::vector<int> local{
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,9,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,1,0,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,11,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,12,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,16,1,16,1,1,1,1,1,1,1,1,16,1,1,1,1,1,1,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,10,
+            1,0,0,0,0,0,5,5,5,0,0,5,5,5,5,5,0,5,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,5,5,5,5,5,1,1,5,1,5,5,5,5,5,0,0,0,0,0,0,0,0,0,16,0,0,1,
+            1,0,0,0,0,0,0,0,5,5,5,5,0,0,0,5,5,5,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,5,5,5,1,5,1,5,5,5,5,0,0,0,0,0,0,0,0,0,0,16,0,12,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,5,5,1,5,1,1,5,5,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,16,2,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,1,0,16,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,12,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+        deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        primary_bg.set_camera(camera);
+        break;
+    }
+    case 1:
+    {
+        current_room.init(24, 24, 22, 22);
+        std::vector<int> local_col{
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,7,1,
+            1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,
+            1,0,0,1,0,1,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,1,1,
+            1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0,1,1,
+            1,0,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,0,0,0,0,1,1,
+            1,0,1,0,1,1,0,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,1,1,
+            1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,0,0,0,1,
+            1,0,1,1,1,0,0,0,0,1,0,0,0,0,1,1,1,1,0,0,0,0,0,1,
+            1,0,1,1,1,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,0,0,0,1,
+            1,0,1,0,1,0,0,0,0,1,1,1,1,1,0,1,1,1,0,0,0,1,0,1,
+            1,0,1,0,1,1,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,1,0,1,
+            1,0,1,0,1,0,0,0,0,1,0,1,0,1,1,1,0,0,0,0,0,1,0,1,
+            1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,0,0,0,0,0,0,1,0,1,
+            1,0,0,0,0,1,0,0,0,1,0,0,1,1,1,1,1,1,0,0,0,1,0,1,
+            1,0,0,0,0,1,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,1,0,1,
+            1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,1,1,1,1,0,1,
+            1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,1,
+            1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+            1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+            1,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+        std::vector<int> local{
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,1,
+            1,0,0,0,15,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,15,0,1,
+            1,0,12,0,12,1,0,0,0,0,0,0,0,0,1,5,1,12,0,0,0,12,1,1,
+            1,0,12,1,12,1,0,0,0,0,0,0,0,0,1,5,1,12,12,0,12,12,1,1,
+            1,0,12,13,12,1,0,0,0,0,0,0,0,0,1,5,1,12,12,1,12,12,1,1,
+            1,15,1,1,1,1,12,10,10,11,10,0,1,1,1,5,1,12,12,13,12,12,1,1,
+            1,0,1,13,1,1,12,1,1,1,1,0,0,0,0,0,1,12,12,12,12,12,1,1,
+            1,0,1,1,1,10,7,8,6,6,6,7,8,6,6,6,7,8,6,6,6,7,8,11,
+            1,0,0,0,1,14,0,0,0,15,0,0,0,0,1,1,5,5,12,0,0,16,0,10,
+            1,0,1,1,1,0,0,0,0,1,0,16,0,16,5,1,5,5,0,0,0,16,0,11,
+            1,0,1,5,1,0,0,0,0,1,0,0,0,0,0,1,5,5,0,0,0,16,0,10,
+            1,0,1,2,5,0,0,0,0,1,1,1,5,1,2,1,1,1,16,16,16,10,0,11,
+            1,0,1,0,5,5,0,0,0,12,0,1,5,1,5,1,0,0,0,0,0,11,15,10,
+            1,0,1,0,5,0,0,0,0,1,0,1,14,1,5,1,0,0,0,0,0,10,0,11,
+            1,15,1,1,1,1,1,15,1,1,0,1,1,1,5,15,0,0,14,0,0,11,0,10,
+            1,0,0,0,12,11,0,0,0,10,0,12,1,1,1,1,1,1,0,0,0,10,13,11,
+            1,0,0,16,12,10,0,0,0,11,0,0,1,0,0,0,0,1,12,0,0,11,0,10,
+            1,0,0,0,12,11,12,0,0,10,0,0,0,0,0,16,0,1,1,1,1,1,0,11,
+            1,0,0,0,12,10,0,0,0,11,0,0,0,0,0,0,0,0,0,0,0,1,0,10,
+            1,0,0,0,0,11,0,0,12,10,0,12,0,0,0,0,0,12,12,12,0,1,5,11,
+            1,0,0,0,0,10,0,0,0,11,0,12,0,0,0,12,12,12,12,12,0,1,5,1,
+            1,14,0,0,0,11,0,0,0,10,0,12,12,12,0,0,12,12,12,12,0,1,5,1,
+            1,0,0,0,0,16,0,0,0,16,0,0,0,0,0,0,0,0,0,5,5,1,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1};
+        deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        primary_bg.set_camera(camera);
+        break;
+    }
+    case 2: {
+        current_room.init(24,24,19,22);
+        std::vector<int> local{
+            10,9,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,14,12,0,0,12,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,12,16,0,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,15,0,0,0,0,0,16,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,14,1,
+            1,12,0,0,0,1,0,0,0,0,14,0,0,0,0,0,1,15,0,0,0,0,5,1,
+            1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,0,0,1,
+            1,16,0,0,0,1,2,12,0,16,0,0,0,0,0,0,15,0,0,0,0,0,12,1,
+            1,0,0,0,0,15,0,0,0,0,0,0,0,0,0,12,0,0,0,12,0,0,0,1,
+            1,5,6,5,10,6,7,8,6,6,6,7,8,6,6,6,7,8,6,6,6,7,8,11,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,0,0,10,
+            1,15,1,1,10,0,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,10,
+            1,0,0,0,10,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,0,10,
+            1,14,0,0,10,0,13,12,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,10,
+            1,0,0,0,10,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,0,10,
+            1,0,0,0,10,16,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,10,
+            1,5,5,5,10,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,12,0,0,10,
+            1,5,5,5,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,10,
+            1,6,6,6,10,6,7,8,6,6,6,7,8,6,6,6,7,8,6,0,6,7,8,11
+        };
+        std::vector<int> local_col{
+            1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            1,8,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+            1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,0,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,1,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,
+            0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,
+            1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,1,1,
+            1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            1,1,0,0,0,1,0,1,0,1,0,0,0,0,0,0,1,0,0,0,0,0,1,1,
+            1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,
+            1,1,1,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,
+            1,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,
+            1,0,0,0,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,
+            1,0,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,
+            1,0,0,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,
+            1,1,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,
+            1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1
+        };
+
+        deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        primary_bg.set_camera(camera);
+        break;
+    }
+    case 3: {
+        current_room.init(6,64,3,62);
+        std::vector<int> local{
+            10,9,9,10,0,0,
+            1,10,10,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,1,1,
+            1,0,0,0,12,1,
+            1,12,0,0,0,1,
+            1,1,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,1,1,0,0,1,
+            0,1,12,0,0,1,
+            0,1,0,0,0,1,
+            0,1,0,0,0,1,
+            0,1,1,0,1,1
+        };
+        std::vector<int> local_col{
+            1,1,1,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,0,0,
+            1,0,0,1,1,1,
+            1,0,0,0,1,1,
+            1,1,0,0,0,1,
+            1,1,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,0,1,0,0,1,
+            0,1,1,0,0,1,
+            0,1,1,0,0,1,
+            0,1,0,0,0,1,
+            0,1,0,0,0,1,
+            0,1,1,0,1,1
+        };
+
+        deep_copy(local, current_room.local_tileset);
+        deep_copy(local_col, current_room.collisions);
+
+        primary_bg.set_camera(camera);
+        break;
+    }
+    default:
+    {
+        break;
+    }
+    };
+
+    // set up levels
+    bn::vector<moving_block, 16> blocks;
+    bn::vector<gem, 16> gems;
+    bn::vector<xy, 64> gas_tanks;
+    bn::vector<button, 12> buttons;
+    bn::vector<gate, 12> gates;
+
+    // Set up special items
+    for (int y = 0; y < current_room.height; y++) {
+        for (int x = 0; x < current_room.width; x++) {
+            int absloc = x + (y * current_room.width);
+
+            if (current_room.local_tileset.at(absloc) == 2) {
+                gem gemy;
+                gemy.entity.set_camera(camera);
+                gemy.entity.set_position(x * 32, y * 32);
+                gems.push_back(gemy);
+            } else if (current_room.local_tileset.at(absloc) == 12) {
+                xy gassy;
+                gassy.x = x;
+                gassy.y = y;
+                current_room.collisions.at(x + (y * current_room.width)) = 1;
+                gas_tanks.push_back(gassy);
+            } else if (current_room.local_tileset.at(absloc) == 13) {
+                button buttony;
+                buttony.x = x;
+                buttony.y = y;
+                buttons.push_back(buttony);
+            } else if (current_room.local_tileset.at(absloc) == 14) {
+                button buttony;
+                buttony.x = x;
+                buttony.y = y;
+                buttony.short_toggle = true;
+                buttons.push_back(buttony);
+                current_room.local_tileset.at(absloc) = 13;
+            } else if (current_room.local_tileset.at(absloc) == 15) {
+                gate gatey;
+                gatey.x = x;
+                gatey.y = y;
+                current_room.collisions.at(x + (y * current_room.width)) = 1;
+                gates.push_back(gatey);
+            } else if (current_room.local_tileset.at(absloc) == 16) {
+                moving_block pushy;
+                pushy.entity.set_camera(camera);
+                pushy.entity.set_position(x * 32, y * 32);
+                current_room.collisions.at(absloc) = 1;
+                blocks.push_back(pushy);
+            }
+        }
+    }
+
+    if (dt.world_index == 1) {
+        gates.at(0).triggered_by = 0;
+        gates.at(1).triggered_by = 1;
+        gates.at(2).triggered_by = 2;
+        gates.at(3).triggered_by = 4;
+        gates.at(4).triggered_by = 6;
+        gates.at(5).triggered_by = 7;
+        gates.at(6).triggered_by = 3;
+        gates.at(7).triggered_by = 5;
+    } else if (dt.world_index == 2) {
+        gates.at(0).triggered_by = 0;
+        gates.at(1).triggered_by = 2;
+        gates.at(2).triggered_by = 1;
+        gates.at(3).triggered_by = 3;
+        gates.at(4).triggered_by = 4;
+    }
+
+    // A header
+    bn::sprite_ptr a_notif = bn::sprite_items::a_button_2.create_sprite(0, 0);
+    a_notif.set_camera(camera);
+    a_notif.set_visible(false);
+
+    // Make a fireball!
+    int p_index = 0;
+    int p_size = 3;
+    projectile p[3];
+    for (int t = 0; t < 3; t++)
+    {
+        p[t].fireball.set_camera(camera);
+        p[t].fireball.set_visible(false);
+    }
+
+    // GAMELOOP
+    int update_counter = 0;
+    bool firstThing = true;
+    int flex = 84;
+    int follow_x = 0;
+    int follow_y = 0;
+    int follow_id = 0;
+    int anim8 = 0;
+
+    int last_x = dt.spawn_x;
+    int last_y = dt.spawn_y;
+
+    auto l_button = bn::sprite_items::l_button.create_sprite(-90, 14);
+    l_button.set_visible(false);
+    bn::blending::set_transparency_alpha(bn::fixed(1));
+
+    a_notif = bn::sprite_items::a_button_2.create_sprite(follow_x, follow_y - 28, 0);
+    a_notif.set_camera(camera);
+
+    while (true)
+    {
+        // set camera follow point
+        follow_x = chari.at(follow_id).entity.x().integer();
+        follow_y = chari.at(follow_id).entity.y().integer();
+
+        // manage a notif
+        a_notif.set_visible(false);
+        a_notif.set_position(follow_x, follow_y - 28);
+
+        // Pause
+        if (bn::keypad::start_pressed())
+        {
+            bn::core::update();
+            bn::music::pause();
+            bn::sound_items::cnaut.play();
+            while (!bn::keypad::start_pressed())
+            {
+                bn::core::update();
+            }
+            bn::music::resume();
+            bn::sound_items::pop.play();
+        }
+
+        // Create projectiles
+        if (bn::keypad::r_pressed())
+        {
+            chari.at(follow_id).event = true;
+            if (chari.at(follow_id).identity == 0)
+            {
+                bn::sound_items::fireblast.play();
+                p[p_index].active = true;
+                p[p_index].fireball.set_x(follow_x);
+                p[p_index].fireball.set_y(follow_y);
+                p[p_index].dir = chari.at(follow_id).dir;
+                p[p_index].dur = 0;
+                p[p_index].fireball.set_visible(true);
+                p_index++;
+                if (p_index >= p_size)
+                    p_index = 0;
+            }
+            else if (chari.at(follow_id).identity == 4)
+            {
+                bn::sound_items::firecrackle.play();
+
+                if (so->checkpoint == 8 && so->xp < 201)
+                {
+                    so->xp++;
+                }
+                else if (so->checkpoint == 10 && so->xp < 301)
+                {
+                    so->xp++;
+                }
+            }
+            else
+            {
+                bn::sound_items::squeak.play();
+            }
+        }
+
+        // Update projectiles
+        for (int t = 0; t < p_size; t++)
+        {
+            if (p[t].active)
+            {
+                p[t].fireball.set_z_order(1);
+                p[t].update();
+
+                int f_x = (p[t].fireball.x().integer() + 16) / 32;
+                int f_y = (p[t].fireball.y().integer() + 16) / 32;
+                int f_z = f_x + (f_y * current_room.width);
+
+                for (int i = 0; i < buttons.size(); i++) {
+                    if (buttons.at(i).x == f_x && buttons.at(i).y == f_y && !buttons.at(i).short_toggle) {
+                        if (!buttons.at(t).toggled) {
+                            bn::sound_items::pop.play();
+                            buttons.at(t).toggled = true;
+                            current_room.local_tileset.at(f_z) = 14;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < gas_tanks.size(); i++) {
+                    if (gas_tanks.at(i).x == f_x && gas_tanks.at(i).y == f_y) {
+                        dt.spawn_x = last_x;
+                        dt.spawn_y = last_y;
+                        return dt;
+                    }
+                }
+            }
+        }
+
+        // Control actions
+        int possible_action = current_room.collisions.at(((follow_x + 16) / 32) + (((follow_y + 16) / 32) * current_room.width));
+        if (possible_action > 1)
+        {
+            a_notif.set_visible(true);
+
+            if (bn::keypad::a_pressed())
+            {
+
+                // Start action
+                a_notif.set_visible(false);
+                bn::core::update();
+                int me = chari.at(follow_id).identity;
+                switch (possible_action)
+                {
+                    case 2:
+                    {
+                        line lc[10] = {
+                            {true, true, 00, "                                                                  MAPLE                            What the.."},
+                            {true, true, 00, "                                                                  MAPLE                            What the heck is this?"},
+                            {true, true, 00, "                                                                  SCOUT                            Maybe my bunker tool needs to be"},
+                            {true, true, 00, "                                                                  SCOUT                            recalibrated."},
+                            {true, true, 00, "                                                                  MAPLE                            Well, fix it. I don't want to die"},
+                            {true, true, 00, "                                                                  MAPLE                            down here."},
+                            {true, true, 00, "COM: Endscene"}};
+                        dialogue_page_lite(lc);
+                        break;
+                    };
+                    case 3:
+                    {
+                        line lc[32] = {
+                            {true, true, 00, "                                                                  ELEANOR                          Vee, do we need to go any"},
+                            {true, true, 00, "                                                                  ELEANOR                          further? I'm scared."},
+                            {true, true, 00, "                                                                  OLIVIER                          I'll stay behind with my wife."},
+                            {true, true, 00, "                                                                  OLIVIER                          We can protect ourselves. I'm   "},
+                            {true, true, 00, "                                                                  OLIVIER                          sure we're far enough from"},
+                            {true, true, 00, "                                                                  OLIVIER                          whatever was going on."},
+                            {true, true, 00, "                                                                  AARON                            Alright.. If you say so. Fais"},
+                            {true, true, 00, "                                                                  AARON                            attention, oui?"},
+                            {true, true, 00, "                                                                  OLIVIER                          Oui."},
+                            {true, true, 00, "                                                                  AARON                            Enoki, are you going to stay"},
+                            {true, true, 00, "                                                                  AARON                            with them?"},
+                            {true, true, 00, "                                                                  ENOKI                            Bad things happen to me"},
+                            {true, true, 00, "                                                                  ENOKI                            whenever I'm too far away from  "},
+                            {true, true, 00, "                                                                  ENOKI                            a Tremblay, so I'll say no."},
+                            {true, true, 00, "                                                                  AARON                            Very well, then. So, it's"},
+                            {true, true, 00, "                                                                  AARON                            you, Maple, and Scout.. oui?  "},  
+                            {true, true, 00, "                                                                  SCOUT                            Oui."},
+                            {true, true, 00, "                                                                  SCOUT                            But maybe it should just be me."},
+                            {true, true, 00, "                                                                  SCOUT                            I'm the 'scout', right?"},
+                            {true, true, 00, "                                                                  MAPLE                            No, you're not going into there"},
+                            {true, true, 00, "                                                                  MAPLE                            by yourself. I'm coming with."},
+                            {true, true, 00, "                                                                  SCOUT                            Maybe Aaron and Enoki stay?"},
+                            {true, true, 00, "                                                                  AARON                            ...Fine. You two go."},
+                            {true, true, 00, "                                                                  MAPLE                            Allons-zi. Into the tacky"},
+                            {true, true, 00, "                                                                  MAPLE                            hallway."},
+                            {true, true, 00, "COM: Endscene"}};
+                        dialogue_page_lite(lc);
+                        break;
+                    };
+                    case 4:
+                    {
+                        dt.spawn_x = 22;
+                        dt.spawn_y = 22;
+                        dt.world_index = 1;
+                        return dt;
+                    };
+                    case 5:
+                    {
+                        line lc[10] = {
+                            {true, true, 00, "                                                                  OLIVIER                          Is that gasoline?"},
+                            {true, true, 00, "                                                                  SCOUT                            It, uh.. seems like.."},
+                            {true, true, 00, "                                                                  AARON                            Seems like what?"},
+                            {true, true, 00, "                                                                  SCOUT                            It, er- someone might have"},
+                            {true, true, 00, "                                                                  SCOUT                            already been here."},
+                            {true, true, 00, "                                                                  MAPLE                            Oh I don't like that."},
+                            {true, true, 00, "COM: Endscene"}};
+                        dialogue_page_lite(lc);
+                        break;
+                    };
+                    case 6:
+                    {
+                        line lc[10] = {
+                            {true, true, 00, "                                                                  SCOUT                            Hey, y'all don't worry,"},
+                            {true, true, 00, "                                                                  SCOUT                            I can take care of this."},
+                            {true, true, 00, "COM: Endscene"}};
+                        dialogue_page_lite(lc);
+                        break;
+                    };
+                    case 7:
+                    {
+                        dt.spawn_x = 19;
+                        dt.spawn_y = 22;
+                        dt.world_index = 2;
+                        return dt;
+                        break;
+                    };
+                    case 8:
+                    {
+                        dt.spawn_x = 3;
+                        dt.spawn_y = 62;
+                        dt.world_index = 3;
+                        return dt;
+                        break;
+                    };
+                    case 9:
+                    {
+                        line lc[10] = {
+                            {true, true, 00, "                                                                  You wonder what fire might be    able to do to this button."},
+                            {true, true, 00, "COM: Endscene"}};
+                        dialogue_page_lite(lc);
+                        break;
+                    };
+                    case 10:
+                    {
+                        dt.spawn_x = 0;
+                        dt.spawn_y = 0;
+                        dt.world_index = 99;
+                        return dt;
+                        break;
+                    };
+                }
+            }
+        }
+
+        // Swap characters
+        if (bn::keypad::b_pressed())
+        {
+            bn::sound_items::cnaut.play();
+            bn::blending::set_intensity_alpha(1);
+            int new_chari = (follow_id + 1) % chari.size();
+
+            // If there's a scripted character, use that one
+            /*
+            for (int t = 0; t < chari.size(); t++) {
+                if (chari.at(t).identity == chari.at(follow_id).follow_id) {
+                    new_chari = t;
+                }
+            }
+            */
+            
+            chari.at(follow_id).entity.set_blending_enabled(false);
+            for (int t = 0; t < chari.size(); t++) {
+                if (t != new_chari) {
+                    if (chari.at(t).can_follow) {
+                        chari.at(t).role = 0;
+                    } else {
+                        chari.at(t).role = 2;
+                    }
+                }
+            }
+
+            chari.at(new_chari).entity.set_blending_enabled(true);
+            chari.at(new_chari).role = 1;
+
+            so->last_char_id = chari.at(new_chari).identity;
+        }
+
+        // Character operations
+        for (int t = 0; t < chari.size(); t++)
+        {
+
+            // Set primary camera following X/Y coordinates
+
+            if (chari.at(t).role == 1)
+            {
+                chari.at(t).update();
+                follow_id = t;
+            }
+            else if (chari.at(t).role == 0)
+            {
+                int my_follow_at = chari.at(t).follow_id;
+                
+                if (my_follow_at == -1) {
+                    my_follow_at = (t + 1) % chari.size();
+                }
+
+                chari.at(t).update(chari.at(my_follow_at).entity.x().integer(), chari.at(my_follow_at).entity.y().integer());
+            }
+
+            // Z-Order followers
+            chari.at(t).entity.set_z_order(200 - (chari.at(t).entity.y().integer() - camera.y().integer()));
+
+            /*
+            if (chari.at(t).entity.y() < chari.at(follow_id).entity.y())
+            {
+                chari.at(t).entity.set_z_order(3);
+            }
+            else
+            {
+                chari.at(t).entity.set_z_order(1);
+            }
+            */
+        }
+
+        //chari.at(follow_id).entity.set_z_order(2);
+
+        // Camera follows primary player
+        if (current_room.width > 7)
+        {
+            if (camera.x() > follow_x + 30)
+            {
+                camera.set_x(camera.x() - 1);
+            }
+            else if (camera.x() < follow_x - 30)
+            {
+                camera.set_x(camera.x() + 1);
+            }
+
+            // Camera adjustment
+            if (camera.x().integer() > (current_room.width * 32) - 172)
+            {
+                camera.set_x((current_room.width * 32) - 172);
+            }
+            else if (camera.x().integer() < 106)
+            {
+                camera.set_x(106);
+            }
+        }
+        else
+        {
+            camera.set_x(3 * 32);
+        }
+
+        if (camera.y() > follow_y + 30)
+        {
+            camera.set_y(camera.y() - 1);
+        }
+        else if (camera.y() < follow_y - 30)
+        {
+            camera.set_y(camera.y() + 1);
+        }
+
+        if (camera.y().integer() > (current_room.height * 32) - 96)
+        {
+            camera.set_y((current_room.height * 32) - 96);
+        }
+        else if (camera.y().integer() < 64)
+        {
+            camera.set_y(64);
+        }
+
+        // Regularly update the tileset based on new camera coordinates
+        if (update_counter == 0)
+        {
+            local_walls_p = 0;
+            int f_x_a = camera.x().integer() / 32;
+            int f_y_a = camera.y().integer() / 32;
+            int min_y = f_y_a - 4;
+            if (min_y < 0)
+                min_y = 0;
+            int min_x = f_x_a - 4;
+            if (min_x < 0)
+                min_x = 0;
+            int max_y = f_y_a + 7;
+            if (max_y > current_room.height)
+                max_y = current_room.height;
+            int max_x = f_x_a + 7;
+            if (max_x > current_room.width)
+                max_x = current_room.width;
+            for (int y = min_y; y < max_y; y++)
+            {
+                for (int x = min_x; x < max_x; x++)
+                {
+                    int loc = current_room.local_tileset.at((current_room.width * y) + x);
+                    if (local_walls_p < w_size && loc > 0)
+                    {
+
+                        if (loc == 1 || (loc > 3 && loc < 16)) {
+                            local_walls[local_walls_p].entity = bn::sprite_items::underground_tiles.create_sprite(x * 32, y * 32, loc - 1);
+                            local_walls[local_walls_p].entity.set_camera(camera);
+                            local_walls[local_walls_p].entity.set_z_order(240);
+                            local_walls_p++;
+                        }
+                    }
+                }
+            }
+        }
+        update_counter++;
+        if (update_counter > 16)
+            update_counter = 0;
+
+        // manage objects
+        int rel_x = (follow_x + 16) / 32;
+        int rel_y = (follow_y + 16) / 32;
+        for (int t = 0; t < blocks.size(); t++) {
+            blocks.at(t).entity.put_above();
+            int my_x = blocks.at(t).entity.x().integer() / 32;
+            int my_y = blocks.at(t).entity.y().integer() / 32;
+            int my_z = my_x + (my_y * current_room.width);
+
+            if (blocks.at(t).moving_y < 0) {
+                my_z += current_room.width;
+            }
+
+            if (blocks.at(t).moving_x < 0) {
+                my_z++;
+            }
+
+            // Push block
+            if (rel_x == my_x) {
+                if (rel_y == my_y + 1 && current_room.collisions.at(my_z - current_room.width) == 0 && chari.at(follow_id).dir == 3) {
+                    a_notif.set_visible(true);
+                    if (bn::keypad::a_pressed()) {
+                        blocks.at(t).moving_y = -2;
+                        current_room.collisions.at(my_z) = 0;
+                    }
+                } else if (rel_y == my_y - 1  && current_room.collisions.at(my_z + current_room.width) == 0 && chari.at(follow_id).dir == 0) {
+                    a_notif.set_visible(true);
+                    if (bn::keypad::a_pressed()) {
+                        blocks.at(t).moving_y = 2;
+                        current_room.collisions.at(my_z) = 0;
+                    }
+                }
+            } else if (rel_y == my_y) {
+                if (rel_x == my_x + 1 && current_room.collisions.at(my_z - 1) == 0 && chari.at(follow_id).dir == 2) {
+                    a_notif.set_visible(true);
+                    if (bn::keypad::a_pressed()) {
+                        blocks.at(t).moving_x = -2;
+                        current_room.collisions.at(my_z) = 0;
+                    }
+                } else if (rel_x == my_x - 1  && current_room.collisions.at(my_z + 1) == 0 && chari.at(follow_id).dir == 1) {
+                    a_notif.set_visible(true);
+                    if (bn::keypad::a_pressed()) {
+                        blocks.at(t).moving_x = 2;
+                        current_room.collisions.at(my_z) = 0;
+                    }
+                }
+            }        
+
+            // End movement
+            if (blocks.at(t).moving_x != 0) {
+                if (
+                    current_room.collisions.at(
+                        my_z + (blocks.at(t).moving_x / 2)) == 1) {
+                    bn::sound_items::firehit.play();
+                    if (blocks.at(t).moving_x < 0) my_x++;
+                    blocks.at(t).moving_x = 0;
+                    current_room.collisions.at(my_z) = 1;
+
+                    blocks.at(t).entity.set_position(my_x * 32, my_y * 32);
+                } else {
+                    blocks.at(t).entity.set_x(blocks.at(t).entity.x().integer() + blocks.at(t).moving_x);
+                }
+            }
+            if (blocks.at(t).moving_y != 0) {
+                if (
+                    current_room.collisions.at(
+                        my_z + ((blocks.at(t).moving_y / 2) * current_room.width)) == 1) {
+                    bn::sound_items::firehit.play();
+                    if (blocks.at(t).moving_y < 0) my_y++;
+                    blocks.at(t).moving_y = 0;
+                    current_room.collisions.at(my_z) = 1;
+
+                    blocks.at(t).entity.set_position(my_x * 32, my_y * 32);
+                } else {
+                    blocks.at(t).entity.set_y(blocks.at(t).entity.y().integer() + blocks.at(t).moving_y);
+                }
+            }
+        }
+
+        // Gems
+        for (int t = 0; t < gems.size(); t++) {
+            if (gems.at(t).entity.visible()) {
+                gems.at(t).entity.put_above();
+                int my_x = gems.at(t).entity.x().integer() / 32;
+                int my_y = gems.at(t).entity.y().integer() / 32;
+                int my_z = my_x + (my_y * current_room.width);
+
+                if (my_x == rel_x && my_y == rel_y) {
+                    bn::sound_items::ding.play();
+                    gems.at(t).entity.set_visible(false);
+                    last_x = my_x;
+                    last_y = my_y;
+                }
+            }
+        }
+
+        // Switches and buttons
+        for (int t = 0; t < buttons.size(); t++) {
+            int my_x = buttons.at(t).x;
+            int my_y = buttons.at(t).y;
+            int my_z = my_x + (my_y * current_room.width);
+
+            if ((my_x == rel_x && my_y == rel_y) || current_room.collisions.at(my_z) == 1) {
+                if (!buttons.at(t).toggled) {
+                    bn::sound_items::pop.play();
+                    buttons.at(t).toggled = true;
+                    current_room.local_tileset.at(my_z) = 14;
+                }
+            } else if (buttons.at(t).short_toggle) {
+                if (buttons.at(t).toggled) {
+                    bn::sound_items::pop.play();
+                    buttons.at(t).toggled = false;
+                    current_room.local_tileset.at(my_z) = 13;
+                }
+            }
+        }
+        for (int t = 0; t < gates.size(); t++) {
+            button *bt = &buttons.at(gates.at(t).triggered_by);
+            if (current_room.local_tileset.at(bt->x + (bt->y * current_room.width)) == 14) {
+                current_room.local_tileset.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 0;
+                current_room.collisions.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 0;
+            } else {
+                current_room.local_tileset.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 15;
+                current_room.collisions.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 1;
+            }
+        }
+
+        // things
+        if (current_room.local_tileset.at(rel_x + (rel_y * current_room.width)) == 4) {
+            current_room.local_tileset.at(rel_x + (rel_y * current_room.width)) = 0;
+        }
+
+        // deal with stuff
+        if (chari.at(follow_id).identity == 3) {
+            if (current_room.local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) == 5 && chari.at(follow_id).dir == 0) {
+                a_notif.set_visible(true);
+                if (bn::keypad::a_pressed()) {
+                    bn::sound_items::firecrackle.play();
+                    current_room.local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
+                    current_room.collisions.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
+                }
+            }
+            if (current_room.local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) == 5 && chari.at(follow_id).dir == 3) {
+                a_notif.set_visible(true);
+                if (bn::keypad::a_pressed()) {
+                    bn::sound_items::firecrackle.play();
+                    current_room.local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
+                    current_room.collisions.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
+                }
+            }
+            if (current_room.local_tileset.at(rel_x + 1 + ((rel_y) * current_room.width)) == 5 && chari.at(follow_id).dir == 1) {
+                a_notif.set_visible(true);
+                if (bn::keypad::a_pressed()) {
+                    bn::sound_items::firecrackle.play();
+                    current_room.local_tileset.at(rel_x + 1 + ((rel_y) * current_room.width)) = 0;
+                    current_room.collisions.at(rel_x + 1 + ((rel_y) * current_room.width)) = 0;
+                }
+            }
+            if (current_room.local_tileset.at(rel_x - 1 + ((rel_y) * current_room.width)) == 5 && chari.at(follow_id).dir == 2) {
+                a_notif.set_visible(true);
+                if (bn::keypad::a_pressed()) {
+                    bn::sound_items::firecrackle.play();
+                    current_room.local_tileset.at(rel_x - 1 + ((rel_y) * current_room.width)) = 0;
+                    current_room.collisions.at(rel_x - 1 + ((rel_y) * current_room.width)) = 0;
+                }
+            }
+        }
+
+        a_notif.put_above();
+        bn::core::update();
     }
 }

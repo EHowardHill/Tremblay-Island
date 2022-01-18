@@ -45,7 +45,7 @@ int exec_dialogue(int x) {
                 {true, fals, 1, "MAPLE                            Alright, so where do I plug this crock-pot in at? Are there any   plugs?"},
                 {fals, fals, 1, "MAPLE                            I take it that I'm late enough   y'all probably already ate       something else."},
                 {fals, true, 9, "ENOKI                            Well, we've got an outhouse,     but that's the only place with   electricity. And yeah, we got    some chicken."},
-                {fals, true, 8, "ENOKI                            We missed you earlier :("},
+                {fals, true, 8, "ENOKI                            We missed you earlier!"},
                 {fals, fals, 5, "MAPLE                            Well I'm finally here, now. So,  where is- Oh! Salut, Aaron."},
                 {true, true, 10, "AARON                            Bonsoir! Or Bonjour more like, I guess, it's technically morning, isn't it? I'm just glad you got  here. Happy new millenium!"},
                 {fals, fals, 3, "MAPLE                            Happy new millenium! Y'all reallyare in the middle of nowhere, youknow that?"},
@@ -674,6 +674,7 @@ int exec_dialogue(int x) {
                 {true, true, 00, "ENOKI                            What's he always on about?"},
                 {true, true, 00, "AARON                            I don't know, Noke."},
                 {true, true, 00, "MAPLE                            ..."},
+                {fals, fals, 00, "SF: Boom"},
                 {true, true, 00, "ENOKI                            Hey, what's that noise?"},
                 {true, true, 00, "AARON                            I don't like that, it sounds     like... Hey, Maple, maybe you    should get up."},
                 {true, true, 00, "MAPLE                            ...grr, I'm gonna kill that      gator..."},
@@ -686,6 +687,291 @@ int exec_dialogue(int x) {
             };
         dialogue_page(lc);
         return 0;
+        }
+
+        case 33: {
+            line lc[32] = {
+                {fals, fals, 0,  "S07:01"},  
+                {fals, fals, 0,  "BG: fadeout"},
+                {true, true, 00, "MAPLE                            So come clean with me, oui?      Did you make this place?"},
+                {true, true, 00, "SCOUT                            Heck no! I kind of wish I did,   though."},
+                {true, true, 00, "S07:02"},
+                {true, true, 00, "..."},
+                {true, true, 00, "S07:03"},
+                {true, true, 00, "SCOUT                            MAPLE LOOK OUT!"},
+                {true, true, 00, "S07:04"},
+                {true, true, 00, "MAPLE                            ...Scout, are you alright?"},
+                {true, true, 00, "RUFUS                            Ow. I think it popped my back a  bit, though."},
+                {true, true, 00, "S07:05"},
+                {true, true, 00, "MAPLE                            What's with all the gasoline in  this place, huh?"},
+                {true, true, 00, "SCOUT                            Maybe be a little extra careful  with that fire power of yours in this next part, huh?"},
+                {fals, fals, 0,  "COM: Endscene"}
+            };
+        dialogue_page(lc);
+        return 0;
+        }
+
+        case 34: {
+
+            if (true) {
+                line lc[32] = {
+                    {fals, fals, 0,  "S07:06"},  
+                    {fals, fals, 0,  "BG: fadeout"},
+                    {true, true, 00, "MAPLE                            ..."},
+                    {true, true, 00, "MAPLE                            What... the actual heck am I     looking at right now?"},
+                    {true, true, 00, "S07:07"},
+                    {true, true, 00, "BG: rain"},
+                    {true, true, 00, "RUFUS                            Ichabod Williams and             Maple Tremblay, what a surprise! Fancy seeing you two here."},
+                    {true, true, 00, "RUFUS                            Finally, I've got a full set."},
+                    {true, true, 00, "S07:08"},
+                    {true, true, 00, "SCOUT                            RUFUS THI-, WHAT ARE YOU DOING?"},
+                    {true, true, 00, "MAPLE                            LET ME GO, YOU PUNK!"},
+                    {true, true, 00, "RUFUS                            I suppose it won't be a bad idea to clap a magic-proof wristband  to keep you from getting any...  sparks of inspiration."},
+                    {true, true, 00, "BG: fadeout"},
+                    {true, true, 00, "S07:14"},
+                    {true, true, 00, "RUFUS                            Alright, now that we've got all  three Tremblays in one place,    let's get started, shall we?"},
+                    {true, true, 00, "S07:07"},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "BG: groovy"},
+                    {true, true, 00, "RUFUS                            Firstly, let's have an           introduction. I'm Monsieur Rufus Thibodeaux, and I'm going to be  your professor today."},
+                    {true, true, 00, "RUFUS                            Pay attention - no one ever seemsto pay attention to  me, so therewill definitely be a quiz at the end of today's lecture."},
+                    {true, true, 00, "S07:10"},
+                    {true, true, 00, "RUFUS                            Lesson one. Repeat after me,     'Rufus is not short. He is just  small-boned.'"},
+                    {true, true, 00, "MAPLE                            .....Are you /kidding/ me?"},
+                    {true, true, 00, "RUFUS                            That doesn't sound very much likethe prompt, does it, Maple?"},
+                    {true, true, 00, "S07:11"},
+                    {true, true, 00, "RUFUS                            Everyone fails that section.     Moving on... Let's talk about theApres Flower. I was employed by  a certain company to"},
+                    {true, true, 00, "RUFUS                            study this flower - same as our  dear Ichadod.. er.. 'Scout',     here. If you remember, it's both native here and known"},
+                    {true, true, 00, "RUFUS                            to contain unknown 'metaphysical'properties. Neat, huh? So,       despite my instructions, I felt  bored and decided to"},
+                    {true, true, 00, "RUFUS                            have myself a little chompy-chompof some of the leaves. Do you    know what happened after that?"},
+                    {true, true, 00, "S07:12"},
+                    {true, true, 00, "RUFUS                            Within moments, I found myself   traveling through the multiverse.I explored all sorts of differentworlds, some similar"},
+                    {true, true, 00, "RUFUS                            and others very different to     ours, but do you know what I     discovered in nearly every one?"},
+                    {true, true, 00, "S07:13"},
+                    {true, true, 00, "RUFUS                            There was this strange trend of  strong-willed, conventionally    attractive women who seemed to   act as the moral good"},
+                    {true, true, 00, "RUFUS                            and savior of every world, with  strange-looking men serving as   the butt of every joke, or as    incompetant villains"},
+                    {true, true, 00, "RUFUS                            only to be replaced by the much  more competant, misunderstood    female villains who were only badbecause a man somehow"},
+                    {true, true, 00, "RUFUS                            turned them evil. And you know   what I thought?"},
+                    {true, true, 00, "MAPLE                            Hold on-"},
+                    {true, true, 00, "S07:14"},
+                    {true, true, 00, "MAPLE                            Are you literally telling me thatyou've decided to become a super villain because you took a flowerthat told you that"},
+                    {true, true, 00, "MAPLE                            women are always the good guys,  and so you're going to harrass   our island?"},
+                    {true, true, 00, "S07:16"},
+                    {true, true, 00, "RUFUS                            I believe that by taking a pre-  emptive strike, I can manage to  keep my respect and autonomy     intact, yes."},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "S07:15"},
+                    {true, true, 00, "ENOKI                            Monsieur Rufus, may I go to the  restroom?"},
+                    {true, true, 00, "S07:16"},
+                    {true, true, 00, "RUFUS                            You can go after the lecture, I'malmost done."},
+                    {true, true, 00, "S07:17"},
+                    {true, true, 00, "RUFUS                            Now, as I was saying...."},
+                    {true, true, 00, "BG: fadeout"},
+                    {true, true, 00, "S07:16"},
+                    {true, true, 00, "AARON                            Rufus, let's have a talk."},
+                    {true, true, 00, "S07:18"},
+                    {true, true, 00, "AARON                            First off, I'm surprised you     didn't know my wife was a        magician, she's good at getting  out of tight spaces."},
+                    {true, true, 00, "AARON                            Secondly, I don't care what you  say when you ate that flower, youscared a lot of my friends. Bad."},
+                    {true, true, 00, "AARON                            That's completely unacceptable.  You can't just kidnap people, or drill under their property, or   hold them hostage."},
+                    {true, true, 00, "AARON                            Let us go and leave us alone,    c'est bon? Got it?"},
+                    {true, true, 00, "RUFUS                            I'll tell you what. The two of   us have a little fight. You win, and I leave your island alone."},
+                    {true, true, 00, "RUFUS                            I win, and you have to eat a     little bit of Apres, and we'll   see if you join my side. Oui?"},
+                    {true, true, 00, "RUFUS                            Game on."},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+        }
+
+        case 35: {
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "RUFUS                            HA! Looks like I'm the victor    here. It's Apres flower time."},
+                    {true, true, 00, "MAPLE                            You know what? In your dreams,   you little punk."},
+                    {true, true, 00, "RUFUS                            Who you calling little?"},
+                    {true, true, 00, "MAPLE                            You're standing on your tiptoes."},
+                    {true, true, 00, "MAPLE                            Look, I don't know why you're so obsessed with thinking the       world's supposed to work a       certain way."},
+                    {true, true, 00, "MAPLE                            But life is complicated, alright?Everybody's complicated. I don't care what you saw in that flower,but you can't just"},
+                    {true, true, 00, "MAPLE                            Come in and bother all of us, whoare just chilling out, because   you think that-"},
+                    {true, true, 00, "MAPLE                            Ok, y'all can stop snickering    whenever you want."},
+                    {true, true, 00, "RUFUS                            But you don't-"},
+                    {true, true, 00, "MAPLE                            I'll threaten you again like I   threaten everybody else-         any funny business, and-"},
+                    {true, true, 00, "RUFUS                            I know, I know, I know, you'll   burn my face off."},
+                    {true, true, 00, "MAPLE                            Darn straight."},
+                    {true, true, 00, "CESAR                            Hey, Maple?"},
+                    {true, true, 00, "MAPLE                            NOT NOW CESAR, I'M MESSING WITH ALITTLE PUNK, HERE!"},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "GUY                              It's nice out here."},
+                    {true, true, 00, "DIANA                            You're telling me. Honestly if itwasn't so expensive, I'd just    boat around 24/7."},
+                    {true, true, 00, "GUY                              You think we gonna get any       tourists?"},
+                    {true, true, 00, "DIANA                            Okay, I don't know if this is    just you, but you need to chill  out about your restaraunt."},
+                    {true, true, 00, "DIANA                            You need to learn when to take a break and relax, oui?"},
+                    {true, true, 00, "GUY                              I guess so. It's like my baby    though. I'm crazy about it."},
+                    {true, true, 00, "DIANA                            I mean, what if something        happened, though? Like, what if  it blew up?"},
+                    {true, true, 00, ""},
+                    {true, true, 00, "GUY                              ..."},
+                    {true, true, 00, "DIANA                            ..."},
+                    {true, true, 00, "GUY                              Thunder... my... dog."},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "RUFUS                            What the..."},
+                    {true, true, 00, "RUFUS                            ..."},
+                    {true, true, 00, "MAPLE                            I... I-I..."},
+                    {true, true, 00, "AARON                            Maple, I-"},
+                    {true, true, 00, "MAPLE                            ...I-I'm..."},
+                    {true, true, 00, "ENOKI                            Maple, come back!"},
+                    {true, true, 00, "MAPLE                            *sniff sniff*"},
+                    {true, true, 00, "AARON                            Maple, get up."},
+                    {true, true, 00, "MAPLE                            ..."},
+                    {true, true, 00, "AARON                            Maple, we need to talk.          Right now."},
+                    {true, true, 00, "ENOKI                            Maple, it's-"},
+                    {true, true, 00, "AARON                            Maria, I love you, but it needs  to just be Maple and I."},
+                    {true, true, 00, "ENOKI                            Maria... Alright Aaron, I'll go  check on the others."},
+                    {true, true, 00, "AARON                            Maple, you need to get up and    look me in the eyes."},
+                    {true, true, 00, "MAPLE                            G-Go away."},
+                    {true, true, 00, "AARON                            GET UP!"},
+                    {true, true, 00, "MAPLE                            O-Oui."},
+                    {true, true, 00, "AARON                            Maple. We've needed to have this talk for a very long time and it can't wait.."},
+                    {true, true, 00, "AARON                            I think you know what it's about."},
+                    {true, true, 00, "MAPLE                            I d-don't want to talk right now."},
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "AARON                            Ever since high school, you've.. well, you know well enough."},
+                    {true, true, 00, "AARON                            I can't fault you for everything.Maria is the best thing that has ever happened to me."},
+                    {true, true, 00, "AARON                            I would have never met her if it wasn't for you. And I want you toknow that you're my sister."},
+                    {true, true, 00, "AARON                            I'll always love you, okay? But  you... you've got this anger     inside of you all of the time."},
+                    {true, true, 00, "AARON                            Anger isn't a bad thing, but     everything you're angry about..  it's all stuff YOU do."},
+                    {true, true, 00, "AARON                            You're a miserable person to be  around and you make everyone elsesuffer because of it."},
+                    {true, true, 00, "AARON                            Get over yourself."},
+                    {true, true, 00, "AARON                            And Rufus, I believe I have a    deal to take care of."},
+                    {true, true, 00, "ENOKI                            A-Aar.. AARON, WAIT!"},
+                    {true, true, 00, "AARON                            I have to stay true to my word."},
+                    {true, true, 00, "RUFUS                            Hey, chill, I didn't expect to   actually blow up your island-"},
+                    {true, true, 00, "AARON                            The flower. Hand it over. Now."},
+                    {true, true, 00, "ENOKI                            A-Aaron..? How do you feel?"},
+                    {true, true, 00, "AARON                            I paid off the island in cash. Weshould easily have enough to renta house back in Louisiana."},
+                    {true, true, 00, "AARON                            A cajun isn't home outside of    Louisiana anyway, oui?"},
+                    {true, true, 00, "AARON                            Eleanor, Olivier, I'm sorry for  what happened to your home."},
+                    {true, true, 00, "OLIVIER                          C'est bon. We're just happy to besafe. Easy come, easy go."},
+                    {true, true, 00, "RUFUS                            I-I can help if anyone needs     anything or anywhere to stay."},
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "SCOUT                            Maple, how are you doing?"},
+                    {true, true, 00, "MAPLE                            ..."},
+                    {true, true, 00, "MAPLE                            ...Don't you dare give me any    pity, are we clear?"},
+                    {true, true, 00, "SCOUT                            Y-Yeah, of course, I just.. I'm  sorry for-"},
+                    {true, true, 00, "MAPLE                            What are YOU sorry for?"},
+                    {true, true, 00, "SCOUT                            Please just let me finish."},
+                    {true, true, 00, "MAPLE                            Okay. Go on."},
+                    {true, true, 00, "SCOUT                            I.. I'm sorry for being forward, but please don't beat yourself   up. I'm on your side, right?"},
+                    {true, true, 00, "MAPLE                            What, are you going to ask me outor something?"},
+                    {true, true, 00, "SCOUT                            No, I- I.. well, no, I wasn't    going to.. look, I just don't    want you to go."},
+                    {true, true, 00, "SCOUT                            Please don't go somewhere far    away because you feel bad."},
+                    {true, true, 00, "MAPLE                            ...I won't, Scout. Don't worry."},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "Following the distruction of the island, many of the islanders    decided to part ways. "},
+                    {true, true, 00, "They kept in touch over the yearsbut some drifted farther away    than others."},
+                    {true, true, 00, "Olivier and Eleanor moved into a small town in Ontario. Olivier   worked for a nearby farm, while  Eleanor continued to practice    magic at home."},
+                    {true, true, 00, "Guy Pizza went back into the     pizza business, but this time    took it a little more seriously, eventually owning his own pizza  place."},
+                    {true, true, 00, "Diana was infatuated with sailingand decided to take over Old Man Nicholas' ferrying business. She still operates it to this day."},
+                    {true, true, 00, "Cesar left the country after someold clients managed to track him down. No one knows where he is   but Enoki, just in case she needsa legal represenative."},
+                    {true, true, 00, "However, as for the others..."},
+
+                    {true, true, 00, "ENOKI                            Hey, Maple! Back home so early?"},
+                    {true, true, 00, "MAPLE                            Yep. The interview went great.   The military is going to suck,   but... the benefits are nice."},
+                    {true, true, 00, "AARON                            You're gonna do great, Maple."},
+                    {true, true, 00, "MAPLE                            You really think so?"},
+                    {true, true, 00, "AARON                            You'll be the only elf on the    team, I bet. That's a huge       advantage."},
+                    {true, true, 00, "MAPLE                            Yeah, I guess so. I talked to    Scout about it, he's happy enoughbut he says he'll miss me."},
+                    {true, true, 00, "ENOKI                            We will too."},
+                    {true, true, 00, "MAPLE                            You guys better have your own    place by the time I'm back,      though."},
+                    {true, true, 00, "ENOKI                            Oh, we will, cuz, uh... Well,    I've got some news, too."},
+                    {true, true, 00, "MAPLE                            Oh dear, what?"},
+                    {true, true, 00, "ENOKI                            It's looking like we.. uh.. theremight be another Tremblay here   soon enough."},
+                    {true, true, 00, "MAPLE                            Hold on, you're not-?"},
+                    {true, true, 00, "ENOKI                            Uh huh!"},
+                    {true, true, 00, "MAPLE                            You're PREGNANT?"},
+                    {true, true, 00, "AARON                            Yes, ma'am."},
+                    {true, true, 00, "ENOKI                            Ugh.. 2000 has been such a great year, I bet 2001 will be even    better!"},
+                    {true, true, 00, "MAPLE                            Holy cow, I-.. I'm gonna be an   aunt. An Aaron-Enoki mix, what's that even going to be like?"},
+                    {true, true, 00, "ENOKI                            I guess we're gonna see! You knowhow lucky I am, oui? So, I'm     thinking it's gonna be a girl,"},
+                    {true, true, 00, "ENOKI                            And you know, if it's a girl, I'mgoing to name her-"},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
+
+            if (true) {
+                line lc[32] = {
+                    {true, true, 00, "ENOKI                            Télesphore, it's time to eat!"},
+                    {true, true, 00, "TELES                            Coming!"},
+                    {true, true, 00, "ENOKI                            Télesphore, say bonjour to your  everyone, new year's dinner is   almost ready."},
+                    {true, true, 00, "TELES                            Bonjour, vous-autres."},
+                    {true, true, 00, "SCOUT                            Hey, man! Melanie and Yves are   outside by the fire pit if you   were looking for 'em."},
+                    {true, true, 00, "TELES                            Merci."},
+                    {true, true, 00, "AARON                            Hey, y'all."},
+                    {true, true, 00, "MAPLE                            Car ride wasn't bad. I brought   some gumbo."},
+                    {true, true, 00, "ENOKI                            Well, you had better. I'm almost done myself."},
+                    {true, true, 00, "ENOKI                            It's so nice to have Télesphore  home from college for Christmas, and now y'all?"},
+                    {true, true, 00, "MAPLE                            It's really nice to check in. I'mtrying to get Melanie into       college."},
+                    {true, true, 00, "MAPLE                            They just.. grow up so fast, you know? I know that's cliche."},
+                    {true, true, 00, "AARON                            You're telling us? Hehe."},
+                    {true, true, 00, "DEL                              I hope we're not bothering       anything, are we?"},
+                    {true, true, 00, "ENOKI                            DELPHINE! RUFUS! YOU'RE HERE!"},
+                    {true, true, 00, "RUFUS                            Hey guys, it's been a while."},
+                    {true, true, 00, "ENOKI                            Perfect timing! You couldn't havegotten here any sooner."},
+                    {true, true, 00, "ENOKI                            Happy New Years', y'all."},
+                    {true, true, 00, "                                 - LA FIN -"},
+                    {fals, fals, 0,  "COM: Endscene"}
+                };
+                dialogue_page(lc);
+                return 0;
+            }
         }
 
         default: {

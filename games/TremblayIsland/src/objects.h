@@ -54,10 +54,7 @@ class save_struct {
         int hat_world = 0;
         int hat_char = 0;
 
-        int ball_x = 0;
-        int ball_y = 0;
-        int ball_world = 0;
-        int ball_char = 0;
+        int gems = 0;
 };
 
 class save_all_struct {

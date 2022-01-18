@@ -46,6 +46,9 @@ audio/ahoy.wav
 audio/birds.wav
 1279980
 1631088735.08
+audio/boom.wav
+154670
+1641956464.48
 audio/castle.xm
 232022
 1629764745.57
@@ -103,6 +106,9 @@ audio/guy_hey_01.wav
 audio/heymaple.wav
 145252
 1629764745.57
+audio/knock.wav
+86062
+1641956503.38
 audio/maple_alright_01.wav
 94830
 1636430149.37
@@ -124,6 +130,12 @@ audio/maple_ugh_01.wav
 audio/maple_ugh_02.wav
 26242
 1636430012.78
+audio/mina_aw.wav
+200238
+1642476405.15
+audio/mina_whoo.wav
+87218
+1642476328.18
 audio/motorboat.wav
 658432
 1638763760.99

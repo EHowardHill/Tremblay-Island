@@ -123,6 +123,11 @@
 #include "bn_regular_bg_items_bg_monch.h"
 #include "bn_sprite_items_bg_monch_face.h"
 
+#include "bn_sprite_items_battle_aaron.h"
+#include "bn_sprite_items_battle_rufus.h"
+#include "bn_sprite_items_fight_tiles.h"
+#include "bn_regular_bg_items_bg_stage.h"
+
 static save_all_struct all_save;
 static save_struct *so;
 constexpr bool fals = false;
@@ -926,6 +931,7 @@ public:
 
 dungeon_return rabbit_game()
 {
+
     int score = 0;
     if (true)
     {
@@ -1296,8 +1302,6 @@ dungeon_return underground()
             sprintf(buf, "%d", score);
             file_spr.clear();
             file_gen.generate(-(countDigit(score - 1) * 3), -24, buf, file_spr);
-
-
 
             if (abs((current_room.start_y * 32) - maple.entity.y().integer()) < 32 && abs((current_room.start_x * 32) - maple.entity.x().integer()) < 32) {
                 if (bn::keypad::a_pressed()) {
@@ -2532,8 +2536,6 @@ dungeon_return kitchen() {
                     done = true;
                 }
 
-                //BN_LOG(hand.x(), " x ", hand.y());
-
                 if (food[4].type == je_veus_de && !ready) {
 
                     switch(chari) {
@@ -2622,8 +2624,6 @@ dungeon_return kitchen() {
                     }
                 }
 
-                //BN_LOG(hand.x(), " - ", hand.y());
-
                 if (bn::keypad::a_pressed()) {
                     bn::sound_items::pop.play();
 
@@ -2651,7 +2651,6 @@ dungeon_return kitchen() {
                         }
                     } else if ((sel > 0 && sel < 3 && food[sel].type == 1) || sel == 3) {
                         if (abs(food[4].entity.x() - hand.x()) + abs(food[4].entity.y() - hand.y()) < 16) {
-                            BN_LOG(sel, " - ", food[4].type, " - ", food[sel].type);
                             switch(food[4].type) {
                                 case 1:
                                     if (sel == 1) {
@@ -2799,6 +2798,374 @@ dungeon_return kitchen() {
 
     dungeon_return dt(4, 4, 13);
     return dt;
+}
+
+dungeon_return final_battle() {
+
+    bn::camera_ptr camera = bn::camera_ptr::create(0, 0);
+
+    auto bg_stage = bn::regular_bg_items::bg_stage.create_bg(0,0);
+    bg_stage.set_camera(camera);
+
+    bn::music_items_info::span[35].first.play(bn::fixed(100) / 100);
+    auto axe = bn::sprite_items::ax_bar.create_sprite(0, 64);
+
+    int aaron_x = -64;
+    int aaron_y = -64;
+    int aaron_offset_x = 0;
+    int aaron_offset_y = 0;
+
+    bool aaron_change = true;
+    int aaron_action = 1;
+
+    int rufus_x = 64;
+    int rufus_y = -64;
+
+    int rufus_offset_x = 0;
+    int rufus_offset_y = 0;
+
+    bool rufus_change = true;
+    int rufus_action = 1;
+
+    auto aaron_tile = bn::sprite_items::fight_tiles.create_sprite(96,64,0);
+    auto rufus_tile = bn::sprite_items::fight_tiles.create_sprite(-96,64,1);
+
+    auto a_01 = bn::sprite_items::battle_aaron.create_sprite(aaron_x + 0, aaron_y + 0);
+    auto a_02 = bn::sprite_items::battle_aaron.create_sprite(aaron_x + 0, aaron_y + 64);
+    auto a_03 = bn::sprite_items::battle_aaron.create_sprite(aaron_x + 64, aaron_y + 0);
+    auto a_04 = bn::sprite_items::battle_aaron.create_sprite(aaron_x + 64, aaron_y + 64);
+    auto a_01_anim = bn::create_sprite_animate_action_forever(a_01, 1, bn::sprite_items::battle_aaron.tiles_item(), 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22);
+    auto a_02_anim = bn::create_sprite_animate_action_forever(a_02, 1, bn::sprite_items::battle_aaron.tiles_item(), 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23);
+    auto a_03_anim = bn::create_sprite_animate_action_forever(a_03, 1, bn::sprite_items::battle_aaron.tiles_item(), 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46);
+    auto a_04_anim = bn::create_sprite_animate_action_forever(a_04, 1, bn::sprite_items::battle_aaron.tiles_item(), 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47);
+
+    auto r_01 = bn::sprite_items::battle_rufus.create_sprite(rufus_x + 0, rufus_y + 0);
+    auto r_02 = bn::sprite_items::battle_rufus.create_sprite(rufus_x + 0, rufus_y + 64);
+    auto r_03 = bn::sprite_items::battle_rufus.create_sprite(rufus_x + 64, rufus_y + 0);
+    auto r_04 = bn::sprite_items::battle_rufus.create_sprite(rufus_x + 64, rufus_y + 64);
+    auto r_01_anim = bn::create_sprite_animate_action_forever(r_01, 1, bn::sprite_items::battle_rufus.tiles_item(), 0, 2, 2, 4, 6, 8, 8, 10, 12, 14, 14, 16);
+    auto r_02_anim = bn::create_sprite_animate_action_forever(r_02, 1, bn::sprite_items::battle_rufus.tiles_item(), 1, 3, 3, 5, 7, 9, 9, 11, 13, 15, 15, 17);
+    auto r_03_anim = bn::create_sprite_animate_action_forever(r_03, 1, bn::sprite_items::battle_rufus.tiles_item(), 18, 20, 20, 22, 24, 26, 26, 28, 30, 32, 32, 34);
+    auto r_04_anim = bn::create_sprite_animate_action_forever(r_04, 1, bn::sprite_items::battle_rufus.tiles_item(), 19, 21, 21, 23, 25, 27, 27, 29, 31, 33, 33, 35);    
+
+    int rufus_logic = 3;
+
+    while(axe.x() > -80) {
+
+        if (aaron_x < -128) aaron_x = -128;
+        if (rufus_x > 128) rufus_x = 128;
+
+        // controls
+        if (bn::keypad::left_released() || bn::keypad::right_released()) {
+            aaron_change = true;
+            aaron_action = 1;
+        }
+
+        if (bn::keypad::left_pressed()) {
+            aaron_change = true;
+            aaron_action = 4;
+        }
+        if (bn::keypad::left_held()) {
+            aaron_x -= 4;
+        }
+
+        if (bn::keypad::right_pressed()) {
+            aaron_change = true;
+            aaron_action = 0;
+        }
+        if (bn::keypad::right_held()) {
+            aaron_x += 4;
+        }
+
+        // handle random movement
+        if (std::rand() % 50 == 0) {
+            int old_logic = rufus_logic;
+            rufus_logic = std::rand() % 12;
+            if (old_logic != rufus_logic) {
+                if (rufus_x > 100) rufus_logic = 0;
+                rufus_change = true;
+            }
+        }
+
+        switch(rufus_logic) {
+            case 0: {
+                rufus_action = 0;
+                rufus_x -= 1;
+                break;
+            };
+            case 1: {
+                rufus_action = 4;
+                rufus_x += 1;
+                break;
+            };
+            case 13: {
+                rufus_action = 2;
+                break;
+            }
+            case 14: {
+                rufus_action = 3;
+                break;
+            }
+            default: {
+                rufus_action = 1;
+                break;
+            };
+        }
+
+        // Collision logic
+
+        if (abs(rufus_x - aaron_x) < 72) {
+            axe.set_x(axe.x() - 2);
+
+            rufus_action = 2;
+            rufus_change = true;
+            aaron_action = 3;
+            aaron_change = true;
+
+            bn::sound_items::firehit.play();
+
+            if (std::rand() % 16 == 0) {
+                bn::sound_items::rufus_02.play();
+            }
+
+            int ugh = std::rand() % 12;
+            switch (ugh) {
+                case 0:
+                    bn::sound_items::aaron_ugh_01.play();
+                    break;
+                case 1:
+                    bn::sound_items::aaron_ugh_02.play();
+                    break;
+                case 2:
+                    bn::sound_items::aaron_ugh_03.play();
+                    break;
+                case 3:
+                    bn::sound_items::aaron_ugh_01.play();
+                    break;
+                case 4:
+                    bn::sound_items::aaron_ugh_05.play();
+                    break;
+                case 5:
+                    bn::sound_items::aaron_ugh_06.play();
+                    break;
+                case 6:
+                    bn::sound_items::aaron_ugh_07.play();
+                    break;
+                default:
+
+                    // we do not have an entry for aaron_ugh_08
+                    // but i can't bring myself to delete it
+
+                    break;
+            }
+        }
+
+        if (bn::keypad::a_pressed() && aaron_action != 3) {
+            bn::sound_items::firehit.play();
+
+            if (abs(rufus_x - aaron_x) < 96) {
+                rufus_action = 3;
+                rufus_change = true;
+                bn::sound_items::rufus_01.play();
+                axe.set_x(axe.x() + 1);
+            }
+
+            aaron_action = 2;
+            aaron_change = true;
+        }
+ 
+        // Handle animation changes
+        if (aaron_change) {
+            aaron_change = false;
+            switch(aaron_action) {
+                case 0: {
+                    a_01_anim = bn::create_sprite_animate_action_forever(a_01, 1, bn::sprite_items::battle_aaron.tiles_item(), 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22);
+                    a_02_anim = bn::create_sprite_animate_action_forever(a_02, 1, bn::sprite_items::battle_aaron.tiles_item(), 1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21, 23);
+                    a_03_anim = bn::create_sprite_animate_action_forever(a_03, 1, bn::sprite_items::battle_aaron.tiles_item(), 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46);
+                    a_04_anim = bn::create_sprite_animate_action_forever(a_04, 1, bn::sprite_items::battle_aaron.tiles_item(), 25, 27, 29, 31, 33, 35, 37, 39, 41, 43, 45, 47);
+
+                    aaron_offset_x = 4;
+                    aaron_offset_y = 6;
+                    break;
+                };
+                case 1: {
+                    a_01_anim = bn::create_sprite_animate_action_forever(a_01, 1, bn::sprite_items::battle_aaron.tiles_item(), 48, 48, 50, 52, 54, 56, 56, 58, 60, 62, 64, 66);
+                    a_02_anim = bn::create_sprite_animate_action_forever(a_02, 1, bn::sprite_items::battle_aaron.tiles_item(), 49, 49, 51, 53, 55, 57, 57, 59, 61, 63, 65, 67);
+                    a_03_anim = bn::create_sprite_animate_action_forever(a_03, 1, bn::sprite_items::battle_aaron.tiles_item(), 70, 70, 72, 74, 76, 78, 78, 80, 82, 84, 86, 88);
+                    a_04_anim = bn::create_sprite_animate_action_forever(a_04, 1, bn::sprite_items::battle_aaron.tiles_item(), 71, 71, 73, 75, 77, 79, 79, 81, 83, 85, 87, 89);
+
+                    aaron_offset_x = 6;
+                    aaron_offset_y = 6;
+                    break;
+                };
+                case 2: {
+                    a_01_anim = bn::create_sprite_animate_action_forever(a_01, 1, bn::sprite_items::battle_aaron.tiles_item(), 92, 92, 94, 96, 98, 100, 100, 100, 100, 100, 100, 100);
+                    a_02_anim = bn::create_sprite_animate_action_forever(a_02, 1, bn::sprite_items::battle_aaron.tiles_item(), 93, 93, 95, 97, 99, 101, 101, 101, 101, 101, 101, 101);
+                    a_03_anim = bn::create_sprite_animate_action_forever(a_03, 1, bn::sprite_items::battle_aaron.tiles_item(), 104, 104, 106, 108, 110, 112, 112, 112, 112, 112, 112, 114);
+                    a_04_anim = bn::create_sprite_animate_action_forever(a_04, 1, bn::sprite_items::battle_aaron.tiles_item(), 105, 105, 107, 109, 111, 113, 113, 113, 113, 113, 113, 115);
+
+                    aaron_offset_x = 0;
+                    aaron_offset_y = 0;
+                    break;
+                };
+                case 3: {
+                    a_01_anim = bn::create_sprite_animate_action_forever(a_01, 1, bn::sprite_items::battle_aaron.tiles_item(), 116, 118, 120, 122, 124, 126, 126, 126, 126, 126, 126, 126);
+                    a_02_anim = bn::create_sprite_animate_action_forever(a_02, 1, bn::sprite_items::battle_aaron.tiles_item(), 117, 119, 121, 123, 125, 127, 127, 127, 127, 127, 127, 127);
+                    a_03_anim = bn::create_sprite_animate_action_forever(a_03, 1, bn::sprite_items::battle_aaron.tiles_item(), 128, 130, 132, 134, 136, 138, 138, 138, 138, 138, 138, 138);
+                    a_04_anim = bn::create_sprite_animate_action_forever(a_04, 1, bn::sprite_items::battle_aaron.tiles_item(), 129, 131, 133, 135, 137, 139, 139, 139, 139, 139, 139, 139);
+
+                    aaron_offset_x = 0;
+                    aaron_offset_y = 0;
+                    break;
+                };
+                case 4: {
+                    a_01_anim = bn::create_sprite_animate_action_forever(a_01, 1, bn::sprite_items::battle_aaron.tiles_item(), 22 ,20 ,18 ,16 ,14 ,12 ,10 ,8 ,6 ,4 ,2 ,0);
+                    a_02_anim = bn::create_sprite_animate_action_forever(a_02, 1, bn::sprite_items::battle_aaron.tiles_item(), 23 ,21 ,19 ,17 ,15 ,13 ,11 ,9 ,7 ,5 ,3 ,1);
+                    a_03_anim = bn::create_sprite_animate_action_forever(a_03, 1, bn::sprite_items::battle_aaron.tiles_item(), 46 ,44 ,42 ,40 ,38 ,36 ,34 ,32 ,30 ,28 ,26 ,24);
+                    a_04_anim = bn::create_sprite_animate_action_forever(a_04, 1, bn::sprite_items::battle_aaron.tiles_item(), 47 ,45 ,43 ,41 ,39 ,37 ,35 ,33 ,31 ,29 ,27 ,25);
+
+                    aaron_offset_x = 4;
+                    aaron_offset_y = 6;
+                    break;
+                };
+            }
+        }
+
+        if (rufus_change) {
+            rufus_change = false;
+            switch(rufus_action) {
+                case 0: {
+                    r_01_anim = bn::create_sprite_animate_action_forever(r_01, 1, bn::sprite_items::battle_rufus.tiles_item(), 0, 2, 2, 4, 6, 8, 8, 10, 12, 14, 14, 16);
+                    r_02_anim = bn::create_sprite_animate_action_forever(r_02, 1, bn::sprite_items::battle_rufus.tiles_item(), 1, 3, 3, 5, 7, 9, 9, 11, 13, 15, 15, 17);
+                    r_03_anim = bn::create_sprite_animate_action_forever(r_03, 1, bn::sprite_items::battle_rufus.tiles_item(), 18, 20, 20, 22, 24, 26, 26, 28, 30, 32, 32, 34);
+                    r_04_anim = bn::create_sprite_animate_action_forever(r_04, 1, bn::sprite_items::battle_rufus.tiles_item(), 19, 21, 21, 23, 25, 27, 27, 29, 31, 33, 33, 35);
+                    break;
+                };
+                case 1: {
+                    r_01_anim = bn::create_sprite_animate_action_forever(r_01, 1, bn::sprite_items::battle_rufus.tiles_item(), 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 58);
+                    r_02_anim = bn::create_sprite_animate_action_forever(r_02, 1, bn::sprite_items::battle_rufus.tiles_item(), 37, 39, 41, 43, 45, 47, 49, 51, 53, 55, 57, 59);
+                    r_03_anim = bn::create_sprite_animate_action_forever(r_03, 1, bn::sprite_items::battle_rufus.tiles_item(), 60, 62, 64, 66, 68, 70, 72, 74, 76, 78, 80, 82);
+                    r_04_anim = bn::create_sprite_animate_action_forever(r_04, 1, bn::sprite_items::battle_rufus.tiles_item(), 61, 63, 65, 67, 69, 71, 73, 75, 77, 79, 81, 83);
+                    break;
+                };
+                case 2: {
+                    r_01_anim = bn::create_sprite_animate_action_forever(r_01, 1, bn::sprite_items::battle_rufus.tiles_item(), 84, 86, 90, 92, 94, 96, 98, 100, 102, 102, 102, 102);
+                    r_02_anim = bn::create_sprite_animate_action_forever(r_02, 1, bn::sprite_items::battle_rufus.tiles_item(), 85, 87, 91, 93, 95, 97, 99, 101, 103, 103, 103, 103);
+                    r_03_anim = bn::create_sprite_animate_action_forever(r_03, 1, bn::sprite_items::battle_rufus.tiles_item(), 104, 106, 108, 110, 112, 114, 116, 118, 120, 120, 120, 120);
+                    r_04_anim = bn::create_sprite_animate_action_forever(r_04, 1, bn::sprite_items::battle_rufus.tiles_item(), 105, 107, 109, 111, 113, 115, 117, 119, 121, 121, 121, 121);
+                    BN_LOG("RUFUS ATTACK");
+                    break;
+                };
+                case 3: {
+                    r_01_anim = bn::create_sprite_animate_action_forever(r_01, 1, bn::sprite_items::battle_rufus.tiles_item(), 124, 126, 128, 130, 132, 134, 136, 138, 140, 140, 140, 140);
+                    r_02_anim = bn::create_sprite_animate_action_forever(r_02, 1, bn::sprite_items::battle_rufus.tiles_item(), 125, 127, 129, 131, 133, 135, 137, 139, 141, 141, 141, 141);
+                    r_03_anim = bn::create_sprite_animate_action_forever(r_03, 1, bn::sprite_items::battle_rufus.tiles_item(), 144, 146, 148, 150, 152, 154, 156, 158, 160, 160, 160, 160);
+                    r_04_anim = bn::create_sprite_animate_action_forever(r_04, 1, bn::sprite_items::battle_rufus.tiles_item(), 145, 147, 149, 151, 153, 155, 157, 159, 161, 161, 161, 161);
+                    BN_LOG("RUFUS DEFEND");
+                    break;
+                };
+                case 4: {
+                    r_01_anim = bn::create_sprite_animate_action_forever(r_01, 1, bn::sprite_items::battle_rufus.tiles_item(), 16 ,14 ,14 ,12 ,10 ,8 ,8 ,6 ,4 ,2 ,2 ,0);
+                    r_02_anim = bn::create_sprite_animate_action_forever(r_02, 1, bn::sprite_items::battle_rufus.tiles_item(), 17 ,15 ,15 ,13 ,11 ,9 ,9 ,7 ,5 ,3 ,3 ,1);
+                    r_03_anim = bn::create_sprite_animate_action_forever(r_03, 1, bn::sprite_items::battle_rufus.tiles_item(), 34 ,32 ,32 ,30 ,28 ,26 ,26 ,24 ,22 ,20 ,20 ,18);
+                    r_04_anim = bn::create_sprite_animate_action_forever(r_04, 1, bn::sprite_items::battle_rufus.tiles_item(), 35 ,33 ,33 ,31 ,29 ,27 ,27 ,25 ,23 ,21 ,21 ,19 );
+                    break;
+                };
+            }
+        }
+
+        camera.set_x(((rufus_x + aaron_x) / 2) + 32);
+
+        // Handle Aaron's movement
+        a_01_anim.update();
+        a_02_anim.update();
+        a_03_anim.update();
+        a_04_anim.update();
+        a_01 = a_01_anim.sprite();
+        a_02 = a_02_anim.sprite();
+        a_03 = a_03_anim.sprite();
+        a_04 = a_04_anim.sprite();
+        a_01.set_camera(camera);
+        a_02.set_camera(camera);
+        a_03.set_camera(camera);
+        a_04.set_camera(camera);
+        a_01.set_position(aaron_x + aaron_offset_x, aaron_y + aaron_offset_y);
+        a_02.set_position(aaron_x + aaron_offset_x, aaron_y + aaron_offset_y + 64);
+        a_03.set_position(aaron_x + aaron_offset_x + 64, aaron_y + aaron_offset_y);
+        a_04.set_position(aaron_x + aaron_offset_x + 64, aaron_y + aaron_offset_y + 64);
+
+        // Handle Rufus's movement
+        r_01_anim.update();
+        r_02_anim.update();
+        r_03_anim.update();
+        r_04_anim.update();
+        r_01 = r_01_anim.sprite();
+        r_02 = r_02_anim.sprite();
+        r_03 = r_03_anim.sprite();
+        r_04 = r_04_anim.sprite();
+        r_01.set_camera(camera);
+        r_02.set_camera(camera);
+        r_03.set_camera(camera);
+        r_04.set_camera(camera);
+        r_01.set_position(rufus_x + rufus_offset_x, rufus_y + rufus_offset_y);
+        r_02.set_position(rufus_x + rufus_offset_x, rufus_y + rufus_offset_y + 64);
+        r_03.set_position(rufus_x + rufus_offset_x + 64, rufus_y + rufus_offset_y);
+        r_04.set_position(rufus_x + rufus_offset_x + 64, rufus_y + rufus_offset_y + 64);
+        bn::core::update();
+
+        if (aaron_action == 2 || aaron_action == 3) {
+
+            for (int t = 1; t < 8; t++) {
+                // Handle Aaron's movement
+                a_01_anim.update();
+                a_02_anim.update();
+                a_03_anim.update();
+                a_04_anim.update();
+                a_01 = a_01_anim.sprite();
+                a_02 = a_02_anim.sprite();
+                a_03 = a_03_anim.sprite();
+                a_04 = a_04_anim.sprite();
+                a_01.set_camera(camera);
+                a_02.set_camera(camera);
+                a_03.set_camera(camera);
+                a_04.set_camera(camera);
+                a_01.set_position(aaron_x + aaron_offset_x, aaron_y + aaron_offset_y);
+                a_02.set_position(aaron_x + aaron_offset_x, aaron_y + aaron_offset_y + 64);
+                a_03.set_position(aaron_x + aaron_offset_x + 64, aaron_y + aaron_offset_y);
+                a_04.set_position(aaron_x + aaron_offset_x + 64, aaron_y + aaron_offset_y + 64);
+
+                // Handle Rufus's movement
+                r_01_anim.update();
+                r_02_anim.update();
+                r_03_anim.update();
+                r_04_anim.update();
+                r_01 = r_01_anim.sprite();
+                r_02 = r_02_anim.sprite();
+                r_03 = r_03_anim.sprite();
+                r_04 = r_04_anim.sprite();
+                r_01.set_camera(camera);
+                r_02.set_camera(camera);
+                r_03.set_camera(camera);
+                r_04.set_camera(camera);
+                r_01.set_position(rufus_x + rufus_offset_x, rufus_y + rufus_offset_y);
+                r_02.set_position(rufus_x + rufus_offset_x, rufus_y + rufus_offset_y + 64);
+                r_03.set_position(rufus_x + rufus_offset_x + 64, rufus_y + rufus_offset_y);
+                r_04.set_position(rufus_x + rufus_offset_x + 64, rufus_y + rufus_offset_y + 64);
+                bn::core::update();
+            }
+
+            if (aaron_action == 2) {
+                if (rufus_action == 3) {
+                    rufus_x += 32;
+                }
+            } else {
+                aaron_x -= 32;
+            }
+
+            aaron_action = 1;
+            aaron_change = true;
+        }
+    }
 }
 
 void core_gameplay(int x, int y, int world, int until, bool force = false, int force_char = 0)
@@ -2987,16 +3354,33 @@ int checkpoint(int level)
                 core_gameplay(10, 6, 8, 0, true);
             }
             break;
-
         case 11:
+            so->checkpoint = 10;
             break;
 
         case 12:
             exec_dialogue(32);
-
             so->last_char_id = 2;
             core_gameplay(9, 6, 4, 0, true);
             break;
+
+        case 13:
+            so->checkpoint = 12;
+            break;
+
+        case 14: {
+            dungeon_return dt;
+            dt.spawn_x = 1;//1;//3;//22;//1;
+            dt.spawn_y = 13;//9;//62;//22;//9;
+            dt.world_index = 1;//0;//2;//1;//0;
+
+            do {
+                dt = rufus_dungeon(dt, so);
+            } while(dt.world_index < 99);
+
+            so->checkpoint = 15;
+            break;
+        }
 
         default:
             return -1;
@@ -3010,12 +3394,14 @@ int main()
 {
     bn::core::init(); // Initialize Butano libraries
 
+    final_battle();
+
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
     
-    so->checkpoint = 12;
-    so->xp = 300;
+    so->checkpoint = 8;
+    so->xp = 50;
 
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
