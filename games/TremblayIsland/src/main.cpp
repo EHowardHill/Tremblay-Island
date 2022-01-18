@@ -2925,7 +2925,7 @@ dungeon_return final_battle() {
             bn::sound_items::firehit.play();
 
             if (std::rand() % 16 == 0) {
-                bn::sound_items::rufus_02.play();
+                bn::sound_items::mina_aw.play();
             }
 
             int ugh = std::rand() % 12;
@@ -2968,6 +2968,10 @@ dungeon_return final_battle() {
                 rufus_change = true;
                 bn::sound_items::rufus_01.play();
                 axe.set_x(axe.x() + 1);
+
+                if (std::rand() % 24 == 0) {
+                    bn::sound_items::mina_whoo.play();
+                }
             }
 
             aaron_action = 2;
