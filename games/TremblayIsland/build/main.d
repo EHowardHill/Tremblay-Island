@@ -241,6 +241,43 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0716.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0717.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0718.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0801.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0802.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0803.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0804.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0805.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0806.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0807.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0901.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0902.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0903.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0904.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0905.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0906.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0907.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0908.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0909.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0910.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0911.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0912.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0913.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0914.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0915.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0916.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0917.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0918.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1001.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1002.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1003.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1004.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1005.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1006.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1007.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1008.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1009.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1010.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1011.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1012.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_mountain.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_ocean.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_day_castle.h \
@@ -249,6 +286,14 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_dialogue_bg_2.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_cruz_01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_cruz_02.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_aaron_01.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_aaron_02.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_aaron_03.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_01.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_02.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_03.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_aaron_eyes.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_enoki_eyes.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/src/scripts.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/src/wander.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_builder.h \
@@ -581,6 +626,43 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0716.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0717.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0718.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0801.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0802.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0803.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0804.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0805.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0806.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0807.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0901.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0902.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0903.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0904.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0905.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0906.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0907.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0908.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0909.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0910.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0911.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0912.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0913.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0914.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0915.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0916.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0917.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0918.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1001.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1002.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1003.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1004.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1005.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1006.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1007.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1008.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1009.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1010.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1011.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s1012.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_mountain.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_ocean.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_day_castle.h:
@@ -589,6 +671,14 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_dialogue_bg_2.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_cruz_01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_cruz_02.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_aaron_01.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_aaron_02.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_aaron_03.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_01.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_02.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_03.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_aaron_eyes.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_enoki_eyes.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/src/scripts.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/src/wander.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_builder.h:

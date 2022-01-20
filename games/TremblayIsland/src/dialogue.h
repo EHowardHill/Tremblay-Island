@@ -121,6 +121,43 @@
 #include "bn_regular_bg_items_s0716.h"
 #include "bn_regular_bg_items_s0717.h"
 #include "bn_regular_bg_items_s0718.h"
+#include "bn_regular_bg_items_s0801.h"
+#include "bn_regular_bg_items_s0802.h"
+#include "bn_regular_bg_items_s0803.h"
+#include "bn_regular_bg_items_s0804.h"
+#include "bn_regular_bg_items_s0805.h"
+#include "bn_regular_bg_items_s0806.h"
+#include "bn_regular_bg_items_s0807.h"
+#include "bn_regular_bg_items_s0901.h"
+#include "bn_regular_bg_items_s0902.h"
+#include "bn_regular_bg_items_s0903.h"
+#include "bn_regular_bg_items_s0904.h"
+#include "bn_regular_bg_items_s0905.h"
+#include "bn_regular_bg_items_s0906.h"
+#include "bn_regular_bg_items_s0907.h"
+#include "bn_regular_bg_items_s0908.h"
+#include "bn_regular_bg_items_s0909.h"
+#include "bn_regular_bg_items_s0910.h"
+#include "bn_regular_bg_items_s0911.h"
+#include "bn_regular_bg_items_s0912.h"
+#include "bn_regular_bg_items_s0913.h"
+#include "bn_regular_bg_items_s0914.h"
+#include "bn_regular_bg_items_s0915.h"
+#include "bn_regular_bg_items_s0916.h"
+#include "bn_regular_bg_items_s0917.h"
+#include "bn_regular_bg_items_s0918.h"
+#include "bn_regular_bg_items_s1001.h"
+#include "bn_regular_bg_items_s1002.h"
+#include "bn_regular_bg_items_s1003.h"
+#include "bn_regular_bg_items_s1004.h"
+#include "bn_regular_bg_items_s1005.h"
+#include "bn_regular_bg_items_s1006.h"
+#include "bn_regular_bg_items_s1007.h"
+#include "bn_regular_bg_items_s1008.h"
+#include "bn_regular_bg_items_s1009.h"
+#include "bn_regular_bg_items_s1010.h"
+#include "bn_regular_bg_items_s1011.h"
+#include "bn_regular_bg_items_s1012.h"
 
 #include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
@@ -132,6 +169,15 @@
 
 #include "bn_regular_bg_items_cruz_01.h"
 #include "bn_regular_bg_items_cruz_02.h"
+
+#include "bn_regular_bg_items_real_aaron_01.h"
+#include "bn_regular_bg_items_real_aaron_02.h"
+#include "bn_regular_bg_items_real_aaron_03.h"
+#include "bn_regular_bg_items_real_enoki_01.h"
+#include "bn_regular_bg_items_real_enoki_02.h"
+#include "bn_regular_bg_items_real_enoki_03.h"
+#include "bn_sprite_items_real_aaron_eyes.h"
+#include "bn_sprite_items_real_enoki_eyes.h"
 
 // Set pointer by integer reference
 void set_sprite(bn::sprite_ptr chari, int value) {
@@ -300,6 +346,18 @@ void dialogue_page(line n[32]) {
         } else if (strcmp(n[pos].text, "BG: rain") == 0) {
             int music_volume = 80;
             bn::music_items_info::span[14].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: the flame") == 0) {
+            int music_volume = 80;
+            bn::music_items_info::span[23].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: maple") == 0) {
+            int music_volume = 80;
+            bn::music_items_info::span[19].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: pools") == 0) {
+            int music_volume = 80;
+            bn::music_items_info::span[30].first.play(bn::fixed(music_volume) / 100);
+        } else if (strcmp(n[pos].text, "BG: groovy") == 0) {
+            int music_volume = 80;
+            bn::music_items_info::span[20].first.play(bn::fixed(music_volume) / 100);
         } else if (strcmp(n[pos].text, "BG: fadeout") == 0) {
             if (bn::music::playing()) {
                 bn::music::set_volume(0);
@@ -338,6 +396,8 @@ void dialogue_page(line n[32]) {
             primary_bg.set_item(bn::regular_bg_items::bg_trailer_home);
             primary_bg.set_visible(true);
             primary_bg.set_position(88,-64);
+
+
         } else if (strcmp(n[pos].text, "S01:01") == 0) {
             primary_bg.set_item(bn::regular_bg_items::s0101);
             primary_bg.set_visible(true);
@@ -445,58 +505,172 @@ void dialogue_page(line n[32]) {
             primary_bg.set_visible(true);
 
         } else if (strcmp(n[pos].text, "S07:01") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0701);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:02") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0702);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:03") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0703);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:04") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0704);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:05") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0705);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:06") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0706);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:07") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0707);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:08") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0708);
             primary_bg.set_visible(true);
         } else if (strcmp(n[pos].text, "S07:09") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+            primary_bg.set_item(bn::regular_bg_items::s0709);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:00") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+
+        } else if (strcmp(n[pos].text, "S07:10") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0710);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:01") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+
+        } else if (strcmp(n[pos].text, "S07:11") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0711);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:02") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+        } else if (strcmp(n[pos].text, "S07:12") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0712);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:03") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+        } else if (strcmp(n[pos].text, "S07:13") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0713);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:04") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+        } else if (strcmp(n[pos].text, "S07:14") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0714);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:05") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+        } else if (strcmp(n[pos].text, "S07:15") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0715);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:06") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+        } else if (strcmp(n[pos].text, "S07:16") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0716);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:07") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+        } else if (strcmp(n[pos].text, "S07:17") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0717);
             primary_bg.set_visible(true);
-        } else if (strcmp(n[pos].text, "S07:08") == 0) {
-            primary_bg.set_item(bn::regular_bg_items::s0603);
+        } else if (strcmp(n[pos].text, "S07:18") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0718);
+            primary_bg.set_visible(true);
+
+        } else if (strcmp(n[pos].text, "S08:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0801);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S08:02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0802);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S08:03") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0803);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S08:04") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0804);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S08:05") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0805);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S08:06") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0806);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S08:07") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0807);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0901);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0902);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:03") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0903);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:04") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0904);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:05") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0905);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:06") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0906);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:07") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0907);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:08") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0908);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:09") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0909);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:10") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0910);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:11") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0911);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:12") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0912);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:13") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0913);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:14") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0914);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:15") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0915);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:16") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0916);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:17") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0917);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S09:18") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s0918);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:01") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1001);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:02") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1002);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:03") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1003);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:04") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1004);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:05") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1005);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:06") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1006);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:07") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1007);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:08") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1008);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:09") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1009);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:10") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1010);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:11") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1011);
+            primary_bg.set_visible(true);
+        } else if (strcmp(n[pos].text, "S10:12") == 0) {
+            primary_bg.set_item(bn::regular_bg_items::s1012);
             primary_bg.set_visible(true);
 
         } else if (strcmp(n[pos].text, "S_STV_01") == 0) {

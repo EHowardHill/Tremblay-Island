@@ -2800,7 +2800,7 @@ dungeon_return kitchen() {
     return dt;
 }
 
-dungeon_return final_battle() {
+void final_battle() {
 
     bn::camera_ptr camera = bn::camera_ptr::create(0, 0);
 
@@ -2850,7 +2850,7 @@ dungeon_return final_battle() {
 
     int rufus_logic = 3;
 
-    while(axe.x() > -80) {
+    while(axe.x() > -72) {
 
         if (aaron_x < -128) aaron_x = -128;
         if (rufus_x > 128) rufus_x = 128;
@@ -2915,7 +2915,7 @@ dungeon_return final_battle() {
         // Collision logic
 
         if (abs(rufus_x - aaron_x) < 72) {
-            axe.set_x(axe.x() - 2);
+            axe.set_x(axe.x() - 3);
 
             rufus_action = 2;
             rufus_change = true;
@@ -3386,6 +3386,12 @@ int checkpoint(int level)
             break;
         }
 
+        case 16: {
+            exec_dialogue(34);
+            final_battle();
+            exec_dialogue(35);
+        }
+
         default:
             return -1;
             break;
@@ -3398,14 +3404,11 @@ int main()
 {
     bn::core::init(); // Initialize Butano libraries
 
-    final_battle();
-
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
     
-    so->checkpoint = 8;
-    so->xp = 50;
+    so->checkpoint = 16;
 
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
