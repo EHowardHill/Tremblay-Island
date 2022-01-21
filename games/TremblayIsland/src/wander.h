@@ -1170,6 +1170,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         {
             bn::music_items_info::span[11].first.play(bn::fixed(80) / 100);
         } else if (so->checkpoint < 14) {
+            if (bn::music::playing()) bn::music::stop();
             bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
         }
 
@@ -1713,7 +1714,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     {
         if (so->checkpoint < 12) {
             bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
-        } else {
+        } else if (bn::music::playing()) bn::music::stop(); {
             bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
         }
         current_room.init(20, 20, 9, 17);
@@ -4129,6 +4130,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
+
+                        so->checkpoint = 14;
+                        dt.world_index = 0;
+                        return dt;
                         break;
                     };
                 };
@@ -5548,6 +5553,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         for (int t = 0; t < chari.size(); t++)
         {
             // Set primary camera following X/Y coordinates
+            chari.at(t).entity.set_z_order(200 - (chari.at(t).entity.y().integer() - camera.y().integer()));
 
             if (chari.at(t).role == 1)
             {
@@ -5564,19 +5570,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
                 chari.at(t).update(chari.at(my_follow_at).entity.x().integer(), chari.at(my_follow_at).entity.y().integer());
             }
-
-            // Z-Order followers
-            if (chari.at(t).entity.y() < chari.at(follow_id).entity.y())
-            {
-                chari.at(t).entity.set_z_order(3);
-            }
-            else
-            {
-                chari.at(t).entity.set_z_order(1);
-            }
         }
 
-        chari.at(follow_id).entity.set_z_order(2);
+        //chari.at(follow_id).entity.set_z_order(2);
 
         // Camera follows primary player
         if (current_room.width > 7)
@@ -5652,7 +5648,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (dt.world_index < 4)
                         {
                             local_walls[local_walls_p].entity = bn::sprite_items::environment_stone.create_sprite(x * 32, y * 32, loc - 1);
-                            local_walls[local_walls_p].entity.set_z_order(4);
+                            local_walls[local_walls_p].entity.set_z_order(256);
                         }
                         else if (dt.world_index == 4 || dt.world_index == 7 || dt.world_index == 8 || dt.world_index == 14)
                         {
@@ -5661,7 +5657,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 local_walls[local_walls_p].entity = bn::sprite_items::water_animation.create_sprite(x * 32, y * 32, anim8);
                                 anim8++;
                                 anim8 = anim8 % 8;
-                                local_walls[local_walls_p].entity.set_z_order(4);
+                                local_walls[local_walls_p].entity.set_z_order(256);
                             }
                             else
                             {
@@ -5672,7 +5668,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 }
                                 else
                                 {
-                                    local_walls[local_walls_p].entity.set_z_order(4);
+                                    local_walls[local_walls_p].entity.set_z_order(256);
                                 }
                             }
 
@@ -5684,14 +5680,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (dt.world_index == 5)
                         {
                             local_walls[local_walls_p].entity = bn::sprite_items::trailer_home.create_sprite(x * 32, y * 32, loc - 1);
-                            local_walls[local_walls_p].entity.set_z_order(4);
+                            local_walls[local_walls_p].entity.set_z_order(256);
                         }
                         else if (dt.world_index == 6)
                         {
                             if (loc < 15)
                             {
                                 local_walls[local_walls_p].entity = bn::sprite_items::scout_lab.create_sprite(x * 32, y * 32, loc - 1);
-                                local_walls[local_walls_p].entity.set_z_order(4);
+                                local_walls[local_walls_p].entity.set_z_order(256);
                             }
                         }
                         else if (dt.world_index == 11)
@@ -5700,7 +5696,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             local_walls[local_walls_p].entity = bn::sprite_items::pools_tiles.create_sprite(x * 32, y * 32, loc - 1);
                             if (loc > 1)
                             {
-                                local_walls[local_walls_p].entity.set_z_order(4);
+                                local_walls[local_walls_p].entity.set_z_order(256);
                             }
                             else
                             {
@@ -5927,6 +5923,29 @@ class gate {
 
 dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
 {
+    if (dt.world_index == 2) {
+        line lc[32] = {
+            {true, true, 0,  "S07:01"},  
+            {true, true, 0,  "BG: fadeout"},
+            {true, true, 00, "MAPLE                            So come clean with me, oui?      Did you make this place?"},
+            {true, true, 00, "SCOUT                            Heck no! I kind of wish I did,   though."},
+            {true, true, 00, "S07:02"},
+            {true, true, 00, "..."},
+            {true, true, 00, "S07:03"},
+            {true, true, 00, "SCOUT                            MAPLE LOOK OUT!"},
+            {true, true, 00, "S07:04"},
+            {true, true, 00, "MAPLE                            ...Scout, are you alright?"},
+            {true, true, 00, "RUFUS                            Ow. At least it helped pop my    back."},
+            {true, true, 00, "S07:05"},
+            {true, true, 00, "MAPLE                            What's with all the gasoline in  this place, huh?"},
+            {true, true, 00, "SCOUT                            Maybe be a little extra careful  with that fire power of yours in this next part, huh?"},
+            {true, true, 0,  "COM: Endscene"}
+        };
+        dialogue_page(lc);
+
+        bn::music_items_info::span[29].first.play(bn::fixed(80) / 100);
+    }
+
     if (!bn::music::playing()) {
         bn::music_items_info::span[29].first.play(bn::fixed(80) / 100);
     }
@@ -6276,7 +6295,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         };
         std::vector<int> local_col{
             1,1,1,1,0,0,
-            1,0,0,1,0,0,
+            1,10,10,1,0,0,
             1,0,0,1,0,0,
             1,0,0,1,0,0,
             1,0,0,1,0,0,

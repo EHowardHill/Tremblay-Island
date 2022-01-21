@@ -730,7 +730,6 @@ int exec_dialogue(int x) {
                     {true, true, 00, "BG: fadeout"},
                     {true, true, 00, "S07:14"},
                     {true, true, 00, "RUFUS                            Alright, now that we've got all  three Tremblays in one place,    let's get started, shall we?"},
-                    {true, true, 00, "S07:07"},
                     {fals, fals, 0,  "COM: Endscene"}
                 };
                 dialogue_page(lc);
@@ -744,7 +743,7 @@ int exec_dialogue(int x) {
                     {true, true, 00, "RUFUS                            Pay attention - no one ever seemsto pay attention to  me, so therewill definitely be a quiz at the end of today's lecture."},
                     {true, true, 00, "S07:10"},
                     {true, true, 00, "RUFUS                            Lesson one. Repeat after me,     'Rufus is not short. He is just  small-boned.'"},
-                    {true, true, 00, "MAPLE                            .....Are you /kidding/ me?"},
+                    {true, true, 00, "MAPLE                            .....Are you kidding me?"},
                     {true, true, 00, "RUFUS                            That doesn't sound very much likethe prompt, does it, Maple?"},
                     {true, true, 00, "S07:11"},
                     {true, true, 00, "RUFUS                            Everyone fails that section.     Moving on... Let's talk about theApres Flower. I was employed by  a certain company to"},
@@ -785,12 +784,14 @@ int exec_dialogue(int x) {
                     {true, true, 00, "S07:18"},
                     {true, true, 00, "AARON                            First off, I'm surprised you     didn't know my wife was a        magician, she's good at getting  out of tight spaces."},
                     {true, true, 00, "AARON                            Secondly, I don't care what you  saw when you ate that flower, youscared a lot of my friends. Bad."},
-                    {true, true, 00, "AARON                            That's completely unacceptable.  You can't just kidnap people, or drill under their property, or   hold them hostage."},
+                    {true, true, 00, "AARON                            That's completely unacceptable.  You can't just kidnap people and hold them hostage."},
                     {true, true, 00, "AARON                            Let us go and leave us alone,    c'est bon? Got it?"},
-                    {true, true, 00, "RUFUS                            There's something you should knowbefore we go on. This room's     doors are designed to be tightly shut, so much so that"},
-                    {true, true, 00, "RUFUS                            a bomb could go off outside and  we'd barely notice. However, the moment one of y'all takes a      little bit of Apres flower,"},
+                    {true, true, 00, "RUFUS                            Just hold on a moment, Aaron."},
+                    {true, true, 00, "RUFUS                            There's something you should knowThe doors to this room are       completely, hopelessly tightly   sealed."},
+                    {true, true, 00, "RUFUS                            A bomb could go off outside and  we'd barely notice. However, the moment one of y'all takes a      little bit of Apres flower,"},
                     {true, true, 00, "RUFUS                            those doors open wide up. Here's my challenge. We have a little   fight. If you win, I leave your  island alone."},
                     {true, true, 00, "RUFUS                            I win, and I get to be the new   king. Either way, you gotta take the Apres to get out. Oui?"},
+                    {true, true, 00, "RUFUS                            I'm confident that once one of   you sees the things I'll see, I  won't seem nearly as crazy."},
                     {true, true, 00, "RUFUS                            We'll see."},
                     {fals, fals, 0,  "COM: Endscene"}
                 };
@@ -805,7 +806,9 @@ int exec_dialogue(int x) {
             if (true) {
                 line lc[32] = {
                     {true, true, 00, "S08:01"},
+                    {true, true, 00, "RUFUS                            Well, well, well..."},
                     {true, true, 00, "RUFUS                            HA! Looks like I'm the victor    here. It's Apres flower time."},
+                    {true, true, 00, "RUFUS                            So, who will it be? Aaron, how   about you give it a go?"},
                     {true, true, 00, "MAPLE                            You know what? In your dreams,   you little punk."},
                     {true, true, 00, "S08:02"},
                     {true, true, 00, "BG: rain"},
@@ -822,7 +825,7 @@ int exec_dialogue(int x) {
                     {true, true, 00, "S08:04"},
                     {true, true, 00, "CESAR                            Hey, Maple?"},
                     {true, true, 00, "S08:05"},
-                    {true, true, 00, "MAPLE                            NOT NOW CESAR, I'M MESSING WITH ALITTLE PUNK, HERE!"},
+                    {true, true, 00, "MAPLE                            NOT NOW CESAR, I'M MESSING WITH ALITTLE MEGALOMANIAC, HERE!"},
                     {true, true, 00, "S08:06"},
                     {true, true, 00, "RUFUS                            N-No seriously, you, er, uh..    Oh dear.."},
                     {true, true, 00, "S08:07"},
@@ -902,7 +905,6 @@ int exec_dialogue(int x) {
                     {true, true, 00, "AARON                            You've done so much that has mademe proud to be your big brother."},
                     {true, true, 00, "AARON                            But you... you've got this anger inside of you all of the time at everything you percieve to be    wrong with the world."},
                     {true, true, 00, "AARON                            Anger isn't a bad thing, but     everything you're angry about..  it's because you see it in       yourself, too."},
-                    {true, true, 00, "AARON                            We don't have a home anymore.    Everything we own has been       destroyed. Not that we had too   many things to begin with."},
                     {true, true, 00, "S09:14"},
                     {true, true, 00, "AARON                            I appreciate that you stood up   for me."},
                     {true, true, 00, "MAPLE                            Shut up."},
@@ -915,9 +917,9 @@ int exec_dialogue(int x) {
                     {true, true, 00, "S09:16"},
                     {true, true, 00, "BG: fadeout"},
                     {true, true, 00, "ENOKI                            A-Aar.. AARON, WAIT!"},
-                    {true, true, 00, "AARON                            I have to stay true to my word."},
+                    {true, true, 00, "AARON                            We need to get those doors open."},
                     {true, true, 00, "RUFUS                            Hey, I can find a way to disable the door, I'm sure of it, a-at   least.. I think, you don't need  to-"},
-                    {true, true, 00, "AARON                            I said I would do it.            I'm a man of my word."},
+                    {true, true, 00, "AARON                            I'm doing it."},
                     {fals, fals, 0,  "COM: Endscene"}
                 };
                 dialogue_page(lc);
@@ -1013,7 +1015,6 @@ int exec_dialogue(int x) {
 
             if (true) {
                 line lc[32] = {
-                    {true, true, 00, "BG: fadeout"},
                     {true, true, 00, "S10:04"},
                     {true, true, 00, "SCOUT                            Maple, how are you doing?"},
                     {true, true, 00, "MAPLE                            ..."},
@@ -1081,6 +1082,107 @@ int exec_dialogue(int x) {
                     {fals, fals, 0,  "COM: Endscene"}
                 };
                 dialogue_page(lc);
+            }
+
+            if (true) {
+                bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+                bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+                bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
+                bn::vector<bn::sprite_ptr, 42> file1_spr;
+                bn::vector<bn::sprite_ptr, 42> file2_spr;
+                bn::vector<bn::sprite_ptr, 42> file3_spr;
+                char buf1[48] = {0};
+                char buf2[48] = {0};
+                char buf3[48] = {0};
+                int reg = 3;
+
+                line lc[48] = {
+                    {true, true, 00, "MAPLE TREMBLAY"},
+                    {true, true, 00, "Natalie Anderson"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "MARIA 'ENOKI' TREMBLAY"},
+                    {true, true, 00, "Brianna Beamer / Mely-Anne Dupuis"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "AARON TREMBLAY"},
+                    {true, true, 00, "Josh Hollwarth"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "RUFUS THIBODEAUX"},
+                    {true, true, 00, "Patrick Williams"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "built with Butano"},
+                    {true, true, 00, "github.com/GValiente/butano"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "Scout desktop sketch by"},
+                    {true, true, 00, "@yae.ruu (Instagram)"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "based on characters"},
+                    {true, true, 00, "from 'Vous Voila' by"},
+                    {true, true, 00, "Ethan Hill"},
+                    {true, true, 00, "created by"},
+                    {true, true, 00, "Ethan Hill"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "SPECIAL THANKS:"},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, "my friends and family"},
+                    {true, true, 00, "r/cajunfrench"},
+                    {true, true, 00, "LETU Game Design Club"},
+                    {true, true, 00, "Thank you for playing!"},
+                    {true, true, 00, "Merci d'avoir joue!"},
+                    {true, true, 00, " - LA FIN - "},
+                    {true, true, 00, " - - - - "},
+                    {true, true, 00, ""},
+                    };
+
+                sprintf(buf1, lc[0].text);
+                sprintf(buf2, lc[1].text);
+                sprintf(buf3, lc[2].text);
+
+                file1_spr.clear();
+                file1_gen.generate(-112, 96, buf1, file1_spr);
+                file2_gen.generate(-112, 96 + 14, buf2, file2_spr);
+                file3_gen.generate(-112, 96 + 28, buf3, file3_spr);
+
+                int ending = 36;
+                int scroll_on = 0;
+                while(reg < ending) {
+                    scroll_on += 1;
+                    scroll_on = scroll_on % 2;
+
+                    if (scroll_on == 0 && reg < ending - 1) {
+                        for (int t = 0; t < file1_spr.size(); t++) {
+                            file1_spr.at(t).set_y(file1_spr.at(t).y() - 1);
+                        }
+                        if (file1_spr.at(0).y().integer() < -104 && reg < ending - 1) {
+                            sprintf(buf1, lc[reg].text);
+                            file1_spr.clear();
+                            file1_gen.generate(-112, 96, buf1, file1_spr);
+                            reg++;
+                        }
+
+                        for (int t = 0; t < file2_spr.size(); t++) {
+                            file2_spr.at(t).set_y(file2_spr.at(t).y() - 1);
+                        }
+                        if (file2_spr.at(0).y().integer() < -104 && reg < ending - 1) {
+                            sprintf(buf2, lc[reg].text);
+                            file2_spr.clear();
+                            file2_gen.generate(-112, 96, buf2, file2_spr);
+                            reg++;
+                        }
+
+                        for (int t = 0; t < file3_spr.size(); t++) {
+                            file3_spr.at(t).set_y(file3_spr.at(t).y() - 1);
+                        }
+                        if (file3_spr.at(0).y().integer() < -104 && reg < ending - 1) {
+                            sprintf(buf3, lc[reg].text);
+                            file3_spr.clear();
+                            file3_gen.generate(-112, 96, buf3, file3_spr);
+                            reg++;
+                        }
+                    }
+
+                    bn::core::update();
+                }
             }
 
             break;

@@ -283,7 +283,7 @@ void load_save()
             }
         }
         if (all_save.so[0].xp == -1) all_save.so[0].xp = 0;
-        ss1 << ": " << all_save.so[0].xp << "%%";
+        ss1 << ": " << (all_save.so[0].checkpoint * 6.6) << "%%";
         sprintf(buf1, ss1.str().c_str());
     } else {
         sprintf(buf1, "Slot 1: 0%%");
@@ -297,7 +297,7 @@ void load_save()
             }
         }
         if (all_save.so[1].xp == -1) all_save.so[1].xp = 0;
-        ss1 << ": " << all_save.so[1].xp << "%%";
+        ss1 << ": " << (all_save.so[0].checkpoint * 6.6) << "%%";
         sprintf(buf2, ss1.str().c_str());
     } else {
         sprintf(buf2, "Slot 2: 0%%");
@@ -311,7 +311,7 @@ void load_save()
             }
         }
         if (all_save.so[2].xp == -1) all_save.so[2].xp = 0;
-        ss1 << ": " << all_save.so[2].xp << "%%";
+        ss1 << ": " << (all_save.so[0].checkpoint * 6.6) << "%%";
         sprintf(buf3, ss1.str().c_str());
     } else {
         sprintf(buf3, "Slot 3: 0%%");
@@ -515,7 +515,15 @@ bool victory_page(int chari, int score)
 
     so->xp = new_xp; // Add score to save total
 
-    float new_xp_d = new_xp * 0.48;
+    float bar_modifier = 0.48;
+    if (so->checkpoint > 6) {
+        bar_modifier = 0.24;
+    }
+    if (so->checkpoint > 8) {
+        bar_modifier = 0.16;
+    }
+
+    float new_xp_d = new_xp * bar_modifier;
     int new_xp_p = 0;
     bool final_hit = false;
 
@@ -791,7 +799,7 @@ dungeon_return tree_cut()
                                 bn::sound_items::aaron_ugh_03.play();
                                 break;
                             case 3:
-                                bn::sound_items::aaron_ugh_04.play();
+                                bn::sound_items::aaron_ugh_01.play();
                                 break;
                             case 4:
                                 bn::sound_items::aaron_ugh_05.play();
@@ -3210,6 +3218,12 @@ void core_gameplay(int x, int y, int world, int until, bool force = false, int f
             break;
         }
 
+        // June event
+        if (so->checkpoint == 10 && so->xp > 299) {
+            so->checkpoint = 12;
+            break;
+        }
+
         // if minigame....
         else if (dt.world_index == 99)
         {
@@ -3358,11 +3372,15 @@ int checkpoint(int level)
                 core_gameplay(10, 6, 8, 0, true);
             }
             break;
+
         case 11:
             so->checkpoint = 10;
             break;
 
         case 12:
+
+            if (bn::music::playing()) bn::music::stop();
+
             exec_dialogue(32);
             so->last_char_id = 2;
             core_gameplay(9, 6, 4, 0, true);
@@ -3375,25 +3393,24 @@ int checkpoint(int level)
         case 14: {
             dungeon_return dt;
             dt.spawn_x = 1;//1;//3;//22;//1;
-            dt.spawn_y = 13;//9;//62;//22;//9;
-            dt.world_index = 1;//0;//2;//1;//0;
+            dt.spawn_y = 9;//9;//62;//22;//9;
+            dt.world_index = 0;//0;//2;//1;//0;
 
             do {
                 dt = rufus_dungeon(dt, so);
             } while(dt.world_index < 99);
 
-            so->checkpoint = 15;
             break;
         }
 
-        case 16: {
+        case 15: {
             exec_dialogue(34);
             final_battle();
             exec_dialogue(35);
         }
 
         default:
-            return -1;
+            return 0;
             break;
         }
         bn::core::update();
@@ -3407,8 +3424,6 @@ int main()
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
-    
-    so->checkpoint = 16;
 
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
