@@ -1016,6 +1016,7 @@ int exec_dialogue(int x) {
             if (true) {
                 line lc[32] = {
                     {true, true, 00, "S10:04"},
+                    {true, true, 00, "BG: fadeout"},
                     {true, true, 00, "SCOUT                            Maple, how are you doing?"},
                     {true, true, 00, "MAPLE                            ..."},
                     {true, true, 00, "S10:03"},
