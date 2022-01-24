@@ -48,8 +48,9 @@
 #include "bn_sprite_items_diana_uke.h"
 
 #include "bn_regular_bg_items_dialogue_bg.h"
-
 #include "bn_sprite_items_funny_items.h"
+#include "bn_regular_bg_items_bg_explosion.h"
+#include "bn_regular_bg_items_bg_skeleton.h"
 
 // Projectiles
 class projectile
@@ -970,7 +971,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         std::vector<int> local_col{
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 0, 35, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -1714,8 +1715,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     {
         if (so->checkpoint < 12) {
             bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
-        } else if (bn::music::playing()) bn::music::stop(); {
-            bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
+        } else {
+            if (!bn::music::playing()) bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
         }
         current_room.init(20, 20, 9, 17);
 
@@ -2484,6 +2485,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 a_notif.set_visible(false);
                 bn::core::update();
                 int me = chari.at(follow_id).identity;
+
+                BN_LOG("Action: ", possible_action);
+
                 switch (possible_action)
                 {
 
@@ -4064,6 +4068,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         eleanor.follow_id = chari.size() - 1;
                         eleanor.identity = 5;
                         chari.push_back(eleanor);
+
+                        a_notif.set_visible(false);
+                        for (int n = 0; n < 64; n++) {
+                            aaron.update();
+                            vee.update();
+                            eleanor.update();
+                            bn::core::update();
+                        }
+
                         break;
                     }
                     else if (so->checkpoint == 13) {
@@ -4115,6 +4128,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "                                                                  SCOUT                            I'll tell y'all what. Why        don't we bunker our way away    "},
                                 {true, true, 00, "                                                                  SCOUT                            from the island? I was already   planning on making a tunnel to  "},
                                 {true, true, 00, "                                                                  SCOUT                            shore."},
+                                {true, true, 00, "                                                                  SCOUT                            (I was hoping to save that one   for the Scout Expo, but, uh..)"},
+                                {true, true, 00, "                                                                  SCOUT                            (I guess I don't really have an  option now do I.)"},
                                 {true, true, 00, "                                                                  ELEANOR                          Is that safe?"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
@@ -5236,7 +5251,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
-                        corinne.set_visible(false);
                         break;
                     }
                     else if (so->checkpoint < 12)
@@ -5288,7 +5302,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {true, true, 00, "                                                                  CESAR'S BIZAAR                   'WE ONLY HAVE TWO ITEMS,         DEAL WITH IT'"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
-                    corinne.set_visible(false);
                     break;
                 }
 
@@ -5457,6 +5470,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
+                };
+
+                case 72: {
+                    bn::music::stop();
+                    bn::music_items_info::span[23].first.play(bn::fixed(80) / 100);
                 };
 
                 }
@@ -5840,7 +5858,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             if (chari.at(follow_id).identity == 4 && bn::keypad::r_pressed() && corinne.visible() == false)
             {
-
                 corinne.set_visible(true);
                 corinne.set_x(chari.at(follow_id).entity.x());
                 bn::sound_items::pop.play();
@@ -6560,6 +6577,22 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                     if (gas_tanks.at(i).x == f_x && gas_tanks.at(i).y == f_y) {
                         dt.spawn_x = last_x;
                         dt.spawn_y = last_y;
+
+                        // death explosion
+                        for (int n = 0; n < chari.size(); n++) {
+                            chari.at(n).entity.set_visible(false);
+                        }
+                        for (int n = 0; n < local_walls_p; n++) {
+                            local_walls[local_walls_p].entity.set_visible(false);
+                        }
+                        primary_bg = bn::regular_bg_items::bg_explosion.create_bg(0,0);
+                        bn::sound_items::boom.play();
+                        bn::music::stop();
+
+                        for (int n = 0; n < 64; n++) {
+                            bn::core::update();
+                        }
+
                         return dt;
                     }
                 }

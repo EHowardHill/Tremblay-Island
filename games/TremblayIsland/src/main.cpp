@@ -325,13 +325,13 @@ void load_save()
     auto file2_icon = bn::sprite_items::save_tiles.create_sprite(98,-34 + 34,0);
     auto file3_icon = bn::sprite_items::save_tiles.create_sprite(98,-34 + 68,0);
 
-    if (all_save.so[0].last_char_id > -1) file1_icon = bn::sprite_items::save_tiles.create_sprite(98,-34, all_save.so[0].last_char_id);
+    if (all_save.so[0].last_char_id > -1 && all_save.so[0].last_char_id < 7) file1_icon = bn::sprite_items::save_tiles.create_sprite(98,-34, all_save.so[0].last_char_id);
     else file1_icon.set_visible(false);
 
-    if (all_save.so[1].last_char_id > -1) file2_icon = bn::sprite_items::save_tiles.create_sprite(98,0, all_save.so[1].last_char_id);
+    if (all_save.so[1].last_char_id > -1 && all_save.so[1].last_char_id < 7) file2_icon = bn::sprite_items::save_tiles.create_sprite(98,0, all_save.so[1].last_char_id);
     else file2_icon.set_visible(false);
 
-    if (all_save.so[2].last_char_id > -1) file3_icon = bn::sprite_items::save_tiles.create_sprite(98,34, all_save.so[2].last_char_id);
+    if (all_save.so[2].last_char_id > -1 && all_save.so[2].last_char_id < 7) file3_icon = bn::sprite_items::save_tiles.create_sprite(98,34, all_save.so[2].last_char_id);
     else file3_icon.set_visible(false);
 
     int t = 0;
@@ -364,6 +364,29 @@ void load_save()
 
         arrow.set_y(-32 + (32 * c));
         bn::core::update();
+    }
+
+    // do the save thingy
+    switch(c) {
+        case 0: {
+            file1_icon.set_visible(true);
+            file2_icon.set_visible(false);
+            file3_icon.set_visible(false);
+            break;
+        }
+        case 1: {
+            file1_icon.set_visible(false);
+            file2_icon.set_visible(true);
+            file3_icon.set_visible(false);
+            break;
+        }
+        case 2: {
+            file1_icon.set_visible(false);
+            file2_icon.set_visible(false);
+            file3_icon.set_visible(true);
+            break;
+        }
+        default: {}
     }
 
     velvet.set_visible(false);
@@ -2394,10 +2417,6 @@ dungeon_return store() {
     while(!bn::keypad::b_pressed()) {
 
         if (bn::keypad::a_pressed()) {
-            xp_spr.clear();
-            sprintf(xp_val, "XP: %d", so->xp);
-            file1_gen.generate(64, -48, xp_val, xp_spr);
-
             if (so->hat_world == -1 && item == -1 && so->xp >= 75) {
                 bn::sound_items::ching.play();
                 item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 2);
@@ -2406,6 +2425,7 @@ dungeon_return store() {
                 so->hat_char = so->last_char_id;
                 so->hat_world = 14;
 
+                b_button.set_visible(false);
                 bn::core::update();
 
                 line lc[32] = {
@@ -2413,9 +2433,15 @@ dungeon_return store() {
                     {true, true, 00, "COM: Endscene"}};
                 dialogue_page_lite(lc);
 
+                b_button.set_visible(true);
+
             } else {
                 bn::sound_items::firehit.play();
             }
+
+            xp_spr.clear();
+            sprintf(xp_val, "XP: %d", so->xp);
+            file1_gen.generate(64, -48, xp_val, xp_spr);
         }
 
         if (bn::keypad::left_pressed() || bn::keypad::right_pressed()) {

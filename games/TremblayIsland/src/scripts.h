@@ -53,7 +53,7 @@ int exec_dialogue(int x) {
                 {fals, fals, 5, "MAPLE                            Delphine Thibodeaux!             My goodness it's been... what, a year? Salut!"},
                 {fals, true, 13, "DEL                              Hey, girl! Glad you're here -    Don't worry, we've been waiting  to break out the wine and        eclairs until you showed up."},
                 {fals, true, 12, "DEL                              We're all boring adults, though, so no promises about how late we would have stayed up for you."},
-                {true, true, 7, "ENOKI                            So Maple, what have you been up  to lately? Have we even talked   since the wedding?? I missed my  best friend :("},
+                {true, true, 7, "ENOKI                            So Maple, what have you been up  to lately? Have we even talked   since the wedding?!  I missed my  best friend!"},
                 {fals, fals, 2, "MAPLE                            Surely your husband's been       keeping you busy, I suppose."},
                 {true, true, 10, "AARON                            Well, we're obviously living in acastle now, so that's been an    adventure."},
                 {true, true, 7, "ENOKI                            I am a princess."},
@@ -108,7 +108,7 @@ int exec_dialogue(int x) {
                 {true, true, 0, "S01:12"},
                 {true, true, 0, "ENOKI                            The kinda things you choose to befunny about Maple, it'll never   cease to amaze me."},
                 {true, true, 0, "S01:11"},
-                {true, true, 0, "ENOKI                            Hey- I'm feeling down and that's stupid! You wanna go on another  Maple and Enoki adventure like   old times??"},
+                {true, true, 0, "ENOKI                            Hey- I'm feeling down and that's stupid! You wanna go on another  Maple and Enoki adventure like   old times?! "},
                 {true, true, 0, "ENOKI                            Let's go explore the castle!!"},
                 {true, true, 0, "MAPLE                            Hold up, you bought this castle  and hadn't explored it all first?"},
                 {true, true, 0, "ENOKI                            Well duh, I'm taking my sweet    time with it -- it's a castle!   Allons-y, let's explore!"},
@@ -829,7 +829,7 @@ int exec_dialogue(int x) {
                     {true, true, 00, "S08:06"},
                     {true, true, 00, "RUFUS                            N-No seriously, you, er, uh..    Oh dear.."},
                     {true, true, 00, "S08:07"},
-                    {true, true, 00, "MAPLE                            WHAT??"},
+                    {true, true, 00, "MAPLE                            WHAT?! "},
                     {true, true, 00, "BG: fadeout"},
                     {fals, fals, 0,  "COM: Endscene"}
                 };
