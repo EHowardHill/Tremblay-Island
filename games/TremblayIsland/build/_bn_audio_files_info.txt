@@ -55,6 +55,9 @@ audio/castle.xm
 audio/ching.wav
 55562
 1640251223.33
+audio/click.wav
+326
+1643068953.54
 audio/cnaut.wav
 58104
 1630924188.6

@@ -1,4 +1,4 @@
-int exec_dialogue(int x) {
+int exec_dialogue(int x, int checkpoint = 0) {
 
     constexpr bool fals = false;
     constexpr int n = -1;
@@ -407,112 +407,190 @@ int exec_dialogue(int x) {
         }
 
         case 22: {
-            line lc[32] = {
-                {fals, fals, 0, "                                                                  APRIL 1st, 2000 -                Scout log No. 48"},
-                {fals, fals, 0, "                                                                  Scout TV broadcast actually had  a few viewers this time. I hope  they liked it."},
-                {fals, fals, 0, "                                                                  Maybe next time I'll finally haveenough people that I can host my very first Scout Expo."},
-                {fals, fals, 0, "                                                                  This dirt stuff is going really  slowly, and I've got funding, so"},
-                {fals, fals, 0, "                                                                  I'm happy that I'm able to work  on stuff for fun."},
-                {fals, fals, 0, "                                                                  The 'bag of holding' isn't going to be done fora while, but the"},
-                {fals, fals, 0, "                                                                  prototype shows lots of promise."},
-                {fals, fals, 0, "                                                                  Maybe it could work for that     request Aaron gave me when he"},
-                {fals, fals, 0, "                                                                  wanted a way to race cars on the island."},
-                {fals, fals, 0, "                                                                  I could just stick a whole       racetrack in the pocket dimension"},
-                {fals, fals, 0, "                                                                  so we don't have to tear the     whole place up."},
-                {fals, fals, 0, "                                                                  Of course, it has to be perfect. If he gets stuck there..."},
-                {fals, fals, 0, "                                                                  Yeah, it's gotta be perfect."},
-                {fals, fals, 0, "COM: Endscene"}
-            };
-            dialogue_page_lite(lc);
-            return 0;
+            if (checkpoint < 12) {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  APRIL 1st, 2000 -                Scout log No. 48"},
+                    {fals, fals, 0, "                                                                  Scout TV broadcast actually had  a few viewers this time. I hope  they liked it."},
+                    {fals, fals, 0, "                                                                  Maybe next time I'll finally haveenough people that I can host my very first Scout Expo."},
+                    {fals, fals, 0, "                                                                  This dirt stuff is going really  slowly, and I've got funding, so"},
+                    {fals, fals, 0, "                                                                  I'm happy that I'm able to work  on stuff for fun."},
+                    {fals, fals, 0, "                                                                  The 'bag of holding' isn't going to be done fora while, but the"},
+                    {fals, fals, 0, "                                                                  prototype shows lots of promise."},
+                    {fals, fals, 0, "                                                                  Maybe it could work for that     request Aaron gave me when he"},
+                    {fals, fals, 0, "                                                                  wanted a way to race cars on the island."},
+                    {fals, fals, 0, "                                                                  I could just stick a whole       racetrack in the pocket dimension"},
+                    {fals, fals, 0, "                                                                  so we don't have to tear the     whole place up."},
+                    {fals, fals, 0, "                                                                  Of course, it has to be perfect. If he gets stuck there..."},
+                    {fals, fals, 0, "                                                                  Yeah, it's gotta be perfect."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            } else {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  MAY 1st, 2000 -                  Scout log No. 68"},
+                    {fals, fals, 0, "                                                                  Two new villagers, one of them a little shady but Enoki seems to trust him."},
+                    {fals, fals, 0, "                                                                  Apparently the other new guy is agreat chef, and his last name is Pizza."},
+                    {fals, fals, 0, "                                                                  I've gotta figure out his real   name, my curiosity is gonna kill me."},
+                    {fals, fals, 0, "                                                                  Rufus has been insufferable and  decided to interrupt Scout TV."},
+                    {fals, fals, 0, "                                                                  I don't know if he's got some    kind of complex or something going on."},
+                    {fals, fals, 0, "                                                                  Frankly enough, I'm a little     worried. Maybe I should check on him."},
+                    {fals, fals, 0, "                                                                  Like, more than I'm supposed to."},
+                    {fals, fals, 0, "                                                                  Apparently some company wants to store a bunch of gasoline over at his"},
+                    {fals, fals, 0, "                                                                  island. I found out when they    accidentally took some here."},
+                    {fals, fals, 0, "                                                                  What's he gonna do with all that gasoline? We may never know."},
+                    {fals, fals, 0, "                                                                  Hopefully everyone does okay thismonth. I'm having a lot of fun."},
+                    {fals, fals, 0, "                                                                  Scout out. Hehe, 'scout out'."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            }
             break;
         }
 
         case 23: {
-            line lc[32] = {
-                {fals, fals, 0, "                                                                  MARCH 29th, 2000 -               Scout log No. 45 (deleted)"},
-                {fals, fals, 0, "                                                                  Gotta be the best day since I    moved over here from the Bill &"},
-                {fals, fals, 0, "                                                                  Jim islands. I do NOT miss those islands."},
-                {fals, fals, 0, "                                                                  That Rufus guy was a real pain inthe patookas. Constantly"},
-                {fals, fals, 0, "                                                                  yammering on about that          conspiracy stuff"},
-                {fals, fals, 0, "                                                                  I hope he's doing fine by himselfover there."},
-                {fals, fals, 0, "                                                                  But man, that Maple girl... whew.I think she smiled at me for the"},
-                {fals, fals, 0, "                                                                  first time since she came here."},
-                {fals, fals, 0, "                                                                  It probably doesn't mean anythingbut I haven't been able to sleep"},
-                {fals, fals, 0, "                                                                  just thinking about it."},
-                {fals, fals, 0, "                                                                  She hasn't ever said anything to me that wasn't making fun of me"},
-                {fals, fals, 0, "                                                                  but maybe she's just playing hardto get."},
-                {fals, fals, 0, "                                                                  I've seen how she talks to Aaron and Enoki, she's like that to    everyone."},
-                {fals, fals, 0, "                                                                  Mmm.. Maybe someday I'll figure  out how to talk to her. Maybe"},
-                {fals, fals, 0, "                                                                  I'll make somethingt that really impresses her."},
-                {fals, fals, 0, "                                                                  She's never acts like she's      interested in anything but she   likes food and books."},
-                {fals, fals, 0, "                                                                  Maybe it's not the same kinds,   but I like food and books too."},
-                {fals, fals, 0, "                                                                  Maybe she just likes bigger guys though, and I'm shaped like      Grimace from McDonald's."},
-                {fals, fals, 0, "                                                                  That's it. I'll invent a way to  get me into shape."},
-                {fals, fals, 0, "                                                                  But she SMILED at me.            Now, it was because I tripped on"},
-                {fals, fals, 0, "                                                                  something, but maybe she thinks  I'm cute."},
-                {fals, fals, 0, "                                                                  I've gotta delete this log when  I'm done writing it."},
-                {fals, fals, 0, "COM: Endscene"}
-            };
-            dialogue_page_lite(lc);
-            return 0;
+            if (checkpoint < 12) {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  MARCH 29th, 2000 -               Scout log No. 45 (deleted)"},
+                    {fals, fals, 0, "                                                                  Gotta be the best day since I    moved over here from the Bill &"},
+                    {fals, fals, 0, "                                                                  Jim islands. I do NOT miss those islands."},
+                    {fals, fals, 0, "                                                                  That Rufus guy was a real pain inthe patookas. Constantly"},
+                    {fals, fals, 0, "                                                                  yammering on about that          conspiracy stuff"},
+                    {fals, fals, 0, "                                                                  I hope he's doing fine by himselfover there."},
+                    {fals, fals, 0, "                                                                  But man, that Maple girl... whew.I think she smiled at me for the"},
+                    {fals, fals, 0, "                                                                  first time since she came here."},
+                    {fals, fals, 0, "                                                                  It probably doesn't mean anythingbut I haven't been able to sleep"},
+                    {fals, fals, 0, "                                                                  just thinking about it."},
+                    {fals, fals, 0, "                                                                  She hasn't ever said anything to me that wasn't making fun of me"},
+                    {fals, fals, 0, "                                                                  but maybe she's just playing hardto get."},
+                    {fals, fals, 0, "                                                                  I've seen how she talks to Aaron and Enoki, she's like that to    everyone."},
+                    {fals, fals, 0, "                                                                  Mmm.. Maybe someday I'll figure  out how to talk to her. Maybe"},
+                    {fals, fals, 0, "                                                                  I'll make somethingt that really impresses her."},
+                    {fals, fals, 0, "                                                                  She's never acts like she's      interested in anything but she   likes food and books."},
+                    {fals, fals, 0, "                                                                  Maybe it's not the same kinds,   but I like food and books too."},
+                    {fals, fals, 0, "                                                                  Maybe she just likes bigger guys though, and I'm shaped like      Grimace from McDonald's."},
+                    {fals, fals, 0, "                                                                  That's it. I'll invent a way to  get me into shape."},
+                    {fals, fals, 0, "                                                                  But she SMILED at me.            Now, it was because I tripped on"},
+                    {fals, fals, 0, "                                                                  something, but maybe she thinks  I'm cute."},
+                    {fals, fals, 0, "                                                                  I've gotta delete this log when  I'm done writing it."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            } else {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  APRIL 29th, 2000 -               Scout log No. 65 (deleted)"},
+                    {fals, fals, 0, "                                                                  That new guy, man, I don't have aCHANCE with Maple."},
+                    {fals, fals, 0, "                                                                  First off, apparently they know  each other? He calls her pizza   girl?"},
+                    {fals, fals, 0, "                                                                  I'm done for. Completely. Might  as well give up."},
+                    {fals, fals, 0, "                                                                  Maybe I should learn to cook     something for once."},
+                    {fals, fals, 0, "                                                                  I definitely need to get into    shape, for real."},
+                    {fals, fals, 0, "                                                                  I guess it wouldn't do well to   bring it up to Guy."},
+                    {fals, fals, 0, "                                                                  Maybe I'll just work on myself   and let it go unless someone     brings it up."},
+                    {fals, fals, 0, "                                                                  ...Yeah."},
+                    {fals, fals, 0, "                                                                  I need to stop writing these logsabout my lack of a love life."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            }
             break;
         }
 
         case 24: {
-            line lc[32] = {
-                {fals, fals, 0, "                                                                  MARCH 30th, 2000 -               Scout log No. 46 (deleted)"},
-                {fals, fals, 0, "                                                                  That Rufus guy was a real pain inthe patookas. Constantly"},
-                {fals, fals, 0, "                                                                  yammering on about that          conspiracy stuff"},
-                {fals, fals, 0, "                                                                  Those folks from the company sentme a real cryptic message today."},
-                {fals, fals, 0, "                                                                  Apparently they're not interestedin 'results' anymore, they just"},
-                {fals, fals, 0, "                                                                  want me to install more surveillance equipment."},
-                {fals, fals, 0, "                                                                  Is it official? Maybe they want  Scout TV to be a real broadcast?"},
-                {fals, fals, 0, "                                                                  I'm suspicious it's gotta do withthat Rufus guy."},
-                {fals, fals, 0, "                                                                  They keep asking me about him,   even though we don't work        together."},
-                {fals, fals, 0, "                                                                  It's like they wanna arrest him, but they're waiting for whatever he's inventing to be done, first."},
-                {fals, fals, 0, "                                                                  It wouldn't surprise me."},
-                {fals, fals, 0, "                                                                  Yeah, this log can't be left on  my PC."},
-                {fals, fals, 0, "COM: Endscene"}
-            };
-            dialogue_page_lite(lc);
-            return 0;
+            if (checkpoint < 12) {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  MARCH 30th, 2000 -               Scout log No. 46 (deleted)"},
+                    {fals, fals, 0, "                                                                  That Rufus guy was a real pain inthe patookas. Constantly"},
+                    {fals, fals, 0, "                                                                  yammering on about that          conspiracy stuff"},
+                    {fals, fals, 0, "                                                                  Those folks from the company sentme a real cryptic message today."},
+                    {fals, fals, 0, "                                                                  Apparently they're not interestedin 'results' anymore, they just"},
+                    {fals, fals, 0, "                                                                  want me to install more surveillance equipment."},
+                    {fals, fals, 0, "                                                                  Is it official? Maybe they want  Scout TV to be a real broadcast?"},
+                    {fals, fals, 0, "                                                                  I'm suspicious it's gotta do withthat Rufus guy."},
+                    {fals, fals, 0, "                                                                  They keep asking me about him,   even though we don't work        together."},
+                    {fals, fals, 0, "                                                                  It's like they wanna arrest him, but they're waiting for whatever he's inventing to be done, first."},
+                    {fals, fals, 0, "                                                                  It wouldn't surprise me."},
+                    {fals, fals, 0, "                                                                  Yeah, this log can't be left on  my PC."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            } else {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  APRIL 30th, 2000 -               Scout log No. 66 (deleted)"},
+                    {fals, fals, 0, "                                                                  I've been thinking a lot about   the Apres flower lately."},
+                    {fals, fals, 0, "                                                                  I can't help but wonder if that  Enoki girl took some. Her eyes..."},
+                    {fals, fals, 0, "                                                                  Well, I can never get a good     enough look to see if the 'ring' is there or not."},
+                    {fals, fals, 0, "                                                                  But it'd explain so much."},
+                    {fals, fals, 0, "                                                                  Actually, now that I think about it, after hearing about the, er..SECOND side effect.."},
+                    {fals, fals, 0, "                                                                  It might not be a bad idea to    keep an eye and see if anything  happens."},
+                    {fals, fals, 0, "                                                                  I don't want anything bad to     happen to me or anyone else."},
+                    {fals, fals, 0, "                                                                  We'll see."},
+                    {fals, fals, 0, "                                                                  You know what? Screw you. You    don't deserve to hear what's     happening to the Tremblays."},
+                    {fals, fals, 0, "                                                                  They're staying out of this and  I'm going to delete this log."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            }
             break;
         }
 
         case 25: {
-            line lc[32] = {
-                {fals, fals, 0, "                                                                  TIME RAIDERS: GENESIS            a fan creation by                ICHABOD 'SCOUT' WILLIAMS"},
-                {fals, fals, 0, "                                                                  The time for reckoning was upon  him, Jahn-Jahn Gazebo felt. It   was only a matter of time before"},
-                {fals, fals, 0, "                                                                  Star Space Goblin Emperor Wizard would catch up to his planet. Butthe Time Raiders   were prepared."},
-                {fals, fals, 0, "                                                                  The squeebo-zeebos had warned himahead of time, so he and his bandwere ready."},
-                {fals, fals, 0, "                                                                  They were going to hide in plain sight by pretending to be a      different band - 'Space Raiders'."},
-                {fals, fals, 0, "                                                                  Jahn-Jahn had given his guitar   sword a new paint job."},
-                {fals, fals, 0, "                                                                  Nexus, his quipster sidekick, hadfashioned his keyboard to look"},
-                {fals, fals, 0, "                                                                  like a computer keyboard, and    swapped out his Mondo Glasses    for a pair of normal sunglasses."},
-                {fals, fals, 0, "                                                                  Ninjette, their drummer and      ninja, had disguised her mondo"},
-                {fals, fals, 0, "                                                                  nunchucks / drumsticks as a pair of chicken drumsticks. They      looked very delicious."},
-                {fals, fals, 0, "                                                                  The time had come. They decided  to swap genres. Country music waswhat they were going with."},
-                {fals, fals, 0, "                                                                  Soon enough, the Star Space      Goblin Emperor Wizard had landed on Sqeeb-Sqeeb 9."},
-                {fals, fals, 0, "                                                                  'AAALRIGHT!' he exclaimed, 'I AM SEARCHING FOR JAHN-JANH GAZEBO!"},
-                {fals, fals, 0, "                                                                  HIS SKULL WILL MEET MY WICKED    FIST OF EVIL!.. FOR EVIL!'"},
-                {fals, fals, 0, "                                                                  'Not so fast, Star Space Goblin  Emperor Wizard!' said Jahn-Jahn, wearing a fake wig."},
-                {fals, fals, 0, "                                                                  'How do you know, random         civilian?' asked the Star Space"},
-                {fals, fals, 0, "                                                                  Goblin Emperor Wizard, who did   not recognize his nemesis."},
-                {fals, fals, 0, "                                                                  'I wrote a song about it! Wanna  hear it? Here it goes!' And withthat, the song began."},
-                {fals, fals, 0, "                                                                  Because it was country music, it sucked so hard that all of his  goons died."},
-                {fals, fals, 0, "                                                                  The Star Space Goblin Emperor    Wizard himself was suspicious"},
-                {fals, fals, 0, "                                                                  that it was actually them, but   Ninjette thought fast."},
-                {fals, fals, 0, "                                                                  She tossed one of the chicken    legs into his mouth, which he"},
-                {fals, fals, 0, "                                                                  thought was delicious. It bought them enough time to leave."},
-                {fals, fals, 0, "                                                                  That's when they met a dude namedScout, who was a fantasitc pilotwho helped them escape."},
-                {fals, fals, 0, "                                                                  'Wow, Scout! You're such a great pilot!' said Jahn-Jahn. 'Do you  want to join the Time Raiders?'"},
-                {fals, fals, 0, "                                                                  Scout immediately accepted, and  everyone lived happily ever      after."},
-                {fals, fals, 0, "                                                                  I can't believe this story got   rejected from the Time Raiders   script competition, it's perfect."},
-                {fals, fals, 0, "COM: Endscene"}
-            };
-            dialogue_page_lite(lc);
-            return 0;
+            if (checkpoint < 12) {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  TIME RAIDERS: GENESIS            a fan creation by                ICHABOD 'SCOUT' WILLIAMS"},
+                    {fals, fals, 0, "                                                                  The time for reckoning was upon  him, Jahn-Jahn Gazebo felt. It   was only a matter of time before"},
+                    {fals, fals, 0, "                                                                  Star Space Goblin Emperor Wizard would catch up to his planet. Butthe Time Raiders   were prepared."},
+                    {fals, fals, 0, "                                                                  The squeebo-zeebos had warned himahead of time, so he and his bandwere ready."},
+                    {fals, fals, 0, "                                                                  They were going to hide in plain sight by pretending to be a      different band - 'Space Raiders'."},
+                    {fals, fals, 0, "                                                                  Jahn-Jahn had given his guitar   sword a new paint job."},
+                    {fals, fals, 0, "                                                                  Nexus, his quipster sidekick, hadfashioned his keyboard to look"},
+                    {fals, fals, 0, "                                                                  like a computer keyboard, and    swapped out his Mondo Glasses    for a pair of normal sunglasses."},
+                    {fals, fals, 0, "                                                                  Ninjette, their drummer and      ninja, had disguised her mondo"},
+                    {fals, fals, 0, "                                                                  nunchucks / drumsticks as a pair of chicken drumsticks. They      looked very delicious."},
+                    {fals, fals, 0, "                                                                  The time had come. They decided  to swap genres. Country music waswhat they were going with."},
+                    {fals, fals, 0, "                                                                  Soon enough, the Star Space      Goblin Emperor Wizard had landed on Sqeeb-Sqeeb 9."},
+                    {fals, fals, 0, "                                                                  'AAALRIGHT!' he exclaimed, 'I AM SEARCHING FOR JAHN-JANH GAZEBO!"},
+                    {fals, fals, 0, "                                                                  HIS SKULL WILL MEET MY WICKED    FIST OF EVIL!.. FOR EVIL!'"},
+                    {fals, fals, 0, "                                                                  'Not so fast, Star Space Goblin  Emperor Wizard!' said Jahn-Jahn, wearing a fake wig."},
+                    {fals, fals, 0, "                                                                  'How do you know, random         civilian?' asked the Star Space"},
+                    {fals, fals, 0, "                                                                  Goblin Emperor Wizard, who did   not recognize his nemesis."},
+                    {fals, fals, 0, "                                                                  'I wrote a song about it! Wanna  hear it? Here it goes!' And withthat, the song began."},
+                    {fals, fals, 0, "                                                                  Because it was country music, it sucked so hard that all of his  goons died."},
+                    {fals, fals, 0, "                                                                  The Star Space Goblin Emperor    Wizard himself was suspicious"},
+                    {fals, fals, 0, "                                                                  that it was actually them, but   Ninjette thought fast."},
+                    {fals, fals, 0, "                                                                  She tossed one of the chicken    legs into his mouth, which he"},
+                    {fals, fals, 0, "                                                                  thought was delicious. It bought them enough time to leave."},
+                    {fals, fals, 0, "                                                                  That's when they met a dude namedScout, who was a fantasitc pilotwho helped them escape."},
+                    {fals, fals, 0, "                                                                  'Wow, Scout! You're such a great pilot!' said Jahn-Jahn. 'Do you  want to join the Time Raiders?'"},
+                    {fals, fals, 0, "                                                                  Scout immediately accepted, and  everyone lived happily ever      after."},
+                    {fals, fals, 0, "                                                                  I can't believe this story got   rejected from the Time Raiders   script competition, it's perfect."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            } else {
+                line lc[32] = {
+                    {fals, fals, 0, "                                                                  TIME RAIDERS: NEO GENESIS DAWN   a fan creation by                ICHABOD 'SCOUT' WILLIAMS"},
+                    {fals, fals, 0, "                                                                  Jahn-Jahn Gazebo was sad.        Very sad.                        He felt a deep sadness."},
+                    {fals, fals, 0, "                                                                  This is because he had accident- ally consumed the sadness pepper of Sector 9."},
+                    {fals, fals, 0, "                                                                  'What is it, Jahn-Jahn?' asked   Scout, who was his first officer."},
+                    {fals, fals, 0, "                                                                  'Peppers suck,' he replied.      He was right."},
+                    {fals, fals, 0, "                                                                  They didn't go on an adventure   this time, since they let Scout  decide their destination."},
+                    {fals, fals, 0, "                                                                  Scout is a very indecisive       individual, you see."},
+                    {fals, fals, 0, "                                                                  In fact, Scout was getting both  writer's block and a horrible    pain in his wrist."},
+                    {fals, fals, 0, "                                                                  So, the Star Space Goblin Emperordecided to randomly give up and  give them his ship."},
+                    {fals, fals, 0, "                                                                  All evil in the universe was     magically zapped away and all    was well the end I'm tired."},
+                    {fals, fals, 0, "                                                                  ..."},
+                    {fals, fals, 0, "                                                                  I'm just not cut out to be a     writer, am I? Far too lazy."},
+                    {fals, fals, 0, "COM: Endscene"}
+                };
+                dialogue_page_lite(lc);
+                return 0;
+            }
             break;
         }
 

@@ -292,7 +292,7 @@ void dialogue_page(line n[32]) {
     bn::sprite_ptr chari_l = bn::sprite_items::maple01.create_sprite(-50, -17);
     bn::sprite_ptr chari_r = bn::sprite_items::maple01.create_sprite(50, -17);
     bn::regular_bg_ptr primary_bg = bn::regular_bg_items::castle_floor.create_bg(0, 0);
-    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
+    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50, 1);
     chari_l.set_visible(false);
     chari_r.set_visible(false);
     chari_r.set_horizontal_flip(true);
@@ -742,11 +742,11 @@ void dialogue_page(line n[32]) {
             char line6[42] = {0};
 
             BN_LOG(n[pos].text);
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line1[t] = n[pos].text[t];} else {line1[t] = ' ';};
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line3[t] = n[pos].text[t + 33];} else {line3[t] = ' ';};
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line4[t] = n[pos].text[t + 66];} else {line4[t] = ' ';};
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line5[t] = n[pos].text[t + 99];} else {line5[t] = ' ';};
-            for (int t = 0; t < 32; t++) if (n[pos].text[t] < 256) {line6[t] = n[pos].text[t + 132];} else {line6[t] = ' ';};
+            for (int t = 0; t < 33; t++) {line1[t] = n[pos].text[t];};
+            for (int t = 0; t < 33; t++) {line3[t] = n[pos].text[t + 33];};
+            for (int t = 0; t < 33; t++) {line4[t] = n[pos].text[t + 66];};
+            for (int t = 0; t < 33; t++) {line5[t] = n[pos].text[t + 99];};
+            for (int t = 0; t < 32; t++) {line6[t] = n[pos].text[t + 132];};
 
             text_line0.generate(-108, 21, line1, text_sprite0);
             text_line0.generate(-108, 33, line3, text_sprite2);
@@ -754,11 +754,76 @@ void dialogue_page(line n[32]) {
             text_line0.generate(-108, 57, line5, text_sprite4);
             text_line0.generate(-108, 69, line6, text_sprite5);
 
+            if (!bn::keypad::b_held()) {
+                // Hide all text
+                for (int t = 0; t < text_sprite0.size(); t++) {text_sprite0.at(t).set_visible(false); text_sprite0.at(t).set_rotation_angle(2);}
+                for (int t = 0; t < text_sprite2.size(); t++) {text_sprite2.at(t).set_visible(false); text_sprite2.at(t).set_rotation_angle(2);}
+                for (int t = 0; t < text_sprite3.size(); t++) {text_sprite3.at(t).set_visible(false); text_sprite3.at(t).set_rotation_angle(2);}
+                for (int t = 0; t < text_sprite4.size(); t++) {text_sprite4.at(t).set_visible(false); text_sprite4.at(t).set_rotation_angle(2);}
+                for (int t = 0; t < text_sprite5.size(); t++) {text_sprite5.at(t).set_visible(false); text_sprite5.at(t).set_rotation_angle(2);}
+            }
+
             dialogue_bg.put_above();
             bn::core::update();
 
             // Process visual effects
-            while(!bn::keypad::a_pressed()) {
+            int ticker = 0;
+            int ticker_delay = 0;
+            while(!(bn::keypad::a_pressed())) {
+
+                for (int t = 0; t < text_sprite0.size(); t++) if (text_sprite0.at(t).visible() && text_sprite0.at(t).rotation_angle() > 0) {text_sprite0.at(t).set_rotation_angle(text_sprite0.at(t).rotation_angle() - 1);}
+                for (int t = 0; t < text_sprite2.size(); t++) if (text_sprite2.at(t).visible() && text_sprite2.at(t).rotation_angle() > 0) {text_sprite2.at(t).set_rotation_angle(text_sprite2.at(t).rotation_angle() - 1);}
+                for (int t = 0; t < text_sprite3.size(); t++) if (text_sprite3.at(t).visible() && text_sprite3.at(t).rotation_angle() > 0) {text_sprite3.at(t).set_rotation_angle(text_sprite3.at(t).rotation_angle() - 1);}
+                for (int t = 0; t < text_sprite4.size(); t++) if (text_sprite4.at(t).visible() && text_sprite4.at(t).rotation_angle() > 0) {text_sprite4.at(t).set_rotation_angle(text_sprite4.at(t).rotation_angle() - 1);}
+                for (int t = 0; t < text_sprite5.size(); t++) if (text_sprite5.at(t).visible() && text_sprite5.at(t).rotation_angle() > 0) {text_sprite5.at(t).set_rotation_angle(text_sprite5.at(t).rotation_angle() - 1);}
+
+                if (ticker < 160) {
+                    if (ticker_delay == 0) {
+                        int ticked = ticker % 32;
+                        if (ticker >= 0 && ticker < 32) {
+                            if (text_sprite0.size() > ticked) {
+                                text_sprite0.at(ticked).set_visible(true);
+                                bn::sound_items::click.play();
+                            } else {
+                                ticker = 31;
+                            }
+                        }
+                        if (ticker >= 32 && ticker < 64) {
+                            if (text_sprite2.size() > ticked) {
+                                text_sprite2.at(ticked).set_visible(true);
+                                bn::sound_items::click.play();
+                            } else {
+                                ticker = 63;
+                            }
+                        }
+                        if (ticker >= 64 && ticker < 96) {
+                            if (text_sprite3.size() > ticked) {
+                                text_sprite3.at(ticked).set_visible(true);
+                                bn::sound_items::click.play();
+                            } else {
+                                ticker = 95;
+                            }
+                        }
+                        if (ticker >= 96 && ticker < 128) {
+                            if (text_sprite4.size() > ticked) {
+                                text_sprite4.at(ticked).set_visible(true);
+                                bn::sound_items::click.play();
+                            } else {
+                                ticker = 127;
+                            }
+                        }
+                        if (ticker >= 128 && ticker < 160) {
+                            if (text_sprite5.size() > ticked) {
+                                text_sprite5.at(ticked).set_visible(true);
+                                bn::sound_items::click.play();
+                            } else {
+                                ticker = 160;
+                            }
+                        }
+                        ticker++;
+                    }
+                    ticker_delay = (ticker_delay + 1) % 2;
+                }
 
                 if (dialogue_bg.visible()) {
 
@@ -785,6 +850,13 @@ void dialogue_page(line n[32]) {
 
                 dialogue_bg.put_above();
                 bn::core::update();
+
+                if (bn::keypad::b_held()) {
+                    for (int t = 0; t < 2; t++) {
+                        bn::core::update();
+                    }
+                    break;
+                }
             }
         }
 
@@ -803,13 +875,16 @@ void dialogue_page(line n[32]) {
     dg_bg1.set_visible(false);
     dg_bg2.set_visible(false);
     bn::blending::set_transparency_alpha(1);
+
+    bn::core::update();
+    BN_LOG("end of dialogue");
 }
 
 void dialogue_page_lite(line n[32]) {
 
     // Variable initialization
     bn::sprite_text_generator text_line0(common::variable_8x16_sprite_font);
-    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
+    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50, 1);
     auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64);
     auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 64);
     dg_bg1.set_scale(2,1);
@@ -857,11 +932,11 @@ void dialogue_page_lite(line n[32]) {
             char line6[48] = {0};
 
             BN_LOG(n[pos].text);
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line1[t] = n[pos].text[t];} else {line1[t] = ' ';};
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line3[t] = n[pos].text[t + 33];} else {line3[t] = ' ';};
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line4[t] = n[pos].text[t + 66];} else {line4[t] = ' ';};
-            for (int t = 0; t < 33; t++) if (n[pos].text[t] < 256) {line5[t] = n[pos].text[t + 99];} else {line5[t] = ' ';};
-            for (int t = 0; t < 32; t++) if (n[pos].text[t] < 256) {line6[t] = n[pos].text[t + 132];} else {line6[t] = ' ';};
+            for (int t = 0; t < 33; t++) {line1[t] = n[pos].text[t];};
+            for (int t = 0; t < 33; t++) {line3[t] = n[pos].text[t + 33];};
+            for (int t = 0; t < 33; t++) {line4[t] = n[pos].text[t + 66];};
+            for (int t = 0; t < 33; t++) {line5[t] = n[pos].text[t + 99];};
+            for (int t = 0; t < 32; t++) {line6[t] = n[pos].text[t + 132];};
             text_line0.generate(-108, 21, line1, text_sprite0);
             text_line0.generate(-108, 33, line3, text_sprite2);
             text_line0.generate(-108, 45, line4, text_sprite3);
@@ -913,13 +988,20 @@ void dialogue_page_lite(line n[32]) {
             }
 
             // Process visual effects
-            while(!bn::keypad::a_pressed()) {
+            while(!(bn::keypad::a_pressed())) {
                 if (bg_alpha < 0.9) {
                     bg_alpha += 0.05;
                     bn::blending::set_transparency_alpha(bg_alpha);
                 }
 
                 bn::core::update();
+
+                if (bn::keypad::b_held()) {
+                    for (int t = 0; t < 2; t++) {
+                        bn::core::update();
+                    }
+                    break;
+                }
             }
 
             bn::core::update();
