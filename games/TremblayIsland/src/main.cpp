@@ -170,7 +170,6 @@
 
 #include "bn_sprite_items_ocean_terrain.h"
 #include "bn_regular_bg_items_grassy_knoll.h"
-#include "bn_sprite_items_water_animation.h"
 #include "bn_sprite_items_scout_lab.h"
 #include "bn_sprite_items_corinne.h"
 #include "bn_sprite_items_diana_uke.h"
@@ -346,7 +345,6 @@ Guy     7
 #include "bn_regular_bg_items_s1010.h"
 #include "bn_regular_bg_items_s1011.h"
 #include "bn_regular_bg_items_s1012.h"
-#include "bn_regular_bg_items_mountain.h"
 #include "bn_regular_bg_items_ocean.h"
 #include "bn_regular_bg_items_day_castle.h"
 #include "bn_regular_bg_items_bg_docks.h"
@@ -585,10 +583,6 @@ void dialogue_page(line n[32]) {
         else if (strcmp(n[pos].text, "BG: Ocean") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::ocean);
-        }
-        else if (strcmp(n[pos].text, "BG: Forest") == 0) {
-            backdrops.clear();
-            backdrops.push_back(&bn::regular_bg_items::mountain);
         }
         else if (strcmp(n[pos].text, "BG: Moody") == 0) {
             backdrops.clear();
@@ -2741,20 +2735,27 @@ public:
             roundDown(y_int + 6) * room_width,
             roundUp(y_int) * room_width};
 
-        int col[8] = {
-            collisions.at(close[0] + close[2]) == 1,
-            collisions.at(close[0] + close[3]) == 1,
-            collisions.at(close[1] + close[2]) == 1,
-            collisions.at(close[1] + close[3]) == 1,
-            collisions.at(close[0] + close[2]) == 1,
-            collisions.at(close[1] + close[2]) == 1,
-            collisions.at(close[0] + close[3]) == 1,
-            collisions.at(close[1] + close[3]) == 1};
+        int col[8] = { 0 };
+        bool canLeft = true;
+        bool canRite = true;
+        bool canUp = true;
+        bool canDn = true;
 
-        bool canLeft = !(((col[4] & col[5]) ^ col[0]) || ((col[6] & col[7]) ^ col[1]));
-        bool canRite = !(((col[4] & col[5]) ^ col[2]) || ((col[6] & col[7]) ^ col[3]));
-        bool canUp = !(((col[0] & col[1]) ^ col[4]) || ((col[2] & col[3]) ^ col[5]));
-        bool canDn = !(((col[0] & col[1]) ^ col[6]) || ((col[2] & col[3]) ^ col[7]));
+        if (collisions.size() > 0) {
+            col[0] = collisions.at(close[0] + close[2]) == 1;
+            col[1] = collisions.at(close[0] + close[3]) == 1;
+            col[2] = collisions.at(close[1] + close[2]) == 1;
+            col[3] = collisions.at(close[1] + close[3]) == 1;
+            col[4] = collisions.at(close[0] + close[2]) == 1;
+            col[5] = collisions.at(close[1] + close[2]) == 1;
+            col[6] = collisions.at(close[0] + close[3]) == 1;
+            col[7] = collisions.at(close[1] + close[3]) == 1;
+
+            canLeft = !(((col[4] & col[5]) ^ col[0]) || ((col[6] & col[7]) ^ col[1]));
+            canRite = !(((col[4] & col[5]) ^ col[2]) || ((col[6] & col[7]) ^ col[3]));
+            canUp = !(((col[0] & col[1]) ^ col[4]) || ((col[2] & col[3]) ^ col[5]));
+            canDn = !(((col[0] & col[1]) ^ col[6]) || ((col[2] & col[3]) ^ col[7]));
+        }
 
         if (canLeft || canRite)
         {
@@ -3274,10 +3275,6 @@ class room
             chari.at(t).room_width = width;
         }
 
-        for (int t = 0; t < 24; t++) {
-            BN_LOG(local_tileset.at(t));
-        }
-
         int f_x = p_x - 5;
         int t_x = p_x + 6;
         int f_y = p_y - 4;
@@ -3295,6 +3292,8 @@ class room
         fix_camera();
         last_camera_x = camera.x().integer() / 32;
         last_camera_y = camera.y().integer() / 32;
+
+        if (follow_id > chari.size() - 1 || follow_id < 0) follow_id = chari.size() - 1;
     }
 
     void start_notif(int type = 0) {
@@ -3311,6 +3310,7 @@ class room
     }
 
     void update_objects() {
+
         camera.set_position(chari.at(follow_id).entity.x(), chari.at(follow_id).entity.y());
         fix_camera();
 
@@ -10113,7 +10113,6 @@ void cutscenes(int c)
 {
     if (c == 0)
     {
-        bn::sound_items::birds.play();
         bn::music_items_info::span[9].first.play(bn::fixed(80) / 100);
         bn::regular_bg_ptr f1 = bn::regular_bg_items::intro_final_1.create_bg(0, 0);
         bn::regular_bg_ptr f2 = bn::regular_bg_items::intro_final_2.create_bg(0, 0);
@@ -10668,10 +10667,7 @@ public:
 
 dungeon_return rabbit_game()
 {
-
-    /*
     int score = 0;
-    if (true)
     {
         room myRoom(9, 5, 4, 2);
 
@@ -10691,30 +10687,16 @@ dungeon_return rabbit_game()
 
         bool isHolding = false;
 
-
-        int local[1024] =  = {
-            2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2};
-        deep_copy(current_room.width * current_room.height, local, myRoom.local_tileset);
-
-        int local_col[1024] =  = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0
-        };
-        deep_copy(current_room.width * current_room.height, local_col, myRoom.collisions);
-        myRoom.camera.set_position(myRoom.start_x * 32, myRoom.start_y * 32);
+        local_tileset.clear();
+        collisions.clear();
 
         if (bn::music::playing()) bn::music::stop();
         bn::music_items_info::span[18].first.play(bn::fixed(80) / 100);
 
-        character enoki(bn::sprite_items::enoki_walking_spring, myRoom, myRoom.start_x, myRoom.start_y, true);
-        enoki.entity.set_camera(myRoom.camera);
+        character enoki(bn::sprite_items::enoki_walking_spring, 8, 2, true);
+        enoki.role = 1;
+        enoki.identity = 1;
+        myRoom.chari.push_back(enoki);
 
         bn::sprite_ptr enoki_hold = bn::sprite_items::enoki_walking_spring.create_sprite(myRoom.start_x, myRoom.start_y, 12);
         enoki_hold.set_camera(myRoom.camera);
@@ -10733,8 +10715,11 @@ dungeon_return rabbit_game()
         int heldItem = 0;
         bool playing = true;
 
+        myRoom.init_render(0, 0);
         while (playing)
         {
+            myRoom.a_notif.set_visible(false);
+
             score_meter++;
             if (score_meter == 50)
             {
@@ -10748,7 +10733,7 @@ dungeon_return rabbit_game()
             file1_gen.generate(-114, -70, buf, file1_spr);
 
             if (isHolding) {
-                enoki_hold.set_position(enoki.entity.x(), enoki.entity.y());
+                enoki.entity.set_position(enoki_hold.x(), enoki_hold.y());
                 enoki_hold.set_visible(true);
                 enoki.entity.set_visible(false);
 
@@ -10765,7 +10750,7 @@ dungeon_return rabbit_game()
             } else {
                 enoki_hold.set_visible(false);
                 enoki.entity.set_visible(true);
-                enoki.update();
+                enoki_hold.set_position(enoki.entity.x(), enoki.entity.y());
             }
 
             bool allOut = true;
@@ -10844,6 +10829,16 @@ dungeon_return rabbit_game()
                 }
             }
 
+            for (int t = 0; t < max_rabbits; t++)
+            {
+                if (
+                    (std::abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
+                    (std::abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16))
+                {
+                    myRoom.start_notif(0);
+                }
+            }
+
             if (bn::keypad::a_pressed())
             {
                 if (isHolding)
@@ -10879,14 +10874,12 @@ dungeon_return rabbit_game()
                 }
             }
 
-            //while(true) bn::core::update();
-
+            myRoom.update_objects();
             bn::core::update();
         }
     }
 
     victory_page(1, score);
-    */
 
     dungeon_return dt(1, 10, 4);
     return dt;
@@ -11804,7 +11797,6 @@ dungeon_return boat_game() {
         int isMoving = 0;
         float boat_transparency = 1;
 
-        bn::sound_items::motorboat.play();
         int distance = 32;
         int tick = 0;
 
@@ -13138,8 +13130,6 @@ int checkpoint(int level)
             break;
         }
     }
-
-    BN_LOG("before leave");
     bn::core::update();
     return level + 1;
 }
