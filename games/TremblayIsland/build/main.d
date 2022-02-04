@@ -41,6 +41,8 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_reciprocal_lut.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_rule_of_three_approximation.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_window.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_string.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_string_view.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_rect_window_actions.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed_point.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_point.h \
@@ -139,7 +141,6 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_aaron_axe_anim.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_axe_game_bg.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_tree_stump.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_underground_bg.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_underground_tiles.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_background.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_scout.h \
@@ -230,15 +231,16 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_sprite_text.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_text_generator.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_font.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_string_view.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_sprite_text.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_unordered_map.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_power_of_two.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_unordered_map_fwd.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x16_sprite_font.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x8_sprite_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_font.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x8_font.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x16_sprite_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x16_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki.h \
@@ -424,6 +426,8 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_reciprocal_lut.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_rule_of_three_approximation.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_window.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_string.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_string_view.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_rect_window_actions.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed_point.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_point.h:
@@ -522,7 +526,6 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_aaron_axe_anim.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_axe_game_bg.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_tree_stump.h:
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_underground_bg.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_underground_tiles.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_background.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_scout.h:
@@ -613,15 +616,16 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_sprite_text.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_text_generator.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_font.h:
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_string_view.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_sprite_text.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_unordered_map.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_power_of_two.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_unordered_map_fwd.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_utf8_character.h:
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x16_sprite_font.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x8_sprite_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_font.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x8_font.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x16_sprite_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x16_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki.h:

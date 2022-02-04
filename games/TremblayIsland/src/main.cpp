@@ -16,9 +16,10 @@
 #include "bn_bgs_mosaic.h"
 #include "bn_sprites_mosaic.h"
 #include "bn_colors.h"
-#include "bn_random.h"
+#include <bn_random.h>
 #include "bn_math.h"
 #include "bn_window.h"
+#include <bn_string.h>
 #include "bn_rect_window_actions.h"
 #include "bn_rect_window_boundaries_hbe_ptr.h"
 #include "bn_sram.h"
@@ -88,7 +89,6 @@
 #include "bn_sprite_items_aaron_axe_anim.h"
 #include "bn_regular_bg_items_axe_game_bg.h"
 #include "bn_sprite_items_tree_stump.h"
-#include "bn_regular_bg_items_underground_bg.h"
 #include "bn_sprite_items_underground_tiles.h"
 
 #include "bn_regular_bg_items_pc_background.h"
@@ -213,6 +213,7 @@ Guy     7
 #include "bn_sound_items.h"
 #include "bn_music_items_info.h"
 #include "common_info.h"
+#include "common_variable_8x8_sprite_font.h"
 #include "common_variable_8x16_sprite_font.h"
 #include "bn_sprite_items_a_button.h"
 #include "bn_regular_bg_items_cinemint_studios.h"
@@ -388,8 +389,21 @@ class save_all_struct {
 save_all_struct all_save;
 save_struct *so = NULL;
 constexpr bool fals = false;
-bn::vector<int, 400> local_tileset;
-bn::vector<int, 400> collisions;
+bn::vector<int, 401> local_tileset;
+bn::vector<int, 401> collisions;
+
+int rand_state = 0;
+int std_rand(void)
+{
+    rand_state = (rand_state * 137 + 12345) % 2048;
+    return abs(rand_state);
+}
+
+int std_abs(int x) {
+    int nx = x * -1;
+    if (nx > x) return nx;
+    return x;
+}
 
 // Generic classes
 class line {
@@ -3062,20 +3076,19 @@ public:
     bool carry = false;
     int spend = 0;
     int dir = 0;
-    int x_vector = 1;
-    int y_vector = 1;
+    int vector_x = 1;
+    int vector_y = 1;
     int to_x = 0;
     int to_y = 0;
     int init_y = 0;
     bool enabled = true;
-    int room_width = 0;
-    bn::vector<int, 1024>* local_tileset;
+    int room_width = 20;
 
     creepy_crawly() {}
 
     void update()
     {
-        int flap = std::rand() % 2;
+        int flap = std_rand() % 2;
         if (flap == 0)
         {
             sprite_anim.update();
@@ -3094,63 +3107,31 @@ public:
 
         if (to_x == 0 && to_y == 0)
         {
-            int rand_dir = std::rand() % 4;
-            switch (rand_dir)
-            {
-            case 0:
-                if (&local_tileset[mz + 1] == 0)
-                {
-                    to_x = mx + 1;
-                    to_y = my;
-                }
-                break;
-            case 1:
-                if (&local_tileset[mz + room_width] == 0)
-                {
-                    to_y = my + 1;
-                    to_x = mx;
-                }
-                break;
-            case 2:
-                if (&local_tileset[mz - 1] == 0)
-                {
-                    to_x = mx - 1;
-                    to_y = my;
-                }
-                break;
-            case 3:
-                if (&local_tileset[mz - room_width] == 0)
-                {
-                    to_y = my - 1;
-                    to_x = mx;
-                }
-                break;
-            }
+            to_x = std_rand() % room_width;
+            to_y = std_rand() % room_width;
         }
         else
         {
-            int vector_x = 0;
             if (mx < to_x)
             {
-                vector_x++;
+                vector_x = 1;
             }
             else if (mx > to_x)
             {
-                vector_x--;
+                vector_x = -1;
             }
-
-            int vector_y = 0;
             if (my < to_y)
             {
-                vector_y++;
+                vector_y = 1;
             }
             else if (my > to_y)
             {
-                vector_y--;
+                vector_y = -1;
             }
-
-            sprite.set_position(sprite.x().integer() + (vector_x * 2), sprite.y().integer() + (vector_y * 2));
         }
+
+        BN_LOG("scooting to ", vector_x, " by ", vector_y);
+        sprite.set_position(sprite.x().integer() + (vector_x), sprite.y().integer() + (vector_y));
     }
 };
 
@@ -3267,10 +3248,7 @@ class room
         if (camera.y().integer() > (height * 32) - (4 * 32) + 16) camera.set_y((height * 32) - (4 * 32) + 16);
     }
 
-    void init_render(int p_x = 0, int p_y = 0) {
-
-        follow_id = so->last_char_id;
-       
+    void init_render(int p_x = 0, int p_y = 0) {     
         for (int t = 0; t < chari.size(); t++) {
             chari.at(t).room_width = width;
         }
@@ -3289,11 +3267,18 @@ class room
             }
         }
 
-        fix_camera();
+        // Handle camera work initially
         last_camera_x = camera.x().integer() / 32;
         last_camera_y = camera.y().integer() / 32;
+        fix_camera();
 
-        if (follow_id > chari.size() - 1 || follow_id < 0) follow_id = chari.size() - 1;
+        // Handle active character
+        for (int t = 0; t < chari.size(); t++) {
+            if (chari.at(t).identity == so->last_char_id) {
+                follow_id = t;
+                break;
+            }
+        }
     }
 
     void start_notif(int type = 0) {
@@ -10309,12 +10294,13 @@ bool victory_page(int chari, int score)
         if (new_xp_p > new_xp)
             new_xp_p = new_xp;
 
-        sprintf(buf, "Score:     %d", total);
-        sprintf(bf2, "XP Earned: %d", new_xp_p);
+        bn::string<36> txt_score = bn::to_string<8>((int)total);
+        bn::string<36> txt_xpern = bn::to_string<8>((int)new_xp);
+
         text_spr.clear();
         text_spr_2.clear();
-        text_gen.generate(8, -64, buf, text_spr);
-        text_gen.generate(8, -48, bf2, text_spr_2);
+        text_gen.generate(8, -64, txt_score, text_spr);
+        text_gen.generate(8, -48, txt_xpern, text_spr_2);
 
         if (new_lc < new_xp_d)
         {
@@ -10515,7 +10501,7 @@ dungeon_return tree_cut()
                     }
 
                     if (penalty) {
-                        int ugh = std::rand() % 7;
+                        int ugh = std_rand() % 7;
                         switch (ugh) {
                             case 0:
                                 bn::sound_items::aaron_ugh_01.play();
@@ -10677,7 +10663,7 @@ dungeon_return rabbit_game()
         bn::regular_bg_ptr garden_bg = bn::regular_bg_items::garden_bg.create_bg(0,0);
         garden_bg.set_camera(myRoom.camera);
 
-        char buf[12];
+        char buf[12] = {0};
         bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 12> file1_spr;
         bn::vector<bn::sprite_ptr, 12> file2_spr;
@@ -10791,19 +10777,19 @@ dungeon_return rabbit_game()
             }
 
             // Random init
-            if (std::rand() % 20 == 0)
+            if (std_rand() % 20 == 0)
             {
                 for (int t = 0; t < max_rabbits; t++)
                 {
-                    if (std::rand() % 3 == 0)
+                    if (std_rand() % 3 == 0)
                     {
                         rabbits.at(t).moving = false;
                     }
                     else
                     {
                         rabbits.at(t).moving = true;
-                        signed int c_x = (std::rand() % 4) - 2;
-                        signed int c_y = (std::rand() % 4) - 2;
+                        signed int c_x = (std_rand() % 4) - 2;
+                        signed int c_y = (std_rand() % 4) - 2;
 
                         if (rabbits.at(t).sprite.x().integer() > 190)
                         {
@@ -10887,8 +10873,6 @@ dungeon_return rabbit_game()
 
 dungeon_return underground()
 {
-
-    /*
     int score = 0;
     bool is_returned = false;
     bool is_victory = false;
@@ -10897,14 +10881,14 @@ dungeon_return underground()
         room current_room(20, 20, 17, 18);
 
         bn::music_items_info::span[19].first.play(bn::fixed(80) / 100);
-        bn::regular_bg_ptr back_floor = bn::regular_bg_items::underground_bg.create_bg(0, 0);
+        bn::regular_bg_ptr back_floor = bn::regular_bg_items::velvet.create_bg(0, 0);
         bn::regular_bg_ptr back_black = bn::regular_bg_items::velvet.create_bg(0, 0);
         back_floor.set_camera(current_room.camera);
         back_black.set_camera(current_room.camera);
 
         bn::blending::set_transparency_alpha(0.9);
 
-        char buf[16];
+        char buf[16] = {0};
         bn::sprite_text_generator file_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 16> file_spr;
         bn::vector<bn::sprite_ptr, 16> bars;
@@ -10922,6 +10906,17 @@ dungeon_return underground()
         internal_window.set_camera(current_room.camera);
 
         const int w_size = 96;
+        
+        character maple = character(
+            bn::sprite_items::maple_walking_spring,
+            current_room.start_x,
+            current_room.start_y,
+            true,
+            current_room.width);
+        current_room.chari.push_back(maple);
+
+        local_tileset.clear();
+        collisions.clear();
 
         int local[1024] =  {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -10965,65 +10960,67 @@ dungeon_return underground()
             1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        deep_copy(current_room.width * current_room.height, local, &local_tileset);
-        deep_copy(current_room.width * current_room.height, local_col, &collisions);
-
-        character maple = character(
-            bn::sprite_items::maple_walking_spring,
-            current_room,
-            current_room.start_x,
-            current_room.start_y,
-            true);
-        maple.entity.set_camera(current_room.camera);
-
-        creepy_crawly bugs[24];
-        for (int t = 0; t < 24; t++)
-        {
-            bugs[t].sprite.set_camera(current_room.camera);
-            int mx = (std::rand() % (current_room.width - 6));
-            int my = (std::rand() % (current_room.height - 6));
-            while (local_tileset[mx + (my * current_room.width)] > 0)
-            {
-                mx = (std::rand() % (current_room.width - 6));
-                my = (std::rand() % (current_room.height - 6));
-            }
-            bugs[t].sprite.set_position(mx * 32, my * 32);
-            bugs[t].current_room = &current_room;
+        for (int t = 0; t <400; t++) {
+            local_tileset.push_back(local[t]);
+            collisions.push_back(local_col[t]);
         }
 
-        // Make a fireball!
-        int p_index = 0;
-        int p.size() = 3;
-        projectile p[3];
-        for (int t = 0; t < 3; t++)
+        current_room.environment = &bn::sprite_items::underground_tiles;
+        
+        current_room.init_render(current_room.start_x, current_room.start_y);       
+
+        bn::vector<creepy_crawly, 24> bugs;
+        for (int t = 0; t < 23; t++)
         {
-            p[t].fireball.set_camera(current_room.camera);
-            p[t].fireball.set_visible(false);
+            creepy_crawly bug;
+            bug.sprite.set_camera(current_room.camera);
+
+            int mx = std_rand() % (current_room.width - 6);
+            int my = std_rand() % (current_room.height - 6);
+            int mz = abs(mx + (my * current_room.width));
+            while (local_tileset.at(mz) > 0)
+            {
+                mx = std_rand() % (current_room.width - 6);
+                my = std_rand() % (current_room.height - 6);
+                mz = abs(mx + (my * current_room.width));
+            }
+            
+            bug.sprite.set_position(mx * 32, my * 32);
+            bugs.push_back(bug);
         }
 
         int update_counter = 0;
         int flex = 84;
         int brightness = 1;
-
-        current_room.camera.set_position(maple.entity.x(), maple.entity.y());
         int forgiveness = 0;
-
         int abx = 0;
         int aby = 0;
-        while (local_tileset[abx + (current_room.width * aby)] > 0)
-        {
-            abx = std::rand() % (current_room.width - 6);
-            aby = std::rand() % (current_room.height - 6);
-        }
-        bn::sprite_ptr treasure = bn::sprite_items::underground_tiles.create_sprite(abx * 32, aby * 32, 1);
-        treasure.set_camera(current_room.camera);
+        int abz = 0;
         bool is_done = false;
 
+        while (local_tileset.at(abz) > 0)
+        {
+            abx = std_abs(std_rand() % (current_room.width - 6));
+            aby = std_abs(std_rand() % (current_room.height - 6));
+            abz = std_abs(abx + (current_room.width * aby));
+        }
+
+        if ((abx * -1) > abx) abx = abx * 1;
+        if ((aby * -1) > aby) aby = aby * 1;
+
+        int vibe_check = 0;
+        if (aby > 0) vibe_check = 1;
+
+        bn::sprite_ptr treasure = bn::sprite_items::underground_tiles.create_sprite(abs(abx) * 32, abs(aby) * 32, 1);
+        treasure.set_camera(current_room.camera);
+        bn::string<8> score_text = bn::to_string<8>(score);
+
+        current_room.a_notif.set_visible(false);
         while (!is_returned)
         {
-            sprintf(buf, "%d", score);
+            score_text = bn::to_string<8>(score);
             file_spr.clear();
-            file_gen.generate(-(countDigit(score - 1) * 3), -24, buf, file_spr);
+            file_gen.generate(0, -48, score_text, file_spr);
 
             if (abs((current_room.start_y * 32) - maple.entity.y().integer()) < 32 && abs((current_room.start_x * 32) - maple.entity.x().integer()) < 32) {
                 if (bn::keypad::a_pressed()) {
@@ -11045,90 +11042,62 @@ dungeon_return underground()
                 {
                     score -= 50;
                 }
-                bn::sound_items::fireblast.play();
-                p[p_index].active = true;
-                p[p_index].fireball.set_x(maple.entity.x());
-                p[p_index].fireball.set_y(maple.entity.y());
-                p[p_index].dir = maple.dir;
-                p[p_index].dur = 0;
-                p[p_index].fireball.set_visible(true);
-                p_index++;
-                if (p_index >= p.size())
-                    p_index = 0;
             }
 
             // Check collision
             int mx = maple.entity.x().integer();
             int my = maple.entity.y().integer();
-            if (forgiveness < 1)
-            {
-                for (int t = 0; t < 24; t++)
-                {
-                    if (abs(mx - bugs[t].sprite.x().integer()) + abs(my - bugs[t].sprite.y().integer()) < 16)
-                    {
-                        score -= 100;
-
-                        if (std::rand() % 2 == 0) {
-                            bn::sound_items::maple_ugh_01.play();
-                        } else {
-                            bn::sound_items::maple_ugh_02.play();
-                        }
-                        
-                        forgiveness = 2000;
-
-                        // Move the treasure
-                        int abx = 0;
-                        int aby = 0;
-                        while (local_tileset[abx + (current_room.width * aby)] > 0)
-                        {
-                            abx = std::rand() % (current_room.width - 6);
-                            aby = std::rand() % (current_room.height - 6);
-                        }
-                        treasure.set_position(abx * 32, aby * 32);
-                        treasure.set_visible(true);
-                        is_done = false;
-                    }
-                    if (score < 0)
-                    {
-                        score = 0;
-                        maple.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
-                    }
-                }
-            }
-            else
-            {
-                forgiveness = 0;
-            }
-
-            maple.entity.set_z_order(2);
 
             // Update projectiles
-            for (int t = 0; t < p.size(); t++)
+            for (int tt = 0; tt < bugs.size(); tt++)
             {
-                if (p[t].active)
+                bugs.at(tt).update();
+
+                // Maple collision
+                if (abs(mx - bugs.at(tt).sprite.x().integer()) + abs(my - bugs.at(tt).sprite.y().integer()) < 16)
                 {
-                    p[t].fireball.set_z_order(1);
-                    p[t].update();
-                    int mxx = p[t].fireball.x().integer();
-                    int myy = p[t].fireball.y().integer();
-                    if (p[t].fireball.visible())
+                    if (std_rand() % 2 == 0) {
+                        bn::sound_items::maple_ugh_01.play();
+                    }
+                    else {
+                        bn::sound_items::maple_ugh_02.play();
+                    }
+
+                    // Move the treasure
+                    int abx = 0;
+                    int aby = 0;
+                    while (local_tileset.at(abx + (current_room.width * aby)) > 0)
                     {
-                        for (int tt = 0; tt < 24; tt++)
+                        abx = std_rand() % (current_room.width - 6);
+                        aby = std_rand() % (current_room.height - 6);
+                    }
+
+                    treasure.set_position(abx * 32, aby * 32);
+                    treasure.set_visible(true);
+                    score = 0;
+                    maple.entity.set_position(current_room.start_x * 32, current_room.start_y * 32);
+                }
+
+                // Projectile effect
+                for (int t = 0; t < current_room.p.size(); t++)
+                {
+                    if (current_room.p[t].active)
+                    {
+                        int mx = current_room.p[t].fireball.x().integer();
+                        int my = current_room.p[t].fireball.y().integer();
+                        int distance = abs(bugs.at(tt).sprite.y().integer() - my) + abs(bugs.at(tt).sprite.x().integer() - mx);
+                        if (distance < 16)
                         {
-                            int distance = abs(bugs[tt].sprite.y().integer() - myy) + abs(bugs[tt].sprite.x().integer() - mxx);
-                            if (distance < 16)
-                            {
-                                bn::sound_items::pop.play();
+                            bn::sound_items::pop.play();
 
-                                int mxx = (std::rand() % (current_room.width));
-                                int myy = (std::rand() % (current_room.height));
+                            int mxx = (std_rand() % (current_room.width));
+                            int myy = (std_rand() % (current_room.height));
 
-                                bugs[tt].sprite.set_position(mxx * 32, myy * 32);
-                                bugs[tt].to_x = 0;
-                                bugs[tt].to_y = 0;
+                            bugs.at(tt).sprite.set_position(mxx * 32, myy * 32);
+                            bugs.at(tt).to_x = 0;
+                            bugs.at(tt).to_y = 0;
 
-                                score += distance * 5;
-                            }
+                            score += distance * 5;
                         }
                     }
                 }
@@ -11137,76 +11106,16 @@ dungeon_return underground()
             back_black.set_position(
                 (back_black.x().integer() + 1) % 256,
                 (back_black.y().integer() + 1) % 256);
-            maple.update();
-
-            current_room.camera.set_x(maple.entity.x());
-            current_room.camera.set_y(maple.entity.y());
 
             if (bn::keypad::r_pressed())
                 brightness = 200;
             if (brightness > 4)
                 brightness -= 4;
-            int x_from = maple.entity.x().integer() - 24 - (brightness);
-            int y_from = maple.entity.y().integer() - 24 - (brightness);
-            int x_to = maple.entity.x().integer() + 24 + (brightness);
-            int y_to = maple.entity.y().integer() + 24 + (brightness);
-            switch (maple.dir)
-            {
-            case 0:
-            {
-                y_to += 36;
-                break;
-            }
-            case 1:
-            {
-                x_to += 36;
-                break;
-            }
-            case 2:
-            {
-                x_from -= 36;
-                break;
-            }
-            case 3:
-            {
-                y_from -= 36;
-                break;
-            }
-            }
+            int x_from = maple.entity.x().integer() - 24 - 48 - (brightness);
+            int y_from = maple.entity.y().integer() - 24 - 48 - (brightness);
+            int x_to = maple.entity.x().integer() + 24 + 48 + (brightness);
+            int y_to = maple.entity.y().integer() + 24 + 48 + (brightness);
             internal_window.set_boundaries(y_from, x_from, y_to, x_to);
-
-            for (int t = 0; t < 24; t++)
-            {
-                bugs[t].update();
-                if (bugs[t].sprite.x().integer() + 32 > x_from && bugs[t].sprite.x().integer() - 32 < x_to)
-                {
-                    if (bugs[t].sprite.y().integer() + 32 > y_from && bugs[t].sprite.y().integer() - 32 < y_to)
-                    {
-                    }
-                }
-            }
-
-            // Regularly update the tileset based on new camera coordinates
-            if (update_counter == 0)
-            {
-                int f_x_a = current_room.camera.x().integer() / 32;
-                int f_y_a = current_room.camera.y().integer() / 32;
-                int min_y = f_y_a - 4;
-                if (min_y < 0)
-                    min_y = 0;
-                int min_x = f_x_a - 4;
-                if (min_x < 0)
-                    min_x = 0;
-                int max_y = f_y_a + 7;
-                if (max_y > current_room.height)
-                    max_y = current_room.height;
-                int max_x = f_x_a + 7;
-                if (max_x > current_room.width)
-                    max_x = current_room.width;
-            }
-            update_counter++;
-            if (update_counter > 16)
-                update_counter = 0;
 
             if (treasure.visible())
             {
@@ -11219,7 +11128,8 @@ dungeon_return underground()
                 }
             }
 
-            maple.entity.put_above();
+            current_room.update_objects();
+
             bn::core::update();
         }
 
@@ -11228,8 +11138,6 @@ dungeon_return underground()
     if (is_victory) {
         victory_page(0, score);
     }
-
-    */
 
     dungeon_return dt(1, 5, 4);
     return dt;
@@ -12185,7 +12093,7 @@ dungeon_return kitchen() {
 
         while(chari < 7) {
 
-            int je_veus_de = 8 + std::rand() % 4;
+            int je_veus_de = 8 + std_rand() % 4;
 
             switch(chari) {
                 case 0:
@@ -12420,7 +12328,7 @@ dungeon_return kitchen() {
                     } else if (sel == 5) {
                         if (abs(food[4].entity.x() - hand.x()) + abs(food[4].entity.y() - hand.y()) < 16) {
                             food[5].entity.set_visible(false);
-                            score += std::rand() % 100;
+                            score += std_rand() % 100;
                         }
                     }
 
@@ -12587,9 +12495,9 @@ void final_battle() {
         }
 
         // handle random movement
-        if (std::rand() % 50 == 0) {
+        if (std_rand() % 50 == 0) {
             int old_logic = rufus_logic;
-            rufus_logic = std::rand() % 12;
+            rufus_logic = std_rand() % 12;
             if (old_logic != rufus_logic) {
                 if (rufus_x > 100) rufus_logic = 0;
                 rufus_change = true;
@@ -12633,11 +12541,11 @@ void final_battle() {
 
             bn::sound_items::firehit.play();
 
-            if (std::rand() % 16 == 0) {
+            if (std_rand() % 16 == 0) {
                 bn::sound_items::mina_aw.play();
             }
 
-            int ugh = std::rand() % 12;
+            int ugh = std_rand() % 12;
             switch (ugh) {
                 case 0:
                     bn::sound_items::aaron_ugh_01.play();
@@ -12678,7 +12586,7 @@ void final_battle() {
                 bn::sound_items::rufus_01.play();
                 axe.set_x(axe.x() + 1);
 
-                if (std::rand() % 24 == 0) {
+                if (std_rand() % 24 == 0) {
                     bn::sound_items::mina_whoo.play();
                 }
             }
