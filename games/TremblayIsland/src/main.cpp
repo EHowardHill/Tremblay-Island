@@ -131,6 +131,7 @@
 
 // UI elements
 #include "bn_sprite_items_a_button_2.h"
+#include "bn_sprite_items_score.h"
 
 // Characters
 #include "bn_sprite_items_maple_walking.h"
@@ -215,6 +216,7 @@ Guy     7
 #include "common_info.h"
 #include "common_variable_8x8_sprite_font.h"
 #include "common_variable_8x16_sprite_font.h"
+#include "common_fixed_8x16_sprite_font.h"
 #include "bn_sprite_items_a_button.h"
 #include "bn_regular_bg_items_cinemint_studios.h"
 #include "bn_regular_bg_items_dialogue_bg.h"
@@ -364,20 +366,20 @@ Guy     7
 
 class save_struct {
     public:
-        int last_char_id = 0;
-        int checkpoint = 0;
+        short int last_char_id = 0;
+        short int checkpoint = 0;
         char island_name[16] = {0};
-        int spawn_x = 0;
-        int spawn_y = 0;
-        int world_index = 0;
-        int xp = 0;
+        short int spawn_x = 0;
+        short int spawn_y = 0;
+        short int world_index = 0;
+        short int xp = 0;
 
-        int hat_x = 0;
-        int hat_y = 0;
-        int hat_world = 0;
-        int hat_char = 0;
+        short int hat_x = 0;
+        short int hat_y = 0;
+        short int hat_world = 0;
+        short int hat_char = 0;
 
-        int gems = 0;
+        short int gems = 0;
 };
 
 class save_all_struct {
@@ -385,12 +387,17 @@ class save_all_struct {
         save_struct so[3];
 };
 
+// defined expressions
+#define fals false
+
 // Reserved global memory
-save_all_struct all_save;
-save_struct *so = NULL;
-constexpr bool fals = false;
-bn::vector<int, 401> local_tileset;
-bn::vector<int, 401> collisions;
+BN_DATA_EWRAM save_all_struct all_save;
+BN_DATA_EWRAM save_struct *so = NULL;
+BN_DATA_EWRAM bn::vector<unsigned short int, 400> local_tileset;
+BN_DATA_EWRAM bn::vector<bn::rect_window, 2> windows;
+
+// Faster memory
+bn::vector<unsigned short int, 400> collisions;
 
 int rand_state = 0;
 int std_rand(void)
@@ -400,7 +407,7 @@ int std_rand(void)
 }
 
 int std_abs(int x) {
-    int nx = x * -1;
+    short int nx = x * -1;
     if (nx > x) return nx;
     return x;
 }
@@ -410,7 +417,7 @@ class line {
     public:
         bool transition;
         bool left;
-        int img = 0;
+        short int img = 0;
         char text[192] = {0};
 };
 
@@ -534,7 +541,7 @@ void dialogue_page(line n[32]) {
     bn::blending::set_intensity_alpha(0);
 
     auto cascade_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
-    int cascade_id = 0;
+    short int cascade_id = 0;
 
     auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64 - 16);
     auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 64 - 16);
@@ -542,12 +549,12 @@ void dialogue_page(line n[32]) {
     dg_bg2.set_scale(2,1);
     dg_bg1.set_blending_enabled(true);
     dg_bg2.set_blending_enabled(true);
-    float bg_alpha = 0.0;
+    bn::fixed_t<12> bg_alpha = 0.0;
 
     // While dialogue is going,
-    int pos = 0;
+    short int pos = 0;
     bool cont = true;
-    int music_volume = 80;
+    short int music_volume = 80;
     while (cont) {
 
         // Set music
@@ -1044,38 +1051,38 @@ void dialogue_page(line n[32]) {
             char line5[42] = {0};
             char line6[42] = {0};
 
-            for (int t = 0; t < 33; t++) {line1[t] = n[pos].text[t];};
-            for (int t = 0; t < 33; t++) {line3[t] = n[pos].text[t + 33];};
-            for (int t = 0; t < 33; t++) {line4[t] = n[pos].text[t + 66];};
-            for (int t = 0; t < 33; t++) {line5[t] = n[pos].text[t + 99];};
-            for (int t = 0; t < 32; t++) {line6[t] = n[pos].text[t + 132];};
+            for (short int t = 0; t < 33; t++) {line1[t] = n[pos].text[t];};
+            for (short int t = 0; t < 33; t++) {line3[t] = n[pos].text[t + 33];};
+            for (short int t = 0; t < 33; t++) {line4[t] = n[pos].text[t + 66];};
+            for (short int t = 0; t < 33; t++) {line5[t] = n[pos].text[t + 99];};
+            for (short int t = 0; t < 32; t++) {line6[t] = n[pos].text[t + 132];};
 
             text_line.generate(-108, 21, line1, text_sprite0);
-            for (int t = 0; t < text_sprite0.size(); t++) { text_sprite0.at(t).set_visible(false); }
+            for (short int t = 0; t < text_sprite0.size(); t++) { text_sprite0.at(t).set_visible(false); }
             bn::core::update();
 
             text_line.generate(-108, 33, line3, text_sprite2);
-            for (int t = 0; t < text_sprite2.size(); t++) { text_sprite2.at(t).set_visible(false); }
+            for (short int t = 0; t < text_sprite2.size(); t++) { text_sprite2.at(t).set_visible(false); }
             //bn::core::update();
 
             text_line.generate(-108, 45, line4, text_sprite3);
-            for (int t = 0; t < text_sprite3.size(); t++) { text_sprite3.at(t).set_visible(false); }
+            for (short int t = 0; t < text_sprite3.size(); t++) { text_sprite3.at(t).set_visible(false); }
             bn::core::update();
 
             text_line.generate(-108, 57, line5, text_sprite4);
-            for (int t = 0; t < text_sprite4.size(); t++) { text_sprite4.at(t).set_visible(false); }
+            for (short int t = 0; t < text_sprite4.size(); t++) { text_sprite4.at(t).set_visible(false); }
             //bn::core::update();
 
             text_line.generate(-108, 69, line6, text_sprite5);
-            for (int t = 0; t < text_sprite5.size(); t++) { text_sprite5.at(t).set_visible(false); }
+            for (short int t = 0; t < text_sprite5.size(); t++) { text_sprite5.at(t).set_visible(false); }
             bn::core::update();
 
             // Process visual effects
-            int ticker = 0;
-            int ticker_delay = 0;
+            short int ticker = 0;
+            short int ticker_delay = 0;
 
             cascade_id = 0;
-            int cascade_offset = 0;
+            short int cascade_offset = 0;
             while (!bn::keypad::a_pressed() && !bn::keypad::b_held()) {
 
                 // Handle moving backgrounds
@@ -1088,16 +1095,16 @@ void dialogue_page(line n[32]) {
                 }
 
                 // Handle text rotation
-                //for (int t = 0; t < text_sprite0.size(); t++) if (text_sprite0.at(t).visible() && text_sprite0.at(t).rotation_angle() > 0) {text_sprite0.at(t).set_rotation_angle(text_sprite0.at(t).rotation_angle() - 1);}
-                //for (int t = 0; t < text_sprite2.size(); t++) if (text_sprite2.at(t).visible() && text_sprite2.at(t).rotation_angle() > 0) {text_sprite2.at(t).set_rotation_angle(text_sprite2.at(t).rotation_angle() - 1);}
-                //for (int t = 0; t < text_sprite3.size(); t++) if (text_sprite3.at(t).visible() && text_sprite3.at(t).rotation_angle() > 0) {text_sprite3.at(t).set_rotation_angle(text_sprite3.at(t).rotation_angle() - 1);}
-                //for (int t = 0; t < text_sprite4.size(); t++) if (text_sprite4.at(t).visible() && text_sprite4.at(t).rotation_angle() > 0) {text_sprite4.at(t).set_rotation_angle(text_sprite4.at(t).rotation_angle() - 1);}
-                //for (int t = 0; t < text_sprite5.size(); t++) if (text_sprite5.at(t).visible() && text_sprite5.at(t).rotation_angle() > 0) {text_sprite5.at(t).set_rotation_angle(text_sprite5.at(t).rotation_angle() - 1);}
+                //for (short int t = 0; t < text_sprite0.size(); t++) if (text_sprite0.at(t).visible() && text_sprite0.at(t).rotation_angle() > 0) {text_sprite0.at(t).set_rotation_angle(text_sprite0.at(t).rotation_angle() - 1);}
+                //for (short int t = 0; t < text_sprite2.size(); t++) if (text_sprite2.at(t).visible() && text_sprite2.at(t).rotation_angle() > 0) {text_sprite2.at(t).set_rotation_angle(text_sprite2.at(t).rotation_angle() - 1);}
+                //for (short int t = 0; t < text_sprite3.size(); t++) if (text_sprite3.at(t).visible() && text_sprite3.at(t).rotation_angle() > 0) {text_sprite3.at(t).set_rotation_angle(text_sprite3.at(t).rotation_angle() - 1);}
+                //for (short int t = 0; t < text_sprite4.size(); t++) if (text_sprite4.at(t).visible() && text_sprite4.at(t).rotation_angle() > 0) {text_sprite4.at(t).set_rotation_angle(text_sprite4.at(t).rotation_angle() - 1);}
+                //for (short int t = 0; t < text_sprite5.size(); t++) if (text_sprite5.at(t).visible() && text_sprite5.at(t).rotation_angle() > 0) {text_sprite5.at(t).set_rotation_angle(text_sprite5.at(t).rotation_angle() - 1);}
 
                 // Handle text ticker
                 if (ticker < 160) {
                     if (ticker_delay == 0) {
-                        int ticked = ticker % 32;
+                        short int ticked = ticker % 32;
                         if (ticker >= 0 && ticker < 32) {
                             if (text_sprite0.size() > ticked) {
                                 text_sprite0.at(ticked).set_visible(true);
@@ -1161,14 +1168,14 @@ void dialogue_page(line n[32]) {
             }
 
             // Handle weirdness
-            for (int t = 0; t < text_sprite0.size(); t++) if (text_sprite0.at(t).visible() && text_sprite0.at(t).rotation_angle() > 0) { text_sprite0.at(t).set_rotation_angle(0); }
-            for (int t = 0; t < text_sprite2.size(); t++) if (text_sprite2.at(t).visible() && text_sprite2.at(t).rotation_angle() > 0) { text_sprite2.at(t).set_rotation_angle(0); }
-            for (int t = 0; t < text_sprite3.size(); t++) if (text_sprite3.at(t).visible() && text_sprite3.at(t).rotation_angle() > 0) { text_sprite3.at(t).set_rotation_angle(0); }
-            for (int t = 0; t < text_sprite4.size(); t++) if (text_sprite4.at(t).visible() && text_sprite4.at(t).rotation_angle() > 0) { text_sprite4.at(t).set_rotation_angle(0); }
-            for (int t = 0; t < text_sprite5.size(); t++) if (text_sprite5.at(t).visible() && text_sprite5.at(t).rotation_angle() > 0) { text_sprite5.at(t).set_rotation_angle(0); }
+            for (short int t = 0; t < text_sprite0.size(); t++) if (text_sprite0.at(t).visible() && text_sprite0.at(t).rotation_angle() > 0) { text_sprite0.at(t).set_rotation_angle(0); }
+            for (short int t = 0; t < text_sprite2.size(); t++) if (text_sprite2.at(t).visible() && text_sprite2.at(t).rotation_angle() > 0) { text_sprite2.at(t).set_rotation_angle(0); }
+            for (short int t = 0; t < text_sprite3.size(); t++) if (text_sprite3.at(t).visible() && text_sprite3.at(t).rotation_angle() > 0) { text_sprite3.at(t).set_rotation_angle(0); }
+            for (short int t = 0; t < text_sprite4.size(); t++) if (text_sprite4.at(t).visible() && text_sprite4.at(t).rotation_angle() > 0) { text_sprite4.at(t).set_rotation_angle(0); }
+            for (short int t = 0; t < text_sprite5.size(); t++) if (text_sprite5.at(t).visible() && text_sprite5.at(t).rotation_angle() > 0) { text_sprite5.at(t).set_rotation_angle(0); }
             ticker = 160;
 
-            for (int t = 1; t < 3; t++) {
+            for (short int t = 1; t < 3; t++) {
                 bn::core::update();
             }
 
@@ -1204,21 +1211,21 @@ void dialogue_page_lite(line n[32]) {
     dg_bg2.set_scale(2,1);
     dg_bg1.set_blending_enabled(true);
     dg_bg2.set_blending_enabled(true);
-    float bg_alpha = 0.0;
+    bn::fixed_t<12> bg_alpha = 0.0;
     bn::blending::set_intensity_alpha(0);
 
     // While dialogue is going,
-    int pos = 0;
+    short int pos = 0;
     bool cont = true;
 
-    int enoki_spoken = false;
-    int maple_spoken = false;
-    int aaron_spoken = false;
-    int scout_spoken = false;
-    int vee_spoken = false;
-    int el_spoken = false;
-    int diana_spoken = false;
-    int guy_spoken = false;
+    short int enoki_spoken = false;
+    short int maple_spoken = false;
+    short int aaron_spoken = false;
+    short int scout_spoken = false;
+    short int vee_spoken = false;
+    short int el_spoken = false;
+    short int diana_spoken = false;
+    short int guy_spoken = false;
 
     while (cont) {
 
@@ -1245,11 +1252,11 @@ void dialogue_page_lite(line n[32]) {
             char line6[48] = {0};
 
             BN_LOG(n[pos].text);
-            for (int t = 0; t < 33; t++) {line1[t] = n[pos].text[t];};
-            for (int t = 0; t < 33; t++) {line3[t] = n[pos].text[t + 33];};
-            for (int t = 0; t < 33; t++) {line4[t] = n[pos].text[t + 66];};
-            for (int t = 0; t < 33; t++) {line5[t] = n[pos].text[t + 99];};
-            for (int t = 0; t < 32; t++) {line6[t] = n[pos].text[t + 132];};
+            for (short int t = 0; t < 33; t++) {line1[t] = n[pos].text[t];};
+            for (short int t = 0; t < 33; t++) {line3[t] = n[pos].text[t + 33];};
+            for (short int t = 0; t < 33; t++) {line4[t] = n[pos].text[t + 66];};
+            for (short int t = 0; t < 33; t++) {line5[t] = n[pos].text[t + 99];};
+            for (short int t = 0; t < 32; t++) {line6[t] = n[pos].text[t + 132];};
             text_line.generate(-108, 21, line1, text_sprite0);
             text_line.generate(-108, 33, line3, text_sprite2);
             text_line.generate(-108, 45, line4, text_sprite3);
@@ -1306,11 +1313,14 @@ void dialogue_page_lite(line n[32]) {
                     bg_alpha += 0.05;
                     bn::blending::set_transparency_alpha(bg_alpha);
                 }
+                else {
+                    bg_alpha = 1;
+                }
 
                 bn::core::update();
 
                 if (bn::keypad::b_held()) {
-                    for (int t = 0; t < 2; t++) {
+                    for (short int t = 0; t < 2; t++) {
                         bn::core::update();
                     }
                     break;
@@ -1697,7 +1707,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 {fals, fals, 0,  "RUFUS                            I can't quite remember what it   looked like though, so I keep    trying. I don't know why but it'ssomething I just have to do."},  
                 {fals, fals, 0,  "MAPLE                            Yeah, that is pretty dumb, but   I think I get what you mean."},
                 {fals, fals, 0,  "MAPLE                            Hey, I know it's not my place to offer, but you got a place to    sleep? I know it's cold out, but we have a bathtub."},
-                {fals, fals, 0,  "RUFUS                            Oh it's fine, I'll be gone in themorning, I don't really want to  interact with anyone else. You   seem reasonable, though."},
+                {fals, fals, 0,  "RUFUS                            Oh it's fine, I'll be gone in themorning, I don't really want to  short interact with anyone else. You   seem reasonable, though."},
                 {fals, fals, 0,  "MAPLE                            You too. It was kind of nice to  find someone with any sense to   chat for a little while."},
                 {fals, fals, 0,  "S04:07"},
                 {fals, fals, 0,  "BG: fadeout"},
@@ -1804,7 +1814,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                     {fals, fals, 0, "                                                                  I've seen how she talks to Aaron and Enoki, she's like that to    everyone."},
                     {fals, fals, 0, "                                                                  Mmm.. Maybe someday I'll figure  out how to talk to her. Maybe"},
                     {fals, fals, 0, "                                                                  I'll make somethingt that really impresses her."},
-                    {fals, fals, 0, "                                                                  She's never acts like she's      interested in anything but she   likes food and books."},
+                    {fals, fals, 0, "                                                                  She's never acts like she's      short interested in anything but she   likes food and books."},
                     {fals, fals, 0, "                                                                  Maybe it's not the same kinds,   but I like food and books too."},
                     {fals, fals, 0, "                                                                  Maybe she just likes bigger guys though, and I'm shaped like      Grimace from McDonald's."},
                     {fals, fals, 0, "                                                                  That's it. I'll invent a way to  get me into shape."},
@@ -1999,6 +2009,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
         case 29: {
             line lc[32] = {
                 {fals, fals, 0,  "BG: fadeout"},
+                {fals, fals, 0,  "S_STV_01"},
                 {fals, fals, 0,  ". . ."},
                 {fals, fals, 0,  "BG: 1"},
                 {fals, fals, 0,  "ENOKI                            Hey, Aaron?"},
@@ -2154,7 +2165,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 line lc[32] = {
                     {true, true, 00, "BG: groovy"},
                     {true, true, 00, "S07:09"},
-                    {true, true, 00, "RUFUS                            Firstly, let's have an           introduction. I'm Monsieur Rufus Thibodeaux, and I'm going to be  your professor today."},
+                    {true, true, 00, "RUFUS                            Firstly, let's have an           short introduction. I'm Monsieur Rufus Thibodeaux, and I'm going  to be your professor today."},
                     {true, true, 00, "RUFUS                            Pay attention - no one ever seemsto pay attention to  me, so therewill definitely be a quiz at the end of today's lecture."},
                     {true, true, 00, "S07:10"},
                     {true, true, 00, "RUFUS                            Lesson one. Repeat after me,     'Rufus is not short. He is just  small-boned.'"},
@@ -2178,7 +2189,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                     {true, true, 00, "MAPLE                            Are you literally telling me thatyou've decided to become a super villain because you took a flowerthat told you that"},
                     {true, true, 00, "MAPLE                            you're the 'bad guy'?"},
                     {true, true, 00, "S07:16"},
-                    {true, true, 00, "RUFUS                            I believe that by taking a pre-  emptive strike, I can manage to  keep my respect and autonomy     intact, yes."},
+                    {true, true, 00, "RUFUS                            I believe that by taking a pre-  emptive strike, I can manage to  keep my respect and autonomy     short intact, yes."},
                     {true, true, 00, "RUFUS                            You see, I believe Maple is the  'main character' based on her    attributes, so I figured it was  best to plan like this."},
                     {fals, fals, 0,  "COM: Endscene"}
                 };
@@ -2510,7 +2521,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 char buf1[48] = {0};
                 char buf2[48] = {0};
                 char buf3[48] = {0};
-                int reg = 3;
+                short int reg = 3;
 
                 line lc[48] = {
                     {true, true, 00, "MAPLE TREMBLAY"},
@@ -2559,14 +2570,14 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 file2_gen.generate(-112, 96 + 14, buf2, file2_spr);
                 file3_gen.generate(-112, 96 + 28, buf3, file3_spr);
 
-                int ending = 36;
-                int scroll_on = 0;
+                short int ending = 36;
+                short int scroll_on = 0;
                 while(reg < ending) {
                     scroll_on += 1;
                     scroll_on = scroll_on % 2;
 
                     if (scroll_on == 0 && reg < ending - 1) {
-                        for (int t = 0; t < file1_spr.size(); t++) {
+                        for (short int t = 0; t < file1_spr.size(); t++) {
                             file1_spr.at(t).set_y(file1_spr.at(t).y() - 1);
                         }
                         if (file1_spr.at(0).y().integer() < -104 && reg < ending - 1) {
@@ -2576,7 +2587,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                             reg++;
                         }
 
-                        for (int t = 0; t < file2_spr.size(); t++) {
+                        for (short int t = 0; t < file2_spr.size(); t++) {
                             file2_spr.at(t).set_y(file2_spr.at(t).y() - 1);
                         }
                         if (file2_spr.at(0).y().integer() < -104 && reg < ending - 1) {
@@ -2586,7 +2597,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                             reg++;
                         }
 
-                        for (int t = 0; t < file3_spr.size(); t++) {
+                        for (short int t = 0; t < file3_spr.size(); t++) {
                             file3_spr.at(t).set_y(file3_spr.at(t).y() - 1);
                         }
                         if (file3_spr.at(0).y().integer() < -104 && reg < ending - 1) {
@@ -2628,13 +2639,6 @@ int countDigit(int n)
     return 1 + countDigit(n / 10);
 }
 
-void deep_copy(int iter, int *a, bn::vector<int, 400> *b) {
-    b->clear();
-    for (int t = 0; t < iter; t++) {
-        b->push_back(a[iter]);
-    }
-}
-
 // Projectiles
 class projectile
 {
@@ -2643,7 +2647,7 @@ public:
     bn::sprite_ptr fireball = fireball_item.create_sprite(0, 0);
     bn::sprite_animate_action<4> fireball_anim = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 00, 1, 2, 3);
     bn::sprite_animate_action<4> fireball_anim_end = bn::create_sprite_animate_action_forever(fireball, 3, fireball_item.tiles_item(), 4, 5, 6, 7);
-    int dir = 1, dur = 0;
+    short int dir = 1, dur = 0;
     bool active = false;
     void update()
     {
@@ -2689,40 +2693,40 @@ public:
 class dungeon_return
 {
 public:
-    int spawn_x = 0;
-    int spawn_y = 0;
-    int world_index = 0;
+    short int spawn_x = 0;
+    short int spawn_y = 0;
+    short int world_index = 0;
 };
 
 // Custom character class
 class character
 {
 public:
-    int identity = 0;
-    int dir = 0;
-    int last_dir = 0;
-    int follow_id = -1;
+    short int identity = 0;
+    short int dir = 0;
+    short int last_dir = 0;
+    short int follow_id = -1;
     bool done = false;
     bool is_walking = false;
     bool event = false;
     bool can_follow = true;
     bool is_npc = false;
 
-    int last_x, last_y;
-    int room_width = 0;
+    short int last_x, last_y;
+    short int room_width = 0;
 
     bn::sprite_item entity_item = bn::sprite_items::maple_walking;
     bn::sprite_ptr entity = entity_item.create_sprite(0, 0);
     bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 00, 1, 00, 2);
 
-    int role = 0;
+    short int role = 0;
     // 0 = follower
     // 1 = main
     // 2 = independent
 
-    int collideFrom = 1;
+    short int collideFrom = 1;
 
-    character(const bn::sprite_item sprite, float x = 0, float y = 0, int main = 0, int room_width = 0)
+    character(const bn::sprite_item sprite, bn::fixed_t<12> x = 0, bn::fixed_t<12> y = 0, int main = 0, int room_width = 0)
     {
         entity = sprite.create_sprite(x * 32, y * 32);
         entity.set_visible(true);
@@ -2732,7 +2736,7 @@ public:
     }
 
     // Get position on board
-    int get_loc()
+    short int get_loc()
     {
         return ((entity.x().round_integer() / 32) + 5) + (((entity.y().round_integer() / 32) + 1) * 8) + 5;
     }
@@ -2741,15 +2745,16 @@ public:
     void update(int x = 0, int y = 0)
     {
         // Collision detection
-        int x_int = entity.x().integer();
-        int y_int = entity.y().integer();
-        int close[4] = {
+        short int x_int = entity.x().integer();
+        short int y_int = entity.y().integer();
+
+        short int close[4] = {
             roundDown(x_int + 6),
             roundUp(x_int - 6),
             roundDown(y_int + 6) * room_width,
             roundUp(y_int) * room_width};
 
-        int col[8] = { 0 };
+        short int col[8] = { 0 };
         bool canLeft = true;
         bool canRite = true;
         bool canUp = true;
@@ -2790,7 +2795,7 @@ public:
             is_walking = false;
 
             // Follow player
-            int dist = abs(x - entity.x().integer()) + abs(y - entity.y().integer());
+            short int dist = abs(x - entity.x().integer()) + abs(y - entity.y().integer());
 
             bool isXTravel = false;
             if (x < entity.x() - 24 || (x < entity.x() && dist > 72))
@@ -3049,8 +3054,8 @@ public:
 class anim_object
 {
 public:
-    int id = 0;
-    int ticker = 0;
+    short int id = 0;
+    short int ticker = 0;
     bn::sprite_item entity_item = bn::sprite_items::aaron_sleep;
     bn::sprite_ptr entity = entity_item.create_sprite(0, 0);
     bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 18, entity_item.tiles_item(), 00, 00, 00, 1);
@@ -3074,30 +3079,30 @@ public:
     bn::sprite_animate_action<4> sprite_anim = bn::create_sprite_animate_action_forever(sprite, 1, bn::sprite_items::cave_bat.tiles_item(), 0, 1, 0, 1);
     bool moving = true;
     bool carry = false;
-    int spend = 0;
-    int dir = 0;
-    int vector_x = 1;
-    int vector_y = 1;
-    int to_x = 0;
-    int to_y = 0;
-    int init_y = 0;
+    short int spend = 0;
+    short int dir = 0;
+    short int vector_x = 1;
+    short int vector_y = 1;
+    short int to_x = 0;
+    short int to_y = 0;
+    short int init_y = 0;
     bool enabled = true;
-    int room_width = 20;
+    short int room_width = 20;
 
     creepy_crawly() {}
 
     void update()
     {
-        int flap = std_rand() % 2;
+        short int flap = std_rand() % 2;
         if (flap == 0)
         {
             sprite_anim.update();
             sprite = sprite_anim.sprite();
         }
 
-        int mx = sprite.x().integer() / 32;
-        int my = sprite.y().integer() / 32;
-        int mz = mx + (my * room_width);
+        short int mx = sprite.x().integer() / 32;
+        short int my = sprite.y().integer() / 32;
+        short int mz = mx + (my * room_width);
 
         if (mx == to_x && my == to_y)
         {
@@ -3129,8 +3134,6 @@ public:
                 vector_y = -1;
             }
         }
-
-        BN_LOG("scooting to ", vector_x, " by ", vector_y);
         sprite.set_position(sprite.x().integer() + (vector_x), sprite.y().integer() + (vector_y));
     }
 };
@@ -3140,8 +3143,8 @@ class moving_block
 public:
     bn::sprite_ptr entity = bn::sprite_items::underground_tiles.create_sprite(0, 0, 15);
     bool is_moving = true;
-    int moving_x = 0;
-    int moving_y = 0;
+    short int moving_x = 0;
+    short int moving_y = 0;
     moving_block(){};
 };
 
@@ -3154,8 +3157,8 @@ public:
 class xy
 {
 public:
-    int x = 0;
-    int y = 0;
+    short int x = 0;
+    short int y = 0;
 };
 
 class button
@@ -3163,52 +3166,94 @@ class button
 public:
     bool toggled = false;
     bool short_toggle = false;
-    int x = 0;
-    int y = 0;
+    short int x = 0;
+    short int y = 0;
 };
 
 class gate
 {
 public:
-    int triggered_by = 0;
-    int x = 0;
-    int y = 0;
+    short int triggered_by = 0;
+    short int x = 0;
+    short int y = 0;
+};
+
+// Score HUD
+class hud {
+public:
+    bn::sprite_ptr orb = bn::sprite_items::score.create_sprite(0, -79, 0);
+    bn::sprite_ptr l_wing = bn::sprite_items::score.create_sprite(-48, -82, 1);
+    bn::sprite_ptr r_wing = bn::sprite_items::score.create_sprite(48, -82, 1);
+    bn::sprite_ptr l_wing_2 = bn::sprite_items::score.create_sprite(-32, -82, 2);
+    bn::sprite_ptr r_wing_2 = bn::sprite_items::score.create_sprite(32, -82, 2);
+    bn::vector<bn::sprite_ptr, 8> text_sprite0;
+    bn::fixed_t<12> wing_scale = 1.25;
+    short int score = 0;
+
+    hud() {
+        r_wing.set_horizontal_flip(true);
+        r_wing_2.set_horizontal_flip(true);
+        l_wing_2.put_above();
+        r_wing_2.put_above();
+        orb.put_above();
+
+        l_wing_2.set_scale(wing_scale, 0.01);
+        r_wing_2.set_scale(wing_scale, 0.01);
+    }
+
+    void update(bn::fixed_t<12> new_value, int new_score) {
+        bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
+        score = new_score;
+        wing_scale = new_value;
+        if (wing_scale == 0) wing_scale = 0.01;
+
+        short int q = -3;
+        if (new_score > 9) q = -5;
+        if (new_score > 99) q = -8;
+
+        text_sprite0.clear();
+        bn::string<8> txt_score = bn::to_string<8>(score);
+        text_line.generate(q, -69, txt_score, text_sprite0);
+
+        l_wing_2.set_scale(wing_scale, 1);
+        r_wing_2.set_scale(wing_scale, 1);
+    }
 };
 
 // Room setup object
 class room
 {
-    int last_camera_x = 0;
-    int last_camera_y = 0;
+    short int last_camera_x = 0;
+    short int last_camera_y = 0;
 
     public:
-    int width = 29;
-    int height = 14;
-    int start_x = 8;
-    int start_y = 3;
+    unsigned short int width = 29;
+    unsigned short int height = 14;
+    unsigned short int start_x = 8;
+    unsigned short int start_y = 3;
     const bn::sprite_item* environment = &bn::sprite_items::environment_stone;
 
-    int follow_x = 0;
-    int follow_y = 0;
-    int follow_id = 0;
+    short int follow_x = 0;
+    short int follow_y = 0;
+    unsigned short int follow_id = 0;
 
     // Cam + characters
     bn::camera_ptr camera = bn::camera_ptr::create(0, 0);
     bn::vector<character, 7> chari;
-    bn::vector<anim_object, 7> anim_objects;
+    bn::vector<anim_object, 2> anim_objects;
 
-    // Tiled environment
-    bn::vector<bn::sprite_ptr, 64> tile_hop;
+    // Tiled environmentupda
+    bn::vector<bn::sprite_ptr, 94> tile_hop;
 
     // Misc environment
     bn::regular_bg_ptr primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
     bn::sprite_ptr a_notif = bn::sprite_items::a_button_2.create_sprite(0, 0);
 
     // Make a fireball!
-    int p_index = 0;
+    unsigned short int p_index = 0;
     bn::vector<projectile, 3> p;
 
-    room(int w, int h, int x, int y) {
+    room(short int w, short int h, short int x, short int y) {
         width = w;
         height = h;
         start_x = x;
@@ -3217,7 +3262,7 @@ class room
         primary_bg.set_camera(camera);
     }
 
-    void configure(int w, int h, int x, int y) {
+    void configure(short int w, short int h, short int x, short int y) {
         width = w;
         height = h;
         start_x = x;
@@ -3225,18 +3270,21 @@ class room
     }
 
     void place(int x, int y) {
-        int z = x + (y * width);
+        short int z = x + (y * width);
         if (z < local_tileset.size() && z > -1) {
-            if (local_tileset.at(z) > 0) {
+            if (local_tileset.at(z) > 0 && local_tileset.at(z) < 64) {
                 bn::sprite_ptr s = environment->create_sprite(x * 32, y * 32, local_tileset.at(z) - 1);
                 s.set_camera(camera);
                 if (environment == &bn::sprite_items::ocean_terrain && local_tileset.at(z) == 1) {
                     s.set_z_order(1);
                 }
-                else {
-                    s.set_z_order(256);
+                else if (environment == &bn::sprite_items::pools_tiles && local_tileset.at(z) == 1) {
+                    s.set_z_order(1);
                 }
-                if (tile_hop.size() < 64) tile_hop.push_back(s);
+                else {
+                    s.set_z_order(296);
+                }
+                if (tile_hop.size() < 88) tile_hop.push_back(s);
             }
         }
     }
@@ -3249,18 +3297,18 @@ class room
     }
 
     void init_render(int p_x = 0, int p_y = 0) {     
-        for (int t = 0; t < chari.size(); t++) {
+        for (unsigned short int t = 0; t < chari.size(); t++) {
             chari.at(t).room_width = width;
         }
 
-        int f_x = p_x - 5;
-        int t_x = p_x + 6;
-        int f_y = p_y - 4;
-        int t_y = p_y + 5;
+        short int f_x = p_x - 5;
+        short int t_x = p_x + 6;
+        short int f_y = p_y - 3;
+        short int t_y = p_y + 5;
         if (f_x < 0) f_x = 0;
         if (t_x > width) t_x = width;
         if (f_y < 0) f_y = 0;
-        if (t_y > width) t_y = width;
+        if (t_y > height) t_y = height;
         for (int y = f_y; y < t_y; y++) {
             for (int x = f_x; x < t_x; x++) {
                 place(x, y);
@@ -3273,7 +3321,7 @@ class room
         fix_camera();
 
         // Handle active character
-        for (int t = 0; t < chari.size(); t++) {
+        for (unsigned short int t = 0; t < chari.size(); t++) {
             if (chari.at(t).identity == so->last_char_id) {
                 follow_id = t;
                 break;
@@ -3281,7 +3329,7 @@ class room
         }
     }
 
-    void start_notif(int type = 0) {
+    void start_notif(unsigned short int type = 0) {
         if (type == 0) {
             a_notif = bn::sprite_items::a_button_2.create_sprite(follow_x, follow_y - 28, 0);
         }
@@ -3294,6 +3342,26 @@ class room
         a_notif.set_visible(true);
     }
 
+    void refresh_tiles(bn::fixed_t<12> x, bn::fixed_t<12> y) {
+        tile_hop.clear();
+        short int p_x = x.integer();
+        short int p_y = y.integer();
+
+        short int f_x = p_x - 5;
+        short int t_x = p_x + 6;
+        short int f_y = p_y - 3;
+        short int t_y = p_y + 5;
+        if (f_x < 0) f_x = 0;
+        if (t_x > width) t_x = width;
+        if (f_y < 0) f_y = 0;
+        if (t_y > height) t_y = height;
+        for (int y = f_y; y < t_y; y++) {
+            for (int x = f_x; x < t_x; x++) {
+                place(x, y);
+            }
+        }
+    }
+
     void update_objects() {
 
         camera.set_position(chari.at(follow_id).entity.x(), chari.at(follow_id).entity.y());
@@ -3303,24 +3371,17 @@ class room
         follow_x = chari.at(follow_id).entity.x().integer();
         follow_y = chari.at(follow_id).entity.y().integer();
 
-        int cam_x = (camera.x().integer() + 16) / 32;
-        int cam_y = (camera.y().integer()) / 32;
+        unsigned short int cam_x = (camera.x().integer() + 16) / 32;
+        unsigned short int cam_y = (camera.y().integer()) / 32;
 
         if (cam_x != last_camera_x || cam_y != last_camera_y) {
             last_camera_x = cam_x;
             last_camera_y = cam_y;
-            tile_hop.clear();
-            for (int x = cam_x - 4; x < cam_x + 5; x++) {
-                for (int y = cam_y - 3; y < cam_y + 4; y++) {
-                    int z = x + (y * width);
-                    bool exists = false;
-                    place(x, y);
-                }
-            }
+            refresh_tiles(cam_x, cam_y);
         }
 
         // Handle animated objects
-        for (int t = 0; t < anim_objects.size(); t++) {
+        for (unsigned short int t = 0; t < anim_objects.size(); t++) {
             anim_objects.at(t).update();
             anim_objects.at(t).entity.set_camera(camera);
         }
@@ -3376,7 +3437,7 @@ class room
         }
 
         // Update projectiles
-        for (int t = 0; t < p.size(); t++)
+        for (short int t = 0; t < p.size(); t++)
         {
             if (p.at(t).active)
             {
@@ -3393,10 +3454,10 @@ class room
         {
             bn::sound_items::cnaut.play();
             bn::blending::set_intensity_alpha(1);
-            int new_chari = (follow_id + 1) % chari.size();
+            short int new_chari = (follow_id + 1) % chari.size();
 
             chari.at(follow_id).entity.set_blending_enabled(false);
-            for (int t = 0; t < chari.size(); t++) {
+            for (short int t = 0; t < chari.size(); t++) {
                 if (t != new_chari) {
                     if (chari.at(t).can_follow) chari.at(t).role = 0;
                     else chari.at(t).role = 2;
@@ -3410,7 +3471,7 @@ class room
         }
 
         // Character operations
-        for (int t = 0; t < chari.size(); t++)
+        for (unsigned short int t = 0; t < chari.size(); t++)
         {
             // Set primary camera following X/Y coordinates
             chari.at(t).entity.set_z_order(200 - (chari.at(t).entity.y().integer() - camera.y().integer()));
@@ -3422,7 +3483,7 @@ class room
             }
             else if (chari.at(t).role == 0)
             {
-                int my_follow_at = chari.at(t).follow_id;
+                short int my_follow_at = chari.at(t).follow_id;
                 if (my_follow_at == -1) my_follow_at = (t + 1) % chari.size();
                 chari.at(t).update(chari.at(my_follow_at).entity.x().integer(), chari.at(my_follow_at).entity.y().integer());
             }
@@ -3431,6 +3492,10 @@ class room
 };
 
 dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true) {
+
+    local_tileset.clear();
+    collisions.clear();
+    windows.clear();
 
     if (so->checkpoint > 1)
     {
@@ -3445,8 +3510,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     current_room.chari.clear();
 
     // current_room.camera setup
-    int sx = current_room.start_x * 32;
-    int sy = current_room.start_y * 32;
+    short int sx = current_room.start_x * 32;
+    short int sy = current_room.start_y * 32;
 
     current_room.camera.set_position(sx,sy);
     bn::vector<anim_object, 3> anim_objects;
@@ -3625,14 +3690,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         }
 
         current_room.configure(12, 6, 8, 3);
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
             1, 1, 2, 40, 3, 1, 1, 1, 0, 1, 1, 0,
             1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 0,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
             1, 36, 0, 0, 0, 0, 0, 0, 31, 1, 1, 0,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             4, 3, 8, 11, 13, 3, 3, 3, 8, 3, 5, 0,
             2, 18, 0, 0, 0, 18, 2, 9, 0, 9, 2, 0,
             2, 0, 0, 0, 0, 0, 2, 10, 0, 10, 2, 0,
@@ -3642,7 +3707,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -3677,7 +3742,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     case 1:
     {
         current_room.configure(21, 12, 18, 1);
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             4, 3, 3, 16, 12, 3, 13, 12, 3, 8, 12, 8, 3, 12, 3, 3, 12, 13, 16, 3, 5,
             2, 18, 0, 0, 0, 0, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2,
             2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
@@ -3690,7 +3755,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
             2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2,
             7, 3, 14, 3, 12, 3, 3, 12, 3, 3, 12, 3, 13, 12, 3, 3, 12, 3, 14, 13, 6};
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 0, 35, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 1, 1,
             1, 0, 0, 0, 0, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -3706,7 +3771,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -3750,7 +3815,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     case 2:
     {
         current_room.configure(11, 8, 9, 6);
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             4, 11, 8, 12, 8, 3, 3, 3, 3, 3, 5,
             2, 18, 9, 9, 26, 27, 2, 0, 0, 0, 2,
             2, 0, 10, 10, 0, 0, 2, 19, 1, 20, 2,
@@ -3759,7 +3824,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             2, 0, 1, 1, 1, 0, 2, 0, 0, 3, 12,
             2, 18, 0, 0, 0, 0, 0, 0, 0, 0, 17,
             7, 3, 3, 14, 3, 3, 3, 3, 3, 3, 6};
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 0, 1, 1, 0, 0, 1, 1, 8, 1, 1,
@@ -3771,7 +3836,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -3822,7 +3887,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     case 3:
     {
         current_room.configure(24, 12, 22, 1);
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             4, 8, 11, 12, 3, 3, 12, 11, 8, 5, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 4, 14, 5,
             2, 18, 0, 0, 0, 0, 0, 0, 18, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
             2, 0, 0, 0, 0, 0, 0, 0, 0, 2, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 2, 0, 2,
@@ -3835,7 +3900,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
             2, 18, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2,
             7, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6};
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 38, 1,
             1, 0, 0, 11, 11, 11, 11, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
@@ -3851,7 +3916,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -3895,7 +3960,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 }
                 */
 
-        for (int t = 0; t < 2; t++)
+        for (short int t = 0; t < 2; t++)
         {
             current_room.chari.at(t).entity.set_camera(current_room.camera);
         }
@@ -3928,7 +3993,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         if (so->checkpoint < 7)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 00, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
                 00, 1, 1, 1, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
                 00, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
@@ -3950,10 +4015,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
                 00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 39, 1, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 43, 42, 12, 13,
                 1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
-                39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
+                0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
                 38, 27, 0, 0, 0, 15, 18, 18, 18, 18, 18, 18, 18, 23, 0, 4, 3, 2, 11, 26,
                 39, 47, 44, 0, 1, 16, 19, 19, 19, 19, 19, 19, 19, 24, 1, 5, 2, 3, 12, 26,
                 38, 0, 0, 0, 27, 17, 20, 21, 20, 22, 20, 21, 20, 25, 27, 4, 3, 2, 11, 26,
@@ -3974,14 +4039,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
         }
         else if (so->checkpoint < 9)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
                 01, 42, 41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
                 01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
@@ -4003,7 +4068,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
                 00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 39, 27, 44, 27, 27, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 43, 42, 12, 13,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
                 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
@@ -4027,14 +4092,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
         }
         else if (so->checkpoint < 11)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
                 01, 42, 41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 66, 1, 1, 0,
                 01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
@@ -4056,10 +4121,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
                 00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
-                39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
+                0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
                 38, 27, 0, 0, 0, 15, 18, 18, 18, 18, 18, 18, 18, 23, 0, 4, 3, 2, 11, 26,
                 39, 47, 44, 0, 1, 16, 19, 19, 19, 19, 19, 19, 19, 24, 1, 5, 2, 3, 12, 26,
                 38, 0, 0, 0, 27, 17, 20, 21, 20, 22, 20, 21, 20, 25, 27, 4, 3, 2, 11, 26,
@@ -4080,14 +4145,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
         }
         else if (so->checkpoint == 12)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
                 01, 42, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
                 01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
@@ -4109,10 +4174,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
                 00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
-                39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
+                0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
                 38, 27, 0, 0, 0, 15, 18, 18, 18, 18, 18, 18, 18, 23, 0, 4, 3, 2, 11, 26,
                 39, 47, 44, 0, 1, 16, 19, 19, 19, 19, 19, 19, 19, 24, 1, 5, 2, 3, 12, 26,
                 38, 0, 0, 0, 27, 17, 20, 21, 20, 22, 20, 21, 20, 25, 27, 4, 3, 2, 11, 26,
@@ -4133,7 +4198,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4160,7 +4225,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         }
         else if (so->checkpoint == 13)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
                 01, 0, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
                 01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
@@ -4182,10 +4247,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
                 00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
-                39, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
+                0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
                 38, 27, 0, 0, 0, 15, 18, 18, 18, 18, 18, 18, 18, 23, 0, 4, 3, 2, 11, 26,
                 39, 47, 44, 0, 1, 16, 19, 19, 19, 19, 19, 19, 19, 24, 1, 5, 2, 3, 12, 26,
                 38, 0, 0, 0, 27, 17, 20, 21, 20, 22, 20, 21, 20, 25, 27, 4, 3, 2, 11, 26,
@@ -4206,7 +4271,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4258,13 +4323,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
 
         current_room.configure(11, 5, 5, 3);
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             01, 1, 0, 0, 17, 0, 18, 0, 0, 0, 1,
             01, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1,
             01, 1, 16, 1, 1, 13, 0, 1, 0, 1, 1,
             01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             1, 6, 0, 0, 0, 0, 0, 0, 0, 0, 51,
             2, 7, 0, 0, 0, 0, 0, 0, 0, 0, 52,
             3, 8, 0, 0, 0, 0, 0, 0, 0, 0, 53,
@@ -4273,7 +4338,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -4324,7 +4389,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         if (so->checkpoint == 12)
         {
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 00, 0, 0, 0, 0, 0, 0, 12, 0,
                 00, 0, 0, 0, 0, 0, 0, 12, 0,
                 00, 0, 0, 0, 0, 0, 1, 12, 1,
@@ -4336,7 +4401,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 6, 0, 0, 0, 13, 14, 0, 1,
                 1, 7, 0, 0, 0, 0, 0, 0, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1};
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 1, 1, 1,
                 0, 0, 0, 0, 0, 0, 1, 1, 1,
@@ -4351,7 +4416,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4380,7 +4445,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         }
         else if (so->checkpoint == 13)
         {
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 00, 0, 0, 0, 0, 0, 0, 12, 0,
                 00, 0, 0, 0, 0, 0, 0, 12, 0,
                 00, 0, 0, 0, 0, 0, 1, 12, 1,
@@ -4392,7 +4457,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 6, 0, 0, 0, 13, 14, 0, 1,
                 1, 7, 0, 0, 0, 0, 0, 0, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1};
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 1, 1, 1,
                 0, 0, 0, 0, 0, 0, 1, 1, 1,
@@ -4407,7 +4472,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4469,7 +4534,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         }
         else
         {
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 00, 0, 0, 0, 0, 0, 0, 12, 0,
                 00, 0, 0, 0, 0, 0, 0, 12, 0,
                 00, 0, 0, 0, 0, 0, 1, 12, 1,
@@ -4481,7 +4546,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 6, 0, 0, 0, 13, 14, 0, 1,
                 1, 7, 0, 0, 0, 0, 0, 0, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1};
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 1, 1, 1,
                 0, 0, 0, 0, 0, 0, 1, 1, 1,
@@ -4496,7 +4561,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4530,11 +4595,12 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             if (!bn::music::playing())
                 bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
         }
+
         current_room.configure(20, 20, 9, 17);
 
         if (so->checkpoint < 10)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 54, 52, 0, 0, 0, 0, 0, 0, 0, 43, 1,
                 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
@@ -4555,7 +4621,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 1, 0, 46, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47, 0, 1, 1,
                 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 0, 35, 35, 35, 35, 35, 35, 39, 27, 27,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 8, 8,
                 27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 14, 8, 7, 7, 7, 7, 7, 6, 42, 1,
@@ -4577,16 +4643,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 27, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 27, 1,
                 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27};
 
-            local_tileset.clear();
-            collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
         }
         else if (so->checkpoint < 12)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 54, 52, 0, 0, 0, 0, 0, 0, 0, 43, 1,
                 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
@@ -4607,7 +4671,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 1, 0, 46, 0, 0, 50, 0, 0, 0, 0, 0, 0, 64, 0, 0, 47, 0, 1, 1,
                 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 0, 35, 35, 35, 35, 35, 35, 39, 27, 27,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 8, 8,
                 27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 14, 8, 7, 7, 7, 7, 7, 6, 42, 1,
@@ -4631,14 +4695,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
         }
         else if (so->checkpoint == 12)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 43, 1,
                 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
@@ -4659,7 +4723,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 1, 0, 46, 0, 0, 71, 0, 0, 0, 0, 0, 0, 71, 0, 0, 47, 0, 1, 1,
                 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 0, 35, 35, 35, 35, 35, 35, 39, 27, 27,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 8, 8,
                 27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 14, 8, 7, 7, 7, 7, 7, 6, 42, 1,
@@ -4683,14 +4747,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
         }
         else if (so->checkpoint == 13)
         {
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 43, 1,
                 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
@@ -4711,7 +4775,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 1, 0, 46, 0, 0, 71, 0, 0, 0, 0, 0, 0, 71, 0, 0, 47, 0, 1, 1,
                 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1,
                 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 35, 35, 35, 35, 35, 35, 35, 35, 35, 44, 0, 35, 35, 35, 35, 35, 35, 39, 27, 27,
                 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 8, 8,
                 27, 1, 0, 0, 28, 28, 33, 28, 28, 0, 14, 8, 7, 7, 7, 7, 7, 6, 42, 1,
@@ -4735,7 +4799,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            current_room.environment = &bn::sprite_items::ocean_terrain;
+
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4782,6 +4848,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         if (so->checkpoint == 5)
             current_room.primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
         current_room.primary_bg.set_camera(current_room.camera);
+        current_room.environment = &bn::sprite_items::ocean_terrain;
+
         break;
     }
     case 9:
@@ -4795,7 +4863,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         if (so->checkpoint < 12)
         {
             current_room.configure(7, 7, 3, 5);
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 57, 0, 1, 1,
                 1, 1, 1, 0, 0, 1, 1,
@@ -4804,7 +4872,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 1, 1, 49, 1, 1, 1,
                 1, 1, 1, 1, 1, 1, 1};
 
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0,
@@ -4813,9 +4881,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0};
 
-            local_tileset.clear();
-            collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4843,7 +4909,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         else
         {
             current_room.configure(7, 7, 3, 5);
-            int local_col[1024] = {
+            short int local_col[current_room.width * current_room.height] = {
                 1, 1, 1, 1, 1, 1, 1,
                 1, 1, 1, 0, 0, 1, 1,
                 1, 1, 1, 0, 0, 1, 1,
@@ -4852,7 +4918,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 1, 1, 1, 49, 1, 1, 1,
                 1, 1, 1, 1, 1, 1, 1};
 
-            int local[1024] = {
+            short int local[current_room.width * current_room.height] = {
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0,
@@ -4863,7 +4929,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             local_tileset.clear();
             collisions.clear();
-            for (int t = 0; t < current_room.width * current_room.height; t++) {
+            for (short int t = 0; t < current_room.width * current_room.height; t++) {
                 local_tileset.push_back(local[t]);
                 collisions.push_back(local_col[t]);
             }
@@ -4928,7 +4994,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         current_room.chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
         current_room.configure(7, 7, 3, 5);
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1,
             1, 1, 0, 0, 0, 1, 1,
             1, 1, 0, 0, 0, 1, 1,
@@ -4937,7 +5003,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             1, 1, 0, 60, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1};
 
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0,
@@ -4945,11 +5011,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0};
-        ;
 
-        local_tileset.clear();
-        collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -4973,116 +5036,102 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     case 11:
     {
         bn::music_items_info::span[12].first.play(bn::fixed(80) / 100);
-        current_room.chari.at(0).entity.set_position(15 * 32, 22 * 32);
+        current_room.chari.at(0).entity.set_position(15 * 32, 18 * 32);
 
-        current_room.configure(24, 24, 15, 22);
-        int local_col[1024] = {
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+        current_room.configure(20, 20, 15, 18);
+        short int local_col[400] = {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1,
+            1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
-        int local[1024] = {
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-            2, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 4, 0, 1, 0, 4, 0, 1, 0, 4, 0, 1, 0, 11, 0, 3, 20, 24, 24, 24, 24, 24, 0, 2,
-            2, 5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0, 12, 0, 3, 21, 28, 30, 28, 30, 25, 0, 2,
-            2, 6, 0, 0, 0, 6, 0, 0, 0, 6, 0, 0, 0, 13, 0, 3, 20, 29, 31, 29, 31, 22, 0, 2,
-            2, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 14, 0, 3, 21, 28, 30, 28, 30, 23, 0, 2,
-            2, 8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 15, 0, 3, 20, 29, 31, 29, 31, 22, 0, 2,
-            2, 9, 0, 1, 0, 9, 0, 1, 0, 9, 0, 1, 0, 16, 0, 3, 21, 26, 26, 26, 26, 26, 0, 2,
-            2, 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0, 17, 0, 3, 2, 27, 27, 27, 27, 27, 0, 2,
-            2, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2,
-            2, 5, 0, 0, 0, 12, 0, 0, 0, 5, 0, 0, 0, 12, 0, 3, 20, 24, 24, 24, 24, 24, 0, 2,
-            2, 6, 0, 1, 0, 13, 0, 1, 0, 6, 0, 1, 0, 13, 0, 3, 21, 28, 30, 28, 30, 25, 0, 2,
-            2, 7, 0, 0, 0, 14, 0, 0, 0, 7, 0, 0, 0, 14, 0, 3, 20, 29, 31, 29, 31, 22, 0, 2,
-            2, 8, 0, 0, 0, 15, 0, 0, 0, 8, 0, 0, 0, 15, 0, 3, 21, 28, 30, 28, 30, 23, 0, 2,
-            2, 9, 0, 0, 0, 16, 0, 0, 0, 9, 0, 0, 0, 16, 0, 3, 20, 29, 31, 29, 31, 22, 0, 2,
-            2, 10, 0, 1, 0, 17, 0, 1, 0, 10, 0, 1, 0, 17, 0, 3, 21, 26, 26, 26, 26, 26, 0, 2,
-            2, 11, 0, 0, 0, 11, 0, 0, 0, 4, 0, 0, 0, 11, 0, 3, 2, 27, 27, 27, 27, 27, 2, 2,
-            2, 12, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2,
-            2, 13, 0, 0, 0, 13, 0, 0, 0, 6, 0, 0, 0, 13, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 14, 0, 1, 0, 14, 0, 1, 0, 7, 0, 1, 0, 14, 0, 3, 0, 4, 0, 7, 11, 15, 0, 2,
-            2, 15, 0, 0, 0, 15, 0, 0, 0, 8, 0, 0, 0, 15, 0, 3, 0, 5, 0, 8, 12, 16, 0, 2,
-            2, 16, 0, 1, 0, 16, 0, 1, 0, 9, 0, 1, 0, 16, 0, 3, 0, 6, 0, 9, 10, 17, 0, 2,
-            2, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 2,
-            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2, 2, 2, 2, 2};
+        short int local[400] = {
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+            2, 7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0, 14, 0, 3, 21, 28, 30, 2,
+            2, 8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 15, 0, 3, 20, 29, 31, 2,
+            2, 9, 0, 1, 0, 9, 0, 1, 0, 9, 0, 1, 0, 16, 0, 3, 21, 26, 26, 2,
+            2, 10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0, 0, 17, 0, 3, 2, 27, 27, 2,
+            2, 4, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2,
+            2, 5, 0, 0, 0, 12, 0, 0, 0, 5, 0, 0, 0, 12, 0, 3, 20, 24, 24, 2,
+            2, 6, 0, 1, 0, 13, 0, 1, 0, 6, 0, 1, 0, 13, 0, 3, 21, 28, 30, 2,
+            2, 7, 0, 0, 0, 14, 0, 0, 0, 7, 0, 0, 0, 14, 0, 3, 20, 29, 31, 2,
+            2, 8, 0, 0, 0, 15, 0, 0, 0, 8, 0, 0, 0, 15, 0, 3, 21, 28, 30, 2,
+            2, 9, 0, 0, 0, 16, 0, 0, 0, 9, 0, 0, 0, 16, 0, 3, 20, 29, 31, 2,
+            2, 10, 0, 1, 0, 17, 0, 1, 0, 10, 0, 1, 0, 17, 0, 3, 21, 26, 26, 2,
+            2, 11, 0, 0, 0, 11, 0, 0, 0, 4, 0, 0, 0, 11, 0, 3, 2, 27, 27, 2,
+            2, 12, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2,
+            2, 13, 0, 0, 0, 13, 0, 0, 0, 6, 0, 0, 0, 13, 0, 3, 0, 0, 0, 2,
+            2, 14, 0, 1, 0, 14, 0, 1, 0, 7, 0, 1, 0, 14, 0, 3, 0, 4, 0, 2,
+            2, 15, 0, 0, 0, 15, 0, 0, 0, 8, 0, 0, 0, 15, 0, 3, 0, 5, 0, 2,
+            2, 16, 0, 1, 0, 16, 0, 1, 0, 9, 0, 1, 0, 16, 0, 3, 0, 6, 0, 2,
+            2, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3, 0, 0, 0, 2,
+            2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2 };
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
 
-        if (so->last_char_id != 4)
-        {
-            character vee(bn::sprite_items::vee_walking_spring, 3, 2, false, current_room.width);
-            vee.entity.set_position(14 * 32, 20 * 32);
-            vee.entity.set_camera(current_room.camera);
-            vee.role = 2;
-            vee.identity = 4;
-            current_room.chari.push_back(vee);
-        }
+        anim_object fp;
+        fp.entity_item = bn::sprite_items::corinne;
+        fp.entity = fp.entity_item.create_sprite(0, 0);
+        fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 0, 1, 2, 1);
+        fp.entity.set_visible(false);
+        fp.entity.set_camera(current_room.camera);
+        fp.entity.set_position(304, 176);
+        current_room.anim_objects.push_back(fp);
 
         current_room.primary_bg = bn::regular_bg_items::greenhouse_bg_01.create_bg(0, 0);
         current_room.primary_bg.set_camera(current_room.camera);
+        current_room.environment = &bn::sprite_items::pools_tiles;
         break;
     }
     case 12:
     {
-        if (bn::music::playing())
-            bn::music::stop();
-
         current_room.configure(7, 7, 3, 5);
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1,
             1, 0, 59, 0, 0, 0, 1,
             1, 0, 1, 1, 1, 0, 1,
             1, 0, 1, 1, 1, 0, 1,
             1, 0, 1, 1, 1, 0, 1,
             1, 0, 0, 58, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1};
+            1, 1, 1, 1, 1, 1, 1 };
+        short int local[current_room.width * current_room.height] = {
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0 };
 
-        int local[1024] = {
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0};
-        ;
-
-        local_tileset.clear();
-        collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
 
         current_room.primary_bg = bn::regular_bg_items::bg_library.create_bg(0, 0);
         current_room.primary_bg.set_camera(current_room.camera);
+        current_room.environment = &bn::sprite_items::environment_stone;
         break;
     }
     case 13:
@@ -5091,7 +5140,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         current_room.chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
         current_room.configure(7, 7, 3, 5);
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1,
             1, 1, 0, 0, 1, 1, 1,
             1, 1, 0, 1, 0, 1, 1,
@@ -5100,7 +5149,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             1, 1, 1, 65, 1, 1, 1,
             1, 1, 1, 1, 1, 1, 1};
 
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0,
@@ -5108,11 +5157,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0};
-        ;
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -5137,7 +5185,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         current_room.configure(12, 20, 7, 18);
 
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01,
             01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01,
             01, 01, 01, 01, 01, 00, 00, 00, 01, 01, 01, 01,
@@ -5159,7 +5207,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             01, 01, 01, 00, 01, 00, 01, 67, 01, 01, 01, 01,
             01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01, 01};
 
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             34, 34, 34, 34, 37, 34, 34, 34, 39, 42, 26, 26,
             35, 35, 35, 35, 34, 35, 35, 39, 42, 43, 26, 26,
             34, 34, 38, 47, 39, 0, 0, 0, 43, 11, 13, 26,
@@ -5183,13 +5231,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         local_tileset.clear();
         collisions.clear();
-        for (int t = 0; t < current_room.width * current_room.height; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
 
         current_room.primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
         current_room.primary_bg.set_camera(current_room.camera);
+        current_room.environment = &bn::sprite_items::ocean_terrain;
         break;
     }
     default:
@@ -5199,7 +5248,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     };
 
     // GAMELOOP
-    int update_counter = 0;
+    short int update_counter = 0;
 
     /*
     // funny hat be like
@@ -5207,7 +5256,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     hat.set_camera(current_room.camera);
     hat.set_visible(false);
     bool active_hat = false;
-    for (int t = 0; t < current_room.chari.size(); t++)
+    for (short int t = 0; t < current_room.chari.size(); t++)
     {
         if (so->hat_char == current_room.chari.at(t).identity)
             active_hat = true;
@@ -5224,33 +5273,41 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     bn::blending::set_transparency_alpha(bn::fixed(1));
     bool jukebox = false;
 
-    bn::rect_window external_window = bn::rect_window::external();
-    external_window.set_show_bg(current_room.primary_bg, false);
-    external_window.set_show_sprites(false);
-    external_window.set_boundaries(-80, -120, 80, 120);
+    windows.clear();
+    {
+        bn::rect_window external_window = bn::rect_window::external();
+        external_window.set_show_bg(current_room.primary_bg, false);
+        external_window.set_show_sprites(false);
+        external_window.set_boundaries(-80, -120, 80, 120);
+        windows.push_back(external_window);
 
-    bn::rect_window internal_window = bn::rect_window::internal();
-    internal_window.set_show_bg(current_room.primary_bg, true);
-    internal_window.set_show_sprites(true);
-    internal_window.set_camera(current_room.camera);
+        bn::rect_window internal_window = bn::rect_window::internal();
+        internal_window.set_show_bg(current_room.primary_bg, true);
+        internal_window.set_show_sprites(true);
+        internal_window.set_camera(current_room.camera);
+        windows.push_back(internal_window);
+    }
 
-    int window_y = 80;
-
+    short int window_y = 80;
     current_room.init_render(dt.spawn_x, dt.spawn_y);
     while (true)
     {
+
         // Control actions
         //current_room.a_notif.set_visible(false);
 
-        int follow_z = ((current_room.follow_x + 16) / 32) + (((current_room.follow_y + 16) / 32) * current_room.width);
+        unsigned short int follow_z = ((current_room.follow_x + 16) / 32) + (((current_room.follow_y + 16) / 32) * current_room.width);
 
-        external_window.set_boundaries(-80, -120, window_y, 120);
+        windows.at(0).set_boundaries(-80, -120, window_y, 120);
         if (window_y > -80)
             window_y -= 10;
 
-        int possible_action = collisions.at(follow_z);
+        short int possible_action = collisions.at(follow_z);
+
         if (possible_action > 1)
         {
+            BN_LOG("My action: ", possible_action);
+
             current_room.start_notif(0);
 
             if (bn::keypad::a_pressed())
@@ -5263,7 +5320,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
                 current_room.a_notif.set_visible(false);
                 bn::core::update();
-                int me = current_room.chari.at(current_room.follow_id).identity;
+                short int me = current_room.chari.at(current_room.follow_id).identity;
 
                 switch (possible_action)
                 {
@@ -5823,7 +5880,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  You see a bunch of books you've  never seen before."},
-                                {true, true, 00, "                                                                  None look particularly           interesting... for now."},
+                                {true, true, 00, "                                                                  None look particularly           short interesting... for now."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -5859,7 +5916,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
                                 {true, true, 00, "                                                                  You see a bunch of books you've  never seen before."},
-                                {true, true, 00, "                                                                  None look particularly           interesting... for now."},
+                                {true, true, 00, "                                                                  None look particularly           short interesting... for now."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -7166,7 +7223,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 52:
                 {
                     dt.spawn_x = 15;
-                    dt.spawn_y = 22;
+                    dt.spawn_y = 18;
                     dt.world_index = 11;
                     return dt;
                 };
@@ -7733,7 +7790,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                                 {true, true, 00, "                                                                  DIANA                            Bienvenu! You're Aaron Tremblay, oui?"},
                                 {true, true, 00, "                                                                  AARON                            Bienvenu! How's the cabin workingfor you?"},
                                 {true, true, 00, "                                                                  DIANA                            Oh, it's perfect!! It feels too  good to be true, honestly."},
-                                {true, true, 00, "                                                                  DIANA                            I'm starting up my first boat    introduction today."},
+                                {true, true, 00, "                                                                  DIANA                            I'm starting up my first boat    short introduction today."},
                                 {true, true, 00, "                                                                  DIANA                            Do you know Capt. Nicholas well?"},
                                 {true, true, 00, "                                                                  AARON                            I'll be honest, I spend most of  my time chopping wood."},
                                 {true, true, 00, "                                                                  AARON                            But he seems like a very nice    person from what I know."},
@@ -8330,7 +8387,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         {
             if (so->hat_char > -1)
             {
-                int my_id = 0;
+                short int my_id = 0;
                 for (int i = 0; i < current_room.chari.size(); i++)
                 {
                     if (current_room.chari.at(i).identity == so->hat_char)
@@ -8380,6 +8437,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         */
 
         current_room.update_objects();
+
         bn::core::update();
 
         // World-specific special events
@@ -8388,8 +8446,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
         case 1:
             for (int i = 0; i < current_room.p.size(); i++)
             {
-                int my_x = current_room.p.at(i).fireball.x().integer() / 32;
-                int my_y = current_room.p.at(i).fireball.y().integer() / 32;
+                short int my_x = current_room.p.at(i).fireball.x().integer() / 32;
+                short int my_y = current_room.p.at(i).fireball.y().integer() / 32;
                 if (my_x >= 8 && my_x <= 11 && my_y >= 4 && my_y <= 7)
                 {
                     anim_objects.at(0).entity.set_visible(true);
@@ -8401,8 +8459,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             {
                 if (current_room.p.at(i).dur < 16)
                 {
-                    int my_x = current_room.p.at(i).fireball.x().integer() / 32;
-                    int my_y = current_room.p.at(i).fireball.y().integer() / 32;
+                    short int my_x = current_room.p.at(i).fireball.x().integer() / 32;
+                    short int my_y = current_room.p.at(i).fireball.y().integer() / 32;
                     if (my_x >= 2 && my_x <= 3 && my_y >= 2 && my_y <= 3)
                     {
                         current_room.p.at(i).dur = 16;
@@ -8417,8 +8475,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             //(144,16);
             for (int i = 0; i < current_room.p.size(); i++)
             {
-                int my_x = current_room.p.at(i).fireball.x().integer() / 32;
-                int my_y = current_room.p.at(i).fireball.y().integer() / 32;
+                short int my_x = current_room.p.at(i).fireball.x().integer() / 32;
+                short int my_y = current_room.p.at(i).fireball.y().integer() / 32;
                 if (my_x >= 4 && my_x <= 5 && my_y >= 0 && my_y <= 1)
                 {
                     current_room.p.at(i).dur = 16;
@@ -8429,7 +8487,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
                     if (bn::music::playing())
                         bn::music::stop();
-                    for (int t = 0; t < 128; t++)
+                    for (short int t = 0; t < 128; t++)
                     {
                         current_room.chari.at(0).update();
                         current_room.p.at(i).update();
@@ -8478,41 +8536,40 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             break;
         case 11:
         {
+            bn::sprite_ptr* corinne = &current_room.anim_objects.at(0).entity;
+            short int follow_id = current_room.follow_id;
 
-            /*
-            if (corinne.visible())
+            if (corinne->visible())
             {
-                if (abs(current_room.chari.at(follow_id).entity.x().integer() - corinne.x().integer()) + abs(current_room.chari.at(follow_id).entity.y().integer() - corinne.y().integer()) < 48)
+                if (abs(current_room.chari.at(follow_id).entity.x().integer() - corinne->x().integer()) + abs(current_room.chari.at(follow_id).entity.y().integer() - corinne->y().integer()) < 48)
                 {
-                    corinne.set_blending_enabled(true);
+                    corinne->set_blending_enabled(true);
                     bn::blending::set_transparency_alpha(0.5);
                 }
                 else
                 {
-                    corinne.set_blending_enabled(false);
+                    corinne->set_blending_enabled(false);
                 }
             }
-            */
 
-            /*
-            if (current_room.chari.at(follow_id).identity == 4 && bn::keypad::r_pressed() && corinne.visible() == false)
+            if (current_room.chari.at(follow_id).identity == 4 && bn::keypad::r_pressed() && corinne->visible() == false)
             {
-                corinne.set_visible(true);
-                corinne.set_x(current_room.chari.at(follow_id).entity.x());
+                corinne->set_visible(true);
+                corinne->set_x(current_room.chari.at(follow_id).entity.x());
                 bn::sound_items::pop.play();
 
                 if (current_room.chari.at(follow_id).entity.y() < (current_room.height * 32) / 2)
                 {
-                    corinne.set_y(current_room.chari.at(follow_id).entity.y() + 192);
+                    corinne->set_y(current_room.chari.at(follow_id).entity.y() + 192);
                 }
                 else
                 {
-                    corinne.set_y(current_room.chari.at(follow_id).entity.y() - 192);
+                    corinne->set_y(current_room.chari.at(follow_id).entity.y() - 192);
                 }
 
-                int s_x = (corinne.x().integer() + 16) / 32;
-                int s_y = (corinne.y().integer() + 16) / 32;
-                corinne.set_position(s_x * 32, s_y * 32);
+                short int s_x = (corinne->x().integer() + 16) / 32;
+                short int s_y = (corinne->y().integer() + 16) / 32;
+                corinne->set_position(s_x * 32, s_y * 32);
 
                 if (collisions.at(s_x + (current_room.width * (s_y + 1))) == 0)
                 {
@@ -8531,9 +8588,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     collisions.at(s_x + (current_room.width * s_y) + 1) = 63;
                 }
             }
-            */
-
-
             break;
         }
         }
@@ -8542,8 +8596,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
 dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
 {
-    /*
-
     if (dt.world_index == 2)
     {
         line lc[32] = {
@@ -8573,10 +8625,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
     }
 
     // Constants
-    const int w_size = 96;
-    stone local_walls[w_size];
-    int local_walls_p = 0;
-    static room current_room;
+    room current_room(0, 0, 0, 0);
 
     // If different than default, reset
     if (dt.spawn_x > 0 && dt.spawn_y > 0)
@@ -8586,20 +8635,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
     }
 
     // current_room.camera setup
-    int sx = current_room.start_x * 32;
-    int sy = current_room.start_y * 32;
-
-    bn::camera_ptr current_room.camera = bn::camera_ptr::create(sx, sy);
-    bn::regular_bg_ptr current_room.primary_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
-    current_room.primary_bg.set_camera(current_room.camera);
-    bn::vector<anim_object, 3> anim_objects;
-
-    // Create initial characters
-    bn::vector<character, 6> current_room.chari;
+    short int sx = current_room.start_x * 32;
+    short int sy = current_room.start_y * 32;
 
     if (dt.world_index == 0)
     {
-        character maple(bn::sprite_items::maple_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        character maple(bn::sprite_items::maple_walking_oo, current_room.start_x, current_room.start_y, false, current_room.width);
         maple.entity.set_camera(current_room.camera);
         maple.entity.set_position(sx, sy);
         maple.role = 0;
@@ -8607,7 +8648,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         maple.follow_id = 5;
         current_room.chari.push_back(maple);
 
-        character scout(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        character scout(bn::sprite_items::scout_walking_spring, current_room.start_x, current_room.start_y, false, current_room.width);
         scout.entity.set_camera(current_room.camera);
         scout.entity.set_position(sx, sy);
         scout.role = 0;
@@ -8615,7 +8656,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         scout.follow_id = 0;
         current_room.chari.push_back(scout);
 
-        character enoki(bn::sprite_items::enoki_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        character enoki(bn::sprite_items::enoki_walking_oo, current_room.start_x, current_room.start_y, false, current_room.width);
         enoki.entity.set_camera(current_room.camera);
         enoki.entity.set_position(sx, sy);
         enoki.role = 0;
@@ -8623,7 +8664,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         enoki.follow_id = 1;
         current_room.chari.push_back(enoki);
 
-        character aaron(bn::sprite_items::aaron_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        character aaron(bn::sprite_items::aaron_walking_oo, current_room.start_x, current_room.start_y, false, current_room.width);
         aaron.entity.set_camera(current_room.camera);
         aaron.entity.set_position(sx, sy);
         aaron.role = 0;
@@ -8631,7 +8672,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         aaron.follow_id = 2;
         current_room.chari.push_back(aaron);
 
-        character vee(bn::sprite_items::vee_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        character vee(bn::sprite_items::vee_walking_spring, current_room.start_x, current_room.start_y, false, current_room.width);
         vee.entity.set_camera(current_room.camera);
         vee.entity.set_position(sx, sy);
         vee.role = 0;
@@ -8639,7 +8680,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         vee.follow_id = 3;
         current_room.chari.push_back(vee);
 
-        character eleanor(bn::sprite_items::eleanor_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        character eleanor(bn::sprite_items::eleanor_walking_spring, current_room.start_x, current_room.start_y, false, current_room.width);
         eleanor.entity.set_camera(current_room.camera);
         eleanor.entity.set_position(sx, sy);
         eleanor.role = 0;
@@ -8649,7 +8690,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
     }
     else
     {
-        character maple(bn::sprite_items::maple_walking_oo, current_room, current_room.start_x, current_room.start_y, false);
+        character maple(bn::sprite_items::maple_walking_oo, current_room.start_x, current_room.start_y, false, current_room.width);
         maple.entity.set_camera(current_room.camera);
         maple.entity.set_position(sx, sy);
         maple.role = 0;
@@ -8657,7 +8698,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         maple.follow_id = 1;
         current_room.chari.push_back(maple);
 
-        character scout(bn::sprite_items::scout_walking_spring, current_room, current_room.start_x, current_room.start_y, false);
+        character scout(bn::sprite_items::scout_walking_spring, current_room.start_x, current_room.start_y, false, current_room.width);
         scout.entity.set_camera(current_room.camera);
         scout.entity.set_position(sx, sy);
         scout.role = 0;
@@ -8667,184 +8708,167 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
     }
 
     current_room.chari.at(0).role = 1;
+    current_room.environment = &bn::sprite_items::underground_tiles;
 
     // World generation
     switch (dt.world_index)
     {
     case 0:
     {
-        current_room.configure(64, 24, 1, 9);
-        int local_col[1024] = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 4, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 3, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
-            1, 0, 0, 0, 6, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 0, 0, 0, 6, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 5, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        int local[1024] = {
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 9, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 4, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 12, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 16, 1, 16, 1, 1, 1, 1, 1, 1, 1, 1, 16, 1, 1, 1, 1, 1, 1, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 10,
-            1, 0, 0, 0, 0, 0, 5, 5, 5, 0, 0, 5, 5, 5, 5, 5, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 1, 1, 5, 1, 5, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 0, 0, 0, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 1, 5, 1, 5, 5, 5, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 12, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5, 5, 1, 5, 1, 1, 5, 5, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 16, 2, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 0, 16, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 12, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-        deep_copy(current_room.width * current_room.height, local, &local_tileset);
-        deep_copy(current_room.width * current_room.height, local_col, &collisions);
+        // exit door - 4
+        // exit message - 3
+        // init - 6
+        // gas talk - 5
+
+        current_room.configure(26, 12, 1, 9);
+        short int local_col[current_room.width * current_room.height] = {
+            0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,
+            0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1,0,0,1,1,1,4,1,1,
+            0,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,0,0,1,1,0,0,1,1,
+            0,0,1,1,0,0,0,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,3,3,1,1,
+            0,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,
+            0,0,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,
+            0,0,1,1,0,1,5,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,
+            1,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,0,0,1,1,
+            1,1,1,1,1,1,1,1,0,1,1,1,0,1,0,0,1,1,0,0,0,1,0,0,1,1,
+            1,0,6,1,0,1,0,1,0,1,1,1,0,0,1,1,1,1,0,0,0,1,0,0,1,1,
+            1,0,6,1,1,1,0,1,0,1,1,1,1,0,0,0,0,0,0,0,0,1,0,1,1,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+        short int local[current_room.width * current_room.height] = {
+            0,0,0,0,0,0,12,1,1,1,1,1,1,1,1,1,1,12,0,0,12,1,1,9,1,12,
+            0,0,12,12,12,12,12,1,0,0,0,0,0,0,0,0,1,12,0,0,12,1,4,0,1,12,
+            0,0,12,1,1,1,1,1,0,1,1,1,1,1,1,0,1,12,0,0,12,1,0,0,1,12,
+            0,0,0,1,0,0,0,1,0,1,12,12,12,12,1,0,1,12,12,12,12,10,0,0,1,12,
+            0,0,0,1,0,0,0,1,16,1,1,1,1,1,1,5,1,1,1,1,1,11,0,0,1,12,
+            0,0,0,1,0,0,0,1,5,5,5,5,5,1,1,5,1,5,5,5,1,10,12,0,1,12,
+            0,0,0,1,0,5,0,1,0,0,0,5,5,5,1,5,1,5,5,5,1,1,0,0,1,12,
+            0,0,0,1,0,5,0,1,0,1,1,1,5,5,1,5,1,1,5,5,0,1,0,0,1,12,
+            1,1,1,1,16,1,16,1,0,1,12,1,0,16,0,0,1,1,0,0,0,1,0,0,10,12,
+            0,0,0,5,0,1,0,5,0,1,12,1,0,0,1,1,1,1,0,0,0,16,0,0,1,12,
+            0,0,0,5,1,1,0,5,0,1,12,1,12,0,0,0,0,0,0,0,0,16,0,12,1,12,
+            1,1,1,1,1,1,1,1,1,1,12,1,1,1,1,1,1,1,1,1,1,1,1,1,1,12};
+
+        local_tileset.clear();
+        collisions.clear();
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
+            local_tileset.push_back(local[t]);
+            collisions.push_back(local_col[t]);
+        }
 
         current_room.primary_bg.set_camera(current_room.camera);
         break;
     }
     case 1:
     {
-        current_room.configure(24, 24, 22, 22);
-        int local_col[1024] = {
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 7, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1,
-            1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 0, 0, 1, 1,
-            1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1,
-            1, 0, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1,
-            1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-            1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-            1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1,
-            1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1,
-            1, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1,
-            1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1,
-            1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        int local[1024] = {
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 9, 1,
-            1, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 15, 0, 1,
-            1, 0, 12, 0, 12, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 1, 12, 0, 0, 0, 12, 1, 1,
-            1, 0, 12, 1, 12, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 1, 12, 12, 0, 12, 12, 1, 1,
-            1, 0, 12, 13, 12, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 5, 1, 12, 12, 1, 12, 12, 1, 1,
-            1, 15, 1, 1, 1, 1, 12, 10, 10, 11, 10, 0, 1, 1, 1, 5, 1, 12, 12, 13, 12, 12, 1, 1,
-            1, 0, 1, 13, 1, 1, 12, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 12, 12, 12, 12, 12, 1, 1,
-            1, 0, 1, 1, 1, 10, 7, 8, 6, 6, 6, 7, 8, 6, 6, 6, 7, 8, 6, 6, 6, 7, 8, 11,
-            1, 0, 0, 0, 1, 14, 0, 0, 0, 15, 0, 0, 0, 0, 1, 1, 5, 5, 12, 0, 0, 16, 0, 10,
-            1, 0, 1, 1, 1, 0, 0, 0, 0, 1, 0, 16, 0, 16, 5, 1, 5, 5, 0, 0, 0, 16, 0, 11,
-            1, 0, 1, 5, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 5, 5, 0, 0, 0, 16, 0, 10,
-            1, 0, 1, 2, 5, 0, 0, 0, 0, 1, 1, 1, 5, 1, 2, 1, 1, 1, 16, 16, 16, 10, 0, 11,
-            1, 0, 1, 0, 5, 5, 0, 0, 0, 12, 0, 1, 5, 1, 5, 1, 0, 0, 0, 0, 0, 11, 15, 10,
-            1, 0, 1, 0, 5, 0, 0, 0, 0, 1, 0, 1, 14, 1, 5, 1, 0, 0, 0, 0, 0, 10, 0, 11,
-            1, 15, 1, 1, 1, 1, 1, 15, 1, 1, 0, 1, 1, 1, 5, 15, 0, 0, 14, 0, 0, 11, 0, 10,
-            1, 0, 0, 0, 12, 11, 0, 0, 0, 10, 0, 12, 1, 1, 1, 1, 1, 1, 0, 0, 0, 10, 13, 11,
-            1, 0, 0, 16, 12, 10, 0, 0, 0, 11, 0, 0, 1, 0, 0, 0, 0, 1, 12, 0, 0, 11, 0, 10,
-            1, 0, 0, 0, 12, 11, 12, 0, 0, 10, 0, 0, 0, 0, 0, 16, 0, 1, 1, 1, 1, 1, 0, 11,
-            1, 0, 0, 0, 12, 10, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 10,
-            1, 0, 0, 0, 0, 11, 0, 0, 12, 10, 0, 12, 0, 0, 0, 0, 0, 12, 12, 12, 0, 1, 5, 11,
-            1, 0, 0, 0, 0, 10, 0, 0, 0, 11, 0, 12, 0, 0, 0, 12, 12, 12, 12, 12, 0, 1, 5, 1,
-            1, 14, 0, 0, 0, 11, 0, 0, 0, 10, 0, 12, 12, 12, 0, 0, 12, 12, 12, 12, 0, 1, 5, 1,
-            1, 0, 0, 0, 0, 16, 0, 0, 0, 16, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 1, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1};
-        deep_copy(current_room.width * current_room.height, local, &local_tileset);
-        deep_copy(current_room.width * current_room.height, local_col, &collisions);
+        current_room.configure(18, 21, 16, 19);
+        short int local_col[current_room.width * current_room.height] = {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1,
+            1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+            1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1,
+            1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 9, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+            1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1,
+            1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
+            1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1,
+            1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
+            1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
+            1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 1,
+            1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1,
+            1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
+            1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1,
+            1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+        short int local[current_room.width * current_room.height] = {
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,1,
+            1,0,0,0,15,0,0,0,0,0,0,0,0,0,0,15,0,1,
+            1,0,12,1,12,0,0,0,0,0,0,0,0,12,1,12,1,1,
+            1,0,12,13,12,0,0,0,0,0,0,0,0,12,13,12,0,1,
+            1,15,1,1,1,0,0,0,0,0,0,0,0,1,12,1,0,1,
+            1,0,1,13,1,1,6,7,8,6,7,8,6,6,7,8,0,11,
+            1,0,1,14,0,0,15,5,0,0,0,1,12,0,0,16,0,10,
+            1,0,1,1,1,0,1,16,0,16,0,1,0,0,0,16,0,11,
+            1,0,1,5,1,0,1,0,0,0,0,1,0,0,0,16,0,10,
+            1,0,1,0,5,0,1,1,5,1,1,1,16,16,16,10,0,11,
+            1,0,1,0,0,5,12,1,5,0,1,0,0,0,0,11,15,10,
+            1,0,1,0,5,0,1,1,14,0,1,0,0,0,0,10,0,11,
+            1,15,1,1,1,15,1,1,5,5,15,0,14,0,0,11,13,10,
+            1,0,0,0,0,0,10,12,1,1,1,1,0,0,0,10,0,11,
+            1,0,0,16,10,0,11,0,1,0,0,1,12,0,0,11,0,10,
+            1,0,0,0,11,0,10,0,0,0,16,1,1,1,1,1,0,11,
+            1,0,0,0,10,2,11,0,0,0,0,0,0,0,0,1,0,10,
+            1,0,0,0,11,0,10,12,0,0,0,0,0,12,0,1,0,11,
+            1,14,0,0,0,0,10,12,0,12,12,12,0,12,0,1,0,1,
+            1,0,0,0,16,0,16,0,0,0,0,0,0,0,5,1,0,1,
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1 };
+
+        local_tileset.clear();
+        collisions.clear();
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
+            local_tileset.push_back(local[t]);
+            collisions.push_back(local_col[t]);
+        }
 
         current_room.primary_bg.set_camera(current_room.camera);
         break;
     }
     case 2:
     {
-        current_room.configure(24, 24, 19, 22);
-        int local[1024] = {
-            10, 9, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 14, 12, 0, 0, 12, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 12, 16, 0, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 15, 0, 0, 0, 0, 0, 16, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 14, 1,
-            1, 12, 0, 0, 0, 1, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 1, 15, 0, 0, 0, 0, 5, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 1,
-            1, 16, 0, 0, 0, 1, 2, 12, 0, 16, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 12, 1,
-            1, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 0, 12, 0, 0, 0, 1,
-            1, 5, 6, 5, 10, 6, 7, 8, 6, 6, 6, 7, 8, 6, 6, 6, 7, 8, 6, 6, 6, 7, 8, 11,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 10,
-            1, 15, 1, 1, 10, 0, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 10,
-            1, 0, 0, 0, 10, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 0, 10,
-            1, 14, 0, 0, 10, 0, 13, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 10,
-            1, 0, 0, 0, 10, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 0, 10,
-            1, 0, 0, 0, 10, 16, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 10,
-            1, 5, 5, 5, 10, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 0, 10,
-            1, 5, 5, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
-            1, 6, 6, 6, 10, 6, 7, 8, 6, 6, 6, 7, 8, 6, 6, 6, 7, 8, 6, 0, 6, 7, 8, 11};
-        int local_col[1024] = {
-            1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 8, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1,
-            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-            1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
-            1, 0, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-            1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
-            1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1,
-            1, 1, 1, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 1,
-            1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1};
+        // 9 - exit door
+        // 
 
-        deep_copy(current_room.width * current_room.height, local, &local_tileset);
-        deep_copy(current_room.width * current_room.height, local_col, &collisions);
+        current_room.configure(19, 19, 14, 17);
+        short int local_col[current_room.width * current_room.height] = {
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 1,
+            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1,
+            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
+            1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1,
+            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1,
+            1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1};
+        short int local[current_room.width * current_room.height] = {
+            10, 9, 10, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+            1, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 1, 14, 12, 0, 0, 12, 0, 1,
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 12, 16, 0, 0, 0, 1,
+            1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, 0, 0, 0, 0, 0, 16, 1,
+            1, 0, 0, 0, 0, 1, 2, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 14, 1,
+            1, 12, 0, 0, 0, 1, 0, 0, 0, 14, 0, 1, 15, 0, 0, 0, 0, 5, 1,
+            1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 12, 0, 0, 1,
+            1, 16, 0, 0, 0, 1, 12, 0, 16, 0, 0, 15, 0, 0, 0, 0, 0, 12, 1,
+            1, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 12, 12, 0, 0, 0, 1,
+            1, 5, 6, 5, 10, 7, 8, 6, 6, 6, 6, 7, 8, 6, 6, 6, 7, 8, 11,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 10,
+            1, 15, 1, 1, 10, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 0, 10,
+            1, 0, 0, 0, 10, 0, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 10,
+            1, 14, 0, 0, 10, 13, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 0, 10,
+            1, 0, 0, 0, 10, 0, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 10,
+            1, 0, 0, 0, 10, 16, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 0, 10,
+            1, 5, 5, 5, 10, 0, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 10,
+            1, 5, 5, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
+            1, 6, 6, 6, 10, 6, 8, 6, 6, 6, 6, 7, 8, 6, 0, 6, 7, 8, 11};
+
+        local_tileset.clear();
+        collisions.clear();
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
+            local_tileset.push_back(local[t]);
+            collisions.push_back(local_col[t]);
+        }
 
         current_room.primary_bg.set_camera(current_room.camera);
         break;
@@ -8852,7 +8876,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
     case 3:
     {
         current_room.configure(6, 64, 3, 62);
-        int local[1024] = {
+        short int local[current_room.width * current_room.height] = {
             10, 9, 9, 10, 0, 0,
             1, 10, 10, 1, 0, 0,
             1, 0, 0, 1, 0, 0,
@@ -8917,7 +8941,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
             0, 1, 0, 0, 0, 1,
             0, 1, 0, 0, 0, 1,
             0, 1, 1, 0, 1, 1};
-        int local_col[1024] = {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 0, 0,
             1, 10, 10, 1, 0, 0,
             1, 0, 0, 1, 0, 0,
@@ -8983,8 +9007,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
             0, 1, 0, 0, 0, 1,
             0, 1, 1, 0, 1, 1};
 
-        deep_copy(current_room.width * current_room.height, local, &local_tileset);
-        deep_copy(current_room.width * current_room.height, local_col, &collisions);
+        local_tileset.clear();
+        collisions.clear();
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
+            local_tileset.push_back(local[t]);
+            collisions.push_back(local_col[t]);
+        }
 
         current_room.primary_bg.set_camera(current_room.camera);
         break;
@@ -8997,7 +9025,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
 
     // set up levels
     bn::vector<moving_block, 16> blocks;
-    bn::vector<gem, 16> gems;
+    bn::vector<gem, 4> gems;
     bn::vector<xy, 64> gas_tanks;
     bn::vector<button, 12> buttons;
     bn::vector<gate, 12> gates;
@@ -9007,7 +9035,8 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
     {
         for (int x = 0; x < current_room.width; x++)
         {
-            int absloc = x + (y * current_room.width);
+            short int absloc = x + (y * current_room.width);
+            BN_LOG(local_tileset.at(absloc));
 
             if (local_tileset.at(absloc) == 2)
             {
@@ -9054,11 +9083,13 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 pushy.entity.set_camera(current_room.camera);
                 pushy.entity.set_position(x * 32, y * 32);
                 collisions.at(absloc) = 1;
+                local_tileset.at(absloc) = 0;
                 blocks.push_back(pushy);
             }
         }
     }
 
+    // Configure doors and latches
     if (dt.world_index == 1)
     {
         gates.at(0).triggered_by = 0;
@@ -9079,161 +9110,152 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         gates.at(4).triggered_by = 4;
     }
 
-    // A header
-    bn::sprite_ptr current_room.a_notif = bn::sprite_items::a_button_2.create_sprite(0, 0);
-    current_room.a_notif.set_camera(current_room.camera);
-    current_room.a_notif.set_visible(false);
+    // GAMELOOP
+    short int update_counter = 0;
+    bool firstThing = true;
+    short int flex = 84;
+    short int anim8 = 0;
+    short int last_x = dt.spawn_x;
+    short int last_y = dt.spawn_y;
 
-    // Make a fireball!
-    int p_index = 0;
-    int p.size() = 3;
-    projectile p[3];
-    for (int t = 0; t < 3; t++)
+    windows.clear();
     {
-        current_room.p.at(t).fireball.set_camera(current_room.camera);
-        current_room.p.at(t).fireball.set_visible(false);
+        bn::rect_window external_window = bn::rect_window::external();
+        external_window.set_show_bg(current_room.primary_bg, false);
+        external_window.set_show_sprites(false);
+        external_window.set_boundaries(-80, -120, 80, 120);
+        windows.push_back(external_window);
+
+        bn::rect_window internal_window = bn::rect_window::internal();
+        internal_window.set_show_bg(current_room.primary_bg, true);
+        internal_window.set_show_sprites(true);
+        internal_window.set_camera(current_room.camera);
+        windows.push_back(internal_window);
     }
 
-    // GAMELOOP
-    int update_counter = 0;
-    bool firstThing = true;
-    int flex = 84;
-    int follow_x = 0;
-    int follow_y = 0;
-    int follow_id = 0;
-    int anim8 = 0;
-
-    int last_x = dt.spawn_x;
-    int last_y = dt.spawn_y;
-
-    auto l_button = bn::sprite_items::l_button.create_sprite(-90, 14);
-    l_button.set_visible(false);
-    bn::blending::set_transparency_alpha(bn::fixed(1));
-
-    current_room.a_notif = bn::sprite_items::a_button_2.create_sprite(follow_x, follow_y - 28, 0);
-    current_room.a_notif.set_camera(current_room.camera);
-
+    short int window_y = 80;
+    current_room.init_render();
     while (true)
     {
+        // Control window
+        windows.at(0).set_boundaries(-80, -120, window_y, 120);
+        if (window_y > -80)
+            window_y -= 10;
+
         // set current_room.camera follow point
-        follow_x = current_room.chari.at(follow_id).entity.x().integer();
-        follow_y = current_room.chari.at(follow_id).entity.y().integer();
+        current_room.follow_x = current_room.chari.at(current_room.follow_id).entity.x().integer();
+        current_room.follow_y = current_room.chari.at(current_room.follow_id).entity.y().integer();
 
         // manage a notif
         current_room.a_notif.set_visible(false);
-        current_room.a_notif.set_position(follow_x, follow_y - 28);
+        current_room.a_notif.set_position(current_room.follow_x, current_room.follow_y - 28);
 
-        // Pause
-        if (bn::keypad::start_pressed())
+        // deal with stuff
+        char rel_x = (current_room.follow_x + 16) / 32;
+        char rel_y = (current_room.follow_y + 16) / 32;
+
+        if (current_room.chari.at(current_room.follow_id).identity == 3)
         {
-            bn::core::update();
-            bn::music::pause();
-            bn::sound_items::cnaut.play();
-            while (!bn::keypad::start_pressed())
+            if (local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 0)
             {
-                bn::core::update();
-            }
-            bn::music::resume();
-            bn::sound_items::pop.play();
-        }
-
-        // Create projectiles
-        if (bn::keypad::r_pressed())
-        {
-            current_room.chari.at(follow_id).event = true;
-            if (current_room.chari.at(follow_id).identity == 0)
-            {
-                bn::sound_items::fireblast.play();
-                current_room.p.at(p_index).active = true;
-                current_room.p.at(p_index).fireball.set_x(follow_x);
-                current_room.p.at(p_index).fireball.set_y(follow_y);
-                current_room.p.at(p_index).dir = current_room.chari.at(follow_id).dir;
-                current_room.p.at(p_index).dur = 0;
-                current_room.p.at(p_index).fireball.set_visible(true);
-                p_index++;
-                if (p_index >= p.size())
-                    p_index = 0;
-            }
-            else if (current_room.chari.at(follow_id).identity == 4)
-            {
-                bn::sound_items::firecrackle.play();
-
-                if (so->checkpoint == 8 && so->xp < 201)
+                current_room.start_notif(0);
+                if (bn::keypad::a_pressed())
                 {
-                    so->xp++;
-                }
-                else if (so->checkpoint == 10 && so->xp < 301)
-                {
-                    so->xp++;
+                    bn::sound_items::firecrackle.play();
+                    local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
+                    collisions.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
+                    current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
                 }
             }
-            else
+            if (local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 3)
             {
-                bn::sound_items::squeak.play();
+                current_room.start_notif(0);
+                if (bn::keypad::a_pressed())
+                {
+                    bn::sound_items::firecrackle.play();
+                    local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
+                    collisions.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
+                    current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+                }
+            }
+            if (local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 1)
+            {
+                current_room.start_notif(0);
+                if (bn::keypad::a_pressed())
+                {
+                    bn::sound_items::firecrackle.play();
+                    local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
+                    collisions.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
+                    current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+                }
+            }
+            if (local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 2)
+            {
+                current_room.start_notif(0);
+                if (bn::keypad::a_pressed())
+                {
+                    bn::sound_items::firecrackle.play();
+                    local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
+                    collisions.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
+                    current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+                }
             }
         }
 
         // Update projectiles
-        for (int t = 0; t < p.size(); t++)
+        for (short int t = 0; t < current_room.p.size(); t++)
         {
-            if (p.at(t).active)
+            short int f_x = (current_room.p.at(t).fireball.x().integer() + 16) / 32;
+            short int f_y = (current_room.p.at(t).fireball.y().integer() + 16) / 32;
+            short int f_z = f_x + (f_y * current_room.width);
+
+            for (int i = 0; i < buttons.size(); i++)
             {
-                current_room.p.at(t).fireball.set_z_order(1);
-                current_room.p.at(t).update();
-
-                int f_x = (p.at(t).fireball.x().integer() + 16) / 32;
-                int f_y = (p.at(t).fireball.y().integer() + 16) / 32;
-                int f_z = f_x + (f_y * current_room.width);
-
-                for (int i = 0; i < buttons.size(); i++)
+                if (buttons.at(i).x == f_x && buttons.at(i).y == f_y && !buttons.at(i).short_toggle)
                 {
-                    if (buttons.at(i).x == f_x && buttons.at(i).y == f_y && !buttons.at(i).short_toggle)
+                    if (!buttons.at(t).toggled)
                     {
-                        if (!buttons.at(t).toggled)
-                        {
-                            bn::sound_items::pop.play();
-                            buttons.at(t).toggled = true;
-                            local_tileset.at(f_z) = 14;
-                        }
+                        bn::sound_items::pop.play();
+                        buttons.at(t).toggled = true;
+                        local_tileset.at(f_z) = 14;
+                        current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
                     }
                 }
+            }
 
-                for (int i = 0; i < gas_tanks.size(); i++)
+            for (int i = 0; i < gas_tanks.size(); i++)
+            {
+                if (gas_tanks.at(i).x == f_x && gas_tanks.at(i).y == f_y)
                 {
-                    if (gas_tanks.at(i).x == f_x && gas_tanks.at(i).y == f_y)
+                    dt.spawn_x = last_x;
+                    dt.spawn_y = last_y;
+
+                    // death explosion
+                    for (int n = 0; n < current_room.chari.size(); n++)
                     {
-                        dt.spawn_x = last_x;
-                        dt.spawn_y = last_y;
-
-                        // death explosion
-                        for (int n = 0; n < current_room.chari.size(); n++)
-                        {
-                            current_room.chari.at(n).entity.set_visible(false);
-                        }
-                        for (int n = 0; n < local_walls_p; n++)
-                        {
-                            local_walls[local_walls_p].set_visible(false);
-                        }
-                        current_room.primary_bg = bn::regular_bg_items::bg_explosion.create_bg(0, 0);
-                        bn::sound_items::boom.play();
-                        bn::music::stop();
-
-                        for (int n = 0; n < 64; n++)
-                        {
-                            bn::core::update();
-                        }
-
-                        return dt;
+                        current_room.chari.at(n).entity.set_visible(false);
                     }
+                    current_room.primary_bg = bn::regular_bg_items::bg_explosion.create_bg(0, 0);
+                    bn::sound_items::boom.play();
+                    bn::music::stop();
+
+                    for (int n = 0; n < 64; n++)
+                    {
+                        bn::core::update();
+                    }
+
+                    return dt;
                 }
             }
         }
 
         // Control actions
-        int possible_action = collisions.at(((follow_x + 16) / 32) + (((follow_y + 16) / 32) * current_room.width));
+        unsigned short int follow_z = ((current_room.follow_x + 16) / 32) + (((current_room.follow_y + 16) / 32) * current_room.width);
+
+        unsigned short int possible_action = collisions.at(follow_z);
         if (possible_action > 1)
         {
-            current_room.a_notif.set_visible(true);
+            current_room.start_notif(0);
 
             if (bn::keypad::a_pressed())
             {
@@ -9241,7 +9263,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 // Start action
                 current_room.a_notif.set_visible(false);
                 bn::core::update();
-                int me = current_room.chari.at(follow_id).identity;
+                short int me = current_room.chari.at(current_room.follow_id).identity;
                 switch (possible_action)
                 {
                 case 2:
@@ -9253,7 +9275,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                         {true, true, 00, "                                                                  SCOUT                            recalibrated."},
                         {true, true, 00, "                                                                  MAPLE                            Well, fix it. I don't want to die"},
                         {true, true, 00, "                                                                  MAPLE                            down here."},
-                        {true, true, 00, "COM: Endscene"}};
+                        {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
                 };
@@ -9285,14 +9307,14 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                         {true, true, 00, "                                                                  AARON                            ...Fine. You two go."},
                         {true, true, 00, "                                                                  MAPLE                            Allons-zi. Into the tacky"},
                         {true, true, 00, "                                                                  MAPLE                            hallway."},
-                        {true, true, 00, "COM: Endscene"}};
+                        {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
                 };
                 case 4:
                 {
-                    dt.spawn_x = 22;
-                    dt.spawn_y = 22;
+                    dt.spawn_x = 16;
+                    dt.spawn_y = 19;
                     dt.world_index = 1;
                     return dt;
                 };
@@ -9305,23 +9327,25 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                         {true, true, 00, "                                                                  SCOUT                            It, er- someone might have"},
                         {true, true, 00, "                                                                  SCOUT                            already been here."},
                         {true, true, 00, "                                                                  MAPLE                            Oh I don't like that."},
-                        {true, true, 00, "COM: Endscene"}};
+                        {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
                 };
                 case 6:
                 {
-                    line lc[10] = {
-                        {true, true, 00, "                                                                  SCOUT                            Hey, y'all don't worry,"},
-                        {true, true, 00, "                                                                  SCOUT                            I can take care of this."},
-                        {true, true, 00, "COM: Endscene"}};
-                    dialogue_page_lite(lc);
+                    if (current_room.chari.at(current_room.follow_id).identity != 3) {
+                        line lc[10] = {
+                            {true, true, 00, "                                                                  SCOUT                            Hey, y'all don't worry,"},
+                            {true, true, 00, "                                                                  SCOUT                            I can take care of this."},
+                            {true, true, 00, "COM: Endscene"} };
+                        dialogue_page_lite(lc);
+                    }
                     break;
                 };
                 case 7:
                 {
-                    dt.spawn_x = 19;
-                    dt.spawn_y = 22;
+                    dt.spawn_x = 14;
+                    dt.spawn_y = 17;
                     dt.world_index = 2;
                     return dt;
                     break;
@@ -9338,7 +9362,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 {
                     line lc[10] = {
                         {true, true, 00, "                                                                  You wonder what fire might be    able to do to this button."},
-                        {true, true, 00, "COM: Endscene"}};
+                        {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
                 };
@@ -9353,160 +9377,14 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 }
             }
         }
-
-        // Swap characters
-        if (bn::keypad::b_pressed())
-        {
-            bn::sound_items::cnaut.play();
-            bn::blending::set_intensity_alpha(1);
-            int new_chari = (follow_id + 1) % current_room.chari.size();
-
-            current_room.chari.at(follow_id).entity.set_blending_enabled(false);
-            for (int t = 0; t < current_room.chari.size(); t++)
-            {
-                if (t != new_chari)
-                {
-                    if (current_room.chari.at(t).can_follow)
-                    {
-                        current_room.chari.at(t).role = 0;
-                    }
-                    else
-                    {
-                        current_room.chari.at(t).role = 2;
-                    }
-                }
-            }
-
-            current_room.chari.at(new_chari).entity.set_blending_enabled(true);
-            current_room.chari.at(new_chari).role = 1;
-
-            so->last_char_id = current_room.chari.at(new_chari).identity;
-        }
-
-        // Character operations
-        for (int t = 0; t < current_room.chari.size(); t++)
-        {
-
-            // Set primary current_room.camera following X/Y coordinates
-
-            if (current_room.chari.at(t).role == 1)
-            {
-                current_room.chari.at(t).update();
-                follow_id = t;
-            }
-            else if (current_room.chari.at(t).role == 0)
-            {
-                int my_follow_at = current_room.chari.at(t).follow_id;
-
-                if (my_follow_at == -1)
-                {
-                    my_follow_at = (t + 1) % current_room.chari.size();
-                }
-
-                current_room.chari.at(t).update(current_room.chari.at(my_follow_at).entity.x().integer(), current_room.chari.at(my_follow_at).entity.y().integer());
-            }
-
-            // Z-Order followers
-            current_room.chari.at(t).entity.set_z_order(200 - (current_room.chari.at(t).entity.y().integer() - current_room.camera.y().integer()));
-        }
-
-        //current_room.chari.at(follow_id).entity.set_z_order(2);
-
-        // current_room.camera follows primary player
-        if (current_room.width > 7)
-        {
-            if (current_room.camera.x() > follow_x + 30)
-            {
-                current_room.camera.set_x(current_room.camera.x() - 1);
-            }
-            else if (current_room.camera.x() < follow_x - 30)
-            {
-                current_room.camera.set_x(current_room.camera.x() + 1);
-            }
-
-            // current_room.camera adjustment
-            if (current_room.camera.x().integer() > (current_room.width * 32) - 172)
-            {
-                current_room.camera.set_x((current_room.width * 32) - 172);
-            }
-            else if (current_room.camera.x().integer() < 106)
-            {
-                current_room.camera.set_x(106);
-            }
-        }
-        else
-        {
-            current_room.camera.set_x(3 * 32);
-        }
-
-        if (current_room.camera.y() > follow_y + 30)
-        {
-            current_room.camera.set_y(current_room.camera.y() - 1);
-        }
-        else if (current_room.camera.y() < follow_y - 30)
-        {
-            current_room.camera.set_y(current_room.camera.y() + 1);
-        }
-
-        if (current_room.camera.y().integer() > (current_room.height * 32) - 96)
-        {
-            current_room.camera.set_y((current_room.height * 32) - 96);
-        }
-        else if (current_room.camera.y().integer() < 64)
-        {
-            current_room.camera.set_y(64);
-        }
-
-        // Regularly update the tileset based on new current_room.camera coordinates
-        if (update_counter == 0)
-        {
-            local_walls_p = 0;
-            int f_x_a = current_room.camera.x().integer() / 32;
-            int f_y_a = current_room.camera.y().integer() / 32;
-            int min_y = f_y_a - 4;
-            if (min_y < 0)
-                min_y = 0;
-            int min_x = f_x_a - 4;
-            if (min_x < 0)
-                min_x = 0;
-            int max_y = f_y_a + 7;
-            if (max_y > current_room.height)
-                max_y = current_room.height;
-            int max_x = f_x_a + 7;
-            if (max_x > current_room.width)
-                max_x = current_room.width;
-            for (int y = min_y; y < max_y; y++)
-            {
-                for (int x = min_x; x < max_x; x++)
-                {
-                    int loc = local_tileset.at((current_room.width * y) + x);
-                    if (local_walls_p < w_size && loc > 0)
-                    {
-
-                        if (loc == 1 || (loc > 3 && loc < 16))
-                        {
-                            local_walls[local_walls_p] = bn::sprite_items::underground_tiles.create_sprite(x * 32, y * 32, loc - 1);
-                            local_walls[local_walls_p].set_camera(current_room.camera);
-                            local_walls[local_walls_p].set_z_order(240);
-                            local_walls_p++;
-                        }
-                    }
-                }
-            }
-        }
-        update_counter++;
-        if (update_counter > 16)
-            update_counter = 0;
-
+        
         // manage objects
-        int rel_x = (follow_x + 16) / 32;
-        int rel_y = (follow_y + 16) / 32;
-        for (int t = 0; t < blocks.size(); t++)
+        for (unsigned short int t = 0; t < blocks.size(); t++)
         {
             blocks.at(t).entity.put_above();
-            int my_x = blocks.at(t).entity.x().integer() / 32;
-            int my_y = blocks.at(t).entity.y().integer() / 32;
-            int my_z = my_x + (my_y * current_room.width);
+            short int my_x = blocks.at(t).entity.x().integer() / 32;
+            short int my_y = blocks.at(t).entity.y().integer() / 32;
+            short int my_z = my_x + (my_y * current_room.width);
 
             if (blocks.at(t).moving_y < 0)
             {
@@ -9518,21 +9396,23 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 my_z++;
             }
 
+            //BN_LOG(rel_x, " - ", my_x, " and ", rel_y, " - ", my_y);
+
             // Push block
             if (rel_x == my_x)
             {
-                if (rel_y == my_y + 1 && collisions.at(my_z - current_room.width) == 0 && current_room.chari.at(follow_id).dir == 3)
+                if (rel_y == my_y + 1 && collisions.at(my_z - current_room.width) != 1 && current_room.chari.at(current_room.follow_id).dir == 3)
                 {
-                    current_room.a_notif.set_visible(true);
+                    current_room.start_notif(0);
                     if (bn::keypad::a_pressed())
                     {
                         blocks.at(t).moving_y = -2;
                         collisions.at(my_z) = 0;
                     }
                 }
-                else if (rel_y == my_y - 1 && collisions.at(my_z + current_room.width) == 0 && current_room.chari.at(follow_id).dir == 0)
+                else if (rel_y == my_y - 1 && collisions.at(my_z + current_room.width) != 1 && current_room.chari.at(current_room.follow_id).dir == 0)
                 {
-                    current_room.a_notif.set_visible(true);
+                    current_room.start_notif(0);
                     if (bn::keypad::a_pressed())
                     {
                         blocks.at(t).moving_y = 2;
@@ -9542,18 +9422,18 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
             }
             else if (rel_y == my_y)
             {
-                if (rel_x == my_x + 1 && collisions.at(my_z - 1) == 0 && current_room.chari.at(follow_id).dir == 2)
+                if (rel_x == my_x + 1 && collisions.at(my_z - 1) != 1 && current_room.chari.at(current_room.follow_id).dir == 2)
                 {
-                    current_room.a_notif.set_visible(true);
+                    current_room.start_notif(0);
                     if (bn::keypad::a_pressed())
                     {
                         blocks.at(t).moving_x = -2;
                         collisions.at(my_z) = 0;
                     }
                 }
-                else if (rel_x == my_x - 1 && collisions.at(my_z + 1) == 0 && current_room.chari.at(follow_id).dir == 1)
+                else if (rel_x == my_x - 1 && collisions.at(my_z + 1) != 1 && current_room.chari.at(current_room.follow_id).dir == 1)
                 {
-                    current_room.a_notif.set_visible(true);
+                    current_room.start_notif(0);
                     if (bn::keypad::a_pressed())
                     {
                         blocks.at(t).moving_x = 2;
@@ -9604,31 +9484,34 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         }
 
         // Gems
-        for (int t = 0; t < gems.size(); t++)
+        for (unsigned short int t = 0; t < gems.size(); t++)
         {
             if (gems.at(t).entity.visible())
             {
                 gems.at(t).entity.put_above();
-                int my_x = gems.at(t).entity.x().integer() / 32;
-                int my_y = gems.at(t).entity.y().integer() / 32;
-                int my_z = my_x + (my_y * current_room.width);
+                unsigned short int my_x = gems.at(t).entity.x().integer() / 32;
+                unsigned short int my_y = gems.at(t).entity.y().integer() / 32;
 
                 if (my_x == rel_x && my_y == rel_y)
                 {
+                    short int my_z = my_x + (my_y * current_room.width);
                     bn::sound_items::ding.play();
+                    local_tileset.at(my_z) = 0;
                     gems.at(t).entity.set_visible(false);
                     last_x = my_x;
                     last_y = my_y;
+                    current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+                    current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
                 }
             }
         }
 
         // Switches and buttons
-        for (int t = 0; t < buttons.size(); t++)
+        for (unsigned short int t = 0; t < buttons.size(); t++)
         {
-            int my_x = buttons.at(t).x;
-            int my_y = buttons.at(t).y;
-            int my_z = my_x + (my_y * current_room.width);
+            unsigned short int my_x = buttons.at(t).x;
+            unsigned short int my_y = buttons.at(t).y;
+            unsigned short int my_z = my_x + (my_y * current_room.width);
 
             if ((my_x == rel_x && my_y == rel_y) || collisions.at(my_z) == 1)
             {
@@ -9649,9 +9532,9 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 }
             }
         }
-        for (int t = 0; t < gates.size(); t++)
+        for (unsigned short int t = 0; t < gates.size(); t++)
         {
-            button *bt = &buttons.at(gates.at(t).triggered_by);
+            button* bt = &buttons.at(gates.at(t).triggered_by);
             if (local_tileset.at(bt->x + (bt->y * current_room.width)) == 14)
             {
                 local_tileset.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 0;
@@ -9670,55 +9553,9 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
             local_tileset.at(rel_x + (rel_y * current_room.width)) = 0;
         }
 
-        // deal with stuff
-        if (current_room.chari.at(follow_id).identity == 3)
-        {
-            if (local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) == 5 && current_room.chari.at(follow_id).dir == 0)
-            {
-                current_room.a_notif.set_visible(true);
-                if (bn::keypad::a_pressed())
-                {
-                    bn::sound_items::firecrackle.play();
-                    local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
-                    collisions.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
-                }
-            }
-            if (local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) == 5 && current_room.chari.at(follow_id).dir == 3)
-            {
-                current_room.a_notif.set_visible(true);
-                if (bn::keypad::a_pressed())
-                {
-                    bn::sound_items::firecrackle.play();
-                    local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
-                    collisions.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
-                }
-            }
-            if (local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(follow_id).dir == 1)
-            {
-                current_room.a_notif.set_visible(true);
-                if (bn::keypad::a_pressed())
-                {
-                    bn::sound_items::firecrackle.play();
-                    local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
-                    collisions.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
-                }
-            }
-            if (local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(follow_id).dir == 2)
-            {
-                current_room.a_notif.set_visible(true);
-                if (bn::keypad::a_pressed())
-                {
-                    bn::sound_items::firecrackle.play();
-                    local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
-                    collisions.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
-                }
-            }
-        }
-
-        current_room.a_notif.put_above();
+        current_room.update_objects();
         bn::core::update();
-    
-    */
+    }
 }
 
 void keyboard(struct save_struct *so) {
@@ -9766,7 +9603,7 @@ void keyboard(struct save_struct *so) {
             if (ss.size() < 16) {
                 bn::sound_items::pop.play();
                 file1_spr.clear();
-                int plus = 0;
+                unsigned short int plus = 0;
                 if (!lower) plus = 36;
                 ss.push_back(basis[x_state + plus + (y_state * 12)]);
                 std::string s(ss.begin(), ss.end());
@@ -9795,14 +9632,14 @@ void keyboard(struct save_struct *so) {
             height = height * -1;
             if (!lower) {
                 while(ui.y().integer() != 192) { //192, 204
-                    int y = ui.y().integer() + 4;
+                    short int y = ui.y().integer() + 4;
                     y = y % 256;
                     ui.set_y(y);
                     bn::core::update();
                 }
             } else {
                 while(ui.y().integer() != 64) {
-                    int y = ui.y().integer() + 4;
+                    short int y = ui.y().integer() + 4;
                     y = y % 256;
                     ui.set_y(y);
                     bn::core::update();
@@ -9819,13 +9656,13 @@ void keyboard(struct save_struct *so) {
         bn::core::update();
     }
 
-    for (int tt = 0; tt < ss.size(); tt++) so->island_name[tt] = ss.at(tt);
+    for (unsigned short int tt = 0; tt < ss.size(); tt++) so->island_name[tt] = ss.at(tt);
     bn::sram::write(so);
 }
 
 void timer(int delay)
 {
-    for (int t = 0; t < delay; t++)
+    for (short int t = 0; t < delay; t++)
     {
         bn::core::update();
     }
@@ -9840,9 +9677,9 @@ void startup()
     ocean.set_visible(false);
 
     header.set_mosaic_enabled(true);
-    float glow = 0.5;
-    int intro_stage = 0;
-    int height = -24;
+    bn::fixed_t<12> glow = 0.5;
+    short int intro_stage = 0;
+    short int height = -24;
     auto item0 = bn::sprite_items::biglogo.create_sprite(-32 - 48, -32 + height, 0);
     auto item1 = bn::sprite_items::biglogo.create_sprite(32 - 48, -34 + height, 2);
     auto item2 = bn::sprite_items::biglogo.create_sprite(-32 - 48, 32 + height, 1);
@@ -9968,7 +9805,7 @@ void load_save()
 
     if (all_save.so[0].island_name[0] < 255 && all_save.so[0].island_name[0] > 0) {
         std::stringstream ss1;
-        for (int t = 0; t < 16; t++) {
+        for (short int t = 0; t < 16; t++) {
             if (all_save.so[0].island_name[t] < 255) {
                 ss1 << all_save.so[0].island_name[t];
             }
@@ -9982,7 +9819,7 @@ void load_save()
 
     if (all_save.so[1].island_name[0] < 255 && all_save.so[1].island_name[0] > 0) {
         std::stringstream ss1;
-        for (int t = 0; t < 16; t++) {
+        for (short int t = 0; t < 16; t++) {
             if (all_save.so[1].island_name[t] < 255) {
                 ss1 << all_save.so[1].island_name[t];
             }
@@ -9996,7 +9833,7 @@ void load_save()
 
     if (all_save.so[2].island_name[0] < 255 && all_save.so[2].island_name[0] > 0) {
         std::stringstream ss1;
-        for (int t = 0; t < 16; t++) {
+        for (short int t = 0; t < 16; t++) {
             if (all_save.so[2].island_name[t] < 255) {
                 ss1 << all_save.so[2].island_name[t];
             }
@@ -10025,8 +9862,8 @@ void load_save()
     if (all_save.so[2].last_char_id > -1 && all_save.so[2].last_char_id < 7) file3_icon = bn::sprite_items::save_tiles.create_sprite(98,34, all_save.so[2].last_char_id);
     else file3_icon.set_visible(false);
 
-    int t = 0;
-    int c = 0;
+    short int t = 0;
+    short int c = 0;
 
     bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
 
@@ -10105,12 +9942,12 @@ void cutscenes(int c)
         bn::blending::set_transparency_alpha(0);
         f1.put_below();
         timer(32);
-        float see = 0;
+        bn::fixed_t<12> see = 0;
         f2.set_visible(true);
-        for (int t = 0; t < 256; t++)
+        for (short int t = 0; t < 256; t++)
         {
             bn::blending::set_transparency_alpha(see);
-            float c_see = see + 0.01;
+            bn::fixed_t<12> c_see = see + 0.01;
             if (c_see <= 1)
                 see = c_see;
             bn::core::update();
@@ -10169,8 +10006,8 @@ bool victory_page(int chari, int score)
         }
     }
 
-    int offset = 0;
-    int total = 0;
+    short int offset = 0;
+    short int total = 0;
     char buf[36] = {0};
     char bf2[36] = {0};
     bn::sprite_text_generator text_gen(common::variable_8x16_sprite_font);
@@ -10194,7 +10031,7 @@ bool victory_page(int chari, int score)
     // Garden   0.13x
     // Caves    0.023x + 2.94
 
-    float modifier = 0;
+    bn::fixed_t<12> modifier = 0;
     switch (chari)
     {
         case 0: {
@@ -10215,20 +10052,20 @@ bool victory_page(int chari, int score)
         }
     }
 
-    int xp = so->xp;
+    short int xp = so->xp;
     if (xp == -1) xp = 0;
 
-    int new_lc = 0;
-    float new_xp = xp + (modifier * score);
+    short int new_lc = 0;
+    bn::fixed_t<12> new_xp = xp + (modifier * score);
     if (so->checkpoint < 8) {
         if (new_xp > 100) new_xp = 100;
     } else if(so->checkpoint < 10) {
         if (new_xp > 200) new_xp = 100;
     }
 
-    so->xp = new_xp; // Add score to save total
+    so->xp = new_xp.integer(); // Add score to save total
 
-    float bar_modifier = 0.48;
+    bn::fixed_t<12> bar_modifier = 0.48;
     if (so->checkpoint > 6) {
         bar_modifier = 0.24;
     }
@@ -10236,15 +10073,15 @@ bool victory_page(int chari, int score)
         bar_modifier = 0.16;
     }
 
-    float new_xp_d = new_xp * bar_modifier;
-    int new_xp_p = 0;
+    bn::fixed_t<12> new_xp_d = new_xp.integer() * bar_modifier;
+    short int new_xp_p = 0;
     bool final_hit = false;
 
     auto a_button = bn::sprite_items::a_button.create_sprite(48,48);
 
     bn::music_items_info::span[13].first.play(bn::fixed(40) / 100);
 
-    int music_int = 0;
+    short int music_int = 0;
     while (!bn::keypad::a_pressed())
     {
         if (offset < 48 * 2)
@@ -10292,10 +10129,10 @@ bool victory_page(int chari, int score)
         if (new_xp_p < new_xp)
             new_xp_p += 5;
         if (new_xp_p > new_xp)
-            new_xp_p = new_xp;
+            new_xp_p = new_xp.integer();
 
-        bn::string<36> txt_score = bn::to_string<8>((int)total);
-        bn::string<36> txt_xpern = bn::to_string<8>((int)new_xp);
+        bn::string<36> txt_score = bn::to_string<8>(total);
+        bn::string<36> txt_xpern = bn::to_string<8>(new_xp.integer());
 
         text_spr.clear();
         text_spr_2.clear();
@@ -10324,11 +10161,11 @@ bool victory_page(int chari, int score)
 dungeon_return tree_cut()
 {
     bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
-    int score = 0;
-    int total = 0;
+    short int score = 0;
+    short int total = 0;
     bool can_have_sp = false;
 
-    if (true) {
+    {
         auto cursor = bn::sprite_items::ax_bar.create_sprite(0, 0);
         auto axe_bg = bn::regular_bg_items::axe_game_bg.create_bg(0,0);
         char buf[16] = {0};
@@ -10336,11 +10173,10 @@ dungeon_return tree_cut()
         bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 16> file1_spr;
         bn::vector<bn::sprite_ptr, 16> file2_spr;
-
         bn::vector<bn::sprite_ptr, 16> bars;
         bn::vector<bn::sprite_ptr, 16> chop;
-        bn::random random;
-        for (int t = 0; t < 14; t++)
+
+        for (short int t = 0; t < 14; t++)
             bars.push_back(bn::sprite_items::horizontal_bar.create_sprite(((t - 7) * 8) + 4, 0));
 
         auto sq1_spr = bn::sprite_items::aaron_axe_anim.create_sprite(-64 - 48,-16);
@@ -10365,24 +10201,26 @@ dungeon_return tree_cut()
 
         auto stump = bn::sprite_items::tree_stump.create_sprite(-32,39,0);
 
-        float curs = 0;
-        int width = 16;
-        int calc_width = width * 4;
-        int max_chop = 4;
-        int hits = 1;
+        bn::fixed_t<12> curs = 0;
+        short int width = 16;
+        short int calc_width = width * 4;
+        short int max_chop = 4;
+        short int hits = 1;
         bool left = false;
-        int wood_stage = 0;
+        short int wood_stage = 0;
 
-        for (int t = 0; t < max_chop; t++)
+        for (short int t = 0; t < max_chop; t++)
         {
-            int x_pos = -(calc_width / 2) + (random.get() % calc_width);
+            short int x_pos = -(calc_width / 2) + (std_rand() % calc_width);
             x_pos = (x_pos / 16) * 16;
             chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
         }
 
+        // Gameloop
+        hud current_hud;
         while (!bn::keypad::b_pressed())
         {
-
+            // Stage of the stump
             switch (wood_stage) {
                 default: {
                     stump = bn::sprite_items::tree_stump.create_sprite(-32,38,0);
@@ -10421,6 +10259,7 @@ dungeon_return tree_cut()
                 }
             }
 
+            // Ready to go notif
             if (!can_have_sp && score > 100) {
                 bn::sound_items::aaron_yeah_01.play();
                 b_button.set_visible(true);
@@ -10456,24 +10295,25 @@ dungeon_return tree_cut()
                 sq4.update();
             }
 
-            sprintf(buf, "Score: %d", score);
-            sprintf(bf2, "Total: %d", total);
-            file1_spr.clear();
-            file2_spr.clear();
-            file1_gen.generate(-114, -70, buf, file1_spr);
-            file1_gen.generate(-114, -58, bf2, file2_spr);
+            // Handle HUD
+            bn::fixed_t<12> wing = score % 200;
+            wing /= 100;
+            if (wing < 0.01) wing = 0;
+            current_hud.update(wing, score);
 
-            curs += 1 + ((float)score / 200);
-            if (curs > 200)
+            // Move cursor forwards
+            curs += 0.2 * (1 + ((bn::fixed_t<12>)score / 200));
+            if (curs > 32)
                 curs = 0;
-            float curs_f = curs;
-            int dir = ((curs) / 20);
-            int curs_loc = sin(curs_f / 32) * calc_width;
+            bn::fixed_t<12> curs_f = curs;
+
+            short int dir = (curs.integer() % 32);
+            bn::fixed_t<12> curs_loc = sin(curs_f / 32) * calc_width;
 
             if (score > total)
                 total = score;
 
-            if (dir > 2 && dir < 8)
+            if (dir < 8 || dir > 24)
             { //left
                 if (bn::keypad::a_held())
                 {
@@ -10492,7 +10332,7 @@ dungeon_return tree_cut()
                 {
                     cursor.set_scale(0.9);
                     bool penalty = false;
-                    for (int t = 0; t < max_chop; t++)
+                    for (short int t = 0; t < max_chop; t++)
                     {
                         if (chop.at(t).visible()) {
                             penalty = true;
@@ -10501,7 +10341,7 @@ dungeon_return tree_cut()
                     }
 
                     if (penalty) {
-                        int ugh = std_rand() % 7;
+                        short int ugh = std_rand() % 7;
                         switch (ugh) {
                             case 0:
                                 bn::sound_items::aaron_ugh_01.play();
@@ -10540,9 +10380,9 @@ dungeon_return tree_cut()
                     if (max_chop > 16)
                         max_chop = 16;
 
-                    for (int t = 0; t < max_chop; t++)
+                    for (short int t = 0; t < max_chop; t++)
                     {
-                        int x_pos = -(calc_width / 2) + (random.get() % calc_width);
+                        short int x_pos = -(calc_width / 2) + (std_rand() % calc_width);
                         x_pos = (x_pos / 4) * 4;
                         chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
                     }
@@ -10554,10 +10394,10 @@ dungeon_return tree_cut()
             if (bn::keypad::a_pressed() && left)
             {
                 bool penalty = true;
-                for (int t = 0; t < max_chop; t++)
+                for (short int t = 0; t < max_chop; t++)
                 {
-                    int c_x = chop.at(t).x().integer();
-                    if (curs_loc + 8 > c_x - 16 && curs_loc + 8 < c_x + 16)
+                    short int c_x = chop.at(t).x().integer();
+                    if (curs_loc - 8 > c_x - 16 && curs_loc - 8 < c_x + 16)
                     {
                         chop.at(t).set_visible(false);
                         if (hits < 5)
@@ -10580,6 +10420,7 @@ dungeon_return tree_cut()
             }
 
             cursor.set_x(curs_loc);
+            b_button.put_above();
             bn::core::update();
         }
 
@@ -10601,11 +10442,11 @@ public:
     bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(sprite, 4, entity.tiles_item(), 0, 1, 0, 1);
     bool moving = true;
     bool carry = false;
-    int spend = 0;
-    int dir = 0;
-    float x_vector = 0;
-    float y_vector = 1;
-    int init_y = 0;
+    short int spend = 0;
+    short int dir = 0;
+    bn::fixed_t<12> x_vector = 0;
+    bn::fixed_t<12> y_vector = 1;
+    short int init_y = 0;
     bool enabled = true;
     rabbit() {}
 
@@ -10626,7 +10467,7 @@ public:
             {
                 sprite.set_visible(false);
             }
-            float sine = sinf((64 - (float)spend) / 21);
+            bn::fixed_t<12> sine = sinf((64 - spend) / 21);
             switch (dir)
             {
                 default:
@@ -10653,7 +10494,7 @@ public:
 
 dungeon_return rabbit_game()
 {
-    int score = 0;
+    short int score = 0;
     {
         room myRoom(9, 5, 4, 2);
 
@@ -10664,13 +10505,6 @@ dungeon_return rabbit_game()
         garden_bg.set_camera(myRoom.camera);
 
         char buf[12] = {0};
-        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
-        bn::vector<bn::sprite_ptr, 12> file1_spr;
-        bn::vector<bn::sprite_ptr, 12> file2_spr;
-
-        bn::vector<bn::sprite_ptr, 16> bars;
-        bn::vector<bn::sprite_ptr, 16> chop;
-
         bool isHolding = false;
 
         local_tileset.clear();
@@ -10688,18 +10522,20 @@ dungeon_return rabbit_game()
         enoki_hold.set_camera(myRoom.camera);
         enoki_hold.set_visible(false);
 
-        for (int t = 0; t < max_rabbits; t++)
+        for (short int t = 0; t < max_rabbits; t++)
         {
             rabbit r;
             r.sprite.set_camera(myRoom.camera);
             rabbits.push_back(r);
         }
 
-        int score_meter = 0;
-        int dir = 0;
-        int last_dir = 0;
-        int heldItem = 0;
+        short int score_meter = 0;
+        short int dir = 0;
+        short int last_dir = 0;
+        short int heldItem = 0;
         bool playing = true;
+
+        hud current_hud;
 
         myRoom.init_render(0, 0);
         while (playing)
@@ -10714,9 +10550,9 @@ dungeon_return rabbit_game()
                     score -= 10;
             }
 
-            sprintf(buf, "Score: %d", score);
-            file1_spr.clear();
-            file1_gen.generate(-114, -70, buf, file1_spr);
+            bn::fixed_t<12> stretch = score;
+            stretch = stretch / 300;
+            current_hud.update(stretch, score);
 
             if (isHolding) {
                 enoki.entity.set_position(enoki_hold.x(), enoki_hold.y());
@@ -10740,7 +10576,7 @@ dungeon_return rabbit_game()
             }
 
             bool allOut = true;
-            for (int t = 0; t < max_rabbits; t++)
+            for (short int t = 0; t < max_rabbits; t++)
             {
                 if (rabbits.at(t).sprite.visible())
                 {
@@ -10777,11 +10613,11 @@ dungeon_return rabbit_game()
             }
 
             // Random init
-            if (std_rand() % 20 == 0)
+            if (std_rand() % 20 == 1)
             {
-                for (int t = 0; t < max_rabbits; t++)
+                for (short int t = 0; t < max_rabbits; t++)
                 {
-                    if (std_rand() % 3 == 0)
+                    if (std_rand() % 3 == 1)
                     {
                         rabbits.at(t).moving = false;
                     }
@@ -10815,7 +10651,7 @@ dungeon_return rabbit_game()
                 }
             }
 
-            for (int t = 0; t < max_rabbits; t++)
+            for (short int t = 0; t < max_rabbits; t++)
             {
                 if (
                     (std::abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
@@ -10830,7 +10666,7 @@ dungeon_return rabbit_game()
                 if (isHolding)
                 {
                     bn::sound_items::cnaut.play();
-                    for (int t = 0; t < max_rabbits; t++)
+                    for (short int t = 0; t < max_rabbits; t++)
                     {
                         if (rabbits.at(t).carry)
                         {
@@ -10844,7 +10680,7 @@ dungeon_return rabbit_game()
                 }
                 else
                 {
-                    for (int t = 0; t < max_rabbits; t++)
+                    for (short int t = 0; t < max_rabbits; t++)
                     {
                         if (
                             (std::abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
@@ -10873,7 +10709,7 @@ dungeon_return rabbit_game()
 
 dungeon_return underground()
 {
-    int score = 0;
+    short int score = 0;
     bool is_returned = false;
     bool is_victory = false;
 
@@ -10893,17 +10729,22 @@ dungeon_return underground()
         bn::vector<bn::sprite_ptr, 16> file_spr;
         bn::vector<bn::sprite_ptr, 16> bars;
 
-        bn::rect_window external_window = bn::rect_window::external();
-        external_window.set_show_bg(back_floor, false);
-        external_window.set_show_bg(back_black, true);
-        external_window.set_show_sprites(false);
-        external_window.set_boundaries(-80, -120, 80, 120);
+        windows.clear();
+        {
+            bn::rect_window external_window = bn::rect_window::external();
+            external_window.set_show_bg(back_floor, false);
+            external_window.set_show_bg(back_black, true);
+            external_window.set_show_sprites(false);
+            external_window.set_boundaries(-80, -120, 80, 120);
+            windows.push_back(external_window);
 
-        bn::rect_window internal_window = bn::rect_window::internal();
-        internal_window.set_show_bg(back_floor, true);
-        internal_window.set_show_bg(back_black, false);
-        internal_window.set_show_sprites(true);
-        internal_window.set_camera(current_room.camera);
+            bn::rect_window internal_window = bn::rect_window::internal();
+            internal_window.set_show_bg(back_floor, true);
+            internal_window.set_show_bg(back_black, false);
+            internal_window.set_show_sprites(true);
+            internal_window.set_camera(current_room.camera);
+            windows.push_back(internal_window);
+        }
 
         const int w_size = 96;
         
@@ -10918,7 +10759,7 @@ dungeon_return underground()
         local_tileset.clear();
         collisions.clear();
 
-        int local[1024] =  {
+        short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1,
@@ -10939,7 +10780,7 @@ dungeon_return underground()
             1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1};
-        int local_col[1024] =  {
+        short int local[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1,
@@ -10960,7 +10801,7 @@ dungeon_return underground()
             1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-        for (int t = 0; t <400; t++) {
+        for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
         }
@@ -10970,14 +10811,14 @@ dungeon_return underground()
         current_room.init_render(current_room.start_x, current_room.start_y);       
 
         bn::vector<creepy_crawly, 24> bugs;
-        for (int t = 0; t < 23; t++)
+        for (short int t = 0; t < 23; t++)
         {
             creepy_crawly bug;
             bug.sprite.set_camera(current_room.camera);
 
-            int mx = std_rand() % (current_room.width - 6);
-            int my = std_rand() % (current_room.height - 6);
-            int mz = abs(mx + (my * current_room.width));
+            short int mx = std_rand() % (current_room.width - 6);
+            short int my = std_rand() % (current_room.height - 6);
+            short int mz = abs(mx + (my * current_room.width));
             while (local_tileset.at(mz) > 0)
             {
                 mx = std_rand() % (current_room.width - 6);
@@ -10989,13 +10830,13 @@ dungeon_return underground()
             bugs.push_back(bug);
         }
 
-        int update_counter = 0;
-        int flex = 84;
-        int brightness = 1;
-        int forgiveness = 0;
-        int abx = 0;
-        int aby = 0;
-        int abz = 0;
+        short int update_counter = 0;
+        short int flex = 84;
+        short int brightness = 1;
+        short int forgiveness = 0;
+        short int abx = 0;
+        short int aby = 0;
+        short int abz = 0;
         bool is_done = false;
 
         while (local_tileset.at(abz) > 0)
@@ -11008,7 +10849,7 @@ dungeon_return underground()
         if ((abx * -1) > abx) abx = abx * 1;
         if ((aby * -1) > aby) aby = aby * 1;
 
-        int vibe_check = 0;
+        short int vibe_check = 0;
         if (aby > 0) vibe_check = 1;
 
         bn::sprite_ptr treasure = bn::sprite_items::underground_tiles.create_sprite(abs(abx) * 32, abs(aby) * 32, 1);
@@ -11025,13 +10866,13 @@ dungeon_return underground()
             if (abs((current_room.start_y * 32) - maple.entity.y().integer()) < 32 && abs((current_room.start_x * 32) - maple.entity.x().integer()) < 32) {
                 if (bn::keypad::a_pressed()) {
                     is_returned = true;
-                    external_window.set_show_sprites(true);
+                    windows.at(0).set_show_sprites(true);
                 }
 
                 if (!treasure.visible()) {
                     is_returned = true;
                     is_victory = true;
-                    external_window.set_show_sprites(true);
+                    windows.at(0).set_show_sprites(true);
                 }
             }
 
@@ -11045,18 +10886,18 @@ dungeon_return underground()
             }
 
             // Check collision
-            int mx = maple.entity.x().integer();
-            int my = maple.entity.y().integer();
+            short int mx = maple.entity.x().integer();
+            short int my = maple.entity.y().integer();
 
             // Update projectiles
-            for (int tt = 0; tt < bugs.size(); tt++)
+            for (short int tt = 0; tt < bugs.size(); tt++)
             {
                 bugs.at(tt).update();
 
                 // Maple collision
                 if (abs(mx - bugs.at(tt).sprite.x().integer()) + abs(my - bugs.at(tt).sprite.y().integer()) < 16)
                 {
-                    if (std_rand() % 2 == 0) {
+                    if (std_rand() % 2 == 1) {
                         bn::sound_items::maple_ugh_01.play();
                     }
                     else {
@@ -11064,8 +10905,8 @@ dungeon_return underground()
                     }
 
                     // Move the treasure
-                    int abx = 0;
-                    int aby = 0;
+                    short int abx = 0;
+                    short int aby = 0;
                     while (local_tileset.at(abx + (current_room.width * aby)) > 0)
                     {
                         abx = std_rand() % (current_room.width - 6);
@@ -11079,19 +10920,19 @@ dungeon_return underground()
                 }
 
                 // Projectile effect
-                for (int t = 0; t < current_room.p.size(); t++)
+                for (short int t = 0; t < current_room.p.size(); t++)
                 {
                     if (current_room.p[t].active)
                     {
-                        int mx = current_room.p[t].fireball.x().integer();
-                        int my = current_room.p[t].fireball.y().integer();
-                        int distance = abs(bugs.at(tt).sprite.y().integer() - my) + abs(bugs.at(tt).sprite.x().integer() - mx);
+                        short int mx = current_room.p[t].fireball.x().integer();
+                        short int my = current_room.p[t].fireball.y().integer();
+                        short int distance = abs(bugs.at(tt).sprite.y().integer() - my) + abs(bugs.at(tt).sprite.x().integer() - mx);
                         if (distance < 16)
                         {
                             bn::sound_items::pop.play();
 
-                            int mxx = (std_rand() % (current_room.width));
-                            int myy = (std_rand() % (current_room.height));
+                            short int mxx = (std_rand() % (current_room.width));
+                            short int myy = (std_rand() % (current_room.height));
 
                             bugs.at(tt).sprite.set_position(mxx * 32, myy * 32);
                             bugs.at(tt).to_x = 0;
@@ -11111,11 +10952,11 @@ dungeon_return underground()
                 brightness = 200;
             if (brightness > 4)
                 brightness -= 4;
-            int x_from = maple.entity.x().integer() - 24 - 48 - (brightness);
-            int y_from = maple.entity.y().integer() - 24 - 48 - (brightness);
-            int x_to = maple.entity.x().integer() + 24 + 48 + (brightness);
-            int y_to = maple.entity.y().integer() + 24 + 48 + (brightness);
-            internal_window.set_boundaries(y_from, x_from, y_to, x_to);
+            short int x_from = maple.entity.x().integer() - 24 - 48 - (brightness);
+            short int y_from = maple.entity.y().integer() - 24 - 48 - (brightness);
+            short int x_to = maple.entity.x().integer() + 24 + 48 + (brightness);
+            short int y_to = maple.entity.y().integer() + 24 + 48 + (brightness);
+            windows.at(1).set_boundaries(y_from, x_from, y_to, x_to);
 
             if (treasure.visible())
             {
@@ -11129,10 +10970,8 @@ dungeon_return underground()
             }
 
             current_room.update_objects();
-
             bn::core::update();
         }
-
     }
 
     if (is_victory) {
@@ -11166,8 +11005,8 @@ bool ball_breakout() {
             }
         }
 
-        int d_x = 1;
-        int d_y = 1;
+        short int d_x = 1;
+        short int d_y = 1;
 
         while (ball.y() < 75 && !leave) {
 
@@ -11190,7 +11029,7 @@ bool ball_breakout() {
             if (ball.x() < 1) d_x = d_x * -1;
 
             bool complete = true;
-            for (int t = 0; t < tiles.size(); t++) {
+            for (short int t = 0; t < tiles.size(); t++) {
                 if (tiles.at(t).visible()) {
                     complete = false;
                     if (abs(tiles.at(t).x() - ball.x()) < 4) {
@@ -11236,9 +11075,9 @@ dungeon_return computer() {
     bn::blending::set_transparency_alpha(0);
     bn::sound_items::pc_whir.play();
 
-    int ticks = 0;
+    short int ticks = 0;
     double alpha = 0;
-    int select = 0;
+    short int select = 0;
     while (!bn::keypad::b_pressed()) {
 
         pc_cursor.set_position(
@@ -11371,7 +11210,13 @@ void victory_toutes(int emotion, int total) {
     bn::music_items_info::span[16].first.play(bn::fixed(80) / 100);
     so->xp += (total / 10);
 
-    bn::rect_window external_window = bn::rect_window::external();
+    windows.clear();
+    {
+        bn::rect_window external_window = bn::rect_window::external();
+        external_window.set_show_sprites(true);
+        windows.push_back(external_window);
+    }
+
     auto bg = bn::regular_bg_items::bg_toutes.create_bg(0,0);
     auto bg_static = bn::regular_bg_items::bg_static.create_bg(0,0);
     auto face = bn::sprite_items::toutes_spr.create_sprite(-80,-38,1);
@@ -11380,15 +11225,19 @@ void victory_toutes(int emotion, int total) {
     bg_static.set_blending_enabled(true);
     bn::blending::set_transparency_alpha(0.4);
 
-    external_window.set_show_bg(bg, true);
-    external_window.set_show_bg(bg_static, false);
-    external_window.set_boundaries(-80, -120, 80, 120);
+    windows.at(0).set_show_bg(bg, true);
+    windows.at(0).set_show_bg(bg_static, false);
+    windows.at(0).set_boundaries(-80, -120, 80, 120);
 
-    int w = 0;
-    bn::rect_window internal_window = bn::rect_window::internal();
-    internal_window.set_show_bg(bg, true);
-    internal_window.set_show_bg(bg_static, true);
-    internal_window.set_boundaries(-130, 36 - w - 12, 130, 36 + w - 12);
+    short int w = 0;
+    {
+        bn::rect_window internal_window = bn::rect_window::internal();
+        internal_window.set_show_bg(bg, true);
+        internal_window.set_show_bg(bg_static, true);
+        internal_window.set_show_sprites(true);
+        internal_window.set_boundaries(-130, 96 - w - 12, 130, 96 + w - 12);
+        windows.push_back(internal_window);
+    }
 
     char buf[36] = {0};
     char bf2[36] = {0};
@@ -11408,25 +11257,11 @@ void victory_toutes(int emotion, int total) {
     auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
     b_button.set_visible(false);
 
-    /*
-        bn::rect_window external_window = bn::rect_window::external();
-        external_window.set_show_bg(back_floor, false);
-        external_window.set_show_bg(back_black, true);
-        external_window.set_show_sprites(false);
-        external_window.set_boundaries(-80, -120, 80, 120);
-
-        bn::rect_window internal_window = bn::rect_window::internal();
-        internal_window.set_show_bg(back_floor, true);
-        internal_window.set_show_bg(back_black, false);
-        internal_window.set_show_sprites(true);
-        internal_window.set_camera(camera);
-    */
-
     bool ready = false;
     while (!bn::keypad::b_pressed()) {
 
         if (w < 36) {
-            internal_window.set_boundaries(-130, 36 - w - 12, 130, 36 + w - 12);
+            windows.at(1).set_boundaries(-130, 116 - w - 12, 172, 116 + w - 12);
             w++;
         }
 
@@ -11469,17 +11304,29 @@ void victory_toutes(int emotion, int total) {
 
         bn::core::update();
     }
+
+    windows.clear();
+    {
+        bn::rect_window external_window = bn::rect_window::external();
+        external_window.set_show_sprites(false);
+        external_window.set_boundaries(-80, -120, 80, 120);
+        windows.push_back(external_window);
+
+        bn::rect_window internal_window = bn::rect_window::internal();
+        internal_window.set_boundaries(0, 0, 0, 0);
+        internal_window.set_show_sprites(true);
+        windows.push_back(internal_window);
+    }
 }
 
 dungeon_return crystal_ball() {
 
-    int score = 0;
-    int total = 0;
+    short int score = 0;
+    short int total = 0;
 
     if (true) {
     bn::vector<bn::sprite_ptr, 16> buttons;
     bn::vector<int, 16> buttons_n;
-    bn::random random;
 
     bn::regular_bg_ptr crystal_bg = bn::regular_bg_items::bg_crystal01.create_bg(0,0);
     bn::affine_bg_ptr crystal_rot = bn::affine_bg_items::bg_crystal_ball.create_bg(0,0);
@@ -11507,9 +11354,9 @@ dungeon_return crystal_ball() {
     auto b_button = bn::sprite_items::b_button.create_sprite(90,50);
     b_button.set_visible(true);
 
-    for (int t = 0; t < 4; t++) {
-        int nb = (random.get() % 7);
-        int wd = 16;
+    for (short int t = 0; t < 4; t++) {
+        short int nb = (std_rand() % 7);
+        short int wd = 16;
 
         if (buttons.size() > 0) wd = buttons.at(buttons.size() - 1).x().integer() + 36;
 
@@ -11517,8 +11364,8 @@ dungeon_return crystal_ball() {
         buttons_n.push_back(nb);
     }
 
-    int tick = 0;
-    int angle = 0;
+    short int tick = 0;
+    short int angle = 0;
 
     while(!bn::keypad::b_pressed()) {
 
@@ -11566,7 +11413,7 @@ dungeon_return crystal_ball() {
 
         if (total < score) total = score;
 
-        int s = 0;
+        short int s = 0;
         if (bn::keypad::a_pressed())        s = 1;
         if (bn::keypad::r_pressed())        s = 2;
         if (bn::keypad::l_pressed())        s = 3;
@@ -11587,8 +11434,8 @@ dungeon_return crystal_ball() {
             buttons.erase(buttons.begin());
             buttons_n.erase(buttons_n.begin());
 
-            int nb = (random.get() % 7);
-            int wd = 16;
+            short int nb = (std_rand() % 7);
+            short int wd = 16;
 
             if (buttons.size() > 0) wd = buttons.at(buttons.size() - 1).x().integer() + 36;
 
@@ -11597,8 +11444,8 @@ dungeon_return crystal_ball() {
         }
 
         if (buttons.at(0).x() > 0) {
-            for (int t = 0; t < buttons.size(); t++) {
-                int nw = buttons.at(t).x().integer() - 4;
+            for (short int t = 0; t < buttons.size(); t++) {
+                short int nw = buttons.at(t).x().integer() - 4;
                 buttons.at(t).set_position(nw, 0 - pow(nw/5,2) / 5);
             }
         }
@@ -11607,7 +11454,7 @@ dungeon_return crystal_ball() {
     }
     }
 
-    int emotion = 2;
+    short int emotion = 2;
     if (total > 100) emotion = 1;
     if (total > 200) emotion = 0;
 
@@ -11624,32 +11471,31 @@ class boat_camera
         bn::fixed x = 440;
         bn::fixed y = 128;
         bn::fixed z = 320;
-        int phi = 10;
-        int cos = 0;
-        int sin = 0;
+        short int phi = 10;
+        short int cos = 0;
+        short int sin = 0;
 };
 
 struct rock {
     bn::sprite_ptr entity = bn::sprite_items::avocado.create_sprite(0,-20,5);
-    float size = 0.01;
-    float m_y = -48;
-    int speed = 0;
+    bn::fixed_t<12> size = 0.01;
+    bn::fixed_t<12> m_y = -48;
+    short int speed = 0;
 };
 
 dungeon_return boat_game() {
 
-    int score = 0;
-    int total = 0;
+    short int score = 0;
+    short int total = 0;
 
-    if (true) {
-        int phi = 10;
-        int cos = 0;
-        int sin = 0;
-        bn::random random;
+    {
+        short int phi = 10;
+        short int cos = 0;
+        short int sin = 0;
 
-        char buf[12] = {0};
-        char bf2[12] = {0};
-        char bf3[12] = {0};
+        char buf[16] = {0};
+        char bf2[16] = {0};
+        char bf3[16] = {0};
 
         bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 12> file1_spr;
@@ -11672,7 +11518,7 @@ dungeon_return boat_game() {
         auto wave_anim = bn::create_sprite_animate_action_forever(wave, 2, bn::sprite_items::avocado.tiles_item(), 3, 4, 3, 4);
         boat.set_blending_enabled(true);
 
-        std::vector<bn::sprite_ptr> sky_ptr;
+        bn::vector<bn::sprite_ptr, 4> sky_ptr;
         sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16,-132,0)); // -68
         sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 64,-132,1));
         sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 128,-132,2));
@@ -11693,23 +11539,23 @@ dungeon_return boat_game() {
         int dy_values[bn::display::height()];
         bn::affine_bg_dy_register_hbe_ptr dy_hbe = bn::affine_bg_dy_register_hbe_ptr::create(bg, dy_values);
 
-        float x_offset = 0;
+        bn::fixed_t<12> x_offset = 0;
 
         // Rocks
         rock rs[8] = {};
-        for (int t = 0; t < 8; t++) {
+        for (short int t = 0; t < 8; t++) {
             rock r;
             rs[t] = r;
         }
 
-        int isMoving = 0;
-        float boat_transparency = 1;
+        short int isMoving = 0;
+        bn::fixed_t<12> boat_transparency = 1;
 
-        int distance = 32;
-        int tick = 0;
+        short int distance = 32;
+        short int tick = 0;
 
         bool completed = false;
-        float completed_size = 0.48;
+        bn::fixed_t<12> completed_size = 0.48;
 
         while(completed_size > 0.02) {
 
@@ -11756,7 +11602,7 @@ dungeon_return boat_game() {
                 distance -= isMoving;
             }
 
-            for (int t = 0; t < 8; t++) {
+            for (short int t = 0; t < 8; t++) {
 
                 if (abs(rs[t].entity.x() - boat.x()) < 24 && abs(rs[t].entity.y() - boat.y()) < 24) {
                     rs[t].m_y += 96;
@@ -11766,15 +11612,16 @@ dungeon_return boat_game() {
                 }
 
                 if (rs[t].m_y > 128) {
-                    if (random.get() % 36 == 0) {
+                    if (std_rand() % (36 - (16 - (distance / 2))) == 1) {
+
                         rs[t].size = 0.01;
                         rs[t].entity.set_scale(rs[t].size);
-                        rs[t].entity.set_x((random.get() % 120) - 60);
+                        rs[t].entity.set_x((std_rand() % 120) - 60);
                         rs[t].speed = rs[t].entity.x().integer() / 10;
 
-                        if (random.get() % 2 == 0) {
+                        if (std_rand() % (6 - (distance / 10)) == 1) {
                             rs[t].entity.set_visible(false);
-                            rs[t].m_y = (0 - (random.get() % 1280));
+                            rs[t].m_y = (0 - (std_rand() % 1280));
                             rs[t].entity.set_y(rs[t].m_y);
                         } else {
                             score++;
@@ -11806,12 +11653,12 @@ dungeon_return boat_game() {
                 }
             }
 
-            int camera_x = camera.x.data();
-            int camera_y = camera.y.data() >> 4;
-            int camera_z = camera.z.data();
-            int camera_cos = camera.cos;
-            int camera_sin = camera.sin;
-            int y_shift = 160;
+            short int camera_x = camera.x.data();
+            short int camera_y = camera.y.data() >> 4;
+            short int camera_z = camera.z.data();
+            short int camera_cos = camera.cos;
+            short int camera_sin = camera.sin;
+            short int y_shift = 160;
             bn::fixed dir_x = 0;
             bn::fixed dir_z = bn::fixed::from_data(-64); //-30
 
@@ -11829,10 +11676,10 @@ dungeon_return boat_game() {
             boat.put_above();
 
             // Intro animation
-            int sky_y = sky_ptr.at(0).y().integer();
+            short int sky_y = sky_ptr.at(0).y().integer();
             if (sky_y < -68) {
                 if (sky_y > -92) camera.y = camera.y - 3;
-                for (int t = 0; t < sky_ptr.size(); t++) {
+                for (short int t = 0; t < sky_ptr.size(); t++) {
                     sky_ptr.at(t).set_y(sky_y + 1);
                 }
                 bg_trees.set_y(bg_trees.y().integer() + 1);
@@ -11846,7 +11693,7 @@ dungeon_return boat_game() {
                         dir_x -= bn::fixed::from_data(32);
                         boat = bn::sprite_items::avocado.create_sprite(0, 48, 2);
                         
-                        for (int t = 0; t < 8; t++) {
+                        for (short int t = 0; t < 8; t++) {
                             rs[t].entity.set_x(rs[t].entity.x().integer() + 1);
                         }
                     }
@@ -11855,7 +11702,7 @@ dungeon_return boat_game() {
                         dir_x += bn::fixed::from_data(32);
                         boat = bn::sprite_items::avocado.create_sprite(0, 48, 1);
 
-                        for (int t = 0; t < 8; t++) {
+                        for (short int t = 0; t < 8; t++) {
                             rs[t].entity.set_x(rs[t].entity.x().integer() - 1);
                         }
                     }
@@ -11871,16 +11718,16 @@ dungeon_return boat_game() {
 
             for(int index = 0; index < bn::display::height(); ++index)
             {
-                int reciprocal = bn::reciprocal_lut[index].data() >> 4;
-                int lam = camera_y * reciprocal >> 12;
-                int lcf = lam * camera_cos >> 8;
-                int lsf = lam * camera_sin >> 8;
+                short int reciprocal = bn::reciprocal_lut[index].data() >> 4;
+                short int lam = camera_y * reciprocal >> 12;
+                short int lcf = lam * camera_cos >> 8;
+                short int lsf = lam * camera_sin >> 8;
 
                 pa_values[index] = int16_t(lcf >> 4);
                 pc_values[index] = int16_t(lsf >> 4);
 
-                int lxr = (bn::display::width() / 2) * lcf;
-                int lyr = y_shift * lsf;
+                short int lxr = (bn::display::width() / 2) * lcf;
+                short int lyr = y_shift * lsf;
                 dx_values[index] = (camera_x - lxr + lyr) >> 4;
 
                 lxr = (bn::display::width() / 2) * lsf;
@@ -11893,19 +11740,21 @@ dungeon_return boat_game() {
             dx_hbe.reload_values_ref();
             dy_hbe.reload_values_ref();
 
-            for (int t = 0; t < sky_ptr.size(); t++) {
+            /*
+            for (short int t = 0; t < sky_ptr.size(); t++) {
                 sky_ptr.at(t).put_above();
             }
+            */
 
             if (completed) {
                 boat.set_y(boat.y().integer() - 64);
                 wave.set_y(wave.y().integer() - 64);
-                for (int t = 0; t < 8; t++) {
+                for (short int t = 0; t < 8; t++) {
                     rs[t].entity.set_visible(false);
                 }
                 boat.set_scale(completed_size);
                 wave.set_scale(completed_size);
-                float new_completed_size = completed_size - 0.02;
+                bn::fixed_t<12> new_completed_size = completed_size - 0.02;
                 if (new_completed_size > 0) {
                     completed_size = new_completed_size;
                 }
@@ -11916,7 +11765,7 @@ dungeon_return boat_game() {
 
     }
 
-    if (true) {
+    {
         char buf[36] = {0};
         char bf2[36] = {0};
         char bf3[36] = {0};
@@ -11938,8 +11787,8 @@ dungeon_return boat_game() {
         sprintf(bf3, "boat on the way back.'");
         file3_gen.generate(-96, 0, bf3, file3_spr);
 
-        int xp_count = 1;
-        int sfx_play = 0;
+        short int xp_count = 1;
+        short int sfx_play = 0;
 
         while(!bn::keypad::b_pressed()) {
             auto docks = bn::regular_bg_items::bg_dock.create_bg(0,0);
@@ -11972,7 +11821,7 @@ dungeon_return store() {
 
     auto bg = bn::regular_bg_items::cruz_01.create_bg(0,0);
 
-    int item = -1;
+    short int item = -1;
     auto b_button = bn::sprite_items::b_button.create_sprite(90,-50);
     auto item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 0);
     auto item_bal = bn::sprite_items::funny_items.create_sprite(80, 32, 2);
@@ -11994,7 +11843,7 @@ dungeon_return store() {
 
     sprintf(xp_val, "XP: %d", so->xp);
     file1_gen.generate(64, -48, xp_val, xp_spr);
-    int skip = 0;
+    short int skip = 0;
     bn::core::update();
 
     while(!bn::keypad::b_pressed()) {
@@ -12060,12 +11909,12 @@ dungeon_return store() {
 class ingredient {
     public:
     bn::sprite_ptr entity = bn::sprite_items::gumbo.create_sprite(0,0,0);
-    int type = 0;
+    short int type = 0;
 };
 
 dungeon_return kitchen() {
 
-    int score = 0;
+    short int score = 0;
 
     char buf[36] = {0};
     char bf2[36] = {0};
@@ -12087,13 +11936,13 @@ dungeon_return kitchen() {
     if (true) {
         auto tr_bg = bn::regular_bg_items::axe_game_bg.create_bg(0,0);
         auto pc_bg = bn::regular_bg_items::bg_cooking_01.create_bg(8,0);
-        int chari = 0;
+        short int chari = 0;
 
         bn::sprite_ptr hand = bn::sprite_items::gumbo.create_sprite(0,0,14);
 
         while(chari < 7) {
 
-            int je_veus_de = 8 + std_rand() % 4;
+            short int je_veus_de = 8 + std_rand() % 4;
 
             switch(chari) {
                 case 0:
@@ -12130,19 +11979,19 @@ dungeon_return kitchen() {
             food[4].entity = bn::sprite_items::gumbo.create_sprite(32,-39 + 38,12); // Bowl
             food[5].entity = bn::sprite_items::gumbo.create_sprite(-78,-24,5);      // Spices
             
-            for (int t = 0; t < 5; t++) {
+            for (short int t = 0; t < 5; t++) {
                 food[t].type = 0;
             }
 
-            int sel = -1;
-            int counter = 0;
+            short int sel = -1;
+            short int counter = 0;
 
             bn::sprite_ptr chari_mons = bn::sprite_items::gumbo_mons.create_sprite(102,-57, chari * 2);
             chari_mons.put_below();
             bool done = false;
             bool ready = false;
             bool ready_freddy = false;
-            float blend_value = 0;
+            bn::fixed_t<12> blend_value = 0;
 
             bn::blending::set_transparency_alpha(0);
 
@@ -12197,7 +12046,7 @@ dungeon_return kitchen() {
                 sprintf(buf1, "");
                 sprintf(buf2, "Score: %d", score);
 
-                for (int t = 0; t < 6; t++) {
+                for (short int t = 0; t < 6; t++) {
                     if (food[t].entity.y() < -24 && t != sel) {
                         food[t].entity.set_y(food[t].entity.y() + 2);
                     }
@@ -12244,7 +12093,7 @@ dungeon_return kitchen() {
                 if (bn::keypad::a_pressed()) {
                     bn::sound_items::pop.play();
 
-                    for (int t = 0; t < 6; t++) {
+                    for (short int t = 0; t < 6; t++) {
                         if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16) {
                             sel = t;
                         }
@@ -12259,7 +12108,7 @@ dungeon_return kitchen() {
                     bn::sound_items::fireblast.play();
 
                     if (sel == 0) {
-                        for (int t = 1; t < 3; t++) {
+                        for (short int t = 1; t < 3; t++) {
                             if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16) {
                                 food[t].entity = bn::sprite_items::gumbo.create_sprite(food[t].entity.x(),food[t].entity.y(),t + 1);
                                 food[t].type = 1;
@@ -12387,8 +12236,8 @@ dungeon_return kitchen() {
         auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
         b_button.set_visible(false);
         so->xp += (score / 22);
-        int xp_count = 1;
-        int sfx_play = 0;
+        short int xp_count = 1;
+        short int sfx_play = 0;
         while(!bn::keypad::b_pressed()) {
 
             if ((xp_count - 1) < so->xp) {
@@ -12427,22 +12276,22 @@ void final_battle() {
     bn::music_items_info::span[35].first.play(bn::fixed(100) / 100);
     auto axe = bn::sprite_items::ax_bar.create_sprite(0, 64);
 
-    int aaron_x = -64;
-    int aaron_y = -64;
-    int aaron_offset_x = 0;
-    int aaron_offset_y = 0;
+    short int aaron_x = -64;
+    short int aaron_y = -64;
+    short int aaron_offset_x = 0;
+    short int aaron_offset_y = 0;
 
     bool aaron_change = true;
-    int aaron_action = 1;
+    short int aaron_action = 1;
 
-    int rufus_x = 64;
-    int rufus_y = -64;
+    short int rufus_x = 64;
+    short int rufus_y = -64;
 
-    int rufus_offset_x = 0;
-    int rufus_offset_y = 0;
+    short int rufus_offset_x = 0;
+    short int rufus_offset_y = 0;
 
     bool rufus_change = true;
-    int rufus_action = 1;
+    short int rufus_action = 1;
 
     auto aaron_tile = bn::sprite_items::fight_tiles.create_sprite(96,64,0);
     auto rufus_tile = bn::sprite_items::fight_tiles.create_sprite(-96,64,1);
@@ -12465,7 +12314,7 @@ void final_battle() {
     auto r_03_anim = bn::create_sprite_animate_action_forever(r_03, 1, bn::sprite_items::battle_rufus.tiles_item(), 18, 20, 20, 22, 24, 26, 26, 28, 30, 32, 32, 34);
     auto r_04_anim = bn::create_sprite_animate_action_forever(r_04, 1, bn::sprite_items::battle_rufus.tiles_item(), 19, 21, 21, 23, 25, 27, 27, 29, 31, 33, 33, 35);    
 
-    int rufus_logic = 3;
+    short int rufus_logic = 3;
 
     while(axe.x() > -72) {
 
@@ -12495,8 +12344,8 @@ void final_battle() {
         }
 
         // handle random movement
-        if (std_rand() % 50 == 0) {
-            int old_logic = rufus_logic;
+        if (std_rand() % 50 == 1) {
+            short int old_logic = rufus_logic;
             rufus_logic = std_rand() % 12;
             if (old_logic != rufus_logic) {
                 if (rufus_x > 100) rufus_logic = 0;
@@ -12541,11 +12390,11 @@ void final_battle() {
 
             bn::sound_items::firehit.play();
 
-            if (std_rand() % 16 == 0) {
+            if (std_rand() % 16 == 1) {
                 bn::sound_items::mina_aw.play();
             }
 
-            int ugh = std_rand() % 12;
+            short int ugh = std_rand() % 12;
             switch (ugh) {
                 case 0:
                     bn::sound_items::aaron_ugh_01.play();
@@ -12586,7 +12435,7 @@ void final_battle() {
                 bn::sound_items::rufus_01.play();
                 axe.set_x(axe.x() + 1);
 
-                if (std_rand() % 24 == 0) {
+                if (std_rand() % 24 == 1) {
                     bn::sound_items::mina_whoo.play();
                 }
             }
@@ -12734,7 +12583,7 @@ void final_battle() {
 
         if (aaron_action == 2 || aaron_action == 3) {
 
-            for (int t = 1; t < 8; t++) {
+            for (short int t = 1; t < 8; t++) {
                 // Handle Aaron's movement
                 a_01_anim.update();
                 a_02_anim.update();
@@ -12790,9 +12639,7 @@ void final_battle() {
 void core_gameplay(int x, int y, int world, int until)
 {
     bn::core::update();
-
-    // Random seed
-    std::srand(so->xp);
+    rand_state = so->xp;
 
     // Configure defaults
     dungeon_return dt(x, y, world);
@@ -12805,7 +12652,6 @@ void core_gameplay(int x, int y, int world, int until)
     // Execute until time to leave
     do
     {
-
         // March event
         if (so->checkpoint == 4 && so->xp > 99 && so->last_char_id != 4) {
             so->checkpoint = 5;
@@ -12876,10 +12722,10 @@ void core_gameplay(int x, int y, int world, int until)
                 }
             };
         }
+        
+        // if legit world....
         else
         {
-
-            // if legit world....
             dt = dungeon(dt, so, false);
         }
 

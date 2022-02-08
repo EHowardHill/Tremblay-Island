@@ -183,6 +183,7 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_vector.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_ptr.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button_2.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_score.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_spring.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_oo.h \
@@ -242,6 +243,8 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x8_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x16_sprite_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x16_font.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_fixed_8x16_sprite_font.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_fixed_8x16_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple01.h \
@@ -568,6 +571,7 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_vector.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_ptr.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button_2.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_score.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_spring.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_oo.h:
@@ -627,6 +631,8 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x8_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_variable_8x16_sprite_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x16_font.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/../../common/include/common_fixed_8x16_sprite_font.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_fixed_8x16_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_enoki.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple01.h:

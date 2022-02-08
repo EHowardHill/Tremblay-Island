@@ -118,13 +118,6 @@ class save_all_struct {
         save_struct so[3];
 };
 
-void deep_copy(std::vector<int> &a, std::vector<int> &b) {
-    b.clear();
-    for (auto &c : a) {
-        b.push_back(c);
-    }
-}
-
 template<typename C, typename T>
 bool contains(C&& c, T e) { 
     return std::find(std::begin(c), std::end(c), e) != std::end(c);
@@ -256,10 +249,10 @@ public:
             collisions->at(close[0] + close[3]) == 1,
             collisions->at(close[1] + close[3]) == 1};
 
-        bool canLeft = !(((col[4] && col[5]) ^ col[0]) || ((col[6] && col[7]) ^ col[1]));
-        bool canRite = !(((col[4] && col[5]) ^ col[2]) || ((col[6] && col[7]) ^ col[3]));
-        bool canUp = !(((col[0] && col[1]) ^ col[4]) || ((col[2] && col[3]) ^ col[5]));
-        bool canDn = !(((col[0] && col[1]) ^ col[6]) || ((col[2] && col[3]) ^ col[7]));
+        bool canLeft = !(((col[4] & col[5]) ^ col[0]) || ((col[6] & col[7]) ^ col[1]));
+        bool canRite = !(((col[4] & col[5]) ^ col[2]) || ((col[6] & col[7]) ^ col[3]));
+        bool canUp = !(((col[0] & col[1]) ^ col[4]) || ((col[2] & col[3]) ^ col[5]));
+        bool canDn = !(((col[0] & col[1]) ^ col[6]) || ((col[2] & col[3]) ^ col[7]));
 
         if (canLeft || canRite)
         {

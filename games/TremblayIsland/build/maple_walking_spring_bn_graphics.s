@@ -8,7 +8,7 @@
 @	+ 256 tiles not compressed
 @	Total size: 32 + 8192 = 8224
 @
-@	Time-stamp: 2022-01-26, 07:36:09
+@	Time-stamp: 2022-02-08, 01:10:00
 @	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 @	( http://www.coranac.com/projects/#grit )
 @
@@ -312,7 +312,7 @@ maple_walking_spring_bn_graphicsTiles:
 	.global maple_walking_spring_bn_graphicsPal		@ 32 unsigned chars
 	.hidden maple_walking_spring_bn_graphicsPal
 maple_walking_spring_bn_graphicsPal:
-	.hword 0x03E0,0x0000,0x0020,0x1CE7,0x4904,0x0192,0x7E00,0x7608
+	.hword 0x03E0,0x0000,0x0020,0x0C63,0x4904,0x0192,0x7E00,0x7608
 	.hword 0x2A37,0x3655,0x027A,0x5294,0x3EFC,0x4AFB,0x7FFF,0x0000
 
 @}}BLOCK(maple_walking_spring_bn_graphics)
