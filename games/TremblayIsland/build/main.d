@@ -184,6 +184,7 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_ptr.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button_2.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_score.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_awards.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_spring.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_oo.h \
@@ -572,6 +573,7 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_ptr.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button_2.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_score.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_awards.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_spring.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple_walking_oo.h:

@@ -132,6 +132,7 @@
 // UI elements
 #include "bn_sprite_items_a_button_2.h"
 #include "bn_sprite_items_score.h"
+#include "bn_sprite_items_awards.h"
 
 // Characters
 #include "bn_sprite_items_maple_walking.h"
@@ -1094,13 +1095,6 @@ void dialogue_page(line n[32]) {
                     if (cascade_id > backdrops.size() - 1) cascade_id = 0;
                 }
 
-                // Handle text rotation
-                //for (short int t = 0; t < text_sprite0.size(); t++) if (text_sprite0.at(t).visible() && text_sprite0.at(t).rotation_angle() > 0) {text_sprite0.at(t).set_rotation_angle(text_sprite0.at(t).rotation_angle() - 1);}
-                //for (short int t = 0; t < text_sprite2.size(); t++) if (text_sprite2.at(t).visible() && text_sprite2.at(t).rotation_angle() > 0) {text_sprite2.at(t).set_rotation_angle(text_sprite2.at(t).rotation_angle() - 1);}
-                //for (short int t = 0; t < text_sprite3.size(); t++) if (text_sprite3.at(t).visible() && text_sprite3.at(t).rotation_angle() > 0) {text_sprite3.at(t).set_rotation_angle(text_sprite3.at(t).rotation_angle() - 1);}
-                //for (short int t = 0; t < text_sprite4.size(); t++) if (text_sprite4.at(t).visible() && text_sprite4.at(t).rotation_angle() > 0) {text_sprite4.at(t).set_rotation_angle(text_sprite4.at(t).rotation_angle() - 1);}
-                //for (short int t = 0; t < text_sprite5.size(); t++) if (text_sprite5.at(t).visible() && text_sprite5.at(t).rotation_angle() > 0) {text_sprite5.at(t).set_rotation_angle(text_sprite5.at(t).rotation_angle() - 1);}
-
                 // Handle text ticker
                 if (ticker < 160) {
                     if (ticker_delay == 0) {
@@ -1168,11 +1162,6 @@ void dialogue_page(line n[32]) {
             }
 
             // Handle weirdness
-            for (short int t = 0; t < text_sprite0.size(); t++) if (text_sprite0.at(t).visible() && text_sprite0.at(t).rotation_angle() > 0) { text_sprite0.at(t).set_rotation_angle(0); }
-            for (short int t = 0; t < text_sprite2.size(); t++) if (text_sprite2.at(t).visible() && text_sprite2.at(t).rotation_angle() > 0) { text_sprite2.at(t).set_rotation_angle(0); }
-            for (short int t = 0; t < text_sprite3.size(); t++) if (text_sprite3.at(t).visible() && text_sprite3.at(t).rotation_angle() > 0) { text_sprite3.at(t).set_rotation_angle(0); }
-            for (short int t = 0; t < text_sprite4.size(); t++) if (text_sprite4.at(t).visible() && text_sprite4.at(t).rotation_angle() > 0) { text_sprite4.at(t).set_rotation_angle(0); }
-            for (short int t = 0; t < text_sprite5.size(); t++) if (text_sprite5.at(t).visible() && text_sprite5.at(t).rotation_angle() > 0) { text_sprite5.at(t).set_rotation_angle(0); }
             ticker = 160;
 
             for (short int t = 1; t < 3; t++) {
@@ -3181,7 +3170,7 @@ public:
 // Score HUD
 class hud {
 public:
-    bn::sprite_ptr orb = bn::sprite_items::score.create_sprite(0, -79, 0);
+    bn::sprite_ptr orb = bn::sprite_items::score.create_sprite(0, -82, 0);
     bn::sprite_ptr l_wing = bn::sprite_items::score.create_sprite(-48, -82, 1);
     bn::sprite_ptr r_wing = bn::sprite_items::score.create_sprite(48, -82, 1);
     bn::sprite_ptr l_wing_2 = bn::sprite_items::score.create_sprite(-32, -82, 2);
@@ -3189,6 +3178,7 @@ public:
     bn::vector<bn::sprite_ptr, 8> text_sprite0;
     bn::fixed_t<12> wing_scale = 1.25;
     short int score = 0;
+    short int rotation = 0;
 
     hud() {
         r_wing.set_horizontal_flip(true);
@@ -3207,6 +3197,8 @@ public:
         wing_scale = new_value;
         if (wing_scale == 0) wing_scale = 0.01;
 
+        rotation = (rotation + 1) % 360;
+
         short int q = -3;
         if (new_score > 9) q = -5;
         if (new_score > 99) q = -8;
@@ -3217,6 +3209,149 @@ public:
 
         l_wing_2.set_scale(wing_scale, 1);
         r_wing_2.set_scale(wing_scale, 1);
+    }
+};
+
+// Victory object
+class victory {
+public:
+    bn::vector<bn::sprite_ptr, 4> file1_spr;
+    bn::vector<bn::sprite_ptr, 4> file2_spr;
+    bn::sprite_ptr bg = bn::sprite_items::awards.create_sprite(80, -8, 0);
+    bn::sprite_ptr tg = bn::sprite_items::awards.create_sprite(80, -40, 1);
+    bn::sprite_ptr award = bn::sprite_items::awards.create_sprite(80, 24, 2);
+    bn::sprite_ptr letter = bn::sprite_items::awards.create_sprite(80, 24, 3);
+    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-80, -48);
+
+#define mo_x 32
+#define mo_y 64
+
+    bn::sprite_ptr b_m1 = bn::sprite_items::power_meter.create_sprite(32 + mo_x, mo_y, 1);
+    bn::sprite_ptr b_m2 = bn::sprite_items::power_meter.create_sprite(64 + mo_x, mo_y, 1);
+    bn::sprite_ptr b_l = bn::sprite_items::power_meter.create_sprite(16 + mo_x, mo_y, 0);
+    bn::sprite_ptr b_r = bn::sprite_items::power_meter.create_sprite(80 + mo_x, mo_y, 2);
+    bn::sprite_ptr b_a = bn::sprite_items::power_meter.create_sprite(16 + mo_x, mo_y, 3);
+
+    short int stage = 0;
+    short int xp_render = 0;
+    short int chari = 0;
+    short int level = 0;
+    short int music_counter = 0;
+    short int chapter = 0;
+    short int chap_go = 16 + mo_x;
+    short int score = 0;
+    short int xp = 0;
+
+    victory(int l = 0, int charis = 0, int scores = 50, int xps = 250, int chap = 3) {
+        letter = bn::sprite_items::awards.create_sprite(80, 24, l + 3);
+        level = l;
+        chapter = chap;
+        score = scores;
+        xp = xps;
+        chari = charis;
+
+        chap_go += ((xp / chapter) * 0.64);
+
+        tg.set_visible(false);
+        award.set_visible(false);
+        letter.set_visible(false);
+
+        award.set_scale(2, 2);
+        letter.set_scale(2, 2);
+
+        b_m1.set_scale(4, 1);
+        b_m2.set_scale(4, 1);
+
+        bn::music_items_info::span[13].first.play(bn::fixed(50) / 100);
+    }
+
+    void update() {
+        bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+
+        //b_a.set_x(new_lc + 32);
+
+        if (b_a.x().integer() < chap_go) b_a.set_x(b_a.x() + 1);
+
+        if (music_counter < 224) {
+            music_counter++;
+        }
+        else if (music_counter == 224) {
+            bn::music_items_info::span[16].first.play(bn::fixed(50) / 100);
+            music_counter++;
+        }
+
+        switch (stage) {
+        case 0: {
+            bn::fixed_t<12> hs = bg.vertical_scale();
+            if (hs < 1.9) {
+                hs += 0.1;
+                if (hs > 1.9) {
+                    stage = 1;
+                    hs = 2;
+                }
+                bg.set_vertical_scale(hs);
+            }
+            break;
+        }
+        case 1: {
+            if (xp_render < xp) {
+                xp_render += 3;
+                if (xp_render > xp) xp_render = xp;
+                bn::sound_items::click.play();
+            }
+            else {
+                stage = 2;
+            }
+
+            tg.set_visible(true);
+            file1_spr.clear();
+            file2_spr.clear();
+            file1_gen.generate(80 - 8, -48, bn::to_string<4>(score), file1_spr);
+            file1_gen.generate(80 - 8, -18, bn::to_string<4>(xp_render), file2_spr);
+            break;
+        }
+        case 2: {
+            award.set_visible(true);
+            letter.set_visible(true);
+
+            bn::fixed_t<12> a = award.horizontal_scale();
+            if (a > 1) {
+                a -= 0.1;
+            }
+            else {
+                a = 1;
+                stage = 3;
+                bn::sound_items::firehit.play();
+
+                switch (chari) {
+                case 0: {
+                    if (level < 3) bn::sound_items::maple_alright_02.play();
+                    else bn::sound_items::maple_ugh_01.play();
+                    break;
+                }
+                case 1: {
+                    if (level < 3) bn::sound_items::enoki_hey.play();
+                    else bn::sound_items::enoki_aw.play();
+                    break;
+                }
+                case 2: {
+                    if (level < 3) bn::sound_items::aaron_yeah_02.play();
+                    else bn::sound_items::aaron_ugh_07.play();
+                    break;
+                }
+                default: {
+                    break;
+                }
+                }
+            }
+            award.set_scale(a, a);
+            letter.set_scale(a, a);
+            break;
+        }
+        case 3: {
+            break;
+        }
+        }
     }
 };
 
@@ -3686,7 +3821,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     case 0:
     {
         if (!bn::music::playing()) {
-            bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[2].first.play(0.8);
         }
 
         current_room.configure(12, 6, 8, 3);
@@ -3976,17 +4111,17 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     {
         if (so->checkpoint == 5)
         {
-            bn::music_items_info::span[21].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[21].first.play(0.8);
         }
         else if (so->checkpoint < 12)
         {
-            bn::music_items_info::span[11].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[11].first.play(0.8);
         }
         else if (so->checkpoint < 14)
         {
             if (bn::music::playing())
                 bn::music::stop();
-            bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[1].first.play(0.8);
         }
 
         current_room.configure(20, 20, 9, 17);
@@ -4320,7 +4455,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     case 5:
     {
-        bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[2].first.play(0.8);
 
         current_room.configure(11, 5, 5, 3);
         short int local_col[current_room.width * current_room.height] = {
@@ -4383,7 +4518,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     {
         if (so->checkpoint < 12)
         {
-            bn::music_items_info::span[17].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[17].first.play(0.8);
         }
         current_room.configure(9, 11, 7, 3);
 
@@ -4588,12 +4723,12 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     {
         if (so->checkpoint < 12)
         {
-            bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[27].first.play(0.8);
         }
         else
         {
             if (!bn::music::playing())
-                bn::music_items_info::span[1].first.play(bn::fixed(80) / 100);
+                bn::music_items_info::span[1].first.play(0.8);
         }
 
         current_room.configure(20, 20, 9, 17);
@@ -4856,7 +4991,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     {
         if (so->checkpoint < 12)
         {
-            bn::music_items_info::span[26].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[26].first.play(0.8);
         }
         current_room.chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
@@ -4990,7 +5125,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     case 10:
     {
-        bn::music_items_info::span[5].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[5].first.play(0.8);
         current_room.chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
         current_room.configure(7, 7, 3, 5);
@@ -5035,7 +5170,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     // the creepy garden
     case 11:
     {
-        bn::music_items_info::span[12].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[12].first.play(0.8);
         current_room.chari.at(0).entity.set_position(15 * 32, 18 * 32);
 
         current_room.configure(20, 20, 15, 18);
@@ -5136,7 +5271,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     case 13:
     {
-        bn::music_items_info::span[25].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[25].first.play(0.8);
         current_room.chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
         current_room.configure(7, 7, 3, 5);
@@ -5181,7 +5316,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
     case 14:
     {
-        bn::music_items_info::span[27].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[27].first.play(0.8);
 
         current_room.configure(12, 20, 7, 18);
 
@@ -7881,7 +8016,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             auto b_button = bn::sprite_items::b_button.create_sprite(90, -50);
                             auto uke_anim = bn::create_sprite_animate_action_forever(current_room.chari.at(current_room.follow_id).entity, 12, bn::sprite_items::diana_uke.tiles_item(), 0, 1, 2, 3);
                             bn::music::stop();
-                            bn::music_items_info::span[32].first.play(bn::fixed(80) / 100);
+                            bn::music_items_info::span[32].first.play(0.8);
 
                             while (!bn::keypad::b_pressed())
                             {
@@ -7892,7 +8027,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             }
 
                             bn::music::stop();
-                            bn::music_items_info::span[5].first.play(bn::fixed(80) / 100);
+                            bn::music_items_info::span[5].first.play(0.8);
                         }
                         }
                     }
@@ -8056,7 +8191,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             auto b_button = bn::sprite_items::b_button.create_sprite(90, -50);
                             auto uke_anim = bn::create_sprite_animate_action_forever(current_room.chari.at(current_room.follow_id).entity, 12, bn::sprite_items::diana_uke.tiles_item(), 0, 1, 2, 3);
                             bn::music::stop();
-                            bn::music_items_info::span[32].first.play(bn::fixed(80) / 100);
+                            bn::music_items_info::span[32].first.play(0.8);
 
                             while (!bn::keypad::b_pressed())
                             {
@@ -8067,7 +8202,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             }
 
                             bn::music::stop();
-                            bn::music_items_info::span[5].first.play(bn::fixed(80) / 100);
+                            bn::music_items_info::span[5].first.play(0.8);
                         }
 
                         case 7:
@@ -8364,13 +8499,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     if (!jukebox)
                     {
                         bn::music::stop();
-                        bn::music_items_info::span[23].first.play(bn::fixed(80) / 100);
+                        bn::music_items_info::span[23].first.play(0.8);
                         jukebox = true;
                     }
                     else
                     {
                         bn::music::stop();
-                        bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
+                        bn::music_items_info::span[2].first.play(0.8);
                         jukebox = false;
                     }
                 };
@@ -8616,12 +8751,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
             {true, true, 0, "COM: Endscene"}};
         dialogue_page(lc);
 
-        bn::music_items_info::span[29].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[29].first.play(0.8);
     }
 
     if (!bn::music::playing())
     {
-        bn::music_items_info::span[29].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[29].first.play(0.8);
     }
 
     // Constants
@@ -9745,7 +9880,7 @@ void startup()
             break;
         case 4:
             glow = 0.5;
-            bn::music_items_info::span[3].first.play(bn::fixed(80) / 100);
+            bn::music_items_info::span[3].first.play(0.8);
             timer(16);
             intro_stage++;
             break;
@@ -9865,7 +10000,7 @@ void load_save()
     short int t = 0;
     short int c = 0;
 
-    bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
+    bn::music_items_info::span[8].first.play(0.8);
 
     while (!bn::keypad::a_pressed())
     {
@@ -9935,7 +10070,7 @@ void cutscenes(int c)
 {
     if (c == 0)
     {
-        bn::music_items_info::span[9].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[9].first.play(0.8);
         bn::regular_bg_ptr f1 = bn::regular_bg_items::intro_final_1.create_bg(0, 0);
         bn::regular_bg_ptr f2 = bn::regular_bg_items::intro_final_2.create_bg(0, 0);
         f2.set_blending_enabled(true);
@@ -10007,22 +10142,6 @@ bool victory_page(int chari, int score)
     }
 
     short int offset = 0;
-    short int total = 0;
-    char buf[36] = {0};
-    char bf2[36] = {0};
-    bn::sprite_text_generator text_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 24> text_spr;
-    bn::vector<bn::sprite_ptr, 24> text_spr_2;
-    bn::vector<bn::sprite_ptr, 7> text_spr_3;
-    bn::vector<bn::sprite_ptr, 4> text_spr_4;
-
-    bn::sprite_ptr b_m1 = bn::sprite_items::power_meter.create_sprite(32, 0, 1);
-    bn::sprite_ptr b_m2 = bn::sprite_items::power_meter.create_sprite(64, 0, 1);
-    b_m1.set_scale(4, 1);
-    b_m2.set_scale(4, 1);
-    bn::sprite_ptr b_l = bn::sprite_items::power_meter.create_sprite(16, 0, 0);
-    bn::sprite_ptr b_r = bn::sprite_items::power_meter.create_sprite(80, 0, 2);
-    bn::sprite_ptr b_a = bn::sprite_items::power_meter.create_sprite(32, 0, 3);
 
     bn::regular_bg_ptr background = bn::regular_bg_items::fun_background.create_bg(0, 0);
     bn::regular_bg_ptr sidebar = bn::regular_bg_items::sidebar.create_bg(0, 0);
@@ -10065,25 +10184,24 @@ bool victory_page(int chari, int score)
 
     so->xp = new_xp.integer(); // Add score to save total
 
-    bn::fixed_t<12> bar_modifier = 0.48;
-    if (so->checkpoint > 6) {
-        bar_modifier = 0.24;
-    }
-    if (so->checkpoint > 8) {
-        bar_modifier = 0.16;
-    }
+    int grade = 3;
+    bn::fixed_t<12> new_addition = (modifier * score);
+    if (new_addition < 40) grade = 0;
+    if (new_addition < 30) grade = 1;
+    if (new_addition < 20) grade = 2;
+    if (new_addition < 10) grade = 3;
 
-    bn::fixed_t<12> new_xp_d = new_xp.integer() * bar_modifier;
-    short int new_xp_p = 0;
-    bool final_hit = false;
+    int chap = 4;
+    if (so->checkpoint < 11) chap = 3;
+    if (so->checkpoint < 9) chap = 2;
+    if (so->checkpoint < 5) chap = 1;
 
-    auto a_button = bn::sprite_items::a_button.create_sprite(48,48);
-
-    bn::music_items_info::span[13].first.play(bn::fixed(40) / 100);
-
-    short int music_int = 0;
+    bn::core::update();
+    victory v(grade, chari, score, so->xp, chap);
     while (!bn::keypad::a_pressed())
     {
+        v.update();
+
         if (offset < 48 * 2)
         {
             victory_anim.update();
@@ -10111,47 +10229,6 @@ bool victory_page(int chari, int score)
         victory_spr2 = victory_anim2.sprite();
 
         background.set_position((background.x().integer() + 1) % 256, (background.y().integer() + 1) % 256);
-
-        if (music_int < 225)
-        {
-            music_int++;
-        }
-        else if (music_int == 225)
-        {
-            bn::music::stop();
-            music_int++;
-        }
-
-        if (total < score)
-            total += 5;
-        if (total > score)
-            total = score;
-        if (new_xp_p < new_xp)
-            new_xp_p += 5;
-        if (new_xp_p > new_xp)
-            new_xp_p = new_xp.integer();
-
-        bn::string<36> txt_score = bn::to_string<8>(total);
-        bn::string<36> txt_xpern = bn::to_string<8>(new_xp.integer());
-
-        text_spr.clear();
-        text_spr_2.clear();
-        text_gen.generate(8, -64, txt_score, text_spr);
-        text_gen.generate(8, -48, txt_xpern, text_spr_2);
-
-        if (new_lc < new_xp_d)
-        {
-            new_lc++;
-            bn::sound_items::start.play();
-        }
-        else if (!final_hit)
-        {
-            final_hit = true;
-            total = score;
-            bn::sound_items::firecrackle.play();
-        }
-        b_a.set_x(new_lc + 32);
-
         bn::core::update();
     }
 
@@ -10511,7 +10588,7 @@ dungeon_return rabbit_game()
         collisions.clear();
 
         if (bn::music::playing()) bn::music::stop();
-        bn::music_items_info::span[18].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[18].first.play(0.8);
 
         character enoki(bn::sprite_items::enoki_walking_spring, 8, 2, true);
         enoki.role = 1;
@@ -10716,7 +10793,7 @@ dungeon_return underground()
     {
         room current_room(20, 20, 17, 18);
 
-        bn::music_items_info::span[19].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[19].first.play(0.8);
         bn::regular_bg_ptr back_floor = bn::regular_bg_items::velvet.create_bg(0, 0);
         bn::regular_bg_ptr back_black = bn::regular_bg_items::velvet.create_bg(0, 0);
         back_floor.set_camera(current_room.camera);
@@ -11156,7 +11233,7 @@ dungeon_return computer() {
                         // Documents folder
                         else if (select == 1) {
                             if (pc_cursor.x() > 14 && pc_cursor.x() < 33) {
-                                bn::music_items_info::span[28].first.play(bn::fixed(80) / 100);
+                                bn::music_items_info::span[28].first.play(0.8);
                                 pc_scout = bn::regular_bg_items::pc_bbscreen.create_bg(0,0);
                                 pc_cursor.set_visible(false);
                                 pc_bg.put_above();
@@ -11207,7 +11284,6 @@ dungeon_return computer() {
 
 void victory_toutes(int emotion, int total) {
 
-    bn::music_items_info::span[16].first.play(bn::fixed(80) / 100);
     so->xp += (total / 10);
 
     windows.clear();
@@ -11240,25 +11316,21 @@ void victory_toutes(int emotion, int total) {
     }
 
     char buf[36] = {0};
-    char bf2[36] = {0};
 
     bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
     bn::vector<bn::sprite_ptr, 12> file1_spr;
-    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 12> file2_spr;
-
-    auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64);
-    auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 64);
-    dg_bg1.set_scale(2,1);
-    dg_bg2.set_scale(2,1);
-    dg_bg1.set_visible(false);
-    dg_bg2.set_visible(false);
 
     auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
     b_button.set_visible(false);
 
+    int chap = 2;
+    if (so->checkpoint > 8) chap = 3;
+
     bool ready = false;
+    victory v(emotion, 6, total, so->xp, chap);
     while (!bn::keypad::b_pressed()) {
+
+        v.update();
 
         if (w < 36) {
             windows.at(1).set_boundaries(-130, 116 - w - 12, 172, 116 + w - 12);
@@ -11276,28 +11348,21 @@ void victory_toutes(int emotion, int total) {
 
             switch(emotion) {
                 case 2: {
-                    sprintf(buf, "You've got a... smelly sock.");
-                    file1_gen.generate(-96, 48, buf, file1_spr);
+                    sprintf(buf, "You've got a.. sock.");
+                    file1_gen.generate(-112, 64, buf, file1_spr);
                     break;
                 }
                 case 1: {
-                    sprintf(buf, "You've got... chocolate mousse!");
-                    file1_gen.generate(-96, 48, buf, file1_spr);
+                    sprintf(buf, "You've got.. mousse!");
+                    file1_gen.generate(-112, 64, buf, file1_spr);
                     break;
                 }
                 case 0: {
-                    sprintf(buf, "You've got a twenty!");
-                    file1_gen.generate(-96, 48, buf, file1_spr);
+                    sprintf(buf, "You've got.. a twenty!");
+                    file1_gen.generate(-112, 64, buf, file1_spr);
                     break;
                 }
             }
-
-            sprintf(bf2, "Your XP is now: %d", so->xp);
-            file2_gen.generate(-96, 60, bf2, file2_spr);
-
-            dg_bg1.set_visible(true);
-            dg_bg2.set_visible(true);
-            b_button.set_visible(true);
         }
 
         bg_static.set_position((bg_static.x().integer() + 2) % 256, (bg_static.y().integer() + 1) % 256);
@@ -11338,7 +11403,7 @@ dungeon_return crystal_ball() {
 
     bn::fixed base_degrees_angle;
 
-    bn::music_items_info::span[22].first.play(bn::fixed(80) / 100);
+    bn::music_items_info::span[22].first.play(0.8);
 
     char buf[18] = {0};
     char bf2[18] = {0};
@@ -11505,7 +11570,7 @@ dungeon_return boat_game() {
         bn::vector<bn::sprite_ptr, 12> file3_spr;
 
         if (bn::music::playing()) bn::music::stop();
-        bn::music_items_info::span[30].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[30].first.play(0.8);
 
         boat_camera camera;
         camera.y = 300;
@@ -11551,29 +11616,21 @@ dungeon_return boat_game() {
         short int isMoving = 0;
         bn::fixed_t<12> boat_transparency = 1;
 
-        short int distance = 32;
+        short int distance = 16;
         short int tick = 0;
 
         bool completed = false;
         bn::fixed_t<12> completed_size = 0.48;
 
+        hud current_hud;
         while(completed_size > 0.02) {
 
             if (distance < 1) completed = true;
 
-            sprintf(buf, "Score: %d", score);
-            file1_spr.clear();
-            file1_gen.generate(-114, -58, buf, file1_spr);
-
-            sprintf(bf2, "Total: %d", total);
-            file2_spr.clear();
-            file2_gen.generate(-114, -46, bf2, file2_spr);
+            bn::fixed_t<12> me_level = distance * 0.125;
+            current_hud.update(me_level, score);
 
             if (distance < 0) distance = 0;
-
-            sprintf(bf3, "Distance: %d", distance);
-            file3_spr.clear();
-            file3_gen.generate(-114, -34, bf3, file3_spr);
 
             if (total < score) total = score;
 
@@ -11767,18 +11824,13 @@ dungeon_return boat_game() {
 
     {
         char buf[36] = {0};
-        char bf2[36] = {0};
         char bf3[36] = {0};
 
         bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 32> file1_spr;
-        bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
-        bn::vector<bn::sprite_ptr, 32> file2_spr;
         bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
         bn::vector<bn::sprite_ptr, 32> file3_spr;
 
-        auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
-        b_button.set_visible(false);
         so->xp += (total / 4.675);
 
         bn::music::stop();
@@ -11790,24 +11842,20 @@ dungeon_return boat_game() {
         short int xp_count = 1;
         short int sfx_play = 0;
 
+        int grade = 0;
+        if (total < 40) grade = 1;
+        if (total < 30) grade = 2;
+        if (total < 20) grade = 3;
+
+        int chap = 4;
+        if (so->checkpoint < 11) chap = 3;
+        if (so->checkpoint < 9) chap = 2;
+        if (so->checkpoint < 5) chap = 1;
+
+        victory v(grade, 7, total, so->xp, chap);
         while(!bn::keypad::b_pressed()) {
             auto docks = bn::regular_bg_items::bg_dock.create_bg(0,0);
-
-            if ((xp_count - 1) < so->xp) {
-                sfx_play = (sfx_play + 1) % 8;
-                if (sfx_play == 1) bn::sound_items::ding.play();
-                xp_count++;
-            }
-
-            if (xp_count == so->xp - 1) {
-                xp_count++;
-                b_button.set_visible(true);
-                bn::music_items_info::span[16].first.play(bn::fixed(80) / 100);
-            }
-
-            sprintf(buf, "XP: %d", xp_count - 1);
-            file2_spr.clear();
-            file2_gen.generate(-96, 48, buf, file2_spr);
+            v.update();
 
             bn::core::update();
         }
@@ -11922,24 +11970,20 @@ dungeon_return kitchen() {
 
     bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
     bn::vector<bn::sprite_ptr, 32> file1_spr;
-    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 32> file2_spr;
-    bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 32> file3_spr;
 
-    bn::music_items_info::span[34].first.play(bn::fixed(80) / 100);
+    bn::music_items_info::span[34].first.play(0.8);
 
     char buf1[32] = {};
-    char buf2[32] = {};
 
     // Cooking bit
-    if (true) {
+    {
         auto tr_bg = bn::regular_bg_items::axe_game_bg.create_bg(0,0);
         auto pc_bg = bn::regular_bg_items::bg_cooking_01.create_bg(8,0);
         short int chari = 0;
 
         bn::sprite_ptr hand = bn::sprite_items::gumbo.create_sprite(0,0,14);
 
+        hud current_hud;
         while(chari < 7) {
 
             short int je_veus_de = 8 + std_rand() % 4;
@@ -11969,7 +12013,7 @@ dungeon_return kitchen() {
             }
 
             ingredient food[6];
-            bn::sprite_ptr je_veus_de_food = bn::sprite_items::gumbo.create_sprite(40, -52, je_veus_de);
+            bn::sprite_ptr je_veus_de_food = bn::sprite_items::gumbo.create_sprite(40, -36, je_veus_de);
 
             food[0].entity = bn::sprite_items::gumbo.create_sprite(-42,-39 + 48,13); // Knife
             food[1].entity = bn::sprite_items::gumbo.create_sprite(-10,-39 + 38,0);
@@ -11994,8 +12038,11 @@ dungeon_return kitchen() {
             bn::fixed_t<12> blend_value = 0;
 
             bn::blending::set_transparency_alpha(0);
-
+            bn::fixed_t<12> current_level;
             while(!done) {
+                current_level = ((6 - chari) * 0.325) + 0.01;
+                current_hud.update(current_level, score);
+
                 hand.put_above();
 
                 if (blend_value < 0.05 && ready_freddy) {
@@ -12040,11 +12087,8 @@ dungeon_return kitchen() {
                 }
 
                 file1_spr.clear();
-                file2_spr.clear();
-                file1_gen.generate(-104, -72, buf1, file1_spr);
-                file2_gen.generate(-104, -60,  buf2, file2_spr);
+                file1_gen.generate(-112, 72, buf1, file1_spr);
                 sprintf(buf1, "");
-                sprintf(buf2, "Score: %d", score);
 
                 for (short int t = 0; t < 6; t++) {
                     if (food[t].entity.y() < -24 && t != sel) {
@@ -12219,45 +12263,21 @@ dungeon_return kitchen() {
     }
 
     // Reward screen
-    if (true) {
-        sprintf(buf1, "");
-        file1_spr.clear();
-        file3_spr.clear();
-        file1_gen.generate(-104, -72, buf1, file1_spr);
-        file3_gen.generate(-104, -72, buf1, file3_spr);
-
+    {
         bn::music::stop();
         bn::core::update();
+        file1_gen.clear();
 
         auto face_spr = bn::sprite_items::bg_monch_face.create_sprite(8, -43);
         auto face_b_like = bn::create_sprite_animate_action_forever(face_spr, 4, bn::sprite_items::bg_monch_face.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7);
         auto pc_bg = bn::regular_bg_items::bg_monch.create_bg(0,0);
 
-        auto b_button = bn::sprite_items::b_button.create_sprite(90,0);
-        b_button.set_visible(false);
         so->xp += (score / 22);
-        short int xp_count = 1;
-        short int sfx_play = 0;
-        while(!bn::keypad::b_pressed()) {
-
-            if ((xp_count - 1) < so->xp) {
-                sfx_play = (sfx_play + 1) % 8;
-                if (sfx_play == 1) bn::sound_items::ding.play();
-                xp_count++;
-            }
-
-            if (xp_count == so->xp - 1) {
-                xp_count++;
-                b_button.set_visible(true);
-                bn::music_items_info::span[16].first.play(bn::fixed(80) / 100);
-            }
-
-            sprintf(buf, "XP: %d", xp_count - 1);
-            file2_spr.clear();
-            file2_gen.generate(-84, 32, buf, file2_spr);
+        victory v(0, 8, score, so->xp, 3);
+        while(!bn::keypad::a_pressed()) {
+            v.update();
             face_b_like.update();
             face_spr = face_b_like.sprite();
-
             bn::core::update();
         }
     }
@@ -12638,6 +12658,7 @@ void final_battle() {
 
 void core_gameplay(int x, int y, int world, int until)
 {
+    BN_LOG("got to core");
     bn::core::update();
     rand_state = so->xp;
 
@@ -12705,7 +12726,7 @@ void core_gameplay(int x, int y, int world, int until)
                 }
                 case 7: {
                     bn::blending::set_transparency_alpha(0);
-                    bn::music_items_info::span[33].first.play(bn::fixed(80) / 100);
+                    bn::music_items_info::span[33].first.play(0.8);
                     if (so->hat_world == -1) {
                         if (so->last_char_id == 1) {
                             exec_dialogue(31);
@@ -12753,8 +12774,8 @@ int checkpoint(int level)
         exec_dialogue(2);
         exec_dialogue(3);
 
-        bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
-        bn::music_items_info::span[2].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[2].first.play(0.8);
+        bn::music_items_info::span[2].first.play(0.8);
 
         core_gameplay(8, 3, 0, -1);
         cutscenes(0);
@@ -12776,7 +12797,7 @@ int checkpoint(int level)
 
     // Welcome message
     case 2: {
-        bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[8].first.play(0.8);
         exec_dialogue(18);
         break;
     }
@@ -12797,7 +12818,7 @@ int checkpoint(int level)
         break; 
     }
     case 6: {
-        bn::music_items_info::span[8].first.play(bn::fixed(80) / 100);
+        bn::music_items_info::span[8].first.play(0.8);
         exec_dialogue(17);
         exec_dialogue(19);
         exec_dialogue(20);
