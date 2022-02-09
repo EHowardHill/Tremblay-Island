@@ -12266,7 +12266,7 @@ dungeon_return kitchen() {
     {
         bn::music::stop();
         bn::core::update();
-        file1_gen.clear();
+        file1_spr.clear();
 
         auto face_spr = bn::sprite_items::bg_monch_face.create_sprite(8, -43);
         auto face_b_like = bn::create_sprite_animate_action_forever(face_spr, 4, bn::sprite_items::bg_monch_face.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7);
