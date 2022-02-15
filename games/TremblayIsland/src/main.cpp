@@ -61,13 +61,11 @@
 
 #include "bn_affine_bg_items_bg_crystal_ball.h"
 #include "bn_regular_bg_items_bg_crystal01.h"
-#include "bn_affine_bg_items_bg_ocean.h"
 #include "bn_sprite_items_bg_sky.h"
 #include "bn_affine_bg_items_bg_sky_trees.h"
 #include "bn_sprite_items_l_button.h"
 
 // Extended headers
-#include "save.h"
 #include "bn_sprite_items_b_button.h"
 
 // tree cut
@@ -181,6 +179,15 @@
 #include "bn_regular_bg_items_bg_explosion.h"
 #include "bn_regular_bg_items_bg_skeleton.h"
 
+#include "bn_affine_bg_items_bg_ocean.h"
+
+#include "bn_regular_bg_items_tc_intro.h"
+#include "bn_regular_bg_items_tc_1.h"
+#include "bn_regular_bg_items_tc_2.h"
+#include "bn_regular_bg_items_tc_3.h"
+#include "bn_regular_bg_items_tc_4.h"
+#include "bn_regular_bg_items_tc_5.h"
+
 /*
 Maple   0
 Enoki   1
@@ -254,31 +261,72 @@ Guy     7
 #include "bn_sprite_items_diana01.h"
 #include "bn_sprite_items_nicholas01.h"
 #include "bn_regular_bg_items_castle_floor.h"
-#include "bn_regular_bg_items_castle01.h"
-#include "bn_regular_bg_items_castle02.h"
-#include "bn_regular_bg_items_castle03.h"
 #include "bn_regular_bg_items_scout_tv_01.h"
 #include "bn_regular_bg_items_scout_tv_02.h"
 #include "bn_regular_bg_items_scout_tv_03.h"
 #include "bn_regular_bg_items_scout_tv_04.h"
+
 #include "bn_regular_bg_items_s0101.h"
+#include "bn_regular_bg_items_s0101_1.h"
+#include "bn_regular_bg_items_s0101_2.h"
+
 #include "bn_regular_bg_items_s0102.h"
+#include "bn_regular_bg_items_s0102_01.h"
+#include "bn_regular_bg_items_s0102_02.h"
+
 #include "bn_regular_bg_items_s0103.h"
+#include "bn_regular_bg_items_s0103_01.h"
+#include "bn_regular_bg_items_s0103_02.h"
+
 #include "bn_regular_bg_items_s0104.h"
+#include "bn_regular_bg_items_s0104_01.h"
+#include "bn_regular_bg_items_s0104_02.h"
+
 #include "bn_regular_bg_items_s0105.h"
+
 #include "bn_regular_bg_items_s0106.h"
+#include "bn_regular_bg_items_s0106_01.h"
+#include "bn_regular_bg_items_s0106_02.h"
+
 #include "bn_regular_bg_items_s0107.h"
+#include "bn_regular_bg_items_s0107_01.h"
+#include "bn_regular_bg_items_s0107_02.h"
+
 #include "bn_regular_bg_items_s0108.h"
+#include "bn_regular_bg_items_s0108_01.h"
+#include "bn_regular_bg_items_s0108_02.h"
+
 #include "bn_regular_bg_items_s0109.h"
 #include "bn_regular_bg_items_s0109a.h"
 #include "bn_regular_bg_items_s0109b.h"
+
+#include "bn_regular_bg_items_ocean.h"
+#include "bn_regular_bg_items_ocean_01.h"
+#include "bn_regular_bg_items_ocean_02.h"
+
+#include "bn_regular_bg_items_castle01.h"
+#include "bn_regular_bg_items_castle01_01.h"
+#include "bn_regular_bg_items_castle01_02.h"
+
+#include "bn_regular_bg_items_castle02.h"
+#include "bn_regular_bg_items_castle02_01.h"
+#include "bn_regular_bg_items_castle02_02.h"
+
+#include "bn_regular_bg_items_castle03.h"
+#include "bn_regular_bg_items_castle03_01.h"
+#include "bn_regular_bg_items_castle03_02.h"
+
 #include "bn_regular_bg_items_s0201.h"
 #include "bn_regular_bg_items_s0202.h"
 #include "bn_regular_bg_items_s0203.h"
 #include "bn_regular_bg_items_s0204.h"
 #include "bn_regular_bg_items_s0205.h"
 #include "bn_regular_bg_items_s0206.h"
+
 #include "bn_regular_bg_items_s0207.h"
+#include "bn_regular_bg_items_s0207_01.h"
+#include "bn_regular_bg_items_s0207_02.h"
+
 #include "bn_regular_bg_items_s0208.h"
 #include "bn_regular_bg_items_s0301.h"
 #include "bn_regular_bg_items_s0302.h"
@@ -289,7 +337,11 @@ Guy     7
 #include "bn_regular_bg_items_s0405.h"
 #include "bn_regular_bg_items_s0406.h"
 #include "bn_regular_bg_items_s0407.h"
+
 #include "bn_regular_bg_items_s0501.h"
+#include "bn_regular_bg_items_s0501_01.h"
+#include "bn_regular_bg_items_s0501_02.h"
+
 #include "bn_regular_bg_items_s0502.h"
 #include "bn_regular_bg_items_s0601.h"
 #include "bn_regular_bg_items_s0602.h"
@@ -349,7 +401,166 @@ Guy     7
 #include "bn_regular_bg_items_s1010.h"
 #include "bn_regular_bg_items_s1011.h"
 #include "bn_regular_bg_items_s1012.h"
-#include "bn_regular_bg_items_ocean.h"
+
+#include "bn_regular_bg_items_s0202_02.h"
+#include "bn_regular_bg_items_s0401_01.h"
+#include "bn_regular_bg_items_s0401_02.h"
+#include "bn_regular_bg_items_s0402_01.h"
+#include "bn_regular_bg_items_s0402_02.h"
+#include "bn_regular_bg_items_s0403_01.h"
+#include "bn_regular_bg_items_s0403_02.h"
+#include "bn_regular_bg_items_s0404_01.h"
+#include "bn_regular_bg_items_s0404_02.h"
+#include "bn_regular_bg_items_s0405_01.h"
+#include "bn_regular_bg_items_s0405_02.h"
+#include "bn_regular_bg_items_s0406_01.h"
+#include "bn_regular_bg_items_s0406_02.h"
+#include "bn_regular_bg_items_s0407_01.h"
+#include "bn_regular_bg_items_s0407_02.h"
+
+#include "bn_regular_bg_items_s0302_02.h"
+#include "bn_regular_bg_items_s0909_02.h"
+#include "bn_regular_bg_items_s0711_01.h"
+#include "bn_regular_bg_items_s0711_02.h"
+#include "bn_regular_bg_items_s0910_01.h"
+#include "bn_regular_bg_items_s0712_01.h"
+#include "bn_regular_bg_items_s0910_02.h"
+#include "bn_regular_bg_items_s0712_02.h"
+#include "bn_regular_bg_items_s0713_01.h"
+#include "bn_regular_bg_items_s0911_01.h"
+#include "bn_regular_bg_items_s0713_02.h"
+#include "bn_regular_bg_items_s0911_02.h"
+#include "bn_regular_bg_items_s0714_01.h"
+#include "bn_regular_bg_items_s0912_01.h"
+#include "bn_regular_bg_items_s0714_02.h"
+#include "bn_regular_bg_items_s0912_02.h"
+#include "bn_regular_bg_items_s0715_01.h"
+#include "bn_regular_bg_items_s0913_01.h"
+#include "bn_regular_bg_items_s0715_02.h"
+#include "bn_regular_bg_items_s0913_02.h"
+#include "bn_regular_bg_items_s0716_01.h"
+#include "bn_regular_bg_items_s0914_01.h"
+#include "bn_regular_bg_items_s0716_02.h"
+#include "bn_regular_bg_items_s0914_02.h"
+#include "bn_regular_bg_items_s0717_01.h"
+#include "bn_regular_bg_items_s0915_01.h"
+#include "bn_regular_bg_items_s0717_02.h"
+#include "bn_regular_bg_items_s0915_02.h"
+#include "bn_regular_bg_items_s0718_01.h"
+#include "bn_regular_bg_items_s0916_01.h"
+#include "bn_regular_bg_items_s0718_02.h"
+#include "bn_regular_bg_items_s0916_02.h"
+#include "bn_regular_bg_items_s0801_01.h"
+#include "bn_regular_bg_items_s0917_01.h"
+#include "bn_regular_bg_items_s0801_02.h"
+#include "bn_regular_bg_items_s0917_02.h"
+#include "bn_regular_bg_items_s0802_01.h"
+#include "bn_regular_bg_items_s0918_01.h"
+#include "bn_regular_bg_items_s0502_01.h"
+#include "bn_regular_bg_items_s0802_02.h"
+#include "bn_regular_bg_items_s0918_02.h"
+#include "bn_regular_bg_items_s0502_02.h"
+#include "bn_regular_bg_items_s0803_01.h"
+#include "bn_regular_bg_items_s1001_01.h"
+#include "bn_regular_bg_items_s0601_01.h"
+#include "bn_regular_bg_items_s0803_02.h"
+#include "bn_regular_bg_items_s1001_02.h"
+#include "bn_regular_bg_items_s0601_02.h"
+#include "bn_regular_bg_items_s0804_01.h"
+#include "bn_regular_bg_items_s1002_01.h"
+#include "bn_regular_bg_items_s0602_01.h"
+#include "bn_regular_bg_items_s0804_02.h"
+#include "bn_regular_bg_items_s1002_02.h"
+#include "bn_regular_bg_items_s0602_02.h"
+#include "bn_regular_bg_items_s0603_01.h"
+#include "bn_regular_bg_items_s0805_01.h"
+#include "bn_regular_bg_items_s1003_01.h"
+#include "bn_regular_bg_items_s0603_02.h"
+#include "bn_regular_bg_items_s0805_02.h"
+#include "bn_regular_bg_items_s1003_02.h"
+#include "bn_regular_bg_items_s0701_01.h"
+#include "bn_regular_bg_items_s0806_01.h"
+#include "bn_regular_bg_items_s1004_01.h"
+#include "bn_regular_bg_items_s0701_02.h"
+#include "bn_regular_bg_items_s0806_02.h"
+#include "bn_regular_bg_items_s1004_02.h"
+#include "bn_regular_bg_items_s0202_01.h"
+#include "bn_regular_bg_items_s0202_02.h"
+#include "bn_regular_bg_items_s0702_01.h"
+#include "bn_regular_bg_items_s0807_01.h"
+#include "bn_regular_bg_items_s1005_01.h"
+#include "bn_regular_bg_items_s0702_02.h"
+#include "bn_regular_bg_items_s0807_02.h"
+#include "bn_regular_bg_items_s1005_02.h"
+#include "bn_regular_bg_items_s0203_01.h"
+#include "bn_regular_bg_items_s0203_02.h"
+#include "bn_regular_bg_items_s0703_01.h"
+#include "bn_regular_bg_items_s0901_01.h"
+#include "bn_regular_bg_items_s1006_01.h"
+#include "bn_regular_bg_items_s0703_02.h"
+#include "bn_regular_bg_items_s0901_02.h"
+#include "bn_regular_bg_items_s1006_02.h"
+#include "bn_regular_bg_items_s0204_01.h"
+#include "bn_regular_bg_items_s0204_02.h"
+#include "bn_regular_bg_items_s0704_01.h"
+#include "bn_regular_bg_items_s0902_01.h"
+#include "bn_regular_bg_items_s1007_01.h"
+#include "bn_regular_bg_items_s0704_02.h"
+#include "bn_regular_bg_items_s0902_02.h"
+#include "bn_regular_bg_items_s1007_02.h"
+#include "bn_regular_bg_items_s0205_01.h"
+#include "bn_regular_bg_items_s0205_02.h"
+#include "bn_regular_bg_items_s0705_01.h"
+#include "bn_regular_bg_items_s0903_01.h"
+#include "bn_regular_bg_items_s1008_01.h"
+#include "bn_regular_bg_items_s0705_02.h"
+#include "bn_regular_bg_items_s0903_02.h"
+#include "bn_regular_bg_items_s1008_02.h"
+#include "bn_regular_bg_items_s0206_01.h"
+#include "bn_regular_bg_items_s0206_02.h"
+#include "bn_regular_bg_items_s0706_01.h"
+#include "bn_regular_bg_items_s0904_01.h"
+#include "bn_regular_bg_items_s1009_01.h"
+#include "bn_regular_bg_items_s0706_02.h"
+#include "bn_regular_bg_items_s0904_02.h"
+#include "bn_regular_bg_items_s1009_02.h"
+#include "bn_regular_bg_items_s0707_01.h"
+#include "bn_regular_bg_items_s0905_01.h"
+#include "bn_regular_bg_items_s1010_01.h"
+#include "bn_regular_bg_items_s0707_02.h"
+#include "bn_regular_bg_items_s0905_02.h"
+#include "bn_regular_bg_items_s1010_02.h"
+#include "bn_regular_bg_items_s0208_01.h"
+#include "bn_regular_bg_items_s0708_01.h"
+#include "bn_regular_bg_items_s0906_01.h"
+#include "bn_regular_bg_items_s1011_01.h"
+#include "bn_regular_bg_items_s0208_02.h"
+#include "bn_regular_bg_items_s0708_02.h"
+#include "bn_regular_bg_items_s0906_02.h"
+#include "bn_regular_bg_items_s1011_02.h"
+#include "bn_regular_bg_items_s0301_01.h"
+#include "bn_regular_bg_items_s0709_01.h"
+#include "bn_regular_bg_items_s0908_01.h"
+#include "bn_regular_bg_items_s1012_01.h"
+#include "bn_regular_bg_items_s0301_02.h"
+#include "bn_regular_bg_items_s0709_02.h"
+#include "bn_regular_bg_items_s0908_02.h"
+#include "bn_regular_bg_items_s1012_02.h"
+#include "bn_regular_bg_items_s0710_01.h"
+#include "bn_regular_bg_items_s0302_01.h"
+#include "bn_regular_bg_items_s0710_02.h"
+#include "bn_regular_bg_items_s0909_01.h"
+
+#include "bn_regular_bg_items_s1101.h"
+#include "bn_regular_bg_items_s1101_01.h"
+#include "bn_regular_bg_items_s1101_02.h"
+#include "bn_regular_bg_items_s1102.h"
+#include "bn_regular_bg_items_s1102_01.h"
+#include "bn_regular_bg_items_s1102_02.h"
+#include "bn_regular_bg_items_s1103.h"
+#include "bn_regular_bg_items_s1103_01.h"
+#include "bn_regular_bg_items_s1103_02.h"
+
 #include "bn_regular_bg_items_day_castle.h"
 #include "bn_regular_bg_items_bg_docks.h"
 #include "bn_regular_bg_items_bg_moody.h"
@@ -605,6 +816,8 @@ void dialogue_page(line n[32]) {
         else if (strcmp(n[pos].text, "BG: Ocean") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::ocean);
+            backdrops.push_back(&bn::regular_bg_items::ocean_01);
+            backdrops.push_back(&bn::regular_bg_items::ocean_02);
         }
         else if (strcmp(n[pos].text, "BG: Moody") == 0) {
             backdrops.clear();
@@ -626,18 +839,26 @@ void dialogue_page(line n[32]) {
         else if (strcmp(n[pos].text, "S01:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0101);
+            backdrops.push_back(&bn::regular_bg_items::s0101_1);
+            backdrops.push_back(&bn::regular_bg_items::s0101_2);
         }
         else if (strcmp(n[pos].text, "S01:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0102);
+            backdrops.push_back(&bn::regular_bg_items::s0102_01);
+            backdrops.push_back(&bn::regular_bg_items::s0102_02);
         }
         else if (strcmp(n[pos].text, "S01:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0103);
+            backdrops.push_back(&bn::regular_bg_items::s0103_01);
+            backdrops.push_back(&bn::regular_bg_items::s0103_02);
         }
         else if (strcmp(n[pos].text, "S01:04") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0104);
+            backdrops.push_back(&bn::regular_bg_items::s0104_01);
+            backdrops.push_back(&bn::regular_bg_items::s0104_02);
         }
         else if (strcmp(n[pos].text, "S01:05") == 0) {
             backdrops.clear();
@@ -646,14 +867,20 @@ void dialogue_page(line n[32]) {
         else if (strcmp(n[pos].text, "S01:06") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0106);
+            backdrops.push_back(&bn::regular_bg_items::s0106_01);
+            backdrops.push_back(&bn::regular_bg_items::s0106_02);
         }
         else if (strcmp(n[pos].text, "S01:07") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0107);
+            backdrops.push_back(&bn::regular_bg_items::s0107_01);
+            backdrops.push_back(&bn::regular_bg_items::s0107_02);
         }
         else if (strcmp(n[pos].text, "S01:08") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0108);
+            backdrops.push_back(&bn::regular_bg_items::s0108_01);
+            backdrops.push_back(&bn::regular_bg_items::s0108_02);
         }
         else if (strcmp(n[pos].text, "S01:09") == 0) {
             backdrops.clear();
@@ -664,14 +891,20 @@ void dialogue_page(line n[32]) {
         else if (strcmp(n[pos].text, "S01:10") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::castle01);
+            backdrops.push_back(&bn::regular_bg_items::castle01_01);
+            backdrops.push_back(&bn::regular_bg_items::castle01_02);
         }
         else if (strcmp(n[pos].text, "S01:11") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::castle02);
+            backdrops.push_back(&bn::regular_bg_items::castle02_01);
+            backdrops.push_back(&bn::regular_bg_items::castle02_02);
         }
         else if (strcmp(n[pos].text, "S01:12") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::castle03);
+            backdrops.push_back(&bn::regular_bg_items::castle03_01);
+            backdrops.push_back(&bn::regular_bg_items::castle03_02);
         }
         else if (strcmp(n[pos].text, "S01:13") == 0) {
             backdrops.clear();
@@ -684,210 +917,313 @@ void dialogue_page(line n[32]) {
         else if (strcmp(n[pos].text, "S02:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0202);
+            backdrops.push_back(&bn::regular_bg_items::s0202_01);
+            backdrops.push_back(&bn::regular_bg_items::s0202_02);
         }
         else if (strcmp(n[pos].text, "S02:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0203);
+            backdrops.push_back(&bn::regular_bg_items::s0203_01);
+            backdrops.push_back(&bn::regular_bg_items::s0203_02);
         }
         else if (strcmp(n[pos].text, "S02:04") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0204);
+            backdrops.push_back(&bn::regular_bg_items::s0204_01);
+            backdrops.push_back(&bn::regular_bg_items::s0204_02);
         }
         else if (strcmp(n[pos].text, "S02:05") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0205);
+            backdrops.push_back(&bn::regular_bg_items::s0205_01);
+            backdrops.push_back(&bn::regular_bg_items::s0205_02);
         }
         else if (strcmp(n[pos].text, "S02:06") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0206);
+            backdrops.push_back(&bn::regular_bg_items::s0206_01);
+            backdrops.push_back(&bn::regular_bg_items::s0206_02);
         }
         else if (strcmp(n[pos].text, "S02:07") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0207);
+            backdrops.push_back(&bn::regular_bg_items::s0207_01);
+            backdrops.push_back(&bn::regular_bg_items::s0207_02);
         }
         else if (strcmp(n[pos].text, "S02:08") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0208);
+            backdrops.push_back(&bn::regular_bg_items::s0208_01);
+            backdrops.push_back(&bn::regular_bg_items::s0208_02);
         }
         else if (strcmp(n[pos].text, "S03:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0301);
+            backdrops.push_back(&bn::regular_bg_items::s0301_01);
+            backdrops.push_back(&bn::regular_bg_items::s0301_02);
         }
         else if (strcmp(n[pos].text, "S03:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0302);
+            backdrops.push_back(&bn::regular_bg_items::s0302_01);
+            backdrops.push_back(&bn::regular_bg_items::s0302_02);
         }
         else if (strcmp(n[pos].text, "S04:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0401);
+            backdrops.push_back(&bn::regular_bg_items::s0401_01);
+            backdrops.push_back(&bn::regular_bg_items::s0401_02);
         }
         else if (strcmp(n[pos].text, "S04:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0402);
+            backdrops.push_back(&bn::regular_bg_items::s0402_01);
+            backdrops.push_back(&bn::regular_bg_items::s0402_02);
         }
         else if (strcmp(n[pos].text, "S04:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0403);
+            backdrops.push_back(&bn::regular_bg_items::s0403_01);
+            backdrops.push_back(&bn::regular_bg_items::s0403_02);
         }
         else if (strcmp(n[pos].text, "S04:04") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0404);
+            backdrops.push_back(&bn::regular_bg_items::s0404_01);
+            backdrops.push_back(&bn::regular_bg_items::s0404_02);
         }
         else if (strcmp(n[pos].text, "S04:05") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0405);
+            backdrops.push_back(&bn::regular_bg_items::s0405_01);
+            backdrops.push_back(&bn::regular_bg_items::s0405_02);
         }
         else if (strcmp(n[pos].text, "S04:06") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0406);
+            backdrops.push_back(&bn::regular_bg_items::s0406_01);
+            backdrops.push_back(&bn::regular_bg_items::s0406_02);
         }
         else if (strcmp(n[pos].text, "S04:07") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0407);
+            backdrops.push_back(&bn::regular_bg_items::s0407_01);
+            backdrops.push_back(&bn::regular_bg_items::s0407_02);
         }
         else if (strcmp(n[pos].text, "S05:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0501);
+            backdrops.push_back(&bn::regular_bg_items::s0501_01);
+            backdrops.push_back(&bn::regular_bg_items::s0501_02);
         }
         else if (strcmp(n[pos].text, "S05:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0502);
+            backdrops.push_back(&bn::regular_bg_items::s0502_01);
+            backdrops.push_back(&bn::regular_bg_items::s0502_02);
         }
         else if (strcmp(n[pos].text, "S06:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0601);
+            backdrops.push_back(&bn::regular_bg_items::s0601_01);
+            backdrops.push_back(&bn::regular_bg_items::s0601_02);
         }
         else if (strcmp(n[pos].text, "S06:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0602);
+            backdrops.push_back(&bn::regular_bg_items::s0602_01);
+            backdrops.push_back(&bn::regular_bg_items::s0602_02);
         }
         else if (strcmp(n[pos].text, "S06:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0603);
+            backdrops.push_back(&bn::regular_bg_items::s0603_01);
+            backdrops.push_back(&bn::regular_bg_items::s0603_02);
         }
         else if (strcmp(n[pos].text, "S07:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0701);
+            backdrops.push_back(&bn::regular_bg_items::s0701_01);
+            backdrops.push_back(&bn::regular_bg_items::s0701_02);
         }
         else if (strcmp(n[pos].text, "S07:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0702);
+            backdrops.push_back(&bn::regular_bg_items::s0702_01);
+            backdrops.push_back(&bn::regular_bg_items::s0702_02);
         }
         else if (strcmp(n[pos].text, "S07:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0703);
+            backdrops.push_back(&bn::regular_bg_items::s0703_01);
+            backdrops.push_back(&bn::regular_bg_items::s0703_01);
         }
         else if (strcmp(n[pos].text, "S07:04") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0704);
+            backdrops.push_back(&bn::regular_bg_items::s0704_01);
+            backdrops.push_back(&bn::regular_bg_items::s0704_02);
         }
         else if (strcmp(n[pos].text, "S07:05") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0705);
+            backdrops.push_back(&bn::regular_bg_items::s0705_01);
+            backdrops.push_back(&bn::regular_bg_items::s0705_02);
         }
         else if (strcmp(n[pos].text, "S07:06") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0706);
+            backdrops.push_back(&bn::regular_bg_items::s0706_01);
+            backdrops.push_back(&bn::regular_bg_items::s0706_02);
         }
         else if (strcmp(n[pos].text, "S07:07") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0707);
+            backdrops.push_back(&bn::regular_bg_items::s0707_01);
+            backdrops.push_back(&bn::regular_bg_items::s0707_02);
         }
         else if (strcmp(n[pos].text, "S07:08") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0708);
+            backdrops.push_back(&bn::regular_bg_items::s0708_01);
+            backdrops.push_back(&bn::regular_bg_items::s0708_02);
         }
         else if (strcmp(n[pos].text, "S07:09") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0709);
+            backdrops.push_back(&bn::regular_bg_items::s0709_01);
+            backdrops.push_back(&bn::regular_bg_items::s0709_02);
         }
         else if (strcmp(n[pos].text, "S07:10") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0710);
+            backdrops.push_back(&bn::regular_bg_items::s0710_01);
+            backdrops.push_back(&bn::regular_bg_items::s0710_02);
         }
         else if (strcmp(n[pos].text, "S07:11") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0711);
+            backdrops.push_back(&bn::regular_bg_items::s0711_01);
+            backdrops.push_back(&bn::regular_bg_items::s0711_02);
         }
         else if (strcmp(n[pos].text, "S07:12") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0712);
+            backdrops.push_back(&bn::regular_bg_items::s0712_01);
+            backdrops.push_back(&bn::regular_bg_items::s0712_02);
         }
         else if (strcmp(n[pos].text, "S07:13") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0713);
+            backdrops.push_back(&bn::regular_bg_items::s0713_01);
+            backdrops.push_back(&bn::regular_bg_items::s0713_02);
         }
         else if (strcmp(n[pos].text, "S07:14") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0714);
+            backdrops.push_back(&bn::regular_bg_items::s0714_01);
+            backdrops.push_back(&bn::regular_bg_items::s0714_02);
         }
         else if (strcmp(n[pos].text, "S07:15") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0715);
+            backdrops.push_back(&bn::regular_bg_items::s0715_01);
+            backdrops.push_back(&bn::regular_bg_items::s0715_02);
         }
         else if (strcmp(n[pos].text, "S07:16") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0716);
+            backdrops.push_back(&bn::regular_bg_items::s0716_01);
+            backdrops.push_back(&bn::regular_bg_items::s0716_02);
         }
         else if (strcmp(n[pos].text, "S07:17") == 0) {
             backdrops.clear();
-            backdrops.push_back(&bn::regular_bg_items::s0717);
+            backdrops.push_back(&bn::regular_bg_items::s0717_01);
+            backdrops.push_back(&bn::regular_bg_items::s0717_02);
         }
         else if (strcmp(n[pos].text, "S07:18") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0718);
+            backdrops.push_back(&bn::regular_bg_items::s0718_01);
+            backdrops.push_back(&bn::regular_bg_items::s0718_01);
         }
         else if (strcmp(n[pos].text, "S08:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0801);
+            backdrops.push_back(&bn::regular_bg_items::s0801_01);
+            backdrops.push_back(&bn::regular_bg_items::s0801_02);
         }
         else if (strcmp(n[pos].text, "S08:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0802);
+            backdrops.push_back(&bn::regular_bg_items::s0802_01);
+            backdrops.push_back(&bn::regular_bg_items::s0802_02);
         }
         else if (strcmp(n[pos].text, "S08:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0803);
+            backdrops.push_back(&bn::regular_bg_items::s0803_01);
+            backdrops.push_back(&bn::regular_bg_items::s0803_02);
         }
         else if (strcmp(n[pos].text, "S08:04") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0804);
+            backdrops.push_back(&bn::regular_bg_items::s0804_01);
+            backdrops.push_back(&bn::regular_bg_items::s0804_02);
         }
         else if (strcmp(n[pos].text, "S08:05") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0805);
+            backdrops.push_back(&bn::regular_bg_items::s0805_01);
+            backdrops.push_back(&bn::regular_bg_items::s0805_01);
         }
         else if (strcmp(n[pos].text, "S08:06") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0806);
+            backdrops.push_back(&bn::regular_bg_items::s0806_01);
+            backdrops.push_back(&bn::regular_bg_items::s0806_02);
         }
         else if (strcmp(n[pos].text, "S08:07") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0807);
+            backdrops.push_back(&bn::regular_bg_items::s0807_01);
+            backdrops.push_back(&bn::regular_bg_items::s0807_02);
         }
         else if (strcmp(n[pos].text, "S09:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0901);
+            backdrops.push_back(&bn::regular_bg_items::s0901_01);
+            backdrops.push_back(&bn::regular_bg_items::s0901_02);
         }
         else if (strcmp(n[pos].text, "S09:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0902);
+            backdrops.push_back(&bn::regular_bg_items::s0902_01);
+            backdrops.push_back(&bn::regular_bg_items::s0902_02);
         }
         else if (strcmp(n[pos].text, "S09:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0903);
+            backdrops.push_back(&bn::regular_bg_items::s0903_01);
+            backdrops.push_back(&bn::regular_bg_items::s0903_02);
         }
         else if (strcmp(n[pos].text, "S09:04") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0904);
+            backdrops.push_back(&bn::regular_bg_items::s0904_01);
+            backdrops.push_back(&bn::regular_bg_items::s0904_02);
         }
         else if (strcmp(n[pos].text, "S09:05") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0905);
+            backdrops.push_back(&bn::regular_bg_items::s0905_01);
+            backdrops.push_back(&bn::regular_bg_items::s0905_02);
         }
         else if (strcmp(n[pos].text, "S09:06") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0906);
+            backdrops.push_back(&bn::regular_bg_items::s0906_01);
+            backdrops.push_back(&bn::regular_bg_items::s0906_02);
         }
         else if (strcmp(n[pos].text, "S09:07") == 0) {
             backdrops.clear();
@@ -896,95 +1232,161 @@ void dialogue_page(line n[32]) {
         else if (strcmp(n[pos].text, "S09:08") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0908);
+            backdrops.push_back(&bn::regular_bg_items::s0908_01);
+            backdrops.push_back(&bn::regular_bg_items::s0908_02);
         }
         else if (strcmp(n[pos].text, "S09:09") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0909);
+            backdrops.push_back(&bn::regular_bg_items::s0909_01);
+            backdrops.push_back(&bn::regular_bg_items::s0909_02);
         }
         else if (strcmp(n[pos].text, "S09:10") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0910);
+            backdrops.push_back(&bn::regular_bg_items::s0910_01);
+            backdrops.push_back(&bn::regular_bg_items::s0910_02);
         }
         else if (strcmp(n[pos].text, "S09:11") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0911);
+            backdrops.push_back(&bn::regular_bg_items::s0911_01);
+            backdrops.push_back(&bn::regular_bg_items::s0911_02);
         }
         else if (strcmp(n[pos].text, "S09:12") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0912);
+            backdrops.push_back(&bn::regular_bg_items::s0912_01);
+            backdrops.push_back(&bn::regular_bg_items::s0912_02);
         }
         else if (strcmp(n[pos].text, "S09:13") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0913);
+            backdrops.push_back(&bn::regular_bg_items::s0913_01);
+            backdrops.push_back(&bn::regular_bg_items::s0913_02);
         }
         else if (strcmp(n[pos].text, "S09:14") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0914);
+            backdrops.push_back(&bn::regular_bg_items::s0914_01);
+            backdrops.push_back(&bn::regular_bg_items::s0914_02);
         }
         else if (strcmp(n[pos].text, "S09:15") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0915);
+            backdrops.push_back(&bn::regular_bg_items::s0915_01);
+            backdrops.push_back(&bn::regular_bg_items::s0915_02);
         }
         else if (strcmp(n[pos].text, "S09:16") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0916);
+            backdrops.push_back(&bn::regular_bg_items::s0916_01);
+            backdrops.push_back(&bn::regular_bg_items::s0916_02);
         }
         else if (strcmp(n[pos].text, "S09:17") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0917);
+            backdrops.push_back(&bn::regular_bg_items::s0917_01);
+            backdrops.push_back(&bn::regular_bg_items::s0917_02);
         }
         else if (strcmp(n[pos].text, "S09:18") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s0918);
+            backdrops.push_back(&bn::regular_bg_items::s0918_01);
+            backdrops.push_back(&bn::regular_bg_items::s0918_02);
         }
         else if (strcmp(n[pos].text, "S10:01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1001);
+            backdrops.push_back(&bn::regular_bg_items::s1001_01);
+            backdrops.push_back(&bn::regular_bg_items::s1001_02);
         }
         else if (strcmp(n[pos].text, "S10:02") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1002);
+            backdrops.push_back(&bn::regular_bg_items::s1002_01);
+            backdrops.push_back(&bn::regular_bg_items::s1002_02);
         }
         else if (strcmp(n[pos].text, "S10:03") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1003);
+            backdrops.push_back(&bn::regular_bg_items::s1003_01);
+            backdrops.push_back(&bn::regular_bg_items::s1003_02);
         }
         else if (strcmp(n[pos].text, "S10:04") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1004);
+            backdrops.push_back(&bn::regular_bg_items::s1004_01);
+            backdrops.push_back(&bn::regular_bg_items::s1004_02);
         }
         else if (strcmp(n[pos].text, "S10:05") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1005);
+            backdrops.push_back(&bn::regular_bg_items::s1005_01);
+            backdrops.push_back(&bn::regular_bg_items::s1005_02);
         }
         else if (strcmp(n[pos].text, "S10:06") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1006);
+            backdrops.push_back(&bn::regular_bg_items::s1006_01);
+            backdrops.push_back(&bn::regular_bg_items::s1006_02);
         }
         else if (strcmp(n[pos].text, "S10:07") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1007);
+            backdrops.push_back(&bn::regular_bg_items::s1007_01);
+            backdrops.push_back(&bn::regular_bg_items::s1007_02);
         }
         else if (strcmp(n[pos].text, "S10:08") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1008);
+            backdrops.push_back(&bn::regular_bg_items::s1008_01);
+            backdrops.push_back(&bn::regular_bg_items::s1008_02);
         }
         else if (strcmp(n[pos].text, "S10:09") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1009);
+            backdrops.push_back(&bn::regular_bg_items::s1009_01);
+            backdrops.push_back(&bn::regular_bg_items::s1009_02);
         }
         else if (strcmp(n[pos].text, "S10:10") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1010);
+            backdrops.push_back(&bn::regular_bg_items::s1010_01);
+            backdrops.push_back(&bn::regular_bg_items::s1010_02);
         }
         else if (strcmp(n[pos].text, "S10:11") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1011);
+            backdrops.push_back(&bn::regular_bg_items::s1011_01);
+            backdrops.push_back(&bn::regular_bg_items::s1011_02);
         }
         else if (strcmp(n[pos].text, "S10:12") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::s1012);
+            backdrops.push_back(&bn::regular_bg_items::s1012_01);
+            backdrops.push_back(&bn::regular_bg_items::s1012_02);
         }
+
+        else if (strcmp(n[pos].text, "S11:01") == 0) {
+            backdrops.clear();
+            backdrops.push_back(&bn::regular_bg_items::s1101);
+            backdrops.push_back(&bn::regular_bg_items::s1101_01);
+            backdrops.push_back(&bn::regular_bg_items::s1101_02);
+        }
+        else if (strcmp(n[pos].text, "S11:02") == 0) {
+            backdrops.clear();
+            backdrops.push_back(&bn::regular_bg_items::s1102);
+            backdrops.push_back(&bn::regular_bg_items::s1102_01);
+            backdrops.push_back(&bn::regular_bg_items::s1102_02);
+        }
+        else if (strcmp(n[pos].text, "S11:03") == 0) {
+            backdrops.clear();
+            backdrops.push_back(&bn::regular_bg_items::s1103);
+            backdrops.push_back(&bn::regular_bg_items::s1103_01);
+            backdrops.push_back(&bn::regular_bg_items::s1103_02);
+        }
+
         else if (strcmp(n[pos].text, "S_STV_01") == 0) {
             backdrops.clear();
             backdrops.push_back(&bn::regular_bg_items::scout_tv_01);
@@ -1011,6 +1413,8 @@ void dialogue_page(line n[32]) {
 
         // Handle sprite/dialogue
         } else {
+
+            BN_LOG(n[pos].text);
 
             // Process initial transparency states
             if (n[pos].img != 0) {
@@ -1078,22 +1482,34 @@ void dialogue_page(line n[32]) {
             for (short int t = 0; t < text_sprite5.size(); t++) { text_sprite5.at(t).set_visible(false); }
             bn::core::update();
 
+            BN_LOG("after");
+
             // Process visual effects
             short int ticker = 0;
             short int ticker_delay = 0;
 
             cascade_id = 0;
             short int cascade_offset = 0;
+            short int c_x = cascade_bg.x().integer();
+            short int c_y = cascade_bg.y().integer();
             while (!bn::keypad::a_pressed() && !bn::keypad::b_held()) {
 
+                BN_LOG("thingy ", backdrops.size(), " @ ", cascade_id);
+
                 // Handle moving backgrounds
-                cascade_bg = backdrops.at(cascade_id)->create_bg(cascade_bg.x(), cascade_bg.y());
-                cascade_offset++;
-                if (cascade_offset > 8) {
-                    cascade_offset = 0;
-                    cascade_id++;
-                    if (cascade_id > backdrops.size() - 1) cascade_id = 0;
+                if (backdrops.size() > 0) {
+                    cascade_bg = backdrops.at(cascade_id)->create_bg(c_x, c_y);
+                    if (backdrops.size() > 1) {
+                        cascade_offset++;
+                        if (cascade_offset > 8) {
+                            cascade_offset = 0;
+                            cascade_id++;
+                            if (cascade_id > backdrops.size() - 1) cascade_id = 0;
+                        }
+                    }
                 }
+
+                BN_LOG("moving");
 
                 // Handle text ticker
                 if (ticker < 160) {
@@ -1144,16 +1560,18 @@ void dialogue_page(line n[32]) {
                     ticker_delay = (ticker_delay + 1) % 2;
                 }
 
+                BN_LOG("after ticker");
+
                 // Move in from side
                 if (chari_l.visible() && chari_l.x().integer() < -40) chari_l.set_x(chari_l.x() + 1);
                 if (chari_r.visible() && chari_r.x().integer() > 40) chari_r.set_x(chari_r.x() - 1);
 
                 // Handle transparency
-                if (bn::blending::transparency_alpha().to_double() + 0.1 <= 0.8) {
+                if (bn::blending::transparency_alpha().to_double() + 0.1 <= 0.9) {
                     bn::blending::set_transparency_alpha(bn::blending::transparency_alpha().to_double() + 0.1);
                 }
                 else {
-                    bn::blending::set_transparency_alpha(0.8);
+                    bn::blending::set_transparency_alpha(0.95);
                     chari_l.set_blending_enabled(false);
                     chari_r.set_blending_enabled(false);
                 }
@@ -1353,7 +1771,6 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 {fals, true, 0, "S01:04"},
                 {fals, true, 0, "                                 Y'know....                       If I don't see that castle in    fifteen minutes, I might just    head back."},
                 {fals, true, 0, "                                 At least the drive was nice,     I guess."},
-                {fals, true, 0, "S01:05"},
                 {fals, true, 0, "                                 Okay, I give up. There's no way  that I'm gonna-"},
                 {fals, true, 0, "S01:06"},
                 {fals, true, 0, "                                 .....Oh."},
@@ -1457,7 +1874,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 
         case 3: {
             line lc[32] = {
-                {fals, fals, 00, "BG: fadeout"},
+                {fals, fals, 00, "BG: Moody"},
                 {true, true, 30, "ENOKI                                                             I wanna explore the big          bookshelf room first!"},
                 {true, fals, 02, "MAPLE                                                             Sure, whatever."},
                 {fals, true, 31, "ENOKI                                                             I think you're gonna see why     when we get there."},
@@ -1802,7 +2219,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                     {fals, fals, 0, "                                                                  but maybe she's just playing hardto get."},
                     {fals, fals, 0, "                                                                  I've seen how she talks to Aaron and Enoki, she's like that to    everyone."},
                     {fals, fals, 0, "                                                                  Mmm.. Maybe someday I'll figure  out how to talk to her. Maybe"},
-                    {fals, fals, 0, "                                                                  I'll make somethingt that really impresses her."},
+                    {fals, fals, 0, "                                                                  I'll make something that really  impresses her."},
                     {fals, fals, 0, "                                                                  She's never acts like she's      short interested in anything but she   likes food and books."},
                     {fals, fals, 0, "                                                                  Maybe it's not the same kinds,   but I like food and books too."},
                     {fals, fals, 0, "                                                                  Maybe she just likes bigger guys though, and I'm shaped like      Grimace from McDonald's."},
@@ -1998,13 +2415,14 @@ int exec_dialogue(int x, int checkpoint = 0) {
         case 29: {
             line lc[32] = {
                 {fals, fals, 0,  "BG: fadeout"},
-                {fals, fals, 0,  "S_STV_01"},
+                {fals, fals, 0,  "S11:01"},
                 {fals, fals, 0,  ". . ."},
                 {fals, fals, 0,  "BG: 1"},
                 {fals, fals, 0,  "ENOKI                            Hey, Aaron?"},
                 {fals, fals, 0,  "AARON                            *yawn* Yeah?"},
                 {fals, fals, 0,  "ENOKI                            Are you happy?"},
                 {fals, fals, 0,  "AARON                            Of course I am, Noke."},
+                {fals, fals, 0,  "S11:02"},
                 {fals, fals, 0,  "ENOKI                            No, I mean.. Are you really,     actually happy?                  I worry about you."},
                 {fals, fals, 0,  "AARON                            I guess I'm just a little        melancholy about it, that's all."},
                 {fals, fals, 0,  "ENOKI                            What d'you mean?"},
@@ -2013,6 +2431,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 {fals, fals, 0,  "ENOKI                            You know me though, I'm lucky,   we'll be okay. And besides, I gotyou! That's enough."},
                 {fals, fals, 0,  "AARON                            You might not feel like that whenyou're hungry. You don't know    what it's like to be hungry."},
                 {fals, fals, 0,  "ENOKI                            I don't wanna think about this.. it'll keep me up."},
+                {fals, fals, 0,  "S11:03"},
                 {fals, fals, 0,  "ENOKI                            Can we just be happy now and talkabout these things later?"},  
                 {fals, fals, 0,  "AARON                            I guess so. Goodnight, Noke."},
                 {fals, fals, 0,  "ENOKI                            Goodnight, Aire."},
@@ -2286,9 +2705,8 @@ int exec_dialogue(int x, int checkpoint = 0) {
                     {true, true, 00, "MAPLE                            I... I-I..."},
                     {true, true, 00, "AARON                            Maple, I-"},
                     {true, true, 00, "MAPLE                            ...I-I'm..."},
-                    {true, true, 00, "S09:07"},
-                    {true, true, 00, "ENOKI                            Maple, come back!"},
                     {true, true, 00, "S09:08"},
+                    {true, true, 00, "ENOKI                            Maple, come back!"},
                     {true, true, 00, "MAPLE                            ..."},
                     {true, true, 00, "S09:09"},
                     {true, true, 00, "AARON                            Maple, get up."},
@@ -2324,7 +2742,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                     {true, true, 00, "AARON                            I appreciate that you stood up   for me."},
                     {true, true, 00, "MAPLE                            Shut up."},
                     {true, true, 00, "S09:13"},
-                    {true, true, 00, "AARON                            You don't have the right to be   curt at me after what just       happened."},
+                    {true, true, 00, "AARON                            Not right now."},
                     {true, true, 00, "AARON                            Take your time to calm down, but you will learn to take care of   your anger, or I can't help you  anymore, oui?"},
                     {true, true, 00, "MAPLE                            ...Oui."},
                     {true, true, 00, "S09:15"},
@@ -2446,7 +2864,9 @@ int exec_dialogue(int x, int checkpoint = 0) {
                     {true, true, 00, "MAPLE                            What, are you going to ask me outor something?"},
                     {true, true, 00, "S10:04"},
                     {true, true, 00, "SCOUT                            No, I- I.. well, no, I wasn't    going to.. look, I just don't    want you to go."},
-                    {true, true, 00, "SCOUT                            Please don't go somewhere far    away because you hate yourself."},
+                    {true, true, 00, "SCOUT                            We're not mad at you, and.. look,I don't want to lose your        friendship because you're"},
+                    {true, true, 00, "SCOUT                            mad at yourself, okay? You're    more important than that island. I..."},
+                    {true, true, 00, "SCOUT                            Just promise me that you won't   go anywhere or do anything stupidbecause of this. Please."},
                     {true, true, 00, "MAPLE                            ..."},
                     {true, true, 00, "S10:04"},
                     {true, true, 00, "MAPLE                            ...I won't, Scout. Don't worry."},
@@ -3358,10 +3778,10 @@ public:
 // Room setup object
 class room
 {
+    public:
     short int last_camera_x = 0;
     short int last_camera_y = 0;
-
-    public:
+        
     unsigned short int width = 29;
     unsigned short int height = 14;
     unsigned short int start_x = 8;
@@ -3410,6 +3830,13 @@ class room
             if (local_tileset.at(z) > 0 && local_tileset.at(z) < 64) {
                 bn::sprite_ptr s = environment->create_sprite(x * 32, y * 32, local_tileset.at(z) - 1);
                 s.set_camera(camera);
+
+                // Set Palette
+                if (environment == &bn::sprite_items::ocean_terrain && so->checkpoint == 5) {
+                    s.set_palette(bn::sprite_items::underground_tiles.palette_item());
+                }
+
+                // Set Z order
                 if (environment == &bn::sprite_items::ocean_terrain && local_tileset.at(z) == 1) {
                     s.set_z_order(1);
                 }
@@ -4152,7 +4579,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             short int local[current_room.width * current_room.height] = {
                 39, 1, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 43, 42, 12, 13,
-                1, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
+                27, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 3, 43, 11, 26,
                 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 5, 2, 3, 12, 26,
                 38, 27, 0, 0, 0, 15, 18, 18, 18, 18, 18, 18, 18, 23, 0, 4, 3, 2, 11, 26,
                 39, 47, 44, 0, 1, 16, 19, 19, 19, 19, 19, 19, 19, 24, 1, 5, 2, 3, 12, 26,
@@ -5427,6 +5854,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     current_room.init_render(dt.spawn_x, dt.spawn_y);
     while (true)
     {
+
+        if (bn::keypad::select_pressed()) {
+            so->xp += 10;
+        }
 
         // Control actions
         //current_room.a_notif.set_visible(false);
@@ -8266,7 +8697,30 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     }
                     else if (so->checkpoint < 12)
                     {
+                        //corinne.set_blending_enabled(false);
+                        line lc[32] = {
+                            {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
+                            {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
+                            {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
+                            {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
+                            {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
+                            {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
+                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+                            {true, true, 00, "COM: Endscene"} };
+                        dialogue_page_lite(lc);
+                        break;
                     }
+
+                    break;
                 }
 
                 // Guy's house
@@ -8302,9 +8756,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 }
                 case 68:
                 {
+                    line lc[32] = {
+                        {true, true, 00, "                                                                  CESAR'S BIZAAR                   'GONE FISHING, BE BACK FEB. 28th'"},
+                        {true, true, 00, "COM: Endscene"} };
+                    dialogue_page_lite(lc);
+                    /*
                     dt.spawn_x = 7;
                     dt.spawn_y = 0;
                     dt.world_index = 99;
+                    */
                     return dt;
                 }
                 case 69:
@@ -8842,8 +9302,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         current_room.chari.push_back(scout);
     }
 
-    current_room.chari.at(0).role = 1;
     current_room.environment = &bn::sprite_items::underground_tiles;
+
+    // Handle active character
+    current_room.chari.at(0).role = 1;
+    current_room.follow_id = 0;
+    so->last_char_id = current_room.chari.at(0).identity;
 
     // World generation
     switch (dt.world_index)
@@ -8898,7 +9362,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         current_room.configure(18, 21, 16, 19);
         short int local_col[current_room.width * current_room.height] = {
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 7, 1,
+            1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 1,
             1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
             1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
             1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1,
@@ -8920,7 +9384,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
             1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
         short int local[current_room.width * current_room.height] = {
             1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,1,
-            1,0,0,0,15,0,0,0,0,0,0,0,0,0,0,15,0,1,
+            1,0,0,0,0,0,0,15,0,0,0,15,0,0,0,0,0,1,
             1,0,12,1,12,0,0,0,0,0,0,0,0,12,1,12,1,1,
             1,0,12,13,12,0,0,0,0,0,0,0,0,12,13,12,0,1,
             1,15,1,1,1,0,0,0,0,0,0,0,0,1,12,1,0,1,
@@ -9341,7 +9805,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         for (short int t = 0; t < current_room.p.size(); t++)
         {
             short int f_x = (current_room.p.at(t).fireball.x().integer() + 16) / 32;
-            short int f_y = (current_room.p.at(t).fireball.y().integer() + 16) / 32;
+            short int f_y = (current_room.p.at(t).fireball.y().integer() + 24) / 32;
             short int f_z = f_x + (f_y * current_room.width);
 
             for (int i = 0; i < buttons.size(); i++)
@@ -9353,7 +9817,10 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                         bn::sound_items::pop.play();
                         buttons.at(t).toggled = true;
                         local_tileset.at(f_z) = 14;
+                        current_room.last_camera_x = 0;
+                        current_room.last_camera_y = 0;
                         current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+                        BN_LOG("Refreshing tiles?");
                     }
                 }
             }
@@ -9693,7 +10160,9 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
     }
 }
 
-void keyboard(struct save_struct *so) {
+void keyboard() {
+    bn::core::update();
+
     bn::vector<char, 16> ss;
     bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
     bn::vector<bn::sprite_ptr, 16> file1_spr;
@@ -9792,13 +10261,72 @@ void keyboard(struct save_struct *so) {
     }
 
     for (unsigned short int tt = 0; tt < ss.size(); tt++) so->island_name[tt] = ss.at(tt);
-    bn::sram::write(so);
+    bn::sram::write(all_save);
 }
 
 void timer(int delay)
 {
     for (short int t = 0; t < delay; t++)
     {
+        bn::core::update();
+    }
+}
+
+void intros(int t) {
+    bn::fixed_t<12> glow = 1;
+
+    auto header = bn::regular_bg_items::cinemint_studios.create_bg(0, 0);
+    auto a_button = bn::sprite_items::a_button.create_sprite(-90, -50);
+    int intro_stage = 0;
+
+    a_button.set_visible(false);
+
+    switch (t) {
+    case 0: {
+        header = bn::regular_bg_items::tc_intro.create_bg(0, 0);
+        break;
+    }
+    case 1: {
+        header = bn::regular_bg_items::tc_1.create_bg(0, 0);
+        break;
+    }
+    case 2: {
+        header = bn::regular_bg_items::tc_2.create_bg(0, 0);
+        break;
+    }
+    case 3: {
+        header = bn::regular_bg_items::tc_3.create_bg(0, 0);
+        break;
+    }
+    case 4: {
+        header = bn::regular_bg_items::tc_4.create_bg(0, 0);
+        break;
+    }
+    case 5: {
+        header = bn::regular_bg_items::tc_5.create_bg(0, 0);
+        break;
+    }
+    }
+
+    header.set_mosaic_enabled(true);
+
+    while (!bn::keypad::a_pressed()) {
+        if (intro_stage == 0) {
+            if (glow - 0.02 > 0)
+            {
+                glow -= 0.02;
+                bn::bgs_mosaic::set_horizontal_stretch(glow);
+                bn::bgs_mosaic::set_vertical_stretch(glow);
+                BN_LOG(glow);
+            }
+            else
+            {
+                a_button.set_visible(true);
+                header.set_mosaic_enabled(false);
+                intro_stage++;
+            }
+        }
+
         bn::core::update();
     }
 }
@@ -10100,6 +10628,7 @@ void cutscenes(int c)
         }
         timer(64);
     }
+    bn::core::update();
 }
 
 bool victory_page(int chari, int score)
@@ -11284,6 +11813,8 @@ dungeon_return computer() {
 
 void victory_toutes(int emotion, int total) {
 
+    bn::core::update();
+
     so->xp += (total / 10);
 
     windows.clear();
@@ -11328,7 +11859,7 @@ void victory_toutes(int emotion, int total) {
 
     bool ready = false;
     victory v(emotion, 6, total, so->xp, chap);
-    while (!bn::keypad::b_pressed()) {
+    while (!bn::keypad::a_pressed()) {
 
         v.update();
 
@@ -11405,14 +11936,6 @@ dungeon_return crystal_ball() {
 
     bn::music_items_info::span[22].first.play(0.8);
 
-    char buf[18] = {0};
-    char bf2[18] = {0};
-
-    bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 12> file1_spr;
-    bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
-    bn::vector<bn::sprite_ptr, 12> file2_spr;
-
     buttons.push_back(bn::sprite_items::magic_keys.create_sprite(96,0,0));
     buttons_n.push_back(0);
 
@@ -11432,7 +11955,19 @@ dungeon_return crystal_ball() {
     short int tick = 0;
     short int angle = 0;
 
+    hud current_hud;
     while(!bn::keypad::b_pressed()) {
+
+        // Score hud
+        bn::fixed_t<12> my_width = total + 1;
+        if (my_width > 0) {
+            BN_LOG(my_width);
+            my_width = (score + 1) / my_width;
+        }
+        else {
+            my_width = 0.01;
+        }
+        current_hud.update(my_width * 2, score);
 
         base_degrees_angle += 4;
 
@@ -11467,14 +12002,6 @@ dungeon_return crystal_ball() {
             tick = 0;
             if (score > 0) score--;
         }
-
-        sprintf(buf, "Score: %d", score);
-        file1_spr.clear();
-        file1_gen.generate(-114, -70, buf, file1_spr);
-
-        sprintf(bf2, "Total: %d", total);
-        file2_spr.clear();
-        file2_gen.generate(-114, -58, bf2, file2_spr);
 
         if (total < score) total = score;
 
@@ -11717,10 +12244,10 @@ dungeon_return boat_game() {
             short int camera_sin = camera.sin;
             short int y_shift = 160;
             bn::fixed dir_x = 0;
-            bn::fixed dir_z = bn::fixed::from_data(-64); //-30
+            bn::fixed dir_z = bn::fixed::from_data(12); //-30
 
             if (isMoving == 0) {
-                dir_z = bn::fixed::from_data(-1);
+                dir_z = bn::fixed::from_data(1); // 1
                 wave.set_visible(false);
             } else if (isMoving == 2) {
                 dir_z = bn::fixed::from_data(-196);
@@ -11747,7 +12274,7 @@ dungeon_return boat_game() {
                 if (isMoving > 0) {
                     if (bn::keypad::left_held()) {
                         x_offset += 0.01;
-                        dir_x -= bn::fixed::from_data(32);
+                        dir_x += bn::fixed::from_data(8);
                         boat = bn::sprite_items::avocado.create_sprite(0, 48, 2);
                         
                         for (short int t = 0; t < 8; t++) {
@@ -11756,7 +12283,7 @@ dungeon_return boat_game() {
                     }
                     else if (bn::keypad::right_held()) {
                         x_offset -= 0.01;
-                        dir_x += bn::fixed::from_data(32);
+                        dir_x -= bn::fixed::from_data(8);
                         boat = bn::sprite_items::avocado.create_sprite(0, 48, 1);
 
                         for (short int t = 0; t < 8; t++) {
@@ -11853,7 +12380,7 @@ dungeon_return boat_game() {
         if (so->checkpoint < 5) chap = 1;
 
         victory v(grade, 7, total, so->xp, chap);
-        while(!bn::keypad::b_pressed()) {
+        while(!bn::keypad::a_pressed()) {
             auto docks = bn::regular_bg_items::bg_dock.create_bg(0,0);
             v.update();
 
@@ -12364,7 +12891,7 @@ void final_battle() {
         }
 
         // handle random movement
-        if (std_rand() % 50 == 1) {
+        if (std_rand() % 12 == 1) {
             short int old_logic = rufus_logic;
             rufus_logic = std_rand() % 12;
             if (old_logic != rufus_logic) {
@@ -12374,12 +12901,11 @@ void final_battle() {
         }
 
         switch(rufus_logic) {
-            case 0: {
-                rufus_action = 0;
-                rufus_x -= 1;
+            case 1: {
+                rufus_action = 1;
                 break;
             };
-            case 1: {
+            case 2: {
                 rufus_action = 4;
                 rufus_x += 1;
                 break;
@@ -12393,14 +12919,14 @@ void final_battle() {
                 break;
             }
             default: {
-                rufus_action = 1;
+                rufus_action = 0;
+                rufus_x -= 1;
                 break;
             };
         }
 
         // Collision logic
-
-        if (abs(rufus_x - aaron_x) < 72) {
+        if (abs(rufus_x - aaron_x) < 24) {
             axe.set_x(axe.x() - 3);
 
             rufus_action = 2;
@@ -12658,7 +13184,8 @@ void final_battle() {
 
 void core_gameplay(int x, int y, int world, int until)
 {
-    BN_LOG("got to core");
+    // Ensures the 'brown screen' doesn't happen
+    bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
     bn::core::update();
     rand_state = so->xp;
 
@@ -12769,6 +13296,8 @@ int checkpoint(int level)
 
         // Introduction
     case 0: {
+        intros(0);
+
         exec_dialogue(0);
         exec_dialogue(1);
         exec_dialogue(2);
@@ -12782,13 +13311,14 @@ int checkpoint(int level)
         exec_dialogue(13);
         cutscenes(1);
         exec_dialogue(14);
-        keyboard(so);
+        keyboard();
         exec_dialogue(15);
         break;
     }
 
     // Spring
     case 1: {
+        intros(1);
         exec_dialogue(16);
         so->last_char_id = 0;
         core_gameplay(9, 16, 4, 5);
@@ -12827,6 +13357,7 @@ int checkpoint(int level)
         // Summer - Diana, Eleanor, and Vee
     }
     case 7: {
+        intros(2);
         exec_dialogue(21);
         break; 
     }
@@ -12844,6 +13375,8 @@ int checkpoint(int level)
     }
 
     case 9: {
+        intros(3);
+
         exec_dialogue(29);
         exec_dialogue(28);
         break; 
@@ -12868,6 +13401,8 @@ int checkpoint(int level)
     }
 
     case 12: {
+        intros(4);
+
         if (bn::music::playing()) bn::music::stop();
 
         exec_dialogue(32);
@@ -12895,6 +13430,8 @@ int checkpoint(int level)
         }
 
         case 15: {
+            intros(5);
+
             exec_dialogue(34);
             final_battle();
             exec_dialogue(35);

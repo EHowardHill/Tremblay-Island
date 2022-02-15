@@ -9,11 +9,11 @@
 //
 //	s0204_bn_graphics, 256x256@4, 
 //	+ palette 16 entries, not compressed
-//	+ 346 tiles (t|f|p reduced) not compressed
+//	+ 601 tiles (t|f|p reduced) not compressed
 //	+ regular map (flat), not compressed, 32x32 
-//	Total size: 32 + 11072 + 2048 = 13152
+//	Total size: 32 + 19232 + 2048 = 21312
 //
-//	Time-stamp: 2022-01-26, 07:36:10
+//	Time-stamp: 2022-02-13, 20:28:45
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -22,8 +22,8 @@
 #ifndef GRIT_S0204_BN_GRAPHICS_H
 #define GRIT_S0204_BN_GRAPHICS_H
 
-#define s0204_bn_graphicsTilesLen 11072
-extern const bn::tile s0204_bn_graphicsTiles[bn::max(2768 / 8, 1)];
+#define s0204_bn_graphicsTilesLen 19232
+extern const bn::tile s0204_bn_graphicsTiles[bn::max(4808 / 8, 1)];
 
 #define s0204_bn_graphicsMapLen 2048
 extern const bn::regular_bg_map_cell s0204_bn_graphicsMap[1024];
@@ -38,7 +38,7 @@ extern const bn::color s0204_bn_graphicsPal[16];
 namespace bn::regular_bg_items
 {
     constexpr inline regular_bg_item s0204(
-            regular_bg_tiles_item(span<const tile>(s0204_bn_graphicsTiles, 346), bpp_mode::BPP_4, compression_type::NONE), 
+            regular_bg_tiles_item(span<const tile>(s0204_bn_graphicsTiles, 601), bpp_mode::BPP_4, compression_type::NONE), 
             bg_palette_item(span<const color>(s0204_bn_graphicsPal, 16), bpp_mode::BPP_4, compression_type::NONE),
             regular_bg_map_item(s0204_bn_graphicsMap[0], size(32, 32), compression_type::NONE));
 }
