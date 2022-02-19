@@ -1,0 +1,276 @@
+<h1>mGBA</h1>
+
+<p>mGBA es un emulador para juegos de Game Boy Advance. Su objetivo es ser más rápido y más preciso que muchos emuladores de Game Boy Advance existentes, además de añadir funciones que otros emuladores no tienen. También es compatible con juegos de Game Boy y Game Boy Color.</p>
+
+<p>Las noticias actualizadas y las descargas se encuentran en <a href="https://mgba.io/">mgba.io</a>.</p>
+
+<p><a href="https://travis-ci.org/mgba-emu/mgba"><img src="https://travis-ci.org/mgba-emu/mgba.svg?branch=master" alt="Estado de la compilación" title="" /></a>
+<a href="https://hosted.weblate.org/engage/mgba"><img src="https://hosted.weblate.org/widgets/mgba/-/svg-badge.svg" alt="Estado de la traducción" title="" /></a></p>
+
+<h2>Características</h2>
+
+<ul>
+<li>Soporte de hardware Game Boy Advance altamente preciso<a href="#missing"><sup>[1]</sup></a>.</li>
+<li>Soporte de hardware Game Boy/Game Boy Color.</li>
+<li>Emulación rápida. Corre a velocidad completa en hardware de gama baja, como los netbooks.</li>
+<li>Interfaz gráfica en SDL y Qt.</li>
+<li>Soporte para cable de enlace (link cable) local (en la misma computadora).</li>
+<li>Detección de tipos de guardado, incluso para tamaños de memoria flash<a href="#flashdetect"><sup>[2]</sup></a>.</li>
+<li>Soporte para cartuchos con sensores de movimiento y vibración (solo usable con mandos).</li>
+<li>Soporte para reloj en tiempo real, incluso sin configuración.</li>
+<li>Soporte para sensor solar, para juegos Boktai.</li>
+<li>Soporta la Cámara y la Impresora Game Boy.</li>
+<li>Implementación interna de BIOS, y opción para usar una BIOS externa.</li>
+<li>Modo turbo/avance rápido al mantener Tab presionado.</li>
+<li>Retroceder al presionar "`".</li>
+<li>Salto de cuadros de hasta 10 cuadros por vez.</li>
+<li>Captura de pantalla (pantallazo).</li>
+<li>Soporta códigos de truco.</li>
+<li>9 espacios para estados de guardado. Estos tambien pueden ser vistos como pantallazos.</li>
+<li>Grabación de video, GIF, WebP, y APNG.</li>
+<li>Soporte para e-Reader.</li>
+<li>Controles modificables para teclado y mandos.</li>
+<li>Cargar desde archivos ZIP y 7z.</li>
+<li>Soporta parches IPS, UPS y BPS.</li>
+<li>Depuración de juegos a través de una interfaz de línea de comandos y soporte remoto GDB, compatible con IDA Pro.</li>
+<li>Retroceso configurable.</li>
+<li>Soporte para cargar y exportar instantáneas de GameShark y Action Replay.</li>
+<li>Núcleos disponibles para RetroArch/Libretro y OpenEmu.</li>
+<li>Traducciones de la comunidad a través de <a href="https://hosted.weblate.org/engage/mgba">Weblate</a>.</li>
+<li>Otras cosas más pequeñas.</li>
+</ul>
+
+<h4>Mappers (controladores de memoria) soportados</h4>
+
+<p>Estos mappers tienen soporte completo:</p>
+
+<ul>
+<li>MBC1</li>
+<li>MBC1M</li>
+<li>MBC2</li>
+<li>MBC3</li>
+<li>MBC3+RTC</li>
+<li>MBC5</li>
+<li>MBC5+Rumble</li>
+<li>MBC7</li>
+<li>Wisdom Tree (sin licencia)</li>
+<li>Pokémon Jade/Diamond (sin licencia)</li>
+<li>BBD (sin licencia, similar a MBC5)</li>
+<li>Hitek (sin licencia, similar a MBC5)</li>
+</ul>
+
+<p>Estos mappers tienen soporte parcial:</p>
+
+<ul>
+<li>MBC6 (sin soporte para escribir a la memoria flash)</li>
+<li>MMM01</li>
+<li>Pocket Cam</li>
+<li>TAMA5 (sin soporte para RTC)</li>
+<li>HuC-1 (sin soporte para IR)</li>
+<li>HuC-3 (sin soporte para RTC e IR)</li>
+</ul>
+
+<h3>Características planeadas</h3>
+
+<ul>
+<li>Soporte para cable de enlace por red.</li>
+<li>Soporte para cable de enlace por Joybus para Dolphin.</li>
+<li>Mezcla de audio MP2k, para mayor calidad de sonido.</li>
+<li>Soporte de regrabación para speedruns asistidos por herramientas (TAS).</li>
+<li>Soporte de Lua para prog.</li>
+<li>Un completo paquete de depuración.</li>
+<li>Compatibilidad con adaptadores inalámbricos.</li>
+</ul>
+
+<h2>Plataformas soportadas</h2>
+
+<ul>
+<li>Windows 7 o más reciente</li>
+<li>OS X 10.8 (Mountain Lion)<a href="#osxver"><sup>[3]</sup></a> o más reciente</li>
+<li>Linux</li>
+<li>FreeBSD</li>
+<li>Nintendo 3DS</li>
+<li>Nintendo Switch</li>
+<li>Wii</li>
+<li>PlayStation Vita</li>
+</ul>
+
+<p>Otras plataformas Unix-like, como OpenBSD, funcionan también, pero no han sido probadas.</p>
+
+<h3>Requisitos de sistema</h3>
+
+<p>Los requisitos son mínimos. Cualquier computadora que pueda ejecutar Windows Vista o más reciente debería ser capaz de emular. También se requiere soporte para OpenGL 1.1 o más reciente, con OpenGL 3.2 o más reciente para los shaders y las funciones avanzadas.</p>
+
+<h2>Descargas</h2>
+
+<p>Las descargas se pueden encontrar en la página web oficial, en la sección <a href="http://mgba.io/downloads.html">Descargas</a>. El código fuente se puede encontrar en <a href="https://github.com/mgba-emu/mgba/">GitHub</a>.</p>
+
+<h2>Controles</h2>
+
+<p>Los controles son configurables en el menú de configuración. Many game controllers should be automatically mapped by default. The default keyboard controls are as follows:</p>
+
+<ul>
+<li><strong>A</strong>: X</li>
+<li><strong>B</strong>: Z</li>
+<li><strong>L</strong>: A</li>
+<li><strong>R</strong>: S</li>
+<li><strong>Start</strong>: Entrar</li>
+<li><strong>Select</strong>: Retroceso</li>
+</ul>
+
+<h2>Compilar</h2>
+
+<p>La compilación requiere el uso de CMake 3.1 o más reciente. GCC y Clang funcionan para compilar mGBA, pero Visual Studio 2013 y posteriores no funcionan. El soporte para Visual Studio 2015 y más recientes llegará pronto.</p>
+
+<h4>Compilación por Docker</h4>
+
+<p>Recomendamos usar Docker para compilar en la mayoría de las plataformas. Proporcionamos varias imágenes Docker que contienen la cadena de herramientas y las dependencias necesarias para compilar mGBA a través de varias plataformas. </p>
+
+<p>Para usar una imagen Docker para compilar mGBA, ejecuta este comando mientras estés en el directorio donde hayas desplegado (checkout) el código fuente de mGBA:</p>
+
+<pre><code>docker run --rm -t -v $PWD:/home/mgba/src mgba/windows:w32
+</code></pre>
+
+<p>Esto producirá un directorio <code>build-win32</code> con los ejecutables compilados. Reemplaza <code>mgba/windows:w32</code> con otro nombre de imagen Docker para otras plataformas, lo cual creará un directorio correspondiente. Las siguientes imágenes están disponibles en Docker Hub:</p>
+
+<ul>
+<li>mgba/3ds</li>
+<li>mgba/switch</li>
+<li>mgba/ubuntu:xenial</li>
+<li>mgba/ubuntu:bionic</li>
+<li>mgba/ubuntu:focal</li>
+<li>mgba/ubuntu:groovy</li>
+<li>mgba/vita</li>
+<li>mgba/wii</li>
+<li>mgba/windows:w32</li>
+<li>mgba/windows:w64</li>
+</ul>
+
+<h4>Compilación en *nix</h4>
+
+<p>Si quieres usar CMake para compilar mGBA en un sistema Unix-like, recomendamos los siguientes comandos:</p>
+
+<pre><code>mkdir build
+cd build
+cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
+make
+sudo make install
+</code></pre>
+
+<p>Esto compilará e instalará mGBA en <code>/usr/bin</code> y <code>/usr/lib</code>. Las dependencias que estén instaladas serán detectadas automáticamente, y las características que estén desactivadas si las dependencias no se encuentran serán mostradas después de que el comando <code>cmake</code> muestre las advertencias.</p>
+
+<p>Si estás en macOS, los pasos son un poco diferentes. Asumiendo que usas el gestor de paquetes Homebrew, los comandos recomendados para obtener las dependencias y compilar mGBA son:</p>
+
+<pre><code>brew install cmake ffmpeg libzip qt5 sdl2 libedit pkg-config
+mkdir build
+cd build
+cmake -DCMAKE_PREFIX_PATH=`brew --prefix qt5` ..
+make
+</code></pre>
+
+<p>Toma nota de que no debes usar <code>make install</code> en macOS, ya que no funcionará correctamente.</p>
+
+<h4>Compilación en Windows para desarrolladores</h4>
+
+<h5>MSYS2</h5>
+
+<p>Para desarrollar en Windows, recomendamos MSYS2. Sigue las instrucciones en su <a href="https://msys2.github.io">sitio web</a>. Asegúrate de que estés ejecutando la versión de 32 bits ("MSYS2 MinGW 32-bit") (o la versión de 64 bits "MSYS2 MinGW 64-bit" si quieres compilar para x86_64) y ejecuta estos comandos adicionales para instalar las dependencias necesarias (toma nota de que esto descargará más de 1100 MB en paquetes, así que puede demorarse un poco):</p>
+
+<pre><code>pacman -Sy --needed base-devel git ${MINGW_PACKAGE_PREFIX}-{cmake,ffmpeg,gcc,gdb,libelf,libepoxy,libzip,pkgconf,qt5,SDL2,ntldd-git}
+</code></pre>
+
+<p>Despliega (haz check out en) el código fuente ejecutando este comando:</p>
+
+<pre><code>git clone https://github.com/mgba-emu/mgba.git
+</code></pre>
+
+<p>Luego, compílalo usando estos comandos:</p>
+
+<pre><code>mkdir -p mgba/build
+cd mgba/build
+cmake .. -G "MSYS Makefiles"
+make -j$(nproc --ignore=1)
+</code></pre>
+
+<p>Ten en cuenta de que esta versión de mGBA para Windows no es adecuada para distribuirse, debido a la dispersión de las DLL que necesita para funcionar, pero es perfecta para el desarrollo. Sin embargo, si quieres distribuir tal compilación (por ejemplo, para pruebas en máquinas que no tienen el entorno MSYS2 instalado), al ejecutar <code>cpack -G ZIP</code> se preparará un archivo zip con todas las DLLs necesarias.</p>
+
+<h5>Visual Studio</h5>
+
+<p>Construir usando Visual Studio requiere una configuración igualmente complicada. Para empezar, necesitarás instalar <a href="https://github.com/Microsoft/vcpkg">vcpkg</a>. Después de instalar vcpkg necesitarás instalar varios paquetes adicionales:</p>
+
+<pre><code>vcpkg install ffmpeg[vpx,x264] libepoxy libpng libzip sdl2 sqlite3
+</code></pre>
+
+<p>Toma nota de que esta instalación no soportará la codificación de video acelerada por hardware en Nvidia. Si te preocupa esto, necesitarás instalar CUDA, y luego sustituir <code>ffmpeg[vpx,x264,nvcodec]</code> en el comando anterior.</p>
+
+<p>También necesitarás instalar Qt. Desafortunadamente, debido a que Qt pertenece y es administrado por una empresa en problemas en lugar de una organización razonable, ya no existe un instalador de la edición de código abierto sin conexión para la última versión, por lo que deberás recurrir a un <a href="https://download.qt.io/official_releases/qt/5.12/5.12.9/qt-opensource-windows-x86-5.12.9.exe">instalador de una versión anterior</a> (que quiere que crees una cuenta que de otro modo sería inútil, pero puedes omitir esto al configurar temporalmente un proxy inválido o deshabilitar la red), usa el instalador en línea (que requiere una cuenta de todos modos) o usa vcpkg para construirlo (lentamente). Ninguna de estas son buenas opciones. Si usas el instalador, querrás instalar las versiones de MSVC correspondientes. Ten en cuenta que los instaladores sin conexión no son compatibles con MSVC 2019. Para vcpkg, querrás instalarlo así, lo que llevará bastante tiempo, especialmente en computadoras de cuatro núcleos o menos:</p>
+
+<pre><code>vcpkg install qt5-base qt5-multimedia
+</code></pre>
+
+<p>Luego, abre Visual Studio, selecciona Clonar repositorio, e ingresa <code>https://github.com/mgba-emu/mgba.git</code>. Cuando Visual Studio termine de clonar, ve a Archivo > CMake y abre el archivo CMakeLists.txt en la raíz del repositorio desplegado. Desde allí, puedes trabajar en MGBA en Visual Studio de manera similar a otros proyectos CMake de Visual Studio.</p>
+
+<h4>Compilación con cadenas de herramientas (toolchain)</h4>
+
+<p>Si tienes devkitARM (para 3DS), devkitPPC (para Wii), devkitA64 (para Switch), o vitasdk (para PS Vita), puedes usar los siguientes comandos para compilar:</p>
+
+<pre><code>mkdir build
+cd build
+cmake -DCMAKE_TOOLCHAIN_FILE=../src/platform/3ds/CMakeToolchain.txt ..
+make
+</code></pre>
+
+<p>Reemplaza el parámetro <code>-DCMAKE_TOOLCHAIN_FILE</code> para las plataformas:</p>
+
+<ul>
+<li>3DS: <code>../src/platform/3ds/CMakeToolchain.txt</code></li>
+<li>Switch: <code>../src/platform/switch/CMakeToolchain.txt</code></li>
+<li>Vita: <code>../src/platform/psp2/CMakeToolchain.vitasdk</code></li>
+<li>Wii: <code>../src/platform/wii/CMakeToolchain.txt</code></li>
+</ul>
+
+<h3>Dependencies</h3>
+
+<p>mGBA no tiene dependencias duras, sin embargo, se requieren las siguientes dependencias opcionales para características específicas. Las características se desactivarán si no se pueden encontrar las dependencias.</p>
+
+<ul>
+<li>Qt 5: para la interfaz gráfica. Qt Multimedia o SDL se requieren para el audio.</li>
+<li>SDL: para un frontend más básico y soporte de gamepad en el frontend de Qt. Se recomienda SDL 2, pero se admite 1.2.</li>
+<li>zlib y libpng: para soporte de capturas de pantalla y soporte de estados de guardado embebidos en PNG.</li>
+<li>libedit: para soporte del depurador de línea de comandos.</li>
+<li>ffmpeg o libav: para grabación de video, GIF, WebP y APNG.</li>
+<li>libzip o zlib: para cargar ROMs almacenadas en archivos zip.</li>
+<li>SQLite3: para la bases de datos de juegos.</li>
+<li>libelf: para cargar ELF.</li>
+</ul>
+
+<p>SQLite3, libpng y zlib están incluidos en el emulador, por lo que no necesitan ser compilados externamente primero.</p>
+
+<h2>Notas a pie</h2>
+
+<p><a name="missing">[1]</a> Las características faltantes actualmente son</p>
+
+<ul>
+<li>OBJ window para los modos 3, 4 y 5 (<a href="http://mgba.io/b/5">Bug #5</a>)</li>
+</ul>
+
+<p><a name="flashdetect">[2]</a> La detección del tamaño de la memoria flash no funciona en algunos casos. Se pueden configurar en tiempo de ejecución, pero se recomienda ingresar un bug si se encuentra un caso así.</p>
+
+<p><a name="osxver">[3]</a> 10.8 sólo se necesita para la versión con Qt. Puede ser posible compilar o hacer funcionar la versión Qt en 10.7 o versiones más antigas, pero esto no está oficialmente soportado. La versión SDL funciona en 10.5, y puede funcionar en versiones anteriores.</p>
+
+<h2>Copyright</h2>
+
+<p>mGBA es Copyright © 2013 – 2021 Jeffrey Pfau. Es distribuído bajo la <a href="https://www.mozilla.org/MPL/2.0/">licencia pública de Mozilla (Mozilla Public License) version 2.0</a>. Una copia de la licencia está disponible en el archivo LICENSE.</p>
+
+<p>mGBA contiene las siguientes bibliotecas de terceros:</p>
+
+<ul>
+<li><a href="https://github.com/benhoyt/inih">inih</a>, que es copyright © 2009 - 2020 Ben Hoyt y se utiliza bajo licencia de la cláusula 3 de BSD.</li>
+<li><a href="https://code.google.com/archive/p/blip-buf">blip-buf</a>, que es  copyright © 2003 - 2009 Shay Green y se usa bajo LGPL.</li>
+<li><a href="http://www.7-zip.org/sdk.html">LZMA SDK</a>, la cual está en el dominio público.</li>
+<li><a href="https://github.com/aappleby/smhasher">MurmurHash3</a>, implementación por Austin Appleby, la cual está en el dominio público.</li>
+<li><a href="https://github.com/skandhurkat/Getopt-for-Visual-Studio/">getopt for MSVC</a>, la cual está en el dominio público.</li>
+<li><a href="https://www.sqlite.org">SQLite3</a>, la cual está en el dominio público.</li>
+</ul>
+
+<p>Si usted es un editor de juegos y desea obtener una licencia de mGBA para uso comercial, por favor envíe un correo electrónico a <a href="mailto:licensing@mgba.io">licensing@mgba.io</a> para obtener más información.</p>

@@ -8,7 +8,6 @@
 
 #include "bn_core.h"
 #include "bn_log.h"
-
 #include "bn_music.h"
 #include "bn_keypad.h"
 #include "bn_display.h"
@@ -62,7 +61,6 @@
 #include "bn_affine_bg_items_bg_crystal_ball.h"
 #include "bn_regular_bg_items_bg_crystal01.h"
 #include "bn_sprite_items_bg_sky.h"
-#include "bn_affine_bg_items_bg_sky_trees.h"
 #include "bn_sprite_items_l_button.h"
 
 // Extended headers
@@ -164,7 +162,6 @@
 #include "bn_regular_bg_items_bg_landry_cottage.h"
 #include "bn_regular_bg_items_bg_diana_room.h"
 #include "bn_regular_bg_items_greenhouse_bg_01.h"
-#include "bn_regular_bg_items_greenhouse_bg_02.h"
 #include "bn_regular_bg_items_bg_library.h"
 #include "bn_regular_bg_items_bg_guy_house.h"
 
@@ -260,6 +257,7 @@ Guy     7
 #include "bn_sprite_items_delphine02.h"
 #include "bn_sprite_items_diana01.h"
 #include "bn_sprite_items_nicholas01.h"
+#include "bn_sprite_items_the_tree.h"
 #include "bn_regular_bg_items_castle_floor.h"
 #include "bn_regular_bg_items_scout_tv_01.h"
 #include "bn_regular_bg_items_scout_tv_02.h"
@@ -576,6 +574,10 @@ Guy     7
 #include "bn_sprite_items_real_aaron_eyes.h"
 #include "bn_sprite_items_real_enoki_eyes.h"
 
+bn::fixed_t<12> lerp(bn::fixed a, int b, bn::fixed_t<12> t) {
+    return a * (1 - t) + b * t;
+}
+
 class save_struct {
     public:
         short int last_char_id = 0;
@@ -585,18 +587,36 @@ class save_struct {
         short int spawn_y = 0;
         short int world_index = 0;
         short int xp = 0;
-
         short int hat_x = 0;
         short int hat_y = 0;
         short int hat_world = 0;
-        short int hat_char = 0;
+        short int hat_char = -1;
+        bool popups[16] = {false};
 
-        short int gems = 0;
+        save_struct() {}
+
+        void clear() {
+            last_char_id = -1;
+            checkpoint = 0;
+            spawn_x = 0;
+            spawn_y = 0;
+            world_index = 0;
+            xp = 0;
+            hat_x = -1;
+            hat_y = -1;
+            hat_world = -1;
+            hat_char = -1;
+
+            char def[16] = { 0 };
+            strcpy(island_name, def);
+        }
 };
 
 class save_all_struct {
     public:
         save_struct so[3];
+        int save_init = 0;
+        int language = 0;
 };
 
 // defined expressions
@@ -629,8 +649,9 @@ class line {
     public:
         bool transition;
         bool left;
-        short int img = 0;
-        char text[192] = {0};
+        const int img = 0;
+        const char text[192] = {0};
+        const char move_to = 0;
 };
 
 // Set pointer by integer reference
@@ -733,6 +754,10 @@ void set_sprite(bn::sprite_ptr chari, int value) {
             chari.set_item(bn::sprite_items::enoki11);
             break;
 
+        case 32:
+            chari.set_item(bn::sprite_items::the_tree);
+            break;
+
         default:
             break;
     }
@@ -746,7 +771,7 @@ void dialogue_page(line n[32]) {
     bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
     bn::sprite_ptr chari_l = bn::sprite_items::maple01.create_sprite(-50, -15);
     bn::sprite_ptr chari_r = bn::sprite_items::maple01.create_sprite(50, -15);
-    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50, 1);
+    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -72, 1);
     chari_l.set_visible(false);
     chari_r.set_visible(false);
     chari_r.set_horizontal_flip(true);
@@ -1445,11 +1470,11 @@ void dialogue_page(line n[32]) {
             bn::sound_items::pop.play(0.5);
 
             // Fresh init
-            bn::vector<bn::sprite_ptr, 33> text_sprite0;
-            bn::vector<bn::sprite_ptr, 33> text_sprite2;
-            bn::vector<bn::sprite_ptr, 33> text_sprite3;
-            bn::vector<bn::sprite_ptr, 33> text_sprite4;
-            bn::vector<bn::sprite_ptr, 33> text_sprite5;
+            bn::vector<bn::sprite_ptr, 32> text_sprite0;
+            bn::vector<bn::sprite_ptr, 32> text_sprite2;
+            bn::vector<bn::sprite_ptr, 32> text_sprite3;
+            bn::vector<bn::sprite_ptr, 32> text_sprite4;
+            bn::vector<bn::sprite_ptr, 32> text_sprite5;
             char line1[42] = {0};
             char line3[42] = {0};
             char line4[42] = {0};
@@ -1494,7 +1519,7 @@ void dialogue_page(line n[32]) {
             short int c_y = cascade_bg.y().integer();
             while (!bn::keypad::a_pressed() && !bn::keypad::b_held()) {
 
-                BN_LOG("thingy ", backdrops.size(), " @ ", cascade_id);
+                a_button.set_y(lerp(a_button.y(), -50, 0.2));
 
                 // Handle moving backgrounds
                 if (backdrops.size() > 0) {
@@ -1611,7 +1636,7 @@ void dialogue_page_lite(line n[32]) {
 
     // Variable initialization
     bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
-    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -50, 1);
+    bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -72, 1);
     auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64);
     auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 64);
     dg_bg1.set_scale(2,1);
@@ -1624,6 +1649,7 @@ void dialogue_page_lite(line n[32]) {
     // While dialogue is going,
     short int pos = 0;
     bool cont = true;
+    bool a_dir = false;
 
     short int enoki_spoken = false;
     short int maple_spoken = false;
@@ -1644,43 +1670,47 @@ void dialogue_page_lite(line n[32]) {
         } else {
 
             // SFX
-            bn::sound_items::pop.play(0.5);
+            bn::sound_items::pop.play((std_rand() % 100) / 100);
 
             // Fresh init
             bn::vector<bn::sprite_ptr, 33> text_sprite0;
+            bn::vector<bn::sprite_ptr, 33> text_sprite1;
             bn::vector<bn::sprite_ptr, 33> text_sprite2;
-            bn::vector<bn::sprite_ptr, 33> text_sprite3;
-            bn::vector<bn::sprite_ptr, 33> text_sprite4;
-            bn::vector<bn::sprite_ptr, 33> text_sprite5;
-            char line1[48] = {0};
-            char line3[48] = {0};
-            char line4[48] = {0};
-            char line5[48] = {0};
-            char line6[48] = {0};
+            char line0[34] = {0};
+            char line1[34] = {0};
+            char line2[34] = {0};
+
+            // Set up arrow
+            auto arrow = bn::sprite_items::arrow.create_sprite(-108, 69);
+            if (n[pos].move_to == 0) {
+                arrow.set_visible(false);
+            }
 
             BN_LOG(n[pos].text);
-            for (short int t = 0; t < 33; t++) {line1[t] = n[pos].text[t];};
-            for (short int t = 0; t < 33; t++) {line3[t] = n[pos].text[t + 33];};
-            for (short int t = 0; t < 33; t++) {line4[t] = n[pos].text[t + 66];};
-            for (short int t = 0; t < 33; t++) {line5[t] = n[pos].text[t + 99];};
-            for (short int t = 0; t < 32; t++) {line6[t] = n[pos].text[t + 132];};
-            text_line.generate(-108, 21, line1, text_sprite0);
-            text_line.generate(-108, 33, line3, text_sprite2);
-            text_line.generate(-108, 45, line4, text_sprite3);
-            text_line.generate(-108, 57, line5, text_sprite4);
-            text_line.generate(-108, 69, line6, text_sprite5);
+            strncpy(line0, n[pos].text + 0, 33);
+            strncpy(line1, n[pos].text + 33, 33);
+            strncpy(line2, n[pos].text + 66, 33);
+            text_line.generate(-108, 45, line0, text_sprite0);
+            text_line.generate(-108, 57, line1, text_sprite1);
 
-            if (!enoki_spoken && strncmp(line4, "ENOKI", 5) == 0) {
+            if (n[pos].move_to == 0) {
+                text_line.generate(-108, 69, line2, text_sprite2);
+            }
+            else {
+                text_line.generate(-92, 69, line2, text_sprite2);
+            }
+
+            if (!enoki_spoken && strncmp(line0, "ENOKI", 5) == 0) {
                 bn::sound_items::enoki_hey.play();
                 enoki_spoken = true;
             }
 
-            if (!maple_spoken && strncmp(line4, "MAPLE", 5) == 0) {
+            if (!maple_spoken && strncmp(line0, "MAPLE", 5) == 0) {
                 bn::sound_items::maple_hey_01.play();
                 maple_spoken = true;
             }
 
-            if (!aaron_spoken && strncmp(line4, "AARON", 5) == 0) {
+            if (!aaron_spoken && strncmp(line0, "AARON", 5) == 0) {
                 if (pos < 2) {
                     bn::sound_items::aaron_hey_01.play();
                 } else {
@@ -1689,33 +1719,57 @@ void dialogue_page_lite(line n[32]) {
                 aaron_spoken = true;
             }
 
-            if (!scout_spoken && strncmp(line4, "SCOUT", 5) == 0) {
+            if (!scout_spoken && strncmp(line0, "SCOUT", 5) == 0) {
                 bn::sound_items::scout_hey_01.play();
                 scout_spoken = true;
             }
 
-            if (!vee_spoken && strncmp(line4, "OLIVIER", 7) == 0) {
+            if (!vee_spoken && strncmp(line0, "OLIVIER", 7) == 0) {
                 bn::sound_items::vee_hey_01.play();
                 vee_spoken = true;
             }
 
-            if (!el_spoken && strncmp(line4, "ELEANOR", 7) == 0) {
+            if (!el_spoken && strncmp(line0, "ELEANOR", 7) == 0) {
                 bn::sound_items::eleanor_hey_01.play();
                 el_spoken = true;
             }
 
-            if (!diana_spoken && strncmp(line4, "DIANA", 5) == 0) {
+            if (!diana_spoken && strncmp(line0, "DIANA", 5) == 0) {
                 bn::sound_items::diana_hey_01.play();
                 diana_spoken = true;
             }
 
-            if (!guy_spoken && strncmp(line4, "GUY", 3) == 0) {
+            if (!guy_spoken && strncmp(line0, "GUY", 3) == 0) {
                 bn::sound_items::guy_hey_01.play();
                 guy_spoken = true;
             }
 
             // Process visual effects
             while(!(bn::keypad::a_pressed())) {
+                a_button.set_y(lerp(a_button.y(), -50, 0.2));
+
+                // Handle arrow
+                if (arrow.visible()) {
+                    if (bn::keypad::left_pressed()) {
+                        a_dir = false;
+                        bn::sound_items::cnaut.play();
+                    }
+
+                    if (bn::keypad::right_pressed()) {
+                        a_dir = true;
+                        bn::sound_items::cnaut.play();
+                    }
+
+                    if (!a_dir) {
+                        arrow.set_x(lerp(arrow.x(), -108, 0.4));
+                        arrow.set_horizontal_flip(false);
+                    }
+                    else {
+                        arrow.set_x(lerp(arrow.x(), 108, 0.4));
+                        arrow.set_horizontal_flip(true);
+                    }
+                }
+
                 if (bg_alpha < 0.9) {
                     bg_alpha += 0.05;
                     bn::blending::set_transparency_alpha(bg_alpha);
@@ -1734,6 +1788,10 @@ void dialogue_page_lite(line n[32]) {
                 }
             }
 
+            if (n[pos].move_to > 0 && a_dir) {
+                pos = n[pos].move_to;
+            }
+
             bn::core::update();
         }
 
@@ -1748,6 +1806,10 @@ void dialogue_page_lite(line n[32]) {
         bn::blending::set_transparency_alpha(bg_alpha);
         bn::core::update();
     }
+
+    a_button.set_scale(1.2, 1.2);
+    bn::sound_items::click.play();
+    bn::core::update();
 
     dg_bg1.set_visible(false);
     dg_bg2.set_visible(false);
@@ -1848,7 +1910,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 {true, true, 0, "MAPLE                            Enoki, we all know you're rich,  no need to flaunt it."},
                 {true, true, 0, "ENOKI                            But didn't you literally grow up in a car? I mean, compared to    that, a castle is pretty nice,   right?"},
                 {true, true, 0, "MAPLE                            It just seems.. rash. I don't    mean to take the fun out of it,  but I can't help but think this  was a really, really bad idea."},
-                {true, true, 0, "ENOKI                            Coming from the girl who got     embarrased of her grades freshmanyear and decided to just up and  run away from college."},
+                {true, true, 0, "ENOKI                            Coming from the girl who got     embarrassed of her grades        freshman year and decided to justup and run away from college."},
                 {true, true, 0, "S01:10"},
                 {true, true, 0, "MAPLE                            Oh come on, that was your idea   first."},
                 {true, true, 0, "S01:11"},
@@ -2306,7 +2368,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                     {fals, fals, 0, "                                                                  nunchucks / drumsticks as a pair of chicken drumsticks. They      looked very delicious."},
                     {fals, fals, 0, "                                                                  The time had come. They decided  to swap genres. Country music waswhat they were going with."},
                     {fals, fals, 0, "                                                                  Soon enough, the Star Space      Goblin Emperor Wizard had landed on Sqeeb-Sqeeb 9."},
-                    {fals, fals, 0, "                                                                  'AAALRIGHT!' he exclaimed, 'I AM SEARCHING FOR JAHN-JANH GAZEBO!"},
+                    {fals, fals, 0, "                                                                  'AAALRIGHT!' he exclaimed, 'I AM SEARCHING FOR JAHN-JAHN GAZEBO!"},
                     {fals, fals, 0, "                                                                  HIS SKULL WILL MEET MY WICKED    FIST OF EVIL!.. FOR EVIL!'"},
                     {fals, fals, 0, "                                                                  'Not so fast, Star Space Goblin  Emperor Wizard!' said Jahn-Jahn, wearing a fake wig."},
                     {fals, fals, 0, "                                                                  'How do you know, random         civilian?' asked the Star Space"},
@@ -2385,7 +2447,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 {fals, fals, 0,  "                                 We've got a certain Cesar de la  Cruz on special invitation from  our very own Queen Enoki."},
                 {fals, fals, 0,  "                                 He was apparently a famous lawyerwho's decided that he wants a newstart."},
                 {fals, fals, 0,  "                                 We've also got a guy moving in   whose name is.. Guy. I'm not     kidding - his name is Guy."},
-                {fals, fals, 0,  "                                 I'm looking forward to seeing    what he cooks up, literally! He'sa cook and apparently makes a    mean jumbalaya."},
+                {fals, fals, 0,  "                                 I'm looking forward to seeing    what he cooks up, literally! He'sa cook and apparently makes a    mean jambalaya."},
                 {fals, fals, 0,  "                                 Now, we're getting ever closer tothe Scout Expo, and it's only a  matter of time before it's all   ready."},
                 {fals, fals, 0,  "                                 I've also managed to order a     bunch of new Time Raiders comic, cuz I know a bunch of islanders  have really been getting into-"},
                 {fals, fals, 0,  "BG: fadeout"},
@@ -2764,7 +2826,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 }
 
                 line l2[10] = {
-                    {true, true, 00, "                                                                  N-No... I can't lose you..."},
+                    {true, true, 00, "N-No... I can't lose you..."},
                     {true, true, 00, "COM: Endscene"}};
                 dialogue_page_lite(l2);
 
@@ -2785,7 +2847,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 }
 
                 line l2[10] = {
-                    {true, true, 00, "                                                                  A-Aaron?                         Why are you looking at me        like that?"},
+                    {true, true, 00, "A-Aaron?                         Why are you looking at me        like that?"},
                     {true, true, 00, "COM: Endscene"}};
                 dialogue_page_lite(l2);
             }
@@ -2802,7 +2864,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
                 }
 
                 line l2[10] = {
-                    {true, true, 00, "                                                                  Say something already..          You're scaring me.."},
+                    {true, true, 00, "Say something already..          You're scaring me.."},
                     {true, true, 00, "COM: Endscene"}};
                 dialogue_page_lite(l2);
             }
@@ -3024,6 +3086,16 @@ int exec_dialogue(int x, int checkpoint = 0) {
             break;
         }
 
+        case 36: {
+            line lc[32] = {
+                {true, fals, 32, "what was I drinking?"}, //penis
+                {fals, fals, 0, "COM: Endscene"},
+            };
+            dialogue_page(lc);
+            return 0;
+            break;
+        }
+
         default: {
             return 1;
             break;
@@ -3163,11 +3235,22 @@ public:
             roundDown(y_int + 6) * room_width,
             roundUp(y_int) * room_width};
 
+        short int anti_close[4] = {
+            roundUp(x_int + 6),
+            roundDown(x_int - 6),
+            roundUp(y_int + 6) * room_width,
+            roundDown(y_int) * room_width };
+
         short int col[8] = { 0 };
+        short int gol[8] = { 0 };
         bool canLeft = true;
         bool canRite = true;
         bool canUp = true;
         bool canDn = true;
+        bool newLeft = 0;
+        bool newRite = 0;
+        bool newUp = 0;
+        bool newDown = 0;
 
         if (collisions.size() > 0) {
             col[0] = collisions.at(close[0] + close[2]) == 1;
@@ -3179,10 +3262,37 @@ public:
             col[6] = collisions.at(close[0] + close[3]) == 1;
             col[7] = collisions.at(close[1] + close[3]) == 1;
 
+            gol[0] = collisions.at(anti_close[0] + anti_close[2]) == 1;
+            gol[1] = collisions.at(anti_close[0] + anti_close[3]) == 1;
+            gol[2] = collisions.at(anti_close[1] + anti_close[2]) == 1;
+            gol[3] = collisions.at(anti_close[1] + anti_close[3]) == 1;
+            gol[4] = collisions.at(anti_close[0] + anti_close[2]) == 1;
+            gol[5] = collisions.at(anti_close[1] + anti_close[2]) == 1;
+            gol[6] = collisions.at(anti_close[0] + anti_close[3]) == 1;
+            gol[7] = collisions.at(anti_close[1] + anti_close[3]) == 1;
+
+            /*
+            if (role == 1) {
+                BN_LOG(
+                    col[0], ",", col[1], ",", col[2], ",", col[3], ",", col[4], ",", col[5], ",", col[6], ",", col[7], " - ",
+                    gol[0], ",", gol[1], ",", gol[2], ",", gol[3], ",", gol[4], ",", gol[5], ",", gol[6], ",", gol[7]
+                );
+            }
+            */
+
             canLeft = !(((col[4] & col[5]) ^ col[0]) || ((col[6] & col[7]) ^ col[1]));
             canRite = !(((col[4] & col[5]) ^ col[2]) || ((col[6] & col[7]) ^ col[3]));
             canUp = !(((col[0] & col[1]) ^ col[4]) || ((col[2] & col[3]) ^ col[5]));
             canDn = !(((col[0] & col[1]) ^ col[6]) || ((col[2] & col[3]) ^ col[7]));
+
+            newDown = (!gol[0] & !gol[1] & !gol[2] & !gol[4] & !gol[5] & !gol[6] & gol[3] & gol[7]);
+            newUp = (!gol[0] & !gol[1] & !gol[3] & !gol[4] & !gol[6] & !gol[7] & gol[2] & gol[5]);
+            newLeft = (!gol[0] & !gol[2] & !gol[3] & !gol[4] & !gol[5] & !gol[7] & gol[1] & gol[6]);
+            newRite = (!gol[1] & !gol[2] & !gol[3] & !gol[5] & !gol[6] & !gol[7] & gol[0] & gol[4]);
+
+            //BN_LOG("---");
+            //BN_LOG(canLeft, ", ", canRite, ", ", canUp, ", ", canDn);
+            //BN_LOG(newLeft, ", ", newRite, ", ", newUp, ", ", newDown);
         }
 
         if (canLeft || canRite)
@@ -3218,6 +3328,8 @@ public:
                         done = false;
                     last_dir = dir;
                     is_walking = true;
+                } else {
+                    entity.set_y(entity.y() + newDown - newUp);
                 }
             }
             else if (x > entity.x() + 24 || (x > entity.x() && dist > 72))
@@ -3231,6 +3343,9 @@ public:
                         done = false;
                     last_dir = dir;
                     is_walking = true;
+                }
+                else {
+                    entity.set_y(entity.y() + newLeft - newRite);
                 }
             }
             if (y < entity.y() - 24 || (y < entity.y() && dist > 72))
@@ -3247,6 +3362,9 @@ public:
                         is_walking = true;
                     }
                 }
+                else {
+                    entity.set_x(entity.x() + newDown - newLeft);
+                }
             }
             else if (y > entity.y() + 24 || (y > entity.y() && dist > 72))
             {
@@ -3261,6 +3379,9 @@ public:
                         last_dir = dir;
                         is_walking = true;
                     }
+                }
+                else {
+                    entity.set_x(entity.x() - newRite + newLeft);
                 }
             }
 
@@ -3382,23 +3503,35 @@ public:
                 done = true;
             }
 
+            int delta_x = 0;
+            int delta_y = 0;
+
             // Key controls
             if (bn::keypad::left_held())
             {
-                entity.set_x(entity.x() + (-1 * canLeft));
+                delta_x += (-1 * canLeft);
+                if (!canLeft) delta_y += newDown - newUp;
             }
             if (bn::keypad::right_held())
             {
-                entity.set_x(entity.x() + (1 * canRite));
+                delta_x += (1 * canRite);
+                if (!canRite) delta_y += newLeft - newRite;
             }
             if (bn::keypad::up_held())
             {
-                entity.set_y(entity.y() + (-1 * canUp));
+                delta_y += (-1 * canUp);
+                if (!canUp) delta_x += newDown - newLeft;
             }
             if (bn::keypad::down_held())
             {
-                entity.set_y(entity.y() + (1 * canDn));
+                delta_y += (1 * canDn);
+                if (!canDn) delta_x += newUp - newRite;
             }
+            if (delta_x > 1) delta_x = 1;
+            if (delta_x < -1) delta_x = -1;
+            if (delta_y > 1) delta_y = 1;
+            if (delta_y < -1) delta_y = -1;
+            entity.set_position(entity.x() + delta_x, entity.y() + delta_y);
         }
 
         // If generic dude....
@@ -3587,14 +3720,199 @@ public:
     short int y = 0;
 };
 
+// Pop-Up Instruction
+void popup(int scene) {
+
+    // Check to see if you've seen it before
+    if (!so->popups[scene]) {
+        bn::core::update();
+        so->popups[scene] = true;
+        bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
+        bn::regular_bg_ptr background = bn::regular_bg_items::fun_background.create_bg(0, 0);
+        bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-80, -48);
+
+        int my_chari = so->last_char_id;
+        if (my_chari < 0 || my_chari > 7) my_chari = 0;
+
+        auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 0);
+        auto dg_bg2 = bn::sprite_items::dialogue_bg_2.create_sprite(64, 0);
+        dg_bg1.set_scale(2, 0.01);
+        dg_bg2.set_scale(2, 0.01);
+        dg_bg1.set_blending_enabled(true);
+        dg_bg2.set_blending_enabled(true);
+        bn::music_items_info::span[4].first.play(bn::fixed(50) / 100);
+
+        char text[192] = { 0 };
+
+        switch (scene) {
+        case 0: {
+            char txt1[192] = "You'll find things around the    island to build your Trembloon   count. If you get 100, you get   to progress to the next chapter! Bonne chance!";
+            strncpy(text, txt1, 192);
+            break;
+        }
+        case 1: {
+            char txt1[192] = "Try to catch all the rabbits and toss them out of the garden as   soon as possible. Pick them up & throw them with the A button.    Bonne chance!";
+            strncpy(text, txt1, 192);
+            my_chari = 1;
+            break;
+        }
+        case 2: {
+            char txt1[192] = "Try to find the gem and avoidthe bats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!";
+            strncpy(text, txt1, 192);
+            my_chari = 0;
+            break;
+        }
+        case 3: {
+            char txt1[192] = "Use the A button to chop the     wooden pegs. Make sure you don't swing out of line or miss any, oryou'll lose points!              Bonne chance!";
+            strncpy(text, txt1, 192);
+            my_chari = 2;
+            break;
+        }
+        case 4: {
+            char txt1[192] = "There are new villagers to the   northwest! There are new ways to earn Trembloons, but you'll have to figure out how yourself.      Bonne chance!";
+            strncpy(text, txt1, 192);
+            break;
+        }
+        case 5: {
+            char txt1[192] = "Try to get the highest sequence  of button combinations in a row, and you can magically summon an  item! L and R are the triggers.  Bonne chance!";
+            strncpy(text, txt1, 192);
+            my_chari = 5;
+            break;
+        }
+        case 6: {
+            char txt1[192] = "Pilot the boat to avoid the      rocks! Use up to accelerate, leftand right to steer, and down to  stop the boat.                   Bonne chance!";
+            strncpy(text, txt1, 192);
+            my_chari = 6;
+            break;
+        }
+        case 7: {
+            char txt1[192] = "You can find the customer's orderin the upper right corner.       Remember to press R if you need  to peek at the cookbook.         Bonne chance!";
+            strncpy(text, txt1, 192);
+            my_chari = 7;
+            break;
+        }
+        }
+
+        // Profile picture
+        auto prof_pic = bn::sprite_items::save_tiles.create_sprite(0, 32, my_chari);
+
+        // Fresh init
+        bn::vector<bn::sprite_ptr, 32> text_sprite0;
+        bn::vector<bn::sprite_ptr, 32> text_sprite2;
+        bn::vector<bn::sprite_ptr, 32> text_sprite3;
+        bn::vector<bn::sprite_ptr, 32> text_sprite4;
+        bn::vector<bn::sprite_ptr, 32> text_sprite5;
+        char line1[42] = { 0 };
+        char line3[42] = { 0 };
+        char line4[42] = { 0 };
+        char line5[42] = { 0 };
+        char line6[42] = { 0 };
+
+        for (short int t = 0; t < 33; t++) { line1[t] = text[t]; };
+        for (short int t = 0; t < 33; t++) { line3[t] = text[t + 33]; };
+        for (short int t = 0; t < 33; t++) { line4[t] = text[t + 66]; };
+        for (short int t = 0; t < 33; t++) { line5[t] = text[t + 99]; };
+        for (short int t = 0; t < 32; t++) { line6[t] = text[t + 132]; };
+
+        text_line.generate(-108, 21 - 64, line1, text_sprite0);
+        for (short int t = 0; t < text_sprite0.size(); t++) { text_sprite0.at(t).set_visible(false); }
+
+        text_line.generate(-108, 33 - 64, line3, text_sprite2);
+        for (short int t = 0; t < text_sprite2.size(); t++) { text_sprite2.at(t).set_visible(false); }
+
+        text_line.generate(-108, 45 - 64, line4, text_sprite3);
+        for (short int t = 0; t < text_sprite3.size(); t++) { text_sprite3.at(t).set_visible(false); }
+
+        text_line.generate(-108, 57 - 64, line5, text_sprite4);
+        for (short int t = 0; t < text_sprite4.size(); t++) { text_sprite4.at(t).set_visible(false); }
+
+        text_line.generate(-108, 69 - 64, line6, text_sprite5);
+        for (short int t = 0; t < text_sprite5.size(); t++) { text_sprite5.at(t).set_visible(false); }
+
+        // Process visual effects
+        short int ticker = 0;
+        short int ticker_delay = 0;
+
+        while (!bn::keypad::a_pressed()) {
+            background.set_position((background.x().integer() + 1) % 256, (background.y().integer() + 1) % 256);
+
+            bn::fixed_t<12> new_level = dg_bg1.vertical_scale() + 0.05;
+            if (new_level > 2) new_level = 2;
+            dg_bg1.set_vertical_scale(new_level);
+            dg_bg2.set_vertical_scale(new_level);
+            prof_pic.set_scale(new_level / 2, new_level / 2);
+
+            // Handle text ticker
+            if (ticker < 160) {
+                if (ticker_delay == 0) {
+                    short int ticked = ticker % 32;
+                    if (ticker >= 0 && ticker < 32) {
+                        if (text_sprite0.size() > ticked) {
+                            text_sprite0.at(ticked).set_visible(true);
+                            bn::sound_items::click.play();
+                        }
+                        else {
+                            ticker = 31;
+                        }
+                    }
+                    if (ticker >= 32 && ticker < 64) {
+                        if (text_sprite2.size() > ticked) {
+                            text_sprite2.at(ticked).set_visible(true);
+                            bn::sound_items::click.play();
+                        }
+                        else {
+                            ticker = 63;
+                        }
+                    }
+                    if (ticker >= 64 && ticker < 96) {
+                        if (text_sprite3.size() > ticked) {
+                            text_sprite3.at(ticked).set_visible(true);
+                            bn::sound_items::click.play();
+                        }
+                        else {
+                            ticker = 95;
+                        }
+                    }
+                    if (ticker >= 96 && ticker < 128) {
+                        if (text_sprite4.size() > ticked) {
+                            text_sprite4.at(ticked).set_visible(true);
+                            bn::sound_items::click.play();
+                        }
+                        else {
+                            ticker = 127;
+                        }
+                    }
+                    if (ticker >= 128 && ticker < 160) {
+                        if (text_sprite5.size() > ticked) {
+                            text_sprite5.at(ticked).set_visible(true);
+                            bn::sound_items::click.play();
+                        }
+                        else {
+                            ticker = 160;
+                        }
+                    }
+                    ticker++;
+                }
+                ticker_delay = (ticker_delay + 1) % 2;
+            }
+
+            prof_pic.put_above();
+            a_button.put_above();
+            bn::core::update();
+        }
+    }
+
+    bn::core::update();
+}
+
 // Score HUD
 class hud {
 public:
-    bn::sprite_ptr orb = bn::sprite_items::score.create_sprite(0, -82, 0);
-    bn::sprite_ptr l_wing = bn::sprite_items::score.create_sprite(-48, -82, 1);
-    bn::sprite_ptr r_wing = bn::sprite_items::score.create_sprite(48, -82, 1);
-    bn::sprite_ptr l_wing_2 = bn::sprite_items::score.create_sprite(-32, -82, 2);
-    bn::sprite_ptr r_wing_2 = bn::sprite_items::score.create_sprite(32, -82, 2);
+    bn::sprite_ptr orb = bn::sprite_items::score.create_sprite(0, -90, 0);
+    bn::sprite_ptr l_wing = bn::sprite_items::score.create_sprite(-48, -90, 1);
+    bn::sprite_ptr r_wing = bn::sprite_items::score.create_sprite(48, -90, 1);
+    bn::sprite_ptr l_wing_2 = bn::sprite_items::score.create_sprite(-32, -90, 2);
+    bn::sprite_ptr r_wing_2 = bn::sprite_items::score.create_sprite(32, -90, 2);
     bn::vector<bn::sprite_ptr, 8> text_sprite0;
     bn::fixed_t<12> wing_scale = 1.25;
     short int score = 0;
@@ -3625,10 +3943,20 @@ public:
 
         text_sprite0.clear();
         bn::string<8> txt_score = bn::to_string<8>(score);
-        text_line.generate(q, -69, txt_score, text_sprite0);
+        text_line.generate(q, -72, txt_score, text_sprite0);
 
         l_wing_2.set_scale(wing_scale, 1);
         r_wing_2.set_scale(wing_scale, 1);
+
+        l_wing.put_above();
+        r_wing.put_above();
+        l_wing_2.put_above();
+        r_wing_2.put_above();
+        orb.put_above();
+
+        for (int t = 0; t < text_sprite0.size(); t++) {
+            text_sprite0.at(t).put_above();
+        }
     }
 };
 
@@ -4053,6 +4381,61 @@ class room
     }
 };
 
+class xp_hud {
+    public:
+        bn::sprite_ptr l_side = bn::sprite_items::power_meter.create_sprite(76, 96, 0);
+        bn::sprite_ptr m_side = bn::sprite_items::power_meter.create_sprite(92, 96, 1);
+        bn::sprite_ptr r_side = bn::sprite_items::power_meter.create_sprite(108, 96, 2);
+        bn::sprite_ptr pointer = bn::sprite_items::power_meter.create_sprite(76, 96, 3);
+        int x_to = 76;
+        int chap = 4;
+
+        xp_hud() {
+
+        }
+
+        void update() {
+
+            // Set up chapter
+            if (so->checkpoint < 11) {
+                chap = 3;
+                if (so->xp > 300) so->xp = 300;
+            }
+            if (so->checkpoint < 9) {
+                chap = 2;
+                if (so->xp > 200) so->xp = 200;
+            }
+            if (so->checkpoint < 4) {
+                chap = 1;
+                if (so->xp > 100) so->xp = 100;
+            }
+            if (so->checkpoint == 0) {
+                chap = 1;
+                if (so->xp > 50) so->xp = 50;
+            }
+            x_to = 76 + (so->xp / chap) * 0.32;
+
+            // Configure X position
+            if (x_to > pointer.x()) {
+                pointer.set_x(pointer.x() + 1);
+            }
+            else if (x_to < pointer.x()) {
+                pointer.set_x(x_to);
+            }
+
+            if (69 < pointer.y()) {
+                l_side.set_y(lerp(pointer.y(), 69, 0.3));
+                m_side.set_y(lerp(pointer.y(), 69, 0.3));
+                r_side.set_y(lerp(pointer.y(), 69, 0.3));
+                pointer.set_y(lerp(pointer.y(), 69, 0.3));
+            }
+        }
+
+        void acknowledge() {
+            bn::sound_items::pop.play();
+        }
+};
+
 dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true) {
 
     local_tileset.clear();
@@ -4093,7 +4476,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             current_room.chari.push_back(default_chari);
             break;
         }
-        else if (so->checkpoint < 12)
+        else if (so->checkpoint < 13)
         {
             character default_chari(bn::sprite_items::maple_walking_spring, current_room.start_x, current_room.start_y, current_room.width);
             default_chari.entity.set_camera(current_room.camera);
@@ -5812,12 +6195,12 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     // GAMELOOP
     short int update_counter = 0;
 
-    /*
     // funny hat be like
     auto hat = bn::sprite_items::funny_items.create_sprite(0, 0, 0);
     hat.set_camera(current_room.camera);
     hat.set_visible(false);
     bool active_hat = false;
+
     for (short int t = 0; t < current_room.chari.size(); t++)
     {
         if (so->hat_char == current_room.chari.at(t).identity)
@@ -5830,7 +6213,6 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
     auto l_button = bn::sprite_items::l_button.create_sprite(-90, 14);
     l_button.set_visible(false);
-    */
 
     bn::blending::set_transparency_alpha(bn::fixed(1));
     bool jukebox = false;
@@ -5852,15 +6234,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
     short int window_y = 80;
     current_room.init_render(dt.spawn_x, dt.spawn_y);
+    xp_hud xphud;
     while (true)
     {
-
-        if (bn::keypad::select_pressed()) {
-            so->xp += 10;
-        }
-
-        // Control actions
-        //current_room.a_notif.set_visible(false);
+        xphud.update();
 
         unsigned short int follow_z = ((current_room.follow_x + 16) / 32) + (((current_room.follow_y + 16) / 32) * current_room.width);
 
@@ -5872,7 +6249,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
         if (possible_action > 1)
         {
-            BN_LOG("My action: ", possible_action);
+            //BN_LOG("My action: ", possible_action);
 
             current_room.start_notif(0);
 
@@ -5894,15 +6271,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 2:
                 {
                     line lc[10] = {
-                        {true, true, 00, "                                                                  MAPLE                            Enoki, there's no window."},
-                        {true, true, 00, "                                                                  ENOKI                            Uh-huh?"},
-                        {true, true, 00, "                                                                  MAPLE                            What happens if someone tries-"},
-                        {true, true, 00, "                                                                  MAPLE                            to break in?"},
-                        {true, true, 00, "                                                                  ENOKI                            Aaron punches 'em."},
-                        {true, true, 00, "                                                                  ENOKI                            In the face."},
-                        {true, true, 00, "                                                                  MAPLE                            He's not here, though."},
-                        {true, true, 00, "                                                                  ENOKI                            Then I'll punch 'em."},
-                        {true, true, 00, "                                                                  MAPLE                            I.... Hmm. Alright, then."},
+                        {true, true, 00, "MAPLE                            Enoki, there's no window."},
+                        {true, true, 00, "ENOKI                            Uh-huh?"},
+                        {true, true, 00, "MAPLE                            What happens if someone tries-"},
+                        {true, true, 00, "MAPLE                            to break in?"},
+                        {true, true, 00, "ENOKI                            Aaron punches 'em."},
+                        {true, true, 00, "ENOKI                            In the face."},
+                        {true, true, 00, "MAPLE                            He's not here, though."},
+                        {true, true, 00, "ENOKI                            Then I'll punch 'em."},
+                        {true, true, 00, "MAPLE                            I.... Hmm. Alright, then."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -5911,10 +6288,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 3:
                 {
                     line l2[10] = {
-                        {true, true, 00, "                                                                  You see a pot."},
-                        {true, true, 00, "                                                                  You feel compelled to smash it."},
-                        {true, true, 00, "                                                                  However, this is not possible."},
-                        {true, true, 00, "                                                                  You feel strangely disappointed."},
+                        {true, true, 00, "You see a pot."},
+                        {true, true, 00, "You feel compelled to smash it."},
+                        {true, true, 00, "However, this is not possible."},
+                        {true, true, 00, "You feel strangely disappointed."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(l2);
                     break;
@@ -5923,24 +6300,24 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 4:
                 {
                     line lc[19] = {
-                        {true, true, 00, "                                                                  MAPLE                            Hey, let's head out. I don't want"},
-                        {true, true, 00, "                                                                  MAPLE                            to wake him up."},
-                        {true, true, 00, "                                                                  ENOKI                            I dunno, it doesn't matter,"},
-                        {true, true, 00, "                                                                  ENOKI                            there's no way he'll wake up."},
-                        {true, true, 00, "                                                                  ENOKI                            He likes the light on, too."},
-                        {true, true, 00, "                                                                  MAPLE                            I thought you didn't have"},
-                        {true, true, 00, "                                                                  MAPLE                            electricity..?"},
-                        {true, true, 00, "                                                                  ENOKI                            Oh, we do- just that one plug."},
-                        {true, true, 00, "                                                                  ENOKI                            It's a very important plug."},
-                        {true, true, 00, "                                                                  MAPLE                            You sure you like this place?"},
-                        {true, true, 00, "                                                                  ENOKI                            You gonna come here and insult"},
-                        {true, true, 00, "                                                                  ENOKI                            my house?"},
-                        {true, true, 00, "                                                                  MAPLE                            Well, when you put it THAT way..."},
-                        {true, true, 00, "                                                                  ENOKI                            Uh huh, that's what I thought."},
-                        {true, true, 00, "                                                                  MAPLE                            Je m'excuse."},
-                        {true, true, 00, "                                                                  ENOKI                            Merci."},
-                        {true, true, 00, "                                                                  MAPLE                            But when you both move in with me"},
-                        {true, true, 00, "                                                                  MAPLE                            don't say I didn't warn y'all."},
+                        {true, true, 00, "MAPLE                            Hey, let's head out. I don't want"},
+                        {true, true, 00, "MAPLE                            to wake him up."},
+                        {true, true, 00, "ENOKI                            I dunno, it doesn't matter,"},
+                        {true, true, 00, "ENOKI                            there's no way he'll wake up."},
+                        {true, true, 00, "ENOKI                            He likes the light on, too."},
+                        {true, true, 00, "MAPLE                            I thought you didn't have"},
+                        {true, true, 00, "MAPLE                            electricity..?"},
+                        {true, true, 00, "ENOKI                            Oh, we do- just that one plug."},
+                        {true, true, 00, "ENOKI                            It's a very important plug."},
+                        {true, true, 00, "MAPLE                            You sure you like this place?"},
+                        {true, true, 00, "ENOKI                            You gonna come here and insult"},
+                        {true, true, 00, "ENOKI                            my house?"},
+                        {true, true, 00, "MAPLE                            Well, when you put it THAT way..."},
+                        {true, true, 00, "ENOKI                            Uh huh, that's what I thought."},
+                        {true, true, 00, "MAPLE                            Je m'excuse."},
+                        {true, true, 00, "ENOKI                            Merci."},
+                        {true, true, 00, "MAPLE                            But when you both move in with me"},
+                        {true, true, 00, "MAPLE                            don't say I didn't warn y'all."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -5949,14 +6326,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 8:
                 {
                     line lc[9] = {
-                        {true, true, 00, "                                                                  ENOKI                            Y'know, back when Del was my"},
-                        {true, true, 00, "                                                                  ENOKI                            nanny, my parents gave her like"},
-                        {true, true, 00, "                                                                  ENOKI                            three different rooms she could"},
-                        {true, true, 00, "                                                                  ENOKI                            stay in. I don't think she ever"},
-                        {true, true, 00, "                                                                  ENOKI                            slept anywhere but the tub."},
-                        {true, true, 00, "                                                                  MAPLE                            That actually sounds pretty nice."},
-                        {true, true, 00, "                                                                  ENOKI                            Yeah, I tried it but my skin"},
-                        {true, true, 00, "                                                                  ENOKI                            didn't like it very much."},
+                        {true, true, 00, "ENOKI                            Y'know, back when Del was my"},
+                        {true, true, 00, "ENOKI                            nanny, my parents gave her like"},
+                        {true, true, 00, "ENOKI                            three different rooms she could"},
+                        {true, true, 00, "ENOKI                            stay in. I don't think she ever"},
+                        {true, true, 00, "ENOKI                            slept anywhere but the tub."},
+                        {true, true, 00, "MAPLE                            That actually sounds pretty nice."},
+                        {true, true, 00, "ENOKI                            Yeah, I tried it but my skin"},
+                        {true, true, 00, "ENOKI                            didn't like it very much."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -5965,14 +6342,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 9:
                 {
                     line lc[9] = {
-                        {true, true, 00, "                                                                  MAPLE                            Enoki, this one's locked."},
-                        {true, true, 00, "                                                                  ENOKI                            Oh. Yeah, I think that's"},
-                        {true, true, 00, "                                                                  ENOKI                            the kitchen. We don't know where"},
-                        {true, true, 00, "                                                                  ENOKI                            the key is."},
-                        {true, true, 00, "                                                                  MAPLE                            So how do you eat??"},
-                        {true, true, 00, "                                                                  ENOKI                            We make most of our food over the"},
-                        {true, true, 00, "                                                                  ENOKI                            big fire pit!"},
-                        {true, true, 00, "                                                                  MAPLE                            You two, I *swear*...."},
+                        {true, true, 00, "MAPLE                            Enoki, this one's locked."},
+                        {true, true, 00, "ENOKI                            Oh. Yeah, I think that's"},
+                        {true, true, 00, "ENOKI                            the kitchen. We don't know where"},
+                        {true, true, 00, "ENOKI                            the key is."},
+                        {true, true, 00, "MAPLE                            So how do you eat??"},
+                        {true, true, 00, "ENOKI                            We make most of our food over the"},
+                        {true, true, 00, "ENOKI                            big fire pit!"},
+                        {true, true, 00, "MAPLE                            You two, I *swear*...."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -5982,25 +6359,25 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 10:
                 {
                     line lc[20] = {
-                        {true, true, 00, "                                                                  ENOKI                            Isn't he so cute when he"},
-                        {true, true, 00, "                                                                  ENOKI                            sleeps like that? <3"},
-                        {true, true, 00, "                                                                  MAPLE                            You've been married for, what,"},
-                        {true, true, 00, "                                                                  MAPLE                            a few months now?"},
-                        {true, true, 00, "                                                                  MAPLE                            Aren't you supposed to be at the"},
-                        {true, true, 00, "                                                                  MAPLE                            stage where neither of you talk"},
-                        {true, true, 00, "                                                                  MAPLE                            to each other at meals and both"},
-                        {true, true, 00, "                                                                  MAPLE                            of you've gained ten pounds?"},
-                        {true, true, 00, "                                                                  ENOKI                            Huh, I think I've lost weight."},
-                        {true, true, 00, "                                                                  MAPLE                            I guess I don't get it."},
-                        {true, true, 00, "                                                                  ENOKI                            Just cos you always get in"},
-                        {true, true, 00, "                                                                  ENOKI                            fights with your ex-boyfriends"},
-                        {true, true, 00, "                                                                  ENOKI                            doesn't mean every couple's like"},
-                        {true, true, 00, "                                                                  ENOKI                            that, tu sais."},
-                        {true, true, 00, "                                                                  ENOKI                            I mean, you've got this nasty"},
-                        {true, true, 00, "                                                                  ENOKI                            habit of-"},
-                        {true, true, 00, "                                                                  MAPLE                            You finish that sentence, and"},
-                        {true, true, 00, "                                                                  MAPLE                            I'll burn your eyebrows off."},
-                        {true, true, 00, "                                                                  ENOKI                            ......doing that."},
+                        {true, true, 00, "ENOKI                            Isn't he so cute when he"},
+                        {true, true, 00, "ENOKI                            sleeps like that? <3"},
+                        {true, true, 00, "MAPLE                            You've been married for, what,"},
+                        {true, true, 00, "MAPLE                            a few months now?"},
+                        {true, true, 00, "MAPLE                            Aren't you supposed to be at the"},
+                        {true, true, 00, "MAPLE                            stage where neither of you talk"},
+                        {true, true, 00, "MAPLE                            to each other at meals and both"},
+                        {true, true, 00, "MAPLE                            of you've gained ten pounds?"},
+                        {true, true, 00, "ENOKI                            Huh, I think I've lost weight."},
+                        {true, true, 00, "MAPLE                            I guess I don't get it."},
+                        {true, true, 00, "ENOKI                            Just cos you always get in"},
+                        {true, true, 00, "ENOKI                            fights with your ex-boyfriends"},
+                        {true, true, 00, "ENOKI                            doesn't mean every couple's like"},
+                        {true, true, 00, "ENOKI                            that, tu sais."},
+                        {true, true, 00, "ENOKI                            I mean, you've got this nasty"},
+                        {true, true, 00, "ENOKI                            habit of-"},
+                        {true, true, 00, "MAPLE                            You finish that sentence, and"},
+                        {true, true, 00, "MAPLE                            I'll burn your eyebrows off."},
+                        {true, true, 00, "ENOKI                            ......doing that."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -6010,37 +6387,37 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 11:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  ENOKI                            Nous sommes ici!"},
-                        {true, true, 00, "                                                                  ENOKI                            The bookshelf room."},
-                        {true, true, 00, "                                                                  MAPLE                            You weren't kidding about there"},
-                        {true, true, 00, "                                                                  MAPLE                            literally being just a bookshelf"},
-                        {true, true, 00, "                                                                  MAPLE                            room, were you?"},
-                        {true, true, 00, "                                                                  ENOKI                            Bon, so I can't move it and Aaron"},
-                        {true, true, 00, "                                                                  ENOKI                            can't either, so I was wondering,"},
-                        {true, true, 00, "                                                                  ENOKI                            how about using that elf magic?"},
-                        {true, true, 00, "                                                                  MAPLE                            Let me get this straight..."},
-                        {true, true, 00, "                                                                  MAPLE                            You want me to *burn* a perfectly"},
-                        {true, true, 00, "                                                                  MAPLE                            good bookshelf?"},
-                        {true, true, 00, "                                                                  ENOKI                            Yeah! I wanna see if there's a"},
-                        {true, true, 00, "                                                                  ENOKI                            secret passage behind it or"},
-                        {true, true, 00, "                                                                  ENOKI                            somethin', y'know?"},
-                        {true, true, 00, "                                                                  MAPLE                            I refuse. This is rediculous."},
-                        {true, true, 00, "                                                                  MAPLE                            These are perfectly good books."},
-                        {true, true, 00, "                                                                  ENOKI                            Most are rotting away, so"},
-                        {true, true, 00, "                                                                  ENOKI                            it's probably best that they get"},
-                        {true, true, 00, "                                                                  ENOKI                            burned. I checked."},
-                        {true, true, 00, "                                                                  MAPLE                            Are you sure?"},
-                        {true, true, 00, "                                                                  ENOKI                            Absolutely."},
-                        {true, true, 00, "                                                                  MAPLE                            Alright... I'll make a deal."},
-                        {true, true, 00, "                                                                  MAPLE                            I'll burn this, but you need to"},
-                        {true, true, 00, "                                                                  MAPLE                            save at least one book."}, //j'ai compris?
-                        {true, true, 00, "                                                                  MAPLE                            J'ai compris? Oui?"},
-                        {true, true, 00, "                                                                  ENOKI                            Oui!"},
-                        {true, true, 00, "                                                                  ENOKI                            ....alright, I got my book."},
-                        {true, true, 00, "                                                                  ENOKI                            Remember, use the 'R' trigger"},
-                        {true, true, 00, "                                                                  ENOKI                            to send out a bolt of fire!"},
-                        {true, true, 00, "                                                                  MAPLE                            ...What are you talking about??"},
-                        {true, true, 00, "                                                                  ENOKI                            Huh? Oh, nothing"},
+                        {true, true, 00, "ENOKI                            Nous sommes ici!"},
+                        {true, true, 00, "ENOKI                            The bookshelf room."},
+                        {true, true, 00, "MAPLE                            You weren't kidding about there"},
+                        {true, true, 00, "MAPLE                            literally being just a bookshelf"},
+                        {true, true, 00, "MAPLE                            room, were you?"},
+                        {true, true, 00, "ENOKI                            Bon, so I can't move it and Aaron"},
+                        {true, true, 00, "ENOKI                            can't either, so I was wondering,"},
+                        {true, true, 00, "ENOKI                            how about using that elf magic?"},
+                        {true, true, 00, "MAPLE                            Let me get this straight..."},
+                        {true, true, 00, "MAPLE                            You want me to *burn* a perfectly"},
+                        {true, true, 00, "MAPLE                            good bookshelf?"},
+                        {true, true, 00, "ENOKI                            Yeah! I wanna see if there's a"},
+                        {true, true, 00, "ENOKI                            secret passage behind it or"},
+                        {true, true, 00, "ENOKI                            somethin', y'know?"},
+                        {true, true, 00, "MAPLE                            I refuse. This is rediculous."},
+                        {true, true, 00, "MAPLE                            These are perfectly good books."},
+                        {true, true, 00, "ENOKI                            Most are rotting away, so"},
+                        {true, true, 00, "ENOKI                            it's probably best that they get"},
+                        {true, true, 00, "ENOKI                            burned. I checked."},
+                        {true, true, 00, "MAPLE                            Are you sure?"},
+                        {true, true, 00, "ENOKI                            Absolutely."},
+                        {true, true, 00, "MAPLE                            Alright... I'll make a deal."},
+                        {true, true, 00, "MAPLE                            I'll burn this, but you need to"},
+                        {true, true, 00, "MAPLE                            save at least one book."}, //j'ai compris?
+                        {true, true, 00, "MAPLE                            J'ai compris? Oui?"},
+                        {true, true, 00, "ENOKI                            Oui!"},
+                        {true, true, 00, "ENOKI                            ....alright, I got my book."},
+                        {true, true, 00, "ENOKI                            Remember, use the 'R' trigger"},
+                        {true, true, 00, "ENOKI                            to send out a bolt of fire!"},
+                        {true, true, 00, "MAPLE                            ...What are you talking about??"},
+                        {true, true, 00, "ENOKI                            Huh? Oh, nothing"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -6050,37 +6427,37 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 12:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  MAPLE                            ...."},
-                        {true, true, 00, "                                                                  ENOKI                            Well, there's no passage."},
-                        {true, true, 00, "                                                                  MAPLE                            You don't say."},
-                        {true, true, 00, "                                                                  ENOKI                            That's weird."},
-                        {true, true, 00, "                                                                  MAPLE                            Enoki... Look here."},
-                        {true, true, 00, "                                                                  MAPLE                            I guess it doesn't make any sense"},
-                        {true, true, 00, "                                                                  MAPLE                            to be angry, so I won't be, but.."},
-                        {true, true, 00, "                                                                  MAPLE                            You need to stop being like this."},
-                        {true, true, 00, "                                                                  MAPLE                            You and Aaron just spent all this"},
-                        {true, true, 00, "                                                                  MAPLE                            money on a barely furnished"},
-                        {true, true, 00, "                                                                  MAPLE                            castle without basic faculties"},
-                        {true, true, 00, "                                                                  MAPLE                            for what? So you could play like"},
-                        {true, true, 00, "                                                                  MAPLE                            you're a princess? While I'm over"},
-                        {true, true, 00, "                                                                  MAPLE                            in Carolina, sacrificing the best"},
-                        {true, true, 00, "                                                                  MAPLE                            parts of my life for an apartment"},
-                        {true, true, 00, "                                                                  MAPLE                            with the bare essentials?"},
-                        {true, true, 00, "                                                                  MAPLE                            Enoki... Please."},
-                        {true, true, 00, "                                                                  MAPLE                            I don't want to be the bad guy."},
-                        {true, true, 00, "                                                                  MAPLE                            I know you didn't really have a"},
-                        {true, true, 00, "                                                                  MAPLE                            childhood or parents, I get it."},
-                        {true, true, 00, "                                                                  MAPLE                            That's me too."},
-                        {true, true, 00, "                                                                  MAPLE                            But you can't keep going on like"},
-                        {true, true, 00, "                                                                  MAPLE                            this. Do you understand?"},
-                        {true, true, 00, "                                                                  ENOKI                            I do understand."}, //j'ai compris?
-                        {true, true, 00, "                                                                  MAPLE                            It's 5:00 in the morning, I'm"},
-                        {true, true, 00, "                                                                  MAPLE                            going back to bed. I'll see y'all"},
-                        {true, true, 00, "                                                                  MAPLE                            in the morning, oui?"},
-                        {true, true, 00, "                                                                  ENOKI                            Oui.."},
-                        {true, true, 00, "                                                                  MAPLE                            Hey, don't beat yourself up about"},
-                        {true, true, 00, "                                                                  MAPLE                            it. S'il te plait.. Bonne nuit."},
-                        {true, true, 00, "                                                                  ENOKI                            Bonne nuit.."},
+                        {true, true, 00, "MAPLE                            A...."},
+                        {true, true, 00, "ENOKI                            Well, there's no passage."},
+                        {true, true, 00, "MAPLE                            You don't say."},
+                        {true, true, 00, "ENOKI                            That's weird."},
+                        {true, true, 00, "MAPLE                            Enoki... Look here."},
+                        {true, true, 00, "MAPLE                            I guess it doesn't make any sense"},
+                        {true, true, 00, "MAPLE                            to be angry, so I won't be, but.."},
+                        {true, true, 00, "MAPLE                            You need to stop being like this."},
+                        {true, true, 00, "MAPLE                            You and Aaron just spent all this"},
+                        {true, true, 00, "MAPLE                            money on a barely furnished"},
+                        {true, true, 00, "MAPLE                            castle without basic faculties"},
+                        {true, true, 00, "MAPLE                            for what? So you could play like"},
+                        {true, true, 00, "MAPLE                            you're a princess? While I'm over"},
+                        {true, true, 00, "MAPLE                            in Carolina, sacrificing the best"},
+                        {true, true, 00, "MAPLE                            parts of my life for an apartment"},
+                        {true, true, 00, "MAPLE                            with the bare essentials?"},
+                        {true, true, 00, "MAPLE                            Enoki... Please."},
+                        {true, true, 00, "MAPLE                            I don't want to be the bad guy."},
+                        {true, true, 00, "MAPLE                            I know you didn't really have a"},
+                        {true, true, 00, "MAPLE                            childhood or parents, I get it."},
+                        {true, true, 00, "MAPLE                            That's me too."},
+                        {true, true, 00, "MAPLE                            But you can't keep going on like"},
+                        {true, true, 00, "MAPLE                            this. Do you understand?"},
+                        {true, true, 00, "ENOKI                            I do understand."}, //j'ai compris?
+                        {true, true, 00, "MAPLE                            It's 5:00 in the morning, I'm"},
+                        {true, true, 00, "MAPLE                            going back to bed. I'll see y'all"},
+                        {true, true, 00, "MAPLE                            in the morning, oui?"},
+                        {true, true, 00, "ENOKI                            Oui.."},
+                        {true, true, 00, "MAPLE                            Hey, don't beat yourself up about"},
+                        {true, true, 00, "MAPLE                            it. S'il te plait.. Bonne nuit."},
+                        {true, true, 00, "ENOKI                            Bonne nuit.."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -6118,12 +6495,12 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     {
                         line lc[32] = {
 
-                            {true, true, 00, "                                                                  (Every single one of these are   Enoki's, aren't they?)"},
-                            {true, true, 00, "                                                                  (Of course Aaron would pick up   around here.)"},
-                            {true, true, 00, "                                                                  (They're so different... How on  earth are they not fighting-"},
-                            {true, true, 00, "                                                                  -all the time? I don't get it.)"},
-                            {true, true, 00, "                                                                  (If I had a boyfriend, I'd make  him pick up these clothes-"},
-                            {true, true, 00, "                                                                  -immediately.)"},
+                            {true, true, 00, "(Every single one of these are   Enoki's, aren't they?)"},
+                            {true, true, 00, "(Of course Aaron would pick up   around here.)"},
+                            {true, true, 00, "(They're so different... How on  earth are they not fighting-"},
+                            {true, true, 00, "-all the time? I don't get it.)"},
+                            {true, true, 00, "(If I had a boyfriend, I'd make  him pick up these clothes-"},
+                            {true, true, 00, "-immediately.)"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -6132,12 +6509,12 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     {
                         line lc[32] = {
 
-                            {true, true, 00, "                                                                  (If I knew Maple was coming so   soon I probably would'a cleaned"},
-                            {true, true, 00, "                                                                  -these up a little sooner....)"},
-                            {true, true, 00, "                                                                  (Maybe I can pick 'em up now and she won't notice.)"},
-                            {true, true, 00, "                                                                  (Then again, maybe she already   saw it and is already judging.)"},
-                            {true, true, 00, "                                                                  (..This one's cute enough, maybe I'll just leave it on the floor-"},
-                            {true, true, 00, "                                                                  -and wear it tomorrow.)"},
+                            {true, true, 00, "(If I knew Maple was coming so   soon I probably would'a cleaned"},
+                            {true, true, 00, "-these up a little sooner....)"},
+                            {true, true, 00, "(Maybe I can pick 'em up now and she won't notice.)"},
+                            {true, true, 00, "(Then again, maybe she already   saw it and is already judging.)"},
+                            {true, true, 00, "(..This one's cute enough, maybe I'll just leave it on the floor-"},
+                            {true, true, 00, "-and wear it tomorrow.)"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -6146,15 +6523,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     {
                         line lc[32] = {
 
-                            {true, true, 00, "                                                                  (Enoki wasn't this messy when we lived in the castle.)"},
-                            {true, true, 00, "                                                                  (Maybe she thinks we're finally  moved in for good, so she-"},
-                            {true, true, 00, "                                                                  -feels comfortable here.)"},
-                            {true, true, 00, "                                                                  (I know it's probably too soon tocall, but Aaron Tremblay-"},
-                            {true, true, 00, "                                                                  -you've done it. You've got your own place, and you've got yourself-"},
-                            {true, true, 00, "                                                                  -a wife to leave her clothes on  the floor.)"},
-                            {true, true, 00, "                                                                  (I can't think of anything else  I could want, now.)"},
-                            {true, true, 00, "                                                                  (Well.....                       I miss my car.)"},
-                            {true, true, 00, "                                                                  (Maybe I'll talk to Scout about  putting in a racetrack.)"},
+                            {true, true, 00, "(Enoki wasn't this messy when we lived in the castle.)"},
+                            {true, true, 00, "(Maybe she thinks we're finally  moved in for good, so she-"},
+                            {true, true, 00, "-feels comfortable here.)"},
+                            {true, true, 00, "(I know it's probably too soon tocall, but Aaron Tremblay-"},
+                            {true, true, 00, "-you've done it. You've got your own place, and you've got yourself-"},
+                            {true, true, 00, "-a wife to leave her clothes on  the floor.)"},
+                            {true, true, 00, "(I can't think of anything else  I could want, now.)"},
+                            {true, true, 00, "(Well.....                       I miss my car.)"},
+                            {true, true, 00, "(Maybe I'll talk to Scout about  putting in a racetrack.)"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -6162,7 +6539,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     if (me == 3)
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  (Yeah, I definitely need to not  be here.)"},
+                            {true, true, 00, "(Yeah, I definitely need to not  be here.)"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -6178,10 +6555,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (At least when they were living  in that castle, their bed was in-"},
-                                {true, true, 00, "                                                                  -the center of the room. What's  this supposed to be?)"},
-                                {true, true, 00, "                                                                  (Who's shoved up awkwardly in thecorner? Aaron probably.)"},
-                                {true, true, 00, "                                                                  (I swear, that girl is going to  give him grey hairs ten years    early.)"},
+                                {true, true, 00, "(At least when they were living  in that castle, their bed was in-"},
+                                {true, true, 00, "-the center of the room. What's  this supposed to be?)"},
+                                {true, true, 00, "(Who's shoved up awkwardly in thecorner? Aaron probably.)"},
+                                {true, true, 00, "(I swear, that girl is going to  give him grey hairs ten years    early.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6189,10 +6566,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (I'm so glad I don't have'ta     sleep in the middle of the room.)"},
-                                {true, true, 00, "                                                                  (Rolling over off the bed onto   that stone really really hurt.)"},
-                                {true, true, 00, "                                                                  (Now I getta roll either into    the wall or into Aaron.)"},
-                                {true, true, 00, "                                                                  (I'm so glad he doesn't seem to  mind that much.)"},
+                                {true, true, 00, "(I'm so glad I don't have'ta     sleep in the middle of the room.)"},
+                                {true, true, 00, "(Rolling over off the bed onto   that stone really really hurt.)"},
+                                {true, true, 00, "(Now I getta roll either into    the wall or into Aaron.)"},
+                                {true, true, 00, "(I'm so glad he doesn't seem to  mind that much.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6200,15 +6577,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (Maple isn't gonna be happy when she sees this room.)"},
-                                {true, true, 00, "                                                                  (I remember when she used to be  so easy-going...)"},
-                                {true, true, 00, "                                                                  (She's just so frustrating to be around these days.)"},
-                                {true, true, 00, "                                                                  (Maybe she shouldn't have come.  Every time I try to do something-"},
-                                {true, true, 00, "                                                                  -to help her out, she just spits all over me and pouts.)"},
-                                {true, true, 00, "                                                                  (Maybe she'll get tired of       living here and just go home.)"},
-                                {true, true, 00, "                                                                  (Maybe she's right. Maybe I'm    just living Enoki's fantasy.)"},
-                                {true, true, 00, "                                                                  (But Enoki's the first bit of    happiness I've had in years.)"},
-                                {true, true, 00, "                                                                  (Maybe we'll both change...      I hope something changes.)"},
+                                {true, true, 00, "(Maple isn't gonna be happy when she sees this room.)"},
+                                {true, true, 00, "(I remember when she used to be  so easy-going...)"},
+                                {true, true, 00, "(She's just so frustrating to be around these days.)"},
+                                {true, true, 00, "(Maybe she shouldn't have come.  Every time I try to do something-"},
+                                {true, true, 00, "-to help her out, she just spits all over me and pouts.)"},
+                                {true, true, 00, "(Maybe she'll get tired of       living here and just go home.)"},
+                                {true, true, 00, "(Maybe she's right. Maybe I'm    just living Enoki's fantasy.)"},
+                                {true, true, 00, "(But Enoki's the first bit of    happiness I've had in years.)"},
+                                {true, true, 00, "(Maybe we'll both change...      I hope something changes.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6216,7 +6593,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (I probably shouldn't be in here uninvited...)"},
+                                {true, true, 00, "(I probably shouldn't be in here uninvited...)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6227,9 +6604,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (There's no way I'm going to everadmit it, but...)"},
-                                {true, true, 00, "                                                                  (It's nice staying with them. I  keep forgetting how much I)"},
-                                {true, true, 00, "                                                                  (miss staying with somebody.)"},
+                                {true, true, 00, "(There's no way I'm going to everadmit it, but...)"},
+                                {true, true, 00, "(It's nice staying with them. I  keep forgetting how much I)"},
+                                {true, true, 00, "(miss staying with somebody.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6237,10 +6614,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (Y'know, I wish I could go back  in time and talk to little me.)"},
-                                {true, true, 00, "                                                                  (She would NOT BELIEVE what this year's been like.)"},
-                                {true, true, 00, "                                                                  (I.. don't think my parents know I'm here.)"},
-                                {true, true, 00, "                                                                  (Where the heck do the think I amI wonder, huh.)"},
+                                {true, true, 00, "(Y'know, I wish I could go back  in time and talk to little me.)"},
+                                {true, true, 00, "(She would NOT BELIEVE what this year's been like.)"},
+                                {true, true, 00, "(I.. don't think my parents know I'm here.)"},
+                                {true, true, 00, "(Where the heck do the think I amI wonder, huh.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6248,45 +6625,45 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (I really, really need to get    Maple her own place.)"},
-                                {true, true, 00, "                                                                  (I didn't figure she'd actually  pull her weight, but...)"},
-                                {true, true, 00, "                                                                  (With all that spelunking, we've made enough to break even.)"},
-                                {true, true, 00, "                                                                  (I'm surprised she hasn't really been asking for a new place.)"},
-                                {true, true, 00, "                                                                  (Maybe she doesn't really like   staying by herself.)"},
-                                {true, true, 00, "                                                                  (I really don't want to have to  make another house.)"},
-                                {true, true, 00, "                                                                  (I'll talk to that Olivier guy   and see what he can do.)"},
-                                {true, true, 00, "                                                                  (He seems handy enough.)"},
+                                {true, true, 00, "(I really, really need to get    Maple her own place.)"},
+                                {true, true, 00, "(I didn't figure she'd actually  pull her weight, but...)"},
+                                {true, true, 00, "(With all that spelunking, we've made enough to break even.)"},
+                                {true, true, 00, "(I'm surprised she hasn't really been asking for a new place.)"},
+                                {true, true, 00, "(Maybe she doesn't really like   staying by herself.)"},
+                                {true, true, 00, "(I really don't want to have to  make another house.)"},
+                                {true, true, 00, "(I'll talk to that Olivier guy   and see what he can do.)"},
+                                {true, true, 00, "(He seems handy enough.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Yep, that's a room.)"},
+                                {true, true, 00, "(Yep, that's a room.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         if (me == 4)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Definitely like all the sunlightin here.)"},
-                                {true, true, 00, "                                                                  (Could use a plant or two.)"},
+                                {true, true, 00, "(Definitely like all the sunlightin here.)"},
+                                {true, true, 00, "(Could use a plant or two.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         if (me == 5)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (This reminds me so much of Vee'sparents' house.)"},
-                                {true, true, 00, "                                                                  (I hope they're trustworthy      people.)"},
+                                {true, true, 00, "(This reminds me so much of Vee'sparents' house.)"},
+                                {true, true, 00, "(I hope they're trustworthy      people.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         if (me == 6)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Ok, I like these people.)"},
-                                {true, true, 00, "                                                                  (They make me feel organized.)"},
+                                {true, true, 00, "(Ok, I like these people.)"},
+                                {true, true, 00, "(They make me feel organized.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6296,11 +6673,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Thank goodness, that new guy..  er.. guy is a cook.)"},
-                                {true, true, 00, "                                                                  (Maybe gumbo every day won't be  as heavy when it's not mine.)"},
-                                {true, true, 00, "                                                                  (Maybe he's got a good sense of  humor, too.)"},
-                                {true, true, 00, "                                                                  (Ugh, what's wrong with me.. I'm getting excited to meet people?)"},
-                                {true, true, 00, "                                                                  (What, am I sick? Am I becoming..personable? Gross.)"},
+                                {true, true, 00, "(Thank goodness, that new guy..  er.. guy is a cook.)"},
+                                {true, true, 00, "(Maybe gumbo every day won't be  as heavy when it's not mine.)"},
+                                {true, true, 00, "(Maybe he's got a good sense of  humor, too.)"},
+                                {true, true, 00, "(Ugh, what's wrong with me.. I'm getting excited to meet people?)"},
+                                {true, true, 00, "(What, am I sick? Am I becoming..personable? Gross.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6308,10 +6685,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (Y'know, this room hasn't changedin a bit.)"},
-                                {true, true, 00, "                                                                  (What if I moved the bed to the  other side of the room?)"},
-                                {true, true, 00, "                                                                  (Hmm, then it'd be harder to hideclothes from guests.)"},
-                                {true, true, 00, "                                                                  (I gotta pick those up.. eh...   later, later is good.)"},
+                                {true, true, 00, "(Y'know, this room hasn't changedin a bit.)"},
+                                {true, true, 00, "(What if I moved the bed to the  other side of the room?)"},
+                                {true, true, 00, "(Hmm, then it'd be harder to hideclothes from guests.)"},
+                                {true, true, 00, "(I gotta pick those up.. eh...   later, later is good.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6319,36 +6696,36 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (Well, there goes the last chancefor Maple to take the cabin.)"},
-                                {true, true, 00, "                                                                  (As long as Enoki thinks its     sweet that Maple wants to stay,)"},
-                                {true, true, 00, "                                                                  (This isn't going to be my house.What happened to her being so)"},
-                                {true, true, 00, "                                                                  (independent and proud of it?    Ugh.. generousity leech.)"},
-                                {true, true, 00, "                                                                  (And now Enoki's onto the fact   that I'm a bit upset.)"},
-                                {true, true, 00, "                                                                  (Crap.. Now I'm sounding like    Maple myself.)"},
-                                {true, true, 00, "                                                                  (Do all siblings sound like this?Heck if I'd know.)"},
-                                {true, true, 00, "                                                                  (I don't have any friends.)"},
+                                {true, true, 00, "(Well, there goes the last chancefor Maple to take the cabin.)"},
+                                {true, true, 00, "(As long as Enoki thinks its     sweet that Maple wants to stay,)"},
+                                {true, true, 00, "(This isn't going to be my house.What happened to her being so)"},
+                                {true, true, 00, "(independent and proud of it?    Ugh.. generousity leech.)"},
+                                {true, true, 00, "(And now Enoki's onto the fact   that I'm a bit upset.)"},
+                                {true, true, 00, "(Crap.. Now I'm sounding like    Maple myself.)"},
+                                {true, true, 00, "(Do all siblings sound like this?Heck if I'd know.)"},
+                                {true, true, 00, "(I don't have any friends.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Aaron's birthday is coming up.. plants could be a good gift.)"},
+                                {true, true, 00, "(Aaron's birthday is coming up.. plants could be a good gift.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         else if (me == 7)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Definitely like all the light   in here.)"},
-                                {true, true, 00, "                                                                  (Could use a plant or two.)"},
+                                {true, true, 00, "(Definitely like all the light   in here.)"},
+                                {true, true, 00, "(Could use a plant or two.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (It probably isn't my business tobe here.)"},
+                                {true, true, 00, "(It probably isn't my business tobe here.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6365,17 +6742,17 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  MAPLE                            So, uh, what's the book?"},
-                                {true, true, 00, "                                                                  AARON                            Oh, that's mine."},
-                                {true, true, 00, "                                                                  AARON                            You know I'm not a fiction guy,"},
-                                {true, true, 00, "                                                                  AARON                            But Enoki is stubborn."},
-                                {true, true, 00, "                                                                  ENOKI                            You ever heard'a Yellow?"},
-                                {true, true, 00, "                                                                  ENOKI                            It's kinda fun, I got Aaron into it."},
-                                {true, true, 00, "                                                                  MAPLE                            ...does this have pictures?"},
-                                {true, true, 00, "                                                                  MAPLE                            Do you still read picture books?"},
-                                {true, true, 00, "                                                                  ENOKI                            It's got cigarettes in it though!"},
-                                {true, true, 00, "                                                                  ENOKI                            That means its for kids AND      adults."},
-                                {true, true, 00, "                                                                  MAPLE                            Huh, they make books like that?"},
+                                {true, true, 00, "MAPLE                            So, uh, what's the book?"},
+                                {true, true, 00, "AARON                            Oh, that's mine."},
+                                {true, true, 00, "AARON                            You know I'm not a fiction guy,"},
+                                {true, true, 00, "AARON                            But Enoki is stubborn."},
+                                {true, true, 00, "ENOKI                            You ever heard'a Yellow?"},
+                                {true, true, 00, "ENOKI                            It's kinda fun, I got Aaron into it."},
+                                {true, true, 00, "MAPLE                            ...does this have pictures?"},
+                                {true, true, 00, "MAPLE                            Do you still read picture books?"},
+                                {true, true, 00, "ENOKI                            It's got cigarettes in it though!"},
+                                {true, true, 00, "ENOKI                            That means its for kids AND      adults."},
+                                {true, true, 00, "MAPLE                            Huh, they make books like that?"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6384,16 +6761,16 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  ENOKI                            Oh, oh Maple? You want juice?"},
-                                {true, true, 00, "                                                                  MAPLE                            What kind of juice?"},
-                                {true, true, 00, "                                                                  ENOKI                            It's a secret."},
-                                {true, true, 00, "                                                                  MAPLE                            I'm not drinking mystery liquid."},
-                                {true, true, 00, "                                                                  ENOKI                            ...."},
-                                {true, true, 00, "                                                                  ENOKI                            Ok fine, it's orange juice."},
-                                {true, true, 00, "                                                                  MAPLE                            You don't think I would have"},
-                                {true, true, 00, "                                                                  MAPLE                            found that out?"},
-                                {true, true, 00, "                                                                  ENOKI                            Maybe?"},
-                                {true, true, 00, "                                                                  MAPLE                            No. Merci."},
+                                {true, true, 00, "ENOKI                            Oh, oh Maple? You want juice?"},
+                                {true, true, 00, "MAPLE                            What kind of juice?"},
+                                {true, true, 00, "ENOKI                            It's a secret."},
+                                {true, true, 00, "MAPLE                            I'm not drinking mystery liquid."},
+                                {true, true, 00, "ENOKI                            ...."},
+                                {true, true, 00, "ENOKI                            Ok fine, it's orange juice."},
+                                {true, true, 00, "MAPLE                            You don't think I would have"},
+                                {true, true, 00, "MAPLE                            found that out?"},
+                                {true, true, 00, "ENOKI                            Maybe?"},
+                                {true, true, 00, "MAPLE                            No. Merci."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6402,10 +6779,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  (We're kind of low on orange     juice.)"},
-                                {true, true, 00, "                                                                  (I'll probably need to head to   town and sell some produce.)"},
-                                {true, true, 00, "                                                                  (Selling one fruit to get        another fruit, heh.)"},
-                                {true, true, 00, "                                                                  (If only cucumber juice tasted   a little better.)"},
+                                {true, true, 00, "(We're kind of low on orange     juice.)"},
+                                {true, true, 00, "(I'll probably need to head to   town and sell some produce.)"},
+                                {true, true, 00, "(Selling one fruit to get        another fruit, heh.)"},
+                                {true, true, 00, "(If only cucumber juice tasted   a little better.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6414,13 +6791,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             line lc[32] = {
 
-                                {true, true, 00, "                                                                  ENOKI                            EEEE! All my friends know"},
-                                {true, true, 00, "                                                                  ENOKI                            Each other now!!"},
-                                {true, true, 00, "                                                                  ENOKI                            We're like a proper group."},
-                                {true, true, 00, "                                                                  MAPLE                            Whoa, I haven't decided if-"},
-                                {true, true, 00, "                                                                  MAPLE                            I'm staying, chill out."},
-                                {true, true, 00, "                                                                  SCOUT                            Anyone else showing up?"},
-                                {true, true, 00, "                                                                  AARON                            I guess we'll wait and see."},
+                                {true, true, 00, "ENOKI                            EEEE! All my friends know"},
+                                {true, true, 00, "ENOKI                            Each other now!!"},
+                                {true, true, 00, "ENOKI                            We're like a proper group."},
+                                {true, true, 00, "MAPLE                            Whoa, I haven't decided if-"},
+                                {true, true, 00, "MAPLE                            I'm staying, chill out."},
+                                {true, true, 00, "SCOUT                            Anyone else showing up?"},
+                                {true, true, 00, "AARON                            I guess we'll wait and see."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6431,22 +6808,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me < 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            So, it looks like I've read 'em  all."},
-                                {true, true, 00, "                                                                  AARON                            We haven't gone to town in a     while."},
-                                {true, true, 00, "                                                                  MAPLE                            I wonder what's going on outside."},
-                                {true, true, 00, "                                                                  ENOKI                            If anything was bad, you know"},
-                                {true, true, 00, "                                                                  ENOKI                            Scout woulda' said something."},
-                                {true, true, 00, "                                                                  ENOKI                            He's got that internet thing."},
-                                {true, true, 00, "                                                                  MAPLE                            I wonder if I can get new books  that way."},
-                                {true, true, 00, "                                                                  AARON                            That would sure be nice."},
+                                {true, true, 00, "MAPLE                            So, it looks like I've read 'em  all."},
+                                {true, true, 00, "AARON                            We haven't gone to town in a     while."},
+                                {true, true, 00, "MAPLE                            I wonder what's going on outside."},
+                                {true, true, 00, "ENOKI                            If anything was bad, you know"},
+                                {true, true, 00, "ENOKI                            Scout woulda' said something."},
+                                {true, true, 00, "ENOKI                            He's got that internet thing."},
+                                {true, true, 00, "MAPLE                            I wonder if I can get new books  that way."},
+                                {true, true, 00, "AARON                            That would sure be nice."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  You see a bunch of books you've  never seen before."},
-                                {true, true, 00, "                                                                  None look particularly           short interesting... for now."},
+                                {true, true, 00, "You see a bunch of books you've  never seen before."},
+                                {true, true, 00, "None look particularly           short interesting... for now."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6456,33 +6833,33 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me < 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            I think we need a VCR."},
-                                {true, true, 00, "                                                                  AARON                            You gonna buy one?"},
-                                {true, true, 00, "                                                                  MAPLE                            Yes. And lots of tapes."},
-                                {true, true, 00, "                                                                  ENOKI                            Ooo, can you get the new Time Raider"},
-                                {true, true, 00, "                                                                  ENOKI                            movie? I heard they made one!"},
-                                {true, true, 00, "                                                                  MAPLE                            Just to spite you, I think I'll get"},
-                                {true, true, 00, "                                                                  MAPLE                            everything I can find BUT that."},
-                                {true, true, 00, "                                                                  ENOKI                            Aw.. I was thinking that maybe"},
-                                {true, true, 00, "                                                                  ENOKI                            y'know, since we all like it,"},
-                                {true, true, 00, "                                                                  ENOKI                            ...have a kingdom movie night?"},
-                                {true, true, 00, "                                                                  MAPLE                            Okay, MAYBE. MAYBE."},
+                                {true, true, 00, "MAPLE                            I think we need a VCR."},
+                                {true, true, 00, "AARON                            You gonna buy one?"},
+                                {true, true, 00, "MAPLE                            Yes. And lots of tapes."},
+                                {true, true, 00, "ENOKI                            Ooo, can you get the new Time Raider"},
+                                {true, true, 00, "ENOKI                            movie? I heard they made one!"},
+                                {true, true, 00, "MAPLE                            Just to spite you, I think I'll get"},
+                                {true, true, 00, "MAPLE                            everything I can find BUT that."},
+                                {true, true, 00, "ENOKI                            Aw.. I was thinking that maybe"},
+                                {true, true, 00, "ENOKI                            y'know, since we all like it,"},
+                                {true, true, 00, "ENOKI                            ...have a kingdom movie night?"},
+                                {true, true, 00, "MAPLE                            Okay, MAYBE. MAYBE."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         else if (me == 7)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  You smile, thinking about their  inferior kitchen."},
-                                {true, true, 00, "                                                                  Definitely gonna become regulars."},
+                                {true, true, 00, "You smile, thinking about their  inferior kitchen."},
+                                {true, true, 00, "Definitely gonna become regulars."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  You see a bunch of books you've  never seen before."},
-                                {true, true, 00, "                                                                  None look particularly           short interesting... for now."},
+                                {true, true, 00, "You see a bunch of books you've  never seen before."},
+                                {true, true, 00, "None look particularly           short interesting... for now."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -6513,7 +6890,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     else
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  AARON                            I need to check on the others."},
+                            {true, true, 00, "AARON                            I need to check on the others."},
                             {true, true, 00, "COM: Endscene"},
                         };
                         dialogue_page_lite(lc);
@@ -6524,7 +6901,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 21:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  ENOKI'S GARDEN                   You touch it, I kill you"},
+                        {true, true, 00, "ENOKI'S GARDEN                   You touch it, I kill you"},
                         {true, true, 00, "COM: Endscene"},
                     };
                     dialogue_page_lite(lc);
@@ -6533,7 +6910,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 22:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  WOOD CHOPPING SPOT               Where wood is chopped"},
+                        {true, true, 00, "WOOD CHOPPING SPOT               Where wood is chopped"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -6552,7 +6929,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     else
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  Hmmm... This seems like somethingfor Enoki."},
+                            {true, true, 00, "Hmmm... This seems like somethingfor Enoki."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -6573,7 +6950,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     else
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  Hmmm... This seems like somethingfor Aaron."},
+                            {true, true, 00, "Hmmm... This seems like somethingfor Aaron."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -6582,7 +6959,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 25:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  CAVE OF DANGEROUS BATS           Warning: Contains Bats"},
+                        {true, true, 00, "CAVE OF DANGEROUS BATS           Warning: Contains Bats"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -6600,7 +6977,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     else
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  I think Maple is the only one whocan go in safely."},
+                            {true, true, 00, "I think Maple is the only one whocan go in safely."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -6615,15 +6992,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Plants, huh?"},
-                                {true, true, 00, "                                                                  MAPLE                            Isn't there a garden up top?"},
-                                {true, true, 00, "                                                                  SCOUT                            You see, I, er-"},
-                                {true, true, 00, "                                                                  SCOUT                            It's not really about the plants."},
-                                {true, true, 00, "                                                                  SCOUT                            I'm a dirt scientist."},
-                                {true, true, 00, "                                                                  MAPLE                            Dirt scientist?"},
-                                {true, true, 00, "                                                                  SCOUT                            There's a scientist for, uh.."},
-                                {true, true, 00, "                                                                  SCOUT                            Well, everything."},
-                                {true, true, 00, "                                                                  MAPLE                            Clearly."},
+                                {true, true, 00, "MAPLE                            Plants, huh?"},
+                                {true, true, 00, "MAPLE                            Isn't there a garden up top?"},
+                                {true, true, 00, "SCOUT                            You see, I, er-"},
+                                {true, true, 00, "SCOUT                            It's not really about the plants."},
+                                {true, true, 00, "SCOUT                            I'm a dirt scientist."},
+                                {true, true, 00, "MAPLE                            Dirt scientist?"},
+                                {true, true, 00, "SCOUT                            There's a scientist for, uh.."},
+                                {true, true, 00, "SCOUT                            Well, everything."},
+                                {true, true, 00, "MAPLE                            Clearly."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6631,14 +7008,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 1)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ENOKI                            I think THAT plant is the one."},
-                                {true, true, 00, "                                                                  ENOKI                            That's my favorite."},
-                                {true, true, 00, "                                                                  SCOUT                            You want a cutting?"},
-                                {true, true, 00, "                                                                  ENOKI                            What is it?"},
-                                {true, true, 00, "                                                                  SCOUT                            I... I don't know, actually."},
-                                {true, true, 00, "                                                                  SCOUT                            I study dirt, not plants."},
-                                {true, true, 00, "                                                                  ENOKI                            Maybe it's a mystery fruit!"},
-                                {true, true, 00, "                                                                  SCOUT                            I.. guess it could be."},
+                                {true, true, 00, "ENOKI                            I think THAT plant is the one."},
+                                {true, true, 00, "ENOKI                            That's my favorite."},
+                                {true, true, 00, "SCOUT                            You want a cutting?"},
+                                {true, true, 00, "ENOKI                            What is it?"},
+                                {true, true, 00, "SCOUT                            I... I don't know, actually."},
+                                {true, true, 00, "SCOUT                            I study dirt, not plants."},
+                                {true, true, 00, "ENOKI                            Maybe it's a mystery fruit!"},
+                                {true, true, 00, "SCOUT                            I.. guess it could be."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6646,16 +7023,16 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 2)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            Any progress?"},
-                                {true, true, 00, "                                                                  SCOUT                            Heck yeah!"},
-                                {true, true, 00, "                                                                  SCOUT                            I've got something new."},
-                                {true, true, 00, "                                                                  AARON                            What's it called?"},
-                                {true, true, 00, "                                                                  SCOUT                            I call it 'Scout-Out'."},
-                                {true, true, 00, "                                                                  SCOUT                            Guaranteed to get rid of weeds."},
-                                {true, true, 00, "                                                                  AARON                            Dude, that's amazing!"},
-                                {true, true, 00, "                                                                  SCOUT                            Only issue is, well..."},
-                                {true, true, 00, "                                                                  SCOUT                            It gets rid of the plants, too."},
-                                {true, true, 00, "                                                                  AARON                            Ah, bummer."},
+                                {true, true, 00, "AARON                            Any progress?"},
+                                {true, true, 00, "SCOUT                            Heck yeah!"},
+                                {true, true, 00, "SCOUT                            I've got something new."},
+                                {true, true, 00, "AARON                            What's it called?"},
+                                {true, true, 00, "SCOUT                            I call it 'Scout-Out'."},
+                                {true, true, 00, "SCOUT                            Guaranteed to get rid of weeds."},
+                                {true, true, 00, "AARON                            Dude, that's amazing!"},
+                                {true, true, 00, "SCOUT                            Only issue is, well..."},
+                                {true, true, 00, "SCOUT                            It gets rid of the plants, too."},
+                                {true, true, 00, "AARON                            Ah, bummer."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6663,11 +7040,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Oh man, oh man oh man oh man..)"},
-                                {true, true, 00, "                                                                  (I need to get this new formula  figured out fast.)"},
-                                {true, true, 00, "                                                                  (Maybe promising the investors   magic dirt was a bad idea.)"},
-                                {true, true, 00, "                                                                  (Maybe I can just hide down here and they won't find me.)"},
-                                {true, true, 00, "                                                                  (Probably should take my name offmy hatch, first.)"},
+                                {true, true, 00, "(Oh man, oh man oh man oh man..)"},
+                                {true, true, 00, "(I need to get this new formula  figured out fast.)"},
+                                {true, true, 00, "(Maybe promising the investors   magic dirt was a bad idea.)"},
+                                {true, true, 00, "(Maybe I can just hide down here and they won't find me.)"},
+                                {true, true, 00, "(Probably should take my name offmy hatch, first.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6678,14 +7055,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Same thing going on here?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah, yeah."},
-                                {true, true, 00, "                                                                  MAPLE                            They still haven't talk to you"},
-                                {true, true, 00, "                                                                  MAPLE                            about your results?"},
-                                {true, true, 00, "                                                                  SCOUT                            Nah.. But I'm still getting a"},
-                                {true, true, 00, "                                                                  SCOUT                            paycheck every week."},
-                                {true, true, 00, "                                                                  MAPLE                            Hey, that's good."},
-                                {true, true, 00, "                                                                  SCOUT                            Oh yeah."},
+                                {true, true, 00, "MAPLE                            Same thing going on here?"},
+                                {true, true, 00, "SCOUT                            Yeah, yeah."},
+                                {true, true, 00, "MAPLE                            They still haven't talk to you"},
+                                {true, true, 00, "MAPLE                            about your results?"},
+                                {true, true, 00, "SCOUT                            Nah.. But I'm still getting a"},
+                                {true, true, 00, "SCOUT                            paycheck every week."},
+                                {true, true, 00, "MAPLE                            Hey, that's good."},
+                                {true, true, 00, "SCOUT                            Oh yeah."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6693,11 +7070,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Maple's been looking at these   plants every once in while..)"},
-                                {true, true, 00, "                                                                  (At least she's got an opinion onthem.)"},
-                                {true, true, 00, "                                                                  (I really, really need my boss tomessage me back about them.)"},
-                                {true, true, 00, "                                                                  (I guess I shouldn't rock the    tree, the paycheck is solid.)"},
-                                {true, true, 00, "                                                                  (I just want to make sure I'm    doing everything right.)"},
+                                {true, true, 00, "(Maple's been looking at these   plants every once in while..)"},
+                                {true, true, 00, "(At least she's got an opinion onthem.)"},
+                                {true, true, 00, "(I really, really need my boss tomessage me back about them.)"},
+                                {true, true, 00, "(I guess I shouldn't rock the    tree, the paycheck is solid.)"},
+                                {true, true, 00, "(I just want to make sure I'm    doing everything right.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6705,8 +7082,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Lots of unusual plants and dirt samples in jars.)"},
-                                {true, true, 00, "                                                                  (You don't understand it... but  it's probably harmless.)"},
+                                {true, true, 00, "(Lots of unusual plants and dirt samples in jars.)"},
+                                {true, true, 00, "(You don't understand it... but  it's probably harmless.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6717,22 +7094,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, uh.. Maple?"},
-                                {true, true, 00, "                                                                  SCOUT                            Can I ask you someting?"},
-                                {true, true, 00, "                                                                  MAPLE                            Yeah, what's up?"},
-                                {true, true, 00, "                                                                  SCOUT                            Do.. you.. er- like.. tennis?"},
-                                {true, true, 00, "                                                                  MAPLE                            I love tennis."},
-                                {true, true, 00, "                                                                  MAPLE                            Why do you ask?"},
-                                {true, true, 00, "                                                                  SCOUT                            Oh, nothing, nothing.. I was.."},
-                                {true, true, 00, "                                                                  MAPLE                            You want to play tennis?"},
-                                {true, true, 00, "                                                                  SCOUT                            I mean, I've kinda always wanted"},
-                                {true, true, 00, "                                                                  SCOUT                            to a bit, but I don't have"},
-                                {true, true, 00, "                                                                  SCOUT                            anywhere to play, you know?"},
-                                {true, true, 00, "                                                                  MAPLE                            Well, you get the field, and"},
-                                {true, true, 00, "                                                                  MAPLE                            I might show you a thing or two."},
-                                {true, true, 00, "                                                                  SCOUT                            Aw, you mean it??"},
-                                {true, true, 00, "                                                                  MAPLE                            Sure thing."},
-                                {true, true, 00, "                                                                  SCOUT                            Merci!"},
+                                {true, true, 00, "SCOUT                            Hey, uh.. Maple?"},
+                                {true, true, 00, "SCOUT                            Can I ask you someting?"},
+                                {true, true, 00, "MAPLE                            Yeah, what's up?"},
+                                {true, true, 00, "SCOUT                            Do.. you.. er- like.. tennis?"},
+                                {true, true, 00, "MAPLE                            I love tennis."},
+                                {true, true, 00, "MAPLE                            Why do you ask?"},
+                                {true, true, 00, "SCOUT                            Oh, nothing, nothing.. I was.."},
+                                {true, true, 00, "MAPLE                            You want to play tennis?"},
+                                {true, true, 00, "SCOUT                            I mean, I've kinda always wanted"},
+                                {true, true, 00, "SCOUT                            to a bit, but I don't have"},
+                                {true, true, 00, "SCOUT                            anywhere to play, you know?"},
+                                {true, true, 00, "MAPLE                            Well, you get the field, and"},
+                                {true, true, 00, "MAPLE                            I might show you a thing or two."},
+                                {true, true, 00, "SCOUT                            Aw, you mean it??"},
+                                {true, true, 00, "MAPLE                            Sure thing."},
+                                {true, true, 00, "SCOUT                            Merci!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6740,13 +7117,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 2)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            Ok, so, hear me out."},
-                                {true, true, 00, "                                                                  AARON                            You've got that tool for making"},
-                                {true, true, 00, "                                                                  AARON                            bunkers like this really easily"},
-                                {true, true, 00, "                                                                  AARON                            right? So..."},
-                                {true, true, 00, "                                                                  AARON                            Underground race track."},
-                                {true, true, 00, "                                                                  SCOUT                            Oh dude, that'd be sick!"},
-                                {true, true, 00, "                                                                  SCOUT                            I'll definitely look into that."},
+                                {true, true, 00, "AARON                            Ok, so, hear me out."},
+                                {true, true, 00, "AARON                            You've got that tool for making"},
+                                {true, true, 00, "AARON                            bunkers like this really easily"},
+                                {true, true, 00, "AARON                            right? So..."},
+                                {true, true, 00, "AARON                            Underground race track."},
+                                {true, true, 00, "SCOUT                            Oh dude, that'd be sick!"},
+                                {true, true, 00, "SCOUT                            I'll definitely look into that."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6754,8 +7131,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Well, it's time. They want my   samples.)"},
-                                {true, true, 00, "                                                                  (Let's hope I don't get fired.)"},
+                                {true, true, 00, "(Well, it's time. They want my   samples.)"},
+                                {true, true, 00, "(Let's hope I don't get fired.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6763,8 +7140,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Lots of unusual plants and dirt samples in jars.)"},
-                                {true, true, 00, "                                                                  (You don't understand it... but  it's probably harmless.)"},
+                                {true, true, 00, "(Lots of unusual plants and dirt samples in jars.)"},
+                                {true, true, 00, "(You don't understand it... but  it's probably harmless.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6782,17 +7159,17 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Hey look, more nerd stuff."},
-                                {true, true, 00, "                                                                  SCOUT                            Excusez-moi, mademoiselle!"},
-                                {true, true, 00, "                                                                  SCOUT                            That's Time Raiders!"},
-                                {true, true, 00, "                                                                  MAPLE                            Time... Raiders?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah! The adventures of"},
-                                {true, true, 00, "                                                                  SCOUT                            Jahn-Jahn Gazebo and his"},
-                                {true, true, 00, "                                                                  SCOUT                            sidekicks, Nexus and Ninjette!"},
-                                {true, true, 00, "                                                                  MAPLE                            Everything about that sounds.."},
-                                {true, true, 00, "                                                                  MAPLE                            You ever have a girlfriend?"},
-                                {true, true, 00, "                                                                  SCOUT                            No, girls thought I was a nerd."},
-                                {true, true, 00, "                                                                  MAPLE                            Girls still do, dude."},
+                                {true, true, 00, "MAPLE                            Hey look, more nerd stuff."},
+                                {true, true, 00, "SCOUT                            Excusez-moi, mademoiselle!"},
+                                {true, true, 00, "SCOUT                            That's Time Raiders!"},
+                                {true, true, 00, "MAPLE                            Time... Raiders?"},
+                                {true, true, 00, "SCOUT                            Yeah! The adventures of"},
+                                {true, true, 00, "SCOUT                            Jahn-Jahn Gazebo and his"},
+                                {true, true, 00, "SCOUT                            sidekicks, Nexus and Ninjette!"},
+                                {true, true, 00, "MAPLE                            Everything about that sounds.."},
+                                {true, true, 00, "MAPLE                            You ever have a girlfriend?"},
+                                {true, true, 00, "SCOUT                            No, girls thought I was a nerd."},
+                                {true, true, 00, "MAPLE                            Girls still do, dude."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6800,14 +7177,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 1)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ENOKI                            Ooh, is this Time Raiders??"},
-                                {true, true, 00, "                                                                  SCOUT                            You know Time Raiders??."},
-                                {true, true, 00, "                                                                  ENOKI                            'I've got it, Jahn-Jahn!'"},
-                                {true, true, 00, "                                                                  SCOUT                            Finally, someone else!"},
-                                {true, true, 00, "                                                                  ENOKI                            Yeah, Aaron introduced me."},
-                                {true, true, 00, "                                                                  ENOKI                            I like the artwork."},
-                                {true, true, 00, "                                                                  ENOKI                            Can I borrow this after you?"},
-                                {true, true, 00, "                                                                  SCOUT                            Sure thing! I'm almost done."},
+                                {true, true, 00, "ENOKI                            Ooh, is this Time Raiders??"},
+                                {true, true, 00, "SCOUT                            You know Time Raiders??."},
+                                {true, true, 00, "ENOKI                            'I've got it, Jahn-Jahn!'"},
+                                {true, true, 00, "SCOUT                            Finally, someone else!"},
+                                {true, true, 00, "ENOKI                            Yeah, Aaron introduced me."},
+                                {true, true, 00, "ENOKI                            I like the artwork."},
+                                {true, true, 00, "ENOKI                            Can I borrow this after you?"},
+                                {true, true, 00, "SCOUT                            Sure thing! I'm almost done."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6815,16 +7192,16 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 2)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            Yo, Time Raiders?"},
-                                {true, true, 00, "                                                                  SCOUT                            Heck yeah!"},
-                                {true, true, 00, "                                                                  AARON                            Nice! You check out the latest?"},
-                                {true, true, 00, "                                                                  SCOUT                            Oh no, not yet."},
-                                {true, true, 00, "                                                                  SCOUT                            Something you'll learn about, er-"},
-                                {true, true, 00, "                                                                  SCOUT                            'Island Life',"},
-                                {true, true, 00, "                                                                  SCOUT                            Getting new things is hard."},
-                                {true, true, 00, "                                                                  SCOUT                            I could just use my computer, but"},
-                                {true, true, 00, "                                                                  SCOUT                            That kills the experience."},
-                                {true, true, 00, "                                                                  AARON                            Definitely, definitely."},
+                                {true, true, 00, "AARON                            Yo, Time Raiders?"},
+                                {true, true, 00, "SCOUT                            Heck yeah!"},
+                                {true, true, 00, "AARON                            Nice! You check out the latest?"},
+                                {true, true, 00, "SCOUT                            Oh no, not yet."},
+                                {true, true, 00, "SCOUT                            Something you'll learn about, er-"},
+                                {true, true, 00, "SCOUT                            'Island Life',"},
+                                {true, true, 00, "SCOUT                            Getting new things is hard."},
+                                {true, true, 00, "SCOUT                            I could just use my computer, but"},
+                                {true, true, 00, "SCOUT                            That kills the experience."},
+                                {true, true, 00, "AARON                            Definitely, definitely."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6832,10 +7209,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (I've gotta finish this one so   I can get it to Enoki.)"},
-                                {true, true, 00, "                                                                  (But that formula I promise...   I swear, I'm so close.)"},
-                                {true, true, 00, "                                                                  (Maybe just a few more           all-nighters.)"},
-                                {true, true, 00, "                                                                  (A few more and I'll finally haveit.)"},
+                                {true, true, 00, "(I've gotta finish this one so   I can get it to Enoki.)"},
+                                {true, true, 00, "(But that formula I promise...   I swear, I'm so close.)"},
+                                {true, true, 00, "(Maybe just a few more           all-nighters.)"},
+                                {true, true, 00, "(A few more and I'll finally haveit.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6847,20 +7224,20 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, you know, you like to read"},
-                                {true, true, 00, "                                                                  SCOUT                            a lot, right?"},
-                                {true, true, 00, "                                                                  MAPLE                            Sure thing."},
-                                {true, true, 00, "                                                                  SCOUT                            Do you think that maybe I could"},
-                                {true, true, 00, "                                                                  SCOUT                            borrow some of your books?"},
-                                {true, true, 00, "                                                                  MAPLE                            You wouldn't like them."},
-                                {true, true, 00, "                                                                  SCOUT                            I'm sure I could try."},
-                                {true, true, 00, "                                                                  MAPLE                            You like romance?"},
-                                {true, true, 00, "                                                                  MAPLE                            Steamy romance?"},
-                                {true, true, 00, "                                                                  SCOUT                            I... do you have anything else?"},
-                                {true, true, 00, "                                                                  MAPLE                            No, that's what I like."},
-                                {true, true, 00, "                                                                  MAPLE                            What, it make you uncomfortable?"},
-                                {true, true, 00, "                                                                  SCOUT                            ..Maybe a bit."},
-                                {true, true, 00, "                                                                  MAPLE                            Yeah, stick to your comic books."},
+                                {true, true, 00, "SCOUT                            Hey, you know, you like to read"},
+                                {true, true, 00, "SCOUT                            a lot, right?"},
+                                {true, true, 00, "MAPLE                            Sure thing."},
+                                {true, true, 00, "SCOUT                            Do you think that maybe I could"},
+                                {true, true, 00, "SCOUT                            borrow some of your books?"},
+                                {true, true, 00, "MAPLE                            You wouldn't like them."},
+                                {true, true, 00, "SCOUT                            I'm sure I could try."},
+                                {true, true, 00, "MAPLE                            You like romance?"},
+                                {true, true, 00, "MAPLE                            Steamy romance?"},
+                                {true, true, 00, "SCOUT                            I... do you have anything else?"},
+                                {true, true, 00, "MAPLE                            No, that's what I like."},
+                                {true, true, 00, "MAPLE                            What, it make you uncomfortable?"},
+                                {true, true, 00, "SCOUT                            ..Maybe a bit."},
+                                {true, true, 00, "MAPLE                            Yeah, stick to your comic books."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6868,29 +7245,29 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 1)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, Enoki?"},
-                                {true, true, 00, "                                                                  ENOKI                            Yuh-huh?"},
-                                {true, true, 00, "                                                                  SCOUT                            Can we talk about Maple?"},
-                                {true, true, 00, "                                                                  ENOKI                            Oooh, what about her?"},
-                                {true, true, 00, "                                                                  ENOKI                            You LIKE her, don't you?"},
-                                {true, true, 00, "                                                                  SCOUT                            What's not to like?"},
-                                {true, true, 00, "                                                                  ENOKI                            We all already know, hehe."},
-                                {true, true, 00, "                                                                  SCOUT                            Aw crap, it's obvious."},
-                                {true, true, 00, "                                                                  ENOKI                            She's hard to get."},
-                                {true, true, 00, "                                                                  ENOKI                            I tried to set her up once."},
-                                {true, true, 00, "                                                                  SCOUT                            You did?"},
-                                {true, true, 00, "                                                                  ENOKI                            They even dated for a bit."},
-                                {true, true, 00, "                                                                  ENOKI                            He just got on her nerves."},
-                                {true, true, 00, "                                                                  ENOKI                            You gotta be perfect for her."},
-                                {true, true, 00, "                                                                  SCOUT                            And I'm not."},
-                                {true, true, 00, "                                                                  ENOKI                            I don't know what perfect is."},
-                                {true, true, 00, "                                                                  SCOUT                            Well, I can dream I guess."},
-                                {true, true, 00, "                                                                  ENOKI                            But hey, don't change yourself."},
-                                {true, true, 00, "                                                                  ENOKI                            Just be the best 'you'."},
-                                {true, true, 00, "                                                                  SCOUT                            I guess you're right."},
-                                {true, true, 00, "                                                                  ENOKI                            The right girl'll come in time."},
-                                {true, true, 00, "                                                                  SCOUT                            Right. Merci, Enoki."},
-                                {true, true, 00, "                                                                  ENOKI                            De rien!"},
+                                {true, true, 00, "SCOUT                            Hey, Enoki?"},
+                                {true, true, 00, "ENOKI                            Yuh-huh?"},
+                                {true, true, 00, "SCOUT                            Can we talk about Maple?"},
+                                {true, true, 00, "ENOKI                            Oooh, what about her?"},
+                                {true, true, 00, "ENOKI                            You LIKE her, don't you?"},
+                                {true, true, 00, "SCOUT                            What's not to like?"},
+                                {true, true, 00, "ENOKI                            We all already know, hehe."},
+                                {true, true, 00, "SCOUT                            Aw crap, it's obvious."},
+                                {true, true, 00, "ENOKI                            She's hard to get."},
+                                {true, true, 00, "ENOKI                            I tried to set her up once."},
+                                {true, true, 00, "SCOUT                            You did?"},
+                                {true, true, 00, "ENOKI                            They even dated for a bit."},
+                                {true, true, 00, "ENOKI                            He just got on her nerves."},
+                                {true, true, 00, "ENOKI                            You gotta be perfect for her."},
+                                {true, true, 00, "SCOUT                            And I'm not."},
+                                {true, true, 00, "ENOKI                            I don't know what perfect is."},
+                                {true, true, 00, "SCOUT                            Well, I can dream I guess."},
+                                {true, true, 00, "ENOKI                            But hey, don't change yourself."},
+                                {true, true, 00, "ENOKI                            Just be the best 'you'."},
+                                {true, true, 00, "SCOUT                            I guess you're right."},
+                                {true, true, 00, "ENOKI                            The right girl'll come in time."},
+                                {true, true, 00, "SCOUT                            Right. Merci, Enoki."},
+                                {true, true, 00, "ENOKI                            De rien!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6898,32 +7275,32 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 2)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, bro, so, how'd you, er.."},
-                                {true, true, 00, "                                                                  SCOUT                            How'd you first ask Enoki out?"},
-                                {true, true, 00, "                                                                  AARON                            I just invited her to coffee."},
-                                {true, true, 00, "                                                                  SCOUT                            Coffee, coffee, right.."},
-                                {true, true, 00, "                                                                  SCOUT                            We don't uh, hmm.. No coffee.."},
-                                {true, true, 00, "                                                                  AARON                            You want to ask Maple out?"},
-                                {true, true, 00, "                                                                  SCOUT                            Well, I.. Yeah, I do."},
-                                {true, true, 00, "                                                                  AARON                            I'd tell you to give up, but at"},
-                                {true, true, 00, "                                                                  AARON                            the same time, you never know."},
-                                {true, true, 00, "                                                                  AARON                            No one's good enough for her."},
-                                {true, true, 00, "                                                                  SCOUT                            I figured it wasn't worth it."},
-                                {true, true, 00, "                                                                  AARON                            Absolutely no pleasing her."},
-                                {true, true, 00, "                                                                  AARON                            Trust me, I know."},
-                                {true, true, 00, "                                                                  SCOUT                            What do you mean?"},
-                                {true, true, 00, "                                                                  AARON                            Her type is those losers who"},
-                                {true, true, 00, "                                                                  AARON                            they're way cooler than they"},
-                                {true, true, 00, "                                                                  AARON                            are. Now, I'll give her some"},
-                                {true, true, 00, "                                                                  AARON                            credit, though. She puts up"},
-                                {true, true, 00, "                                                                  AARON                            with a lot of the other kind"},
-                                {true, true, 00, "                                                                  AARON                            of loser, too. Just..."},
-                                {true, true, 00, "                                                                  AARON                            Work on yourself. Maybe try"},
-                                {true, true, 00, "                                                                  AARON                            to be a bit more confident and"},
-                                {true, true, 00, "                                                                  AARON                            socially-aware, right?"},
-                                {true, true, 00, "                                                                  SCOUT                            Right. That's a good start."},
-                                {true, true, 00, "                                                                  AARON                            Good luck, man."},
-                                {true, true, 00, "                                                                  SCOUT                            Merci."},
+                                {true, true, 00, "SCOUT                            Hey, bro, so, how'd you, er.."},
+                                {true, true, 00, "SCOUT                            How'd you first ask Enoki out?"},
+                                {true, true, 00, "AARON                            I just invited her to coffee."},
+                                {true, true, 00, "SCOUT                            Coffee, coffee, right.."},
+                                {true, true, 00, "SCOUT                            We don't uh, hmm.. No coffee.."},
+                                {true, true, 00, "AARON                            You want to ask Maple out?"},
+                                {true, true, 00, "SCOUT                            Well, I.. Yeah, I do."},
+                                {true, true, 00, "AARON                            I'd tell you to give up, but at"},
+                                {true, true, 00, "AARON                            the same time, you never know."},
+                                {true, true, 00, "AARON                            No one's good enough for her."},
+                                {true, true, 00, "SCOUT                            I figured it wasn't worth it."},
+                                {true, true, 00, "AARON                            Absolutely no pleasing her."},
+                                {true, true, 00, "AARON                            Trust me, I know."},
+                                {true, true, 00, "SCOUT                            What do you mean?"},
+                                {true, true, 00, "AARON                            Her type is those losers who"},
+                                {true, true, 00, "AARON                            they're way cooler than they"},
+                                {true, true, 00, "AARON                            are. Now, I'll give her some"},
+                                {true, true, 00, "AARON                            credit, though. She puts up"},
+                                {true, true, 00, "AARON                            with a lot of the other kind"},
+                                {true, true, 00, "AARON                            of loser, too. Just..."},
+                                {true, true, 00, "AARON                            Work on yourself. Maybe try"},
+                                {true, true, 00, "AARON                            to be a bit more confident and"},
+                                {true, true, 00, "AARON                            socially-aware, right?"},
+                                {true, true, 00, "SCOUT                            Right. That's a good start."},
+                                {true, true, 00, "AARON                            Good luck, man."},
+                                {true, true, 00, "SCOUT                            Merci."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6931,9 +7308,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Maybe if I can just get Maple toread a few copies,)"},
-                                {true, true, 00, "                                                                  (We'll finally have something in common with her.)"},
-                                {true, true, 00, "                                                                  (In my dreams.)"},
+                                {true, true, 00, "(Maybe if I can just get Maple toread a few copies,)"},
+                                {true, true, 00, "(We'll finally have something in common with her.)"},
+                                {true, true, 00, "(In my dreams.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6941,18 +7318,18 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 7)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  GUY                              You like Time Raiders?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah, a bit."},
-                                {true, true, 00, "                                                                  GUY                              How often you get new ones?"},
-                                {true, true, 00, "                                                                  SCOUT                            Diana ships in new ones weekly."},
-                                {true, true, 00, "                                                                  GUY                              Ah okay, I didn't wanna move"},
-                                {true, true, 00, "                                                                  GUY                              here and have to give it up."},
-                                {true, true, 00, "                                                                  SCOUT                            There is a bit of a waiting"},
-                                {true, true, 00, "                                                                  SCOUT                            list, though. You gotta go"},
-                                {true, true, 00, "                                                                  SCOUT                            after Enoki, she likes em."},
-                                {true, true, 00, "                                                                  GUY                              Nah, I'll just take em first."},
-                                {true, true, 00, "                                                                  SCOUT                            Look, you take that up with her."},
-                                {true, true, 00, "                                                                  GUY                              Will do."},
+                                {true, true, 00, "GUY                              You like Time Raiders?"},
+                                {true, true, 00, "SCOUT                            Yeah, a bit."},
+                                {true, true, 00, "GUY                              How often you get new ones?"},
+                                {true, true, 00, "SCOUT                            Diana ships in new ones weekly."},
+                                {true, true, 00, "GUY                              Ah okay, I didn't wanna move"},
+                                {true, true, 00, "GUY                              here and have to give it up."},
+                                {true, true, 00, "SCOUT                            There is a bit of a waiting"},
+                                {true, true, 00, "SCOUT                            list, though. You gotta go"},
+                                {true, true, 00, "SCOUT                            after Enoki, she likes em."},
+                                {true, true, 00, "GUY                              Nah, I'll just take em first."},
+                                {true, true, 00, "SCOUT                            Look, you take that up with her."},
+                                {true, true, 00, "GUY                              Will do."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6960,8 +7337,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Last month's comic books remain lying on the floor.)"},
-                                {true, true, 00, "                                                                  (Slowly collecting dust.)"},
+                                {true, true, 00, "(Last month's comic books remain lying on the floor.)"},
+                                {true, true, 00, "(Slowly collecting dust.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6972,20 +7349,20 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, you know, you like to read"},
-                                {true, true, 00, "                                                                  SCOUT                            a lot, right?"},
-                                {true, true, 00, "                                                                  MAPLE                            Sure thing."},
-                                {true, true, 00, "                                                                  SCOUT                            Do you think that maybe I could"},
-                                {true, true, 00, "                                                                  SCOUT                            borrow some of your books?"},
-                                {true, true, 00, "                                                                  MAPLE                            You wouldn't like them."},
-                                {true, true, 00, "                                                                  SCOUT                            I'm sure I could try."},
-                                {true, true, 00, "                                                                  MAPLE                            You like romance?"},
-                                {true, true, 00, "                                                                  MAPLE                            Steamy romance?"},
-                                {true, true, 00, "                                                                  SCOUT                            I... do you have anything else?"},
-                                {true, true, 00, "                                                                  MAPLE                            No, that's what I like."},
-                                {true, true, 00, "                                                                  MAPLE                            What, it make you uncomfortable?"},
-                                {true, true, 00, "                                                                  SCOUT                            ..Maybe a bit."},
-                                {true, true, 00, "                                                                  MAPLE                            Yeah, stick to your comic books."},
+                                {true, true, 00, "SCOUT                            Hey, you know, you like to read"},
+                                {true, true, 00, "SCOUT                            a lot, right?"},
+                                {true, true, 00, "MAPLE                            Sure thing."},
+                                {true, true, 00, "SCOUT                            Do you think that maybe I could"},
+                                {true, true, 00, "SCOUT                            borrow some of your books?"},
+                                {true, true, 00, "MAPLE                            You wouldn't like them."},
+                                {true, true, 00, "SCOUT                            I'm sure I could try."},
+                                {true, true, 00, "MAPLE                            You like romance?"},
+                                {true, true, 00, "MAPLE                            Steamy romance?"},
+                                {true, true, 00, "SCOUT                            I... do you have anything else?"},
+                                {true, true, 00, "MAPLE                            No, that's what I like."},
+                                {true, true, 00, "MAPLE                            What, it make you uncomfortable?"},
+                                {true, true, 00, "SCOUT                            ..Maybe a bit."},
+                                {true, true, 00, "MAPLE                            Yeah, stick to your comic books."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -6993,29 +7370,29 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 1)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, Enoki?"},
-                                {true, true, 00, "                                                                  ENOKI                            Yuh-huh?"},
-                                {true, true, 00, "                                                                  SCOUT                            Can we talk about Maple?"},
-                                {true, true, 00, "                                                                  ENOKI                            Oooh, what about her?"},
-                                {true, true, 00, "                                                                  ENOKI                            You LIKE her, don't you?"},
-                                {true, true, 00, "                                                                  SCOUT                            What's not to like?"},
-                                {true, true, 00, "                                                                  ENOKI                            We all already know, hehe."},
-                                {true, true, 00, "                                                                  SCOUT                            Aw crap, it's obvious."},
-                                {true, true, 00, "                                                                  ENOKI                            She's hard to get."},
-                                {true, true, 00, "                                                                  ENOKI                            I tried to set her up once."},
-                                {true, true, 00, "                                                                  SCOUT                            You did?"},
-                                {true, true, 00, "                                                                  ENOKI                            They even dated for a bit."},
-                                {true, true, 00, "                                                                  ENOKI                            He just got on her nerves."},
-                                {true, true, 00, "                                                                  ENOKI                            You gotta be perfect for her."},
-                                {true, true, 00, "                                                                  SCOUT                            And I'm not."},
-                                {true, true, 00, "                                                                  ENOKI                            I don't know what perfect is."},
-                                {true, true, 00, "                                                                  SCOUT                            Well, I can dream I guess."},
-                                {true, true, 00, "                                                                  ENOKI                            But hey, don't change yourself."},
-                                {true, true, 00, "                                                                  ENOKI                            Just be the best 'you'."},
-                                {true, true, 00, "                                                                  SCOUT                            I guess you're right."},
-                                {true, true, 00, "                                                                  ENOKI                            The right girl'll come in time."},
-                                {true, true, 00, "                                                                  SCOUT                            Right. Merci, Enoki."},
-                                {true, true, 00, "                                                                  ENOKI                            De rien!"},
+                                {true, true, 00, "SCOUT                            Hey, Enoki?"},
+                                {true, true, 00, "ENOKI                            Yuh-huh?"},
+                                {true, true, 00, "SCOUT                            Can we talk about Maple?"},
+                                {true, true, 00, "ENOKI                            Oooh, what about her?"},
+                                {true, true, 00, "ENOKI                            You LIKE her, don't you?"},
+                                {true, true, 00, "SCOUT                            What's not to like?"},
+                                {true, true, 00, "ENOKI                            We all already know, hehe."},
+                                {true, true, 00, "SCOUT                            Aw crap, it's obvious."},
+                                {true, true, 00, "ENOKI                            She's hard to get."},
+                                {true, true, 00, "ENOKI                            I tried to set her up once."},
+                                {true, true, 00, "SCOUT                            You did?"},
+                                {true, true, 00, "ENOKI                            They even dated for a bit."},
+                                {true, true, 00, "ENOKI                            He just got on her nerves."},
+                                {true, true, 00, "ENOKI                            You gotta be perfect for her."},
+                                {true, true, 00, "SCOUT                            And I'm not."},
+                                {true, true, 00, "ENOKI                            I don't know what perfect is."},
+                                {true, true, 00, "SCOUT                            Well, I can dream I guess."},
+                                {true, true, 00, "ENOKI                            But hey, don't change yourself."},
+                                {true, true, 00, "ENOKI                            Just be the best 'you'."},
+                                {true, true, 00, "SCOUT                            I guess you're right."},
+                                {true, true, 00, "ENOKI                            The right girl'll come in time."},
+                                {true, true, 00, "SCOUT                            Right. Merci, Enoki."},
+                                {true, true, 00, "ENOKI                            De rien!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7023,32 +7400,32 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 2)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, bro, so, how'd you, er.."},
-                                {true, true, 00, "                                                                  SCOUT                            How'd you first ask Enoki out?"},
-                                {true, true, 00, "                                                                  AARON                            I just invited her to coffee."},
-                                {true, true, 00, "                                                                  SCOUT                            Coffee, coffee, right.."},
-                                {true, true, 00, "                                                                  SCOUT                            We don't uh, hmm.. No coffee.."},
-                                {true, true, 00, "                                                                  AARON                            You want to ask Maple out?"},
-                                {true, true, 00, "                                                                  SCOUT                            Well, I.. Yeah, I do."},
-                                {true, true, 00, "                                                                  AARON                            I'd tell you to give up, but at"},
-                                {true, true, 00, "                                                                  AARON                            the same time, you never know."},
-                                {true, true, 00, "                                                                  AARON                            No one's good enough for her."},
-                                {true, true, 00, "                                                                  SCOUT                            I figured it wasn't worth it."},
-                                {true, true, 00, "                                                                  AARON                            Absolutely no pleasing her."},
-                                {true, true, 00, "                                                                  AARON                            Trust me, I know."},
-                                {true, true, 00, "                                                                  SCOUT                            What do you mean?"},
-                                {true, true, 00, "                                                                  AARON                            Her type is those losers who"},
-                                {true, true, 00, "                                                                  AARON                            they're way cooler than they"},
-                                {true, true, 00, "                                                                  AARON                            are. Now, I'll give her some"},
-                                {true, true, 00, "                                                                  AARON                            credit, though. She puts up"},
-                                {true, true, 00, "                                                                  AARON                            with a lot of the other kind"},
-                                {true, true, 00, "                                                                  AARON                            of loser, too. Just..."},
-                                {true, true, 00, "                                                                  AARON                            Work on yourself. Maybe try"},
-                                {true, true, 00, "                                                                  AARON                            to be a bit more confident and"},
-                                {true, true, 00, "                                                                  AARON                            socially-aware, right?"},
-                                {true, true, 00, "                                                                  SCOUT                            Right. That's a good start."},
-                                {true, true, 00, "                                                                  AARON                            Good luck, man."},
-                                {true, true, 00, "                                                                  SCOUT                            Merci."},
+                                {true, true, 00, "SCOUT                            Hey, bro, so, how'd you, er.."},
+                                {true, true, 00, "SCOUT                            How'd you first ask Enoki out?"},
+                                {true, true, 00, "AARON                            I just invited her to coffee."},
+                                {true, true, 00, "SCOUT                            Coffee, coffee, right.."},
+                                {true, true, 00, "SCOUT                            We don't uh, hmm.. No coffee.."},
+                                {true, true, 00, "AARON                            You want to ask Maple out?"},
+                                {true, true, 00, "SCOUT                            Well, I.. Yeah, I do."},
+                                {true, true, 00, "AARON                            I'd tell you to give up, but at"},
+                                {true, true, 00, "AARON                            the same time, you never know."},
+                                {true, true, 00, "AARON                            No one's good enough for her."},
+                                {true, true, 00, "SCOUT                            I figured it wasn't worth it."},
+                                {true, true, 00, "AARON                            Absolutely no pleasing her."},
+                                {true, true, 00, "AARON                            Trust me, I know."},
+                                {true, true, 00, "SCOUT                            What do you mean?"},
+                                {true, true, 00, "AARON                            Her type is those losers who"},
+                                {true, true, 00, "AARON                            they're way cooler than they"},
+                                {true, true, 00, "AARON                            are. Now, I'll give her some"},
+                                {true, true, 00, "AARON                            credit, though. She puts up"},
+                                {true, true, 00, "AARON                            with a lot of the other kind"},
+                                {true, true, 00, "AARON                            of loser, too. Just..."},
+                                {true, true, 00, "AARON                            Work on yourself. Maybe try"},
+                                {true, true, 00, "AARON                            to be a bit more confident and"},
+                                {true, true, 00, "AARON                            socially-aware, right?"},
+                                {true, true, 00, "SCOUT                            Right. That's a good start."},
+                                {true, true, 00, "AARON                            Good luck, man."},
+                                {true, true, 00, "SCOUT                            Merci."},
                                 {true, true, 00, " "},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
@@ -7057,9 +7434,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Maybe if I can just get Maple toread a few copies,)"},
-                                {true, true, 00, "                                                                  (We'll finally have something in common with her.)"},
-                                {true, true, 00, "                                                                  (In my dreams.)"},
+                                {true, true, 00, "(Maybe if I can just get Maple toread a few copies,)"},
+                                {true, true, 00, "(We'll finally have something in common with her.)"},
+                                {true, true, 00, "(In my dreams.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7067,18 +7444,18 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 7)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  GUY                              You like Time Raiders?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah, a bit."},
-                                {true, true, 00, "                                                                  GUY                              How often you get new ones?"},
-                                {true, true, 00, "                                                                  SCOUT                            Diana ships in new ones weekly."},
-                                {true, true, 00, "                                                                  GUY                              Ah okay, I didn't wanna move"},
-                                {true, true, 00, "                                                                  GUY                              here and have to give it up."},
-                                {true, true, 00, "                                                                  SCOUT                            There is a bit of a waiting"},
-                                {true, true, 00, "                                                                  SCOUT                            list, though. You gotta go"},
-                                {true, true, 00, "                                                                  SCOUT                            after Enoki, she likes em."},
-                                {true, true, 00, "                                                                  GUY                              Nah, I'll just take em first."},
-                                {true, true, 00, "                                                                  SCOUT                            Look, you take that up with her."},
-                                {true, true, 00, "                                                                  GUY                              Will do."},
+                                {true, true, 00, "GUY                              You like Time Raiders?"},
+                                {true, true, 00, "SCOUT                            Yeah, a bit."},
+                                {true, true, 00, "GUY                              How often you get new ones?"},
+                                {true, true, 00, "SCOUT                            Diana ships in new ones weekly."},
+                                {true, true, 00, "GUY                              Ah okay, I didn't wanna move"},
+                                {true, true, 00, "GUY                              here and have to give it up."},
+                                {true, true, 00, "SCOUT                            There is a bit of a waiting"},
+                                {true, true, 00, "SCOUT                            list, though. You gotta go"},
+                                {true, true, 00, "SCOUT                            after Enoki, she likes em."},
+                                {true, true, 00, "GUY                              Nah, I'll just take em first."},
+                                {true, true, 00, "SCOUT                            Look, you take that up with her."},
+                                {true, true, 00, "GUY                              Will do."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7086,8 +7463,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (Last month's comic books remain lying on the floor.)"},
-                                {true, true, 00, "                                                                  (Slowly collecting dust.)"},
+                                {true, true, 00, "(Last month's comic books remain lying on the floor.)"},
+                                {true, true, 00, "(Slowly collecting dust.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7104,13 +7481,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me == 0)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, please be careful about-"},
-                                {true, true, 00, "                                                                  SCOUT                            my computer, it's expensive."},
-                                {true, true, 00, "                                                                  MAPLE                            I'm not gonna touch it."},
-                                {true, true, 00, "                                                                  MAPLE                            Although, now I want to.."},
-                                {true, true, 00, "                                                                  SCOUT                            Wait!! Please-"},
-                                {true, true, 00, "                                                                  MAPLE                            Dude, I'm not gonna touch it!"},
-                                {true, true, 00, "                                                                  MAPLE                            You nerds and your toys.."},
+                                {true, true, 00, "SCOUT                            Hey, please be careful about-"},
+                                {true, true, 00, "SCOUT                            my computer, it's expensive."},
+                                {true, true, 00, "MAPLE                            I'm not gonna touch it."},
+                                {true, true, 00, "MAPLE                            Although, now I want to.."},
+                                {true, true, 00, "SCOUT                            Wait!! Please-"},
+                                {true, true, 00, "MAPLE                            Dude, I'm not gonna touch it!"},
+                                {true, true, 00, "MAPLE                            You nerds and your toys.."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7118,14 +7495,14 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 1)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ENOKI                            Hey Scout, you got a website?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah! It's not very good though."},
-                                {true, true, 00, "                                                                  ENOKI                            May I see it?"},
-                                {true, true, 00, "                                                                  SCOUT                            Not right now, it's... not done."},
-                                {true, true, 00, "                                                                  ENOKI                            Ah, okay."},
-                                {true, true, 00, "                                                                  ENOKI                            I wanna make a website."},
-                                {true, true, 00, "                                                                  ENOKI                            It looks like a lot of fun."},
-                                {true, true, 00, "                                                                  SCOUT                            It's definitely fun."},
+                                {true, true, 00, "ENOKI                            Hey Scout, you got a website?"},
+                                {true, true, 00, "SCOUT                            Yeah! It's not very good though."},
+                                {true, true, 00, "ENOKI                            May I see it?"},
+                                {true, true, 00, "SCOUT                            Not right now, it's... not done."},
+                                {true, true, 00, "ENOKI                            Ah, okay."},
+                                {true, true, 00, "ENOKI                            I wanna make a website."},
+                                {true, true, 00, "ENOKI                            It looks like a lot of fun."},
+                                {true, true, 00, "SCOUT                            It's definitely fun."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7133,20 +7510,20 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 2)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            You hear about the millenium bug?"},
-                                {true, true, 00, "                                                                  SCOUT                            Well of course."},
-                                {true, true, 00, "                                                                  AARON                            Were you okay?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah, I was fine."},
-                                {true, true, 00, "                                                                  SCOUT                            There was a weird bug in"},
-                                {true, true, 00, "                                                                  SCOUT                            one program."},
-                                {true, true, 00, "                                                                  SCOUT                            I had a shopping list program,"},
-                                {true, true, 00, "                                                                  SCOUT                            It added tons of shoeshine to my"},
-                                {true, true, 00, "                                                                  SCOUT                            my shopping list, which is now"},
-                                {true, true, 00, "                                                                  SCOUT                            due on March 5th, 192000."},
-                                {true, true, 00, "                                                                  AARON                            That's a little while to wait."},
-                                {true, true, 00, "                                                                  SCOUT                            A glitchy date? I understand."},
-                                {true, true, 00, "                                                                  SCOUT                            Extra items? That elludes me."},
-                                {true, true, 00, "                                                                  SCOUT                            Bugs are just the weirdest thing."},
+                                {true, true, 00, "AARON                            You hear about the millenium bug?"},
+                                {true, true, 00, "SCOUT                            Well of course."},
+                                {true, true, 00, "AARON                            Were you okay?"},
+                                {true, true, 00, "SCOUT                            Yeah, I was fine."},
+                                {true, true, 00, "SCOUT                            There was a weird bug in"},
+                                {true, true, 00, "SCOUT                            one program."},
+                                {true, true, 00, "SCOUT                            I had a shopping list program,"},
+                                {true, true, 00, "SCOUT                            It added tons of shoeshine to my"},
+                                {true, true, 00, "SCOUT                            my shopping list, which is now"},
+                                {true, true, 00, "SCOUT                            due on March 5th, 192000."},
+                                {true, true, 00, "AARON                            That's a little while to wait."},
+                                {true, true, 00, "SCOUT                            A glitchy date? I understand."},
+                                {true, true, 00, "SCOUT                            Extra items? That elludes me."},
+                                {true, true, 00, "SCOUT                            Bugs are just the weirdest thing."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7154,11 +7531,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (I've graduated top of my class  with a 3.99 GPA.)"},
-                                {true, true, 00, "                                                                  (I'm a real scientist, living    off a corproate grant.)"},
-                                {true, true, 00, "                                                                  (I have a state of the art, whiz bang Castor 5000 computer.)"},
-                                {true, true, 00, "                                                                  (And I can't use it, because I   forgot my password.)"},
-                                {true, true, 00, "                                                                  (No wonder I can't sleep at      night.)"},
+                                {true, true, 00, "(I've graduated top of my class  with a 3.99 GPA.)"},
+                                {true, true, 00, "(I'm a real scientist, living    off a corproate grant.)"},
+                                {true, true, 00, "(I have a state of the art, whiz bang Castor 5000 computer.)"},
+                                {true, true, 00, "(And I can't use it, because I   forgot my password.)"},
+                                {true, true, 00, "(No wonder I can't sleep at      night.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -7176,8 +7553,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (This looks really expensive...)"},
-                                {true, true, 00, "                                                                  (I probably shouldn't touch.)"},
+                                {true, true, 00, "(This looks really expensive...)"},
+                                {true, true, 00, "(I probably shouldn't touch.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -7287,11 +7664,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (This green formula's been makingall the plants grow real big.)"},
-                                {true, true, 00, "                                                                  (I wonder what would happen if   I had some...)"},
-                                {true, true, 00, "                                                                  (Maybe I'll get super plant      powers...)"},
-                                {true, true, 00, "                                                                  (Or maybe I'll just die.)"},
-                                {true, true, 00, "                                                                  (Those plant powers better be    worth the risk.)"},
+                                {true, true, 00, "(This green formula's been makingall the plants grow real big.)"},
+                                {true, true, 00, "(I wonder what would happen if   I had some...)"},
+                                {true, true, 00, "(Maybe I'll get super plant      powers...)"},
+                                {true, true, 00, "(Or maybe I'll just die.)"},
+                                {true, true, 00, "(Those plant powers better be    worth the risk.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7306,9 +7683,9 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me < 3)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Careful!!"},
-                                {true, true, 00, "                                                                  SCOUT                            Some of this stuff is"},
-                                {true, true, 00, "                                                                  SCOUT                            SUPER SUPER toxic!"},
+                                {true, true, 00, "SCOUT                            Careful!!"},
+                                {true, true, 00, "SCOUT                            Some of this stuff is"},
+                                {true, true, 00, "SCOUT                            SUPER SUPER toxic!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7316,23 +7693,23 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 4)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Bonjour! Are you Olivier?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Oui! And you're Scout?"},
-                                {true, true, 00, "                                                                  SCOUT                            That I am! Welcome!"},
-                                {true, true, 00, "                                                                  OLIVIER                          This whole place was amazing!"},
-                                {true, true, 00, "                                                                  SCOUT                            I tried to be honest in the ad."},
-                                {true, true, 00, "                                                                  OLIVIER                          So, are you a scientist?"},
-                                {true, true, 00, "                                                                  SCOUT                            You could say that, yeah."},
-                                {true, true, 00, "                                                                  SCOUT                            I do a little of everything."},
-                                {true, true, 00, "                                                                  OLIVIER                          And you live underground?"},
-                                {true, true, 00, "                                                                  SCOUT                            I've got this machine that can"},
-                                {true, true, 00, "                                                                  SCOUT                            Drill bunkers really easy."},
-                                {true, true, 00, "                                                                  SCOUT                            I could keep drilling if I"},
-                                {true, true, 00, "                                                                  SCOUT                            really wanted to, you know."},
-                                {true, true, 00, "                                                                  OLIVIER                          Awesome!! Hey, you coming to"},
-                                {true, true, 00, "                                                                  OLIVIER                          the Tremblay's for dinner?"},
-                                {true, true, 00, "                                                                  SCOUT                            Of course!"},
-                                {true, true, 00, "                                                                  OLIVIER                          Alright, I'll see you then!"},
+                                {true, true, 00, "SCOUT                            Bonjour! Are you Olivier?"},
+                                {true, true, 00, "OLIVIER                          Oui! And you're Scout?"},
+                                {true, true, 00, "SCOUT                            That I am! Welcome!"},
+                                {true, true, 00, "OLIVIER                          This whole place was amazing!"},
+                                {true, true, 00, "SCOUT                            I tried to be honest in the ad."},
+                                {true, true, 00, "OLIVIER                          So, are you a scientist?"},
+                                {true, true, 00, "SCOUT                            You could say that, yeah."},
+                                {true, true, 00, "SCOUT                            I do a little of everything."},
+                                {true, true, 00, "OLIVIER                          And you live underground?"},
+                                {true, true, 00, "SCOUT                            I've got this machine that can"},
+                                {true, true, 00, "SCOUT                            Drill bunkers really easy."},
+                                {true, true, 00, "SCOUT                            I could keep drilling if I"},
+                                {true, true, 00, "SCOUT                            really wanted to, you know."},
+                                {true, true, 00, "OLIVIER                          Awesome!! Hey, you coming to"},
+                                {true, true, 00, "OLIVIER                          the Tremblay's for dinner?"},
+                                {true, true, 00, "SCOUT                            Of course!"},
+                                {true, true, 00, "OLIVIER                          Alright, I'll see you then!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7340,24 +7717,24 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 5)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ELEANOR                          Bonjour, monsieur!"},
-                                {true, true, 00, "                                                                  SCOUT                            Bonjour! Are you Eleanor?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui! It's nice to meet you."},
-                                {true, true, 00, "                                                                  ELEANOR                          This whole place was amazing!"},
-                                {true, true, 00, "                                                                  SCOUT                            I tried to be honest in the ad."},
-                                {true, true, 00, "                                                                  ELEANOR                          Are you a wizard?"},
-                                {true, true, 00, "                                                                  SCOUT                            You could say that, yeah."},
-                                {true, true, 00, "                                                                  SCOUT                            I do a little of everything."},
-                                {true, true, 00, "                                                                  ELEANOR                          And you live underground?"},
-                                {true, true, 00, "                                                                  SCOUT                            I've got this machine that can"},
-                                {true, true, 00, "                                                                  SCOUT                            Drill bunkers really easy."},
-                                {true, true, 00, "                                                                  SCOUT                            I could keep drilling if I"},
-                                {true, true, 00, "                                                                  SCOUT                            really wanted to, you know."},
-                                {true, true, 00, "                                                                  ELEANOR                          That's so fascinating!"},
-                                {true, true, 00, "                                                                  SCOUT                            Aw, merci!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Tonight, will I see you at dinner?"},
-                                {true, true, 00, "                                                                  SCOUT                            Of course!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Wonderful!"},
+                                {true, true, 00, "ELEANOR                          Bonjour, monsieur!"},
+                                {true, true, 00, "SCOUT                            Bonjour! Are you Eleanor?"},
+                                {true, true, 00, "ELEANOR                          Oui! It's nice to meet you."},
+                                {true, true, 00, "ELEANOR                          This whole place was amazing!"},
+                                {true, true, 00, "SCOUT                            I tried to be honest in the ad."},
+                                {true, true, 00, "ELEANOR                          Are you a wizard?"},
+                                {true, true, 00, "SCOUT                            You could say that, yeah."},
+                                {true, true, 00, "SCOUT                            I do a little of everything."},
+                                {true, true, 00, "ELEANOR                          And you live underground?"},
+                                {true, true, 00, "SCOUT                            I've got this machine that can"},
+                                {true, true, 00, "SCOUT                            Drill bunkers really easy."},
+                                {true, true, 00, "SCOUT                            I could keep drilling if I"},
+                                {true, true, 00, "SCOUT                            really wanted to, you know."},
+                                {true, true, 00, "ELEANOR                          That's so fascinating!"},
+                                {true, true, 00, "SCOUT                            Aw, merci!"},
+                                {true, true, 00, "ELEANOR                          Tonight, will I see you at dinner?"},
+                                {true, true, 00, "SCOUT                            Of course!"},
+                                {true, true, 00, "ELEANOR                          Wonderful!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7365,24 +7742,24 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else if (me == 6)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Bonjour! Hey, are you Scout?"},
-                                {true, true, 00, "                                                                  SCOUT                            Bonjour! Are you Diana?"},
-                                {true, true, 00, "                                                                  DIANA                            Oui! Nice to finally meet 'ya!"},
-                                {true, true, 00, "                                                                  DIANA                            Man, this place is SICK!"},
-                                {true, true, 00, "                                                                  SCOUT                            I tried to be honest in the ad."},
-                                {true, true, 00, "                                                                  DIANA                            Are you a scientist or something?"},
-                                {true, true, 00, "                                                                  SCOUT                            You could say that, yeah."},
-                                {true, true, 00, "                                                                  SCOUT                            I do a little of everything."},
-                                {true, true, 00, "                                                                  DIANA                            And you live underground?"},
-                                {true, true, 00, "                                                                  SCOUT                            I've got this machine that can"},
-                                {true, true, 00, "                                                                  SCOUT                            Drill bunkers really easy."},
-                                {true, true, 00, "                                                                  SCOUT                            I could keep drilling if I"},
-                                {true, true, 00, "                                                                  SCOUT                            really wanted to, you know."},
-                                {true, true, 00, "                                                                  DIANA                            Aw, that's so cool!"},
-                                {true, true, 00, "                                                                  SCOUT                            Merci!"},
-                                {true, true, 00, "                                                                  DIANA                            You coming to dinner?"},
-                                {true, true, 00, "                                                                  SCOUT                            Of course!"},
-                                {true, true, 00, "                                                                  DIANA                            Sweet!"},
+                                {true, true, 00, "DIANA                            Bonjour! Hey, are you Scout?"},
+                                {true, true, 00, "SCOUT                            Bonjour! Are you Diana?"},
+                                {true, true, 00, "DIANA                            Oui! Nice to finally meet 'ya!"},
+                                {true, true, 00, "DIANA                            Man, this place is SICK!"},
+                                {true, true, 00, "SCOUT                            I tried to be honest in the ad."},
+                                {true, true, 00, "DIANA                            Are you a scientist or something?"},
+                                {true, true, 00, "SCOUT                            You could say that, yeah."},
+                                {true, true, 00, "SCOUT                            I do a little of everything."},
+                                {true, true, 00, "DIANA                            And you live underground?"},
+                                {true, true, 00, "SCOUT                            I've got this machine that can"},
+                                {true, true, 00, "SCOUT                            Drill bunkers really easy."},
+                                {true, true, 00, "SCOUT                            I could keep drilling if I"},
+                                {true, true, 00, "SCOUT                            really wanted to, you know."},
+                                {true, true, 00, "DIANA                            Aw, that's so cool!"},
+                                {true, true, 00, "SCOUT                            Merci!"},
+                                {true, true, 00, "DIANA                            You coming to dinner?"},
+                                {true, true, 00, "SCOUT                            Of course!"},
+                                {true, true, 00, "DIANA                            Sweet!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7390,11 +7767,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  (I wish I could make something   that would make me happy.)"},
-                                {true, true, 00, "                                                                  (All that school and everything, but here I am, and...)"},
-                                {true, true, 00, "                                                                  (I dunno. I move on from one     thing to the next thing,)"},
-                                {true, true, 00, "                                                                  (I can't go anywhere without     immediately wanting to jump.)"},
-                                {true, true, 00, "                                                                  (I just wanna be happy where I amfor once.)"},
+                                {true, true, 00, "(I wish I could make something   that would make me happy.)"},
+                                {true, true, 00, "(All that school and everything, but here I am, and...)"},
+                                {true, true, 00, "(I dunno. I move on from one     thing to the next thing,)"},
+                                {true, true, 00, "(I can't go anywhere without     immediately wanting to jump.)"},
+                                {true, true, 00, "(I just wanna be happy where I amfor once.)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7405,11 +7782,11 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (me < 7)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Careful!!"},
-                                {true, true, 00, "                                                                  SCOUT                            Some of this stuff is"},
-                                {true, true, 00, "                                                                  SCOUT                            SUPER SUPER toxic!"},
-                                {true, true, 00, "                                                                  SCOUT                            Oh, well you already knew that."},
-                                {true, true, 00, "                                                                  SCOUT                            At least I hope so."},
+                                {true, true, 00, "SCOUT                            Careful!!"},
+                                {true, true, 00, "SCOUT                            Some of this stuff is"},
+                                {true, true, 00, "SCOUT                            SUPER SUPER toxic!"},
+                                {true, true, 00, "SCOUT                            Oh, well you already knew that."},
+                                {true, true, 00, "SCOUT                            At least I hope so."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7417,22 +7794,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         else
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Bonjour! You're Guy, right?"},
-                                {true, true, 00, "                                                                  GUY                              Oui. So you're Scout?"},
-                                {true, true, 00, "                                                                  SCOUT                            Bienvenu! You like your cabin?"},
-                                {true, true, 00, "                                                                  GUY                              You weren't kidding about the"},
-                                {true, true, 00, "                                                                  GUY                              kitchen, huh?"},
-                                {true, true, 00, "                                                                  SCOUT                            Not a bit!"},
-                                {true, true, 00, "                                                                  GUY                              There don't seem to be too many"},
-                                {true, true, 00, "                                                                  GUY                              people here, and you know that"},
-                                {true, true, 00, "                                                                  GUY                              I ain't gonna be making a ton of"},
-                                {true, true, 00, "                                                                  GUY                              food without customers."},
-                                {true, true, 00, "                                                                  GUY                              How soon it is gonna be before we"},
-                                {true, true, 00, "                                                                  GUY                              get a ton of new people here?"},
-                                {true, true, 00, "                                                                  SCOUT                            Oh, it shouldn't be too long."},
-                                {true, true, 00, "                                                                  GUY                              And I can hold you to that?"},
-                                {true, true, 00, "                                                                  SCOUT                            Sans doute."},
-                                {true, true, 00, "                                                                  GUY                              Tres bien alors."},
+                                {true, true, 00, "SCOUT                            Bonjour! You're Guy, right?"},
+                                {true, true, 00, "GUY                              Oui. So you're Scout?"},
+                                {true, true, 00, "SCOUT                            Bienvenu! You like your cabin?"},
+                                {true, true, 00, "GUY                              You weren't kidding about the"},
+                                {true, true, 00, "GUY                              kitchen, huh?"},
+                                {true, true, 00, "SCOUT                            Not a bit!"},
+                                {true, true, 00, "GUY                              There don't seem to be too many"},
+                                {true, true, 00, "GUY                              people here, and you know that"},
+                                {true, true, 00, "GUY                              I ain't gonna be making a ton of"},
+                                {true, true, 00, "GUY                              food without customers."},
+                                {true, true, 00, "GUY                              How soon it is gonna be before we"},
+                                {true, true, 00, "GUY                              get a ton of new people here?"},
+                                {true, true, 00, "SCOUT                            Oh, it shouldn't be too long."},
+                                {true, true, 00, "GUY                              And I can hold you to that?"},
+                                {true, true, 00, "SCOUT                            Sans doute."},
+                                {true, true, 00, "GUY                              Tres bien alors."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7442,18 +7819,18 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     {
                         so->checkpoint = 13;
                         line lc[32] = {
-                            {true, true, 00, "                                                                  ENOKI                            Salut? Scout, you down here?    "},
-                            {true, true, 00, "                                                                  SCOUT                            Yeah! We're here! Where's        Aaron?"},
-                            {true, true, 00, "                                                                  ENOKI                            He's out trying to check on      the others."},
-                            {true, true, 00, "                                                                  SCOUT                            Thank goodness. Hey, Maple-      are you feeling alright? You    "},
-                            {true, true, 00, "                                                                  SCOUT                            look really tired."},
-                            {true, true, 00, "                                                                  MAPLE                            You shut up about me being       tired, I've had ENOUGH of that  "},
-                            {true, true, 00, "                                                                  MAPLE                            this morning."},
-                            {true, true, 00, "                                                                  SCOUT                            Oh- Okay, sure."},
-                            {true, true, 00, "                                                                  SCOUT                            Hey Enoki, what's it look        like up there?"},
-                            {true, true, 00, "                                                                  ENOKI                            Fine, it's just... there's this  weird, loud noise."},
-                            {true, true, 00, "                                                                  ENOKI                            Aaron got spooked and wanted us  to be safe."},
-                            {true, true, 00, "                                                                  SCOUT                            I trust his intuition."},
+                            {true, true, 00, "ENOKI                            Salut? Scout, you down here?    "},
+                            {true, true, 00, "SCOUT                            Yeah! We're here! Where's        Aaron?"},
+                            {true, true, 00, "ENOKI                            He's out trying to check on      the others."},
+                            {true, true, 00, "SCOUT                            Thank goodness. Hey, Maple-      are you feeling alright? You    "},
+                            {true, true, 00, "SCOUT                            look really tired."},
+                            {true, true, 00, "MAPLE                            You shut up about me being       tired, I've had ENOUGH of that  "},
+                            {true, true, 00, "MAPLE                            this morning."},
+                            {true, true, 00, "SCOUT                            Oh- Okay, sure."},
+                            {true, true, 00, "SCOUT                            Hey Enoki, what's it look        like up there?"},
+                            {true, true, 00, "ENOKI                            Fine, it's just... there's this  weird, loud noise."},
+                            {true, true, 00, "ENOKI                            Aaron got spooked and wanted us  to be safe."},
+                            {true, true, 00, "SCOUT                            I trust his intuition."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
 
@@ -7496,37 +7873,37 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (true)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            What the heck is going           on outside?"},
-                                {true, true, 00, "                                                                  SCOUT                            It's Rufus. I think he ate       something weird."},
-                                {true, true, 00, "                                                                  ENOKI                            Hehe, I get like that after      some of Guy's cooking, too.     "},
-                                {true, true, 00, "                                                                  SCOUT                            No, I'm being serious. It has to do with my research."},
-                                {true, true, 00, "                                                                  AARON                            Oh, so we finally get to know    what the mysterious bunker      "},
-                                {true, true, 00, "                                                                  AARON                            scientist has been doing for     the past few months?"},
-                                {true, true, 00, "                                                                  SCOUT                            I'm a dirt scientist, but I'm    also something else..."},
-                                {true, true, 00, "                                                                  SCOUT                            I'm a plant scientist."},
-                                {true, true, 00, "                                                                  ENOKI                            Say it ain't so!"},
-                                {true, true, 00, "                                                                  OLIVIER                          And you didn't tell me?"},
-                                {true, true, 00, "                                                                  SCOUT                            No, it was confidential."},
-                                {true, true, 00, "                                                                  SCOUT                            See, there's this... plant. It   grows natively to these"},
-                                {true, true, 00, "                                                                  SCOUT                            islands, and many people         believe it to be magic. It      "},
-                                {true, true, 00, "                                                                  SCOUT                            makes you see things."},
-                                {true, true, 00, "                                                                  ENOKI                            Like mushrooms?"},
-                                {true, true, 00, "                                                                  SCOUT                            Mushrooms make everyone see      different things. This flower   "},
-                                {true, true, 00, "                                                                  SCOUT                            makes everyone see the SAME      thing. That's why we're"},
-                                {true, true, 00, "                                                                  SCOUT                            studying it. It's not just a     trip, there's something going   "},
-                                {true, true, 00, "                                                                  SCOUT                            on."},
-                                {true, true, 00, "                                                                  SCOUT                            Everyone who takes one acts      differently, but it's not       "},
-                                {true, true, 00, "                                                                  SCOUT                            because of a chemical            imbalance. It's as if what they "},
-                                {true, true, 00, "                                                                  SCOUT                            see is so troubling, so          life-shattering, that they're   "},
-                                {true, true, 00, "                                                                  SCOUT                            different people on the other    end."},
-                                {true, true, 00, "                                                                  ELEANOR                          What do they see, then?"},
-                                {true, true, 00, "                                                                  SCOUT                            Nobody knows. They never tell    anyone anything."},
-                                {true, true, 00, "                                                                  SCOUT                            Everyone who takes it gets a     small blue ring around their    "},
-                                {true, true, 00, "                                                                  SCOUT                            eyes. They don't seem to last    forever, but it's how you can   "},
-                                {true, true, 00, "                                                                  SCOUT                            tell. I was looking at that      footage of Rufus, and sure      "},
-                                {true, true, 00, "                                                                  SCOUT                            enough... blue ring."},
-                                {true, true, 00, "                                                                  AARON                            And so he's decided to become    a supervillain or something?    "},
-                                {true, true, 00, "                                                                  SCOUT                            I don't know. Rufus isn't        very.. big, you know? So maybe- "},
+                                {true, true, 00, "AARON                            What the heck is going           on outside?"},
+                                {true, true, 00, "SCOUT                            It's Rufus. I think he ate       something weird."},
+                                {true, true, 00, "ENOKI                            Hehe, I get like that after      some of Guy's cooking, too.     "},
+                                {true, true, 00, "SCOUT                            No, I'm being serious. It has to do with my research."},
+                                {true, true, 00, "AARON                            Oh, so we finally get to know    what the mysterious bunker      "},
+                                {true, true, 00, "AARON                            scientist has been doing for     the past few months?"},
+                                {true, true, 00, "SCOUT                            I'm a dirt scientist, but I'm    also something else..."},
+                                {true, true, 00, "SCOUT                            I'm a plant scientist."},
+                                {true, true, 00, "ENOKI                            Say it ain't so!"},
+                                {true, true, 00, "OLIVIER                          And you didn't tell me?"},
+                                {true, true, 00, "SCOUT                            No, it was confidential."},
+                                {true, true, 00, "SCOUT                            See, there's this... plant. It   grows natively to these"},
+                                {true, true, 00, "SCOUT                            islands, and many people         believe it to be magic. It      "},
+                                {true, true, 00, "SCOUT                            makes you see things."},
+                                {true, true, 00, "ENOKI                            Like mushrooms?"},
+                                {true, true, 00, "SCOUT                            Mushrooms make everyone see      different things. This flower   "},
+                                {true, true, 00, "SCOUT                            makes everyone see the SAME      thing. That's why we're"},
+                                {true, true, 00, "SCOUT                            studying it. It's not just a     trip, there's something going   "},
+                                {true, true, 00, "SCOUT                            on."},
+                                {true, true, 00, "SCOUT                            Everyone who takes one acts      differently, but it's not       "},
+                                {true, true, 00, "SCOUT                            because of a chemical            imbalance. It's as if what they "},
+                                {true, true, 00, "SCOUT                            see is so troubling, so          life-shattering, that they're   "},
+                                {true, true, 00, "SCOUT                            different people on the other    end."},
+                                {true, true, 00, "ELEANOR                          What do they see, then?"},
+                                {true, true, 00, "SCOUT                            Nobody knows. They never tell    anyone anything."},
+                                {true, true, 00, "SCOUT                            Everyone who takes it gets a     small blue ring around their    "},
+                                {true, true, 00, "SCOUT                            eyes. They don't seem to last    forever, but it's how you can   "},
+                                {true, true, 00, "SCOUT                            tell. I was looking at that      footage of Rufus, and sure      "},
+                                {true, true, 00, "SCOUT                            enough... blue ring."},
+                                {true, true, 00, "AARON                            And so he's decided to become    a supervillain or something?    "},
+                                {true, true, 00, "SCOUT                            I don't know. Rufus isn't        very.. big, you know? So maybe- "},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -7535,17 +7912,17 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         {
                             bn::sound_items::knock.play();
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Uhh.... I think something's at   the door."},
-                                {true, true, 00, "                                                                  AARON                            I've got my axe."},
-                                {true, true, 00, "                                                                  SCOUT                            Hey, I tell you guys what.       You know that bunker maker that "},
-                                {true, true, 00, "                                                                  SCOUT                            I have?"},
-                                {true, true, 00, "                                                                  AARON                            Yeah...?"},
-                                {true, true, 00, "                                                                  SCOUT                            I'll tell y'all what. Why        don't we bunker our way away    "},
-                                {true, true, 00, "                                                                  SCOUT                            from the island? I was already   planning on making a tunnel to  "},
-                                {true, true, 00, "                                                                  SCOUT                            shore."},
-                                {true, true, 00, "                                                                  SCOUT                            (I was hoping to save that one   for the Scout Expo, but, uh..)"},
-                                {true, true, 00, "                                                                  SCOUT                            (I guess I don't really have an  option now do I.)"},
-                                {true, true, 00, "                                                                  ELEANOR                          Is that safe?"},
+                                {true, true, 00, "SCOUT                            Uhh.... I think something's at   the door."},
+                                {true, true, 00, "AARON                            I've got my axe."},
+                                {true, true, 00, "SCOUT                            Hey, I tell you guys what.       You know that bunker maker that "},
+                                {true, true, 00, "SCOUT                            I have?"},
+                                {true, true, 00, "AARON                            Yeah...?"},
+                                {true, true, 00, "SCOUT                            I'll tell y'all what. Why        don't we bunker our way away    "},
+                                {true, true, 00, "SCOUT                            from the island? I was already   planning on making a tunnel to  "},
+                                {true, true, 00, "SCOUT                            shore."},
+                                {true, true, 00, "SCOUT                            (I was hoping to save that one   for the Scout Expo, but, uh..)"},
+                                {true, true, 00, "SCOUT                            (I guess I don't really have an  option now do I.)"},
+                                {true, true, 00, "ELEANOR                          Is that safe?"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -7556,8 +7933,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                             bn::sound_items::boom.play();
 
                             line lc[3] = {
-                                {true, true, 00, "                                                                  SCOUT                            Actually let's just go."},
-                                {true, true, 00, "                                                                  ENOKI                            Allons-zi?"},
+                                {true, true, 00, "SCOUT                            Actually let's just go."},
+                                {true, true, 00, "ENOKI                            Allons-zi?"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -7656,10 +8033,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 40:
                 {
                     line lc[5] = {
-                        {true, true, 00, "                                                                  You stare at the art."},
-                        {true, true, 00, "                                                                  And as such...."},
-                        {true, true, 00, "                                                                  So the art stares unto you."},
-                        {true, true, 00, "                                                                  Art is weird."},
+                        {true, true, 00, "You stare at the art.                                             It's cool.   Yeah I don't care.", 2},
+                        {true, true, 00, "And as such...."},
+                        {true, true, 00, "So the art stares unto you."},
+                        {true, true, 00, "Art is weird."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -7668,7 +8045,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 41:
                 {
                     line lc[5] = {
-                        {true, true, 00, "                                                                  - MORE HOUSES THIS WAY -"},
+                        {true, true, 00, "- MORE HOUSES THIS WAY -"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -7685,7 +8062,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     else
                     {
                         line lc[5] = {
-                            {true, true, 00, "                                                                  MAPLE                            Probably should go to Scout's."},
+                            {true, true, 00, "MAPLE                            Probably should go to Scout's."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -7703,10 +8080,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 44:
                 {
                     line lc[5] = {
-                        {true, true, 00, "                                                                   - WISHING POND -                DOESN'T WORK BUT FEEL FREE TO USEIT IF YOU'RE DESPERATE"},
-                        {true, true, 00, "                                                                  The rocks in the way don't even  let you get a great view."},
-                        {true, true, 00, "                                                                  Maybe if you could see over the  rocks, you could throw a coin in to make a wish."},
-                        {true, true, 00, "                                                                  This wasn't thought through very well."},
+                        {true, true, 00, " - WISHING POND -                DOESN'T WORK BUT FEEL FREE TO USEIT IF YOU'RE DESPERATE"},
+                        {true, true, 00, "The rocks in the way don't even  let you get a great view."},
+                        {true, true, 00, "Maybe if you could see over the  rocks, you could throw a coin in to make a wish."},
+                        {true, true, 00, "This wasn't thought through very well."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -7715,7 +8092,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 45:
                 {
                     line lc[5] = {
-                        {true, true, 00, "                                                                   - LE MAISON DE LANDRY -"},
+                        {true, true, 00, " - LE MAISON DE LANDRY -"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -7723,8 +8100,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 46:
                 {
                     line lc[5] = {
-                        {true, true, 00, "                                                                   - DIANA -"},
-                        {true, true, 00, "                                                                  Either refers to the house or    the person."},
+                        {true, true, 00, " - DIANA -"},
+                        {true, true, 00, "Either refers to the house or    the person."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -7736,8 +8113,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     if (so->checkpoint < 10)
                     {
                         line lc[5] = {
-                            {true, true, 00, "                                                                   - SOME RANDOM GUY'S HOUSE -"},
-                            {true, true, 00, "                                                                  No one has moved in yet, you see."},
+                            {true, true, 00, " - SOME RANDOM GUY'S HOUSE -"},
+                            {true, true, 00, "No one has moved in yet, you see."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -7745,8 +8122,8 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     else
                     {
                         line lc[5] = {
-                            {true, true, 00, "                                                                   - GUY'S HOUSE -"},
-                            {true, true, 00, "                                                                  Someone named guy has moved in,  you see."},
+                            {true, true, 00, " - GUY'S HOUSE -"},
+                            {true, true, 00, "Someone named guy has moved in,  you see."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -7804,7 +8181,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 54:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  ~ JARGINS NOIRS ~"},
+                        {true, true, 00, "~ JARGINS NOIRS ~"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -7825,29 +8202,29 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 0:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Oh, hey. So you're Eleanor?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui! Enchante de faire votre     connaissance."},
-                                {true, true, 00, "                                                                  MAPLE                            Egalement. You seem...           No offense,"},
-                                {true, true, 00, "                                                                  MAPLE                            A little old-fashioned?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh, it's just what we're used to."},
-                                {true, true, 00, "                                                                  ELEANOR                          It's so nice to be so far away"},
-                                {true, true, 00, "                                                                  ELEANOR                          from the city again. I had       forgotten how"},
-                                {true, true, 00, "                                                                  ELEANOR                          sentimental I was for the trees."},
-                                {true, true, 00, "                                                                  MAPLE                            I see. And you're her husband,   j'suppose?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Oui, I'm Olivier."},
-                                {true, true, 00, "                                                                  ELEANOR                          He doesn't always talk much, but he makes it count."},
-                                {true, true, 00, "                                                                  ELEANOR                          I met him in a garden, and he    taught me how to read."},
-                                {true, true, 00, "                                                                  OLIVIER                          She's more special, though. She  just about saved my life."},
-                                {true, true, 00, "                                                                  MAPLE                            Oh, how so?"},
-                                {true, true, 00, "                                                                  OLIVIER                          It's not important-"},
-                                {true, true, 00, "                                                                  ELEANOR                          From my mother."},
-                                {true, true, 00, "                                                                  MAPLE                            Ah, I know how that is, haha."},
-                                {true, true, 00, "                                                                  ELEANOR                          You do? She was going to drain   all his blood for a ritual."},
-                                {true, true, 00, "                                                                  MAPLE                            I... Hmm, well, alright then.    That's.. not what I expected."},
-                                {true, true, 00, "                                                                  MAPLE                            Nice to meet y'all, I guess?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Bien sur! I'm baking your family a pie right now as our 'merci'."},
-                                {true, true, 00, "                                                                  MAPLE                            C'est bon, just no, uh, weird    ingredients, haha."},
-                                {true, true, 00, "                                                                  MAPLE                            (What was Scout thinking invitingthese weirdos?!)"},
+                                {true, true, 00, "MAPLE                            Oh, hey. So you're Eleanor?"},
+                                {true, true, 00, "ELEANOR                          Oui! Enchante de faire votre     connaissance."},
+                                {true, true, 00, "MAPLE                            Egalement. You seem...           No offense,"},
+                                {true, true, 00, "MAPLE                            A little old-fashioned?"},
+                                {true, true, 00, "ELEANOR                          Oh, it's just what we're used to."},
+                                {true, true, 00, "ELEANOR                          It's so nice to be so far away"},
+                                {true, true, 00, "ELEANOR                          from the city again. I had       forgotten how"},
+                                {true, true, 00, "ELEANOR                          sentimental I was for the trees."},
+                                {true, true, 00, "MAPLE                            I see. And you're her husband,   j'suppose?"},
+                                {true, true, 00, "OLIVIER                          Oui, I'm Olivier."},
+                                {true, true, 00, "ELEANOR                          He doesn't always talk much, but he makes it count."},
+                                {true, true, 00, "ELEANOR                          I met him in a garden, and he    taught me how to read."},
+                                {true, true, 00, "OLIVIER                          She's more special, though. She  just about saved my life."},
+                                {true, true, 00, "MAPLE                            Oh, how so?"},
+                                {true, true, 00, "OLIVIER                          It's not important-"},
+                                {true, true, 00, "ELEANOR                          From my mother."},
+                                {true, true, 00, "MAPLE                            Ah, I know how that is, haha."},
+                                {true, true, 00, "ELEANOR                          You do? She was going to drain   all his blood for a ritual."},
+                                {true, true, 00, "MAPLE                            I... Hmm, well, alright then.    That's.. not what I expected."},
+                                {true, true, 00, "MAPLE                            Nice to meet y'all, I guess?"},
+                                {true, true, 00, "ELEANOR                          Bien sur! I'm baking your family a pie right now as our 'merci'."},
+                                {true, true, 00, "MAPLE                            C'est bon, just no, uh, weird    ingredients, haha."},
+                                {true, true, 00, "MAPLE                            (What was Scout thinking invitingthese weirdos?!)"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7856,21 +8233,21 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 1:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ENOKI                            Bienvenue, y'all!! Je suis Enoki!Ravie de vous-autres rencontrer!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Bonjour! Enchante de faire votre connaissance."},
-                                {true, true, 00, "                                                                  OLIVIER                          Bonjour!"},
-                                {true, true, 00, "                                                                  ELEANOR                          I'm Eleanor, and this is my      husband Olivier."},
-                                {true, true, 00, "                                                                  ENOKI                            I love your dress!! Where did youget it from?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh! I made it myself. I love yourdress, too!"},
-                                {true, true, 00, "                                                                  ENOKI                            That's soo cool!!"},
-                                {true, true, 00, "                                                                  ENOKI                            We look like we're about the samesize, maybe we can trade someday!"},
-                                {true, true, 00, "                                                                  OLIVIER                          So, Scout said that you and your husband are royalty?"},
-                                {true, true, 00, "                                                                  ENOKI                            Oh yes! This is our little       kingdom, but we're not cruel."},
-                                {true, true, 00, "                                                                  ENOKI                            I'm like the chillest queen      you'll ever meet."},
-                                {true, true, 00, "                                                                  ENOKI                            You guys wanna be a duke and     duchess?"},
-                                {true, true, 00, "                                                                  ELEANOR                          I.. no thank you, I don't think  I know what those are."},
-                                {true, true, 00, "                                                                  OLIVIER                          Merci, en tout cas."},
-                                {true, true, 00, "                                                                  ENOKI                            Bien sur! N'importe quand!"},
+                                {true, true, 00, "ENOKI                            Bienvenue, y'all!! Je suis Enoki!Ravie de vous-autres rencontrer!"},
+                                {true, true, 00, "ELEANOR                          Bonjour! Enchante de faire votre connaissance."},
+                                {true, true, 00, "OLIVIER                          Bonjour!"},
+                                {true, true, 00, "ELEANOR                          I'm Eleanor, and this is my      husband Olivier."},
+                                {true, true, 00, "ENOKI                            I love your dress!! Where did youget it from?"},
+                                {true, true, 00, "ELEANOR                          Oh! I made it myself. I love yourdress, too!"},
+                                {true, true, 00, "ENOKI                            That's soo cool!!"},
+                                {true, true, 00, "ENOKI                            We look like we're about the samesize, maybe we can trade someday!"},
+                                {true, true, 00, "OLIVIER                          So, Scout said that you and your husband are royalty?"},
+                                {true, true, 00, "ENOKI                            Oh yes! This is our little       kingdom, but we're not cruel."},
+                                {true, true, 00, "ENOKI                            I'm like the chillest queen      you'll ever meet."},
+                                {true, true, 00, "ENOKI                            You guys wanna be a duke and     duchess?"},
+                                {true, true, 00, "ELEANOR                          I.. no thank you, I don't think  I know what those are."},
+                                {true, true, 00, "OLIVIER                          Merci, en tout cas."},
+                                {true, true, 00, "ENOKI                            Bien sur! N'importe quand!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7879,26 +8256,26 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 2:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            Bienvenu! Olivier and Eleanor,   I presume?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui oui!"},
-                                {true, true, 00, "                                                                  OLIVIER                          So, I take it that you're 'king' of this island?"},
-                                {true, true, 00, "                                                                  AARON                            Is that what Scout told you?     I suppose you could say that."},
-                                {true, true, 00, "                                                                  AARON                            I never graduated high school,   so I'm not cut out for anything"},
-                                {true, true, 00, "                                                                  AARON                            but work like this, but I didn't want to spend my life in a"},
-                                {true, true, 00, "                                                                  AARON                            factory. So, my wife Enoki and I had the idea to spend our savings"},
-                                {true, true, 00, "                                                                  AARON                            on some land and live off the    grid. The 'royalty' thing was"},
-                                {true, true, 00, "                                                                  AARON                            her idea, and she was very cute  about it, so I had to say yes."},
-                                {true, true, 00, "                                                                  AARON                            She's probably offered           aristocratic roles to y'all."},
-                                {true, true, 00, "                                                                  OLIVIER                          Oh - Aaron, was it? Thank you forclearing out the area for the"},
-                                {true, true, 00, "                                                                  OLIVIER                          greenhouse. I'll be able to grow all sorts of things to share."},
-                                {true, true, 00, "                                                                  ELEANOR                          And I adore this cabin! In a goodway, it reminds me of home."},
-                                {true, true, 00, "                                                                  ELEANOR                          Vee and I were so excited to hearabout this island."},
-                                {true, true, 00, "                                                                  AARON                            Well, we're all very happy to    have you as well!"},
-                                {true, true, 00, "                                                                  AARON                            If my little sister gives either of you a hard time,"},
-                                {true, true, 00, "                                                                  AARON                            She doesn't mean anything by it, I promise."},
-                                {true, true, 00, "                                                                  AARON                            Hop on by to trailer tonight,    we'll have some dinner ready."},
-                                {true, true, 00, "                                                                  OLIVIER                          Encore une fois, je vous remerciesincerement."},
-                                {true, true, 00, "                                                                  AARON                            We're family, now - please, 'tu' is plenty."},
+                                {true, true, 00, "AARON                            Bienvenu! Olivier and Eleanor,   I presume?"},
+                                {true, true, 00, "ELEANOR                          Oui oui!"},
+                                {true, true, 00, "OLIVIER                          So, I take it that you're 'king' of this island?"},
+                                {true, true, 00, "AARON                            Is that what Scout told you?     I suppose you could say that."},
+                                {true, true, 00, "AARON                            I never graduated high school,   so I'm not cut out for anything"},
+                                {true, true, 00, "AARON                            but work like this, but I didn't want to spend my life in a"},
+                                {true, true, 00, "AARON                            factory. So, my wife Enoki and I had the idea to spend our savings"},
+                                {true, true, 00, "AARON                            on some land and live off the    grid. The 'royalty' thing was"},
+                                {true, true, 00, "AARON                            her idea, and she was very cute  about it, so I had to say yes."},
+                                {true, true, 00, "AARON                            She's probably offered           aristocratic roles to y'all."},
+                                {true, true, 00, "OLIVIER                          Oh - Aaron, was it? Thank you forclearing out the area for the"},
+                                {true, true, 00, "OLIVIER                          greenhouse. I'll be able to grow all sorts of things to share."},
+                                {true, true, 00, "ELEANOR                          And I adore this cabin! In a goodway, it reminds me of home."},
+                                {true, true, 00, "ELEANOR                          Vee and I were so excited to hearabout this island."},
+                                {true, true, 00, "AARON                            Well, we're all very happy to    have you as well!"},
+                                {true, true, 00, "AARON                            If my little sister gives either of you a hard time,"},
+                                {true, true, 00, "AARON                            She doesn't mean anything by it, I promise."},
+                                {true, true, 00, "AARON                            Hop on by to trailer tonight,    we'll have some dinner ready."},
+                                {true, true, 00, "OLIVIER                          Encore une fois, je vous remerciesincerement."},
+                                {true, true, 00, "AARON                            We're family, now - please, 'tu' is plenty."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7907,26 +8284,26 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 3:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, y'all! I'm Scout, from      online?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Ah! Enchante de faire votre      connaissance."},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh... But from your picture, I   thought that you..."},
-                                {true, true, 00, "                                                                  SCOUT                            You thought that I what?"},
-                                {true, true, 00, "                                                                  ELEANOR                          I thought you were a skeleton."},
-                                {true, true, 00, "                                                                  SCOUT                            Oh- Well, that's just 'cuz I use the photo of a character I like."},
-                                {true, true, 00, "                                                                  SCOUT                            There's this skeleton from a     comic named Seemore."},
-                                {true, true, 00, "                                                                  SCOUT                            He's got magic powers and a- wellmaybe I should just let you"},
-                                {true, true, 00, "                                                                  SCOUT                            read the comic, it's a ton of    fun."},
-                                {true, true, 00, "                                                                  ELEANOR                          What's a comic?"},
-                                {true, true, 00, "                                                                  SCOUT                            I... huh, I've never had to      answer that question before."},
-                                {true, true, 00, "                                                                  SCOUT                            They're like books, but they've  got pictures, but-"},
-                                {true, true, 00, "                                                                  ELEANOR                          Those sound so cool!"},
-                                {true, true, 00, "                                                                  OLIVIER                          Eleanor was raised in a cult, so she doesn't know much about"},
-                                {true, true, 00, "                                                                  OLIVIER                          the outside world. That's one of the reasons we wanted to move"},
-                                {true, true, 00, "                                                                  OLIVIER                          here, so we could have a little  break from her extended family."},
-                                {true, true, 00, "                                                                  SCOUT                            Oh.. Well, crap. Welcome to the  island, I guess."},
-                                {true, true, 00, "                                                                  SCOUT                            Queen Enoki's got dibs on my     latest Time Raiders,"},
-                                {true, true, 00, "                                                                  SCOUT                            But when she's done, I'll        definitely get you the copy."},
-                                {true, true, 00, "                                                                  ELEANOR                          Merci!!"},
+                                {true, true, 00, "SCOUT                            Hey, y'all! I'm Scout, from      online?"},
+                                {true, true, 00, "OLIVIER                          Ah! Enchante de faire votre      connaissance."},
+                                {true, true, 00, "ELEANOR                          Oh... But from your picture, I   thought that you..."},
+                                {true, true, 00, "SCOUT                            You thought that I what?"},
+                                {true, true, 00, "ELEANOR                          I thought you were a skeleton."},
+                                {true, true, 00, "SCOUT                            Oh- Well, that's just 'cuz I use the photo of a character I like."},
+                                {true, true, 00, "SCOUT                            There's this skeleton from a     comic named Seemore."},
+                                {true, true, 00, "SCOUT                            He's got magic powers and a- wellmaybe I should just let you"},
+                                {true, true, 00, "SCOUT                            read the comic, it's a ton of    fun."},
+                                {true, true, 00, "ELEANOR                          What's a comic?"},
+                                {true, true, 00, "SCOUT                            I... huh, I've never had to      answer that question before."},
+                                {true, true, 00, "SCOUT                            They're like books, but they've  got pictures, but-"},
+                                {true, true, 00, "ELEANOR                          Those sound so cool!"},
+                                {true, true, 00, "OLIVIER                          Eleanor was raised in a cult, so she doesn't know much about"},
+                                {true, true, 00, "OLIVIER                          the outside world. That's one of the reasons we wanted to move"},
+                                {true, true, 00, "OLIVIER                          here, so we could have a little  break from her extended family."},
+                                {true, true, 00, "SCOUT                            Oh.. Well, crap. Welcome to the  island, I guess."},
+                                {true, true, 00, "SCOUT                            Queen Enoki's got dibs on my     latest Time Raiders,"},
+                                {true, true, 00, "SCOUT                            But when she's done, I'll        definitely get you the copy."},
+                                {true, true, 00, "ELEANOR                          Merci!!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7940,32 +8317,32 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 5:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          Eleanor, why'd you turn the stoveon? Aren't we eating with"},
-                                {true, true, 00, "                                                                  OLIVIER                          the Tremblays tonight?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh, yes yes, I just couldn't helpmyself."},
-                                {true, true, 00, "                                                                  ELEANOR                          I haven't seen a stove like this since I was so little."},
-                                {true, true, 00, "                                                                  ELEANOR                          I wanted to try and make some    toast."},
-                                {true, true, 00, "                                                                  OLIVIER                          What do you think of this place?"},
-                                {true, true, 00, "                                                                  OLIVIER                          There aren't many people, are yougoing to get lonely?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Well, are you going to be lonely?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I just wish my grandfather could see us, now."},
-                                {true, true, 00, "                                                                  OLIVIER                          I think he'd be so proud of you."},
-                                {true, true, 00, "                                                                  ELEANOR                          Maybe he can see us from heaven."},
-                                {true, true, 00, "                                                                  ELEANOR                          Maybe mama has changed in heaven and thinks well of you, now."},
-                                {true, true, 00, "                                                                  OLIVIER                          I don't suppose either of us can know, but I won't be lonely."},
-                                {true, true, 00, "                                                                  OLIVIER                          I haven't really been lonely     since I got to know you."},
-                                {true, true, 00, "                                                                  ELEANOR                          Vee, I hope that we don't ever   feel differently."},
-                                {true, true, 00, "                                                                  ELEANOR                          I've seen how my parents became. I already feel older."},
-                                {true, true, 00, "                                                                  ELEANOR                          I know that once we have our own enfants..."},
-                                {true, true, 00, "                                                                  OLIVIER                          How is your sister doing?"},
-                                {true, true, 00, "                                                                  ELEANOR                          She's always exhausted. She jokesabout grey hair, but I think"},
-                                {true, true, 00, "                                                                  ELEANOR                          she really does have grey hairs. But she's different."},
-                                {true, true, 00, "                                                                  ELEANOR                          The things she was so upset aboutare meaningless, now."},
-                                {true, true, 00, "                                                                  OLIVIER                          Maybe it'll be the same with us. Let's just be patient."},
-                                {true, true, 00, "                                                                  ELEANOR                          It'll be strange to have married friends our age. Do you think"},
-                                {true, true, 00, "                                                                  ELEANOR                          Diana will be jealous?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I think she'll have a great time here. S'il te plait detends-toi!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Je suppose que tu as raison, Vee."},
+                                {true, true, 00, "OLIVIER                          Eleanor, why'd you turn the stoveon? Aren't we eating with"},
+                                {true, true, 00, "OLIVIER                          the Tremblays tonight?"},
+                                {true, true, 00, "ELEANOR                          Oh, yes yes, I just couldn't helpmyself."},
+                                {true, true, 00, "ELEANOR                          I haven't seen a stove like this since I was so little."},
+                                {true, true, 00, "ELEANOR                          I wanted to try and make some    toast."},
+                                {true, true, 00, "OLIVIER                          What do you think of this place?"},
+                                {true, true, 00, "OLIVIER                          There aren't many people, are yougoing to get lonely?"},
+                                {true, true, 00, "ELEANOR                          Well, are you going to be lonely?"},
+                                {true, true, 00, "OLIVIER                          I just wish my grandfather could see us, now."},
+                                {true, true, 00, "OLIVIER                          I think he'd be so proud of you."},
+                                {true, true, 00, "ELEANOR                          Maybe he can see us from heaven."},
+                                {true, true, 00, "ELEANOR                          Maybe mama has changed in heaven and thinks well of you, now."},
+                                {true, true, 00, "OLIVIER                          I don't suppose either of us can know, but I won't be lonely."},
+                                {true, true, 00, "OLIVIER                          I haven't really been lonely     since I got to know you."},
+                                {true, true, 00, "ELEANOR                          Vee, I hope that we don't ever   feel differently."},
+                                {true, true, 00, "ELEANOR                          I've seen how my parents became. I already feel older."},
+                                {true, true, 00, "ELEANOR                          I know that once we have our own enfants..."},
+                                {true, true, 00, "OLIVIER                          How is your sister doing?"},
+                                {true, true, 00, "ELEANOR                          She's always exhausted. She jokesabout grey hair, but I think"},
+                                {true, true, 00, "ELEANOR                          she really does have grey hairs. But she's different."},
+                                {true, true, 00, "ELEANOR                          The things she was so upset aboutare meaningless, now."},
+                                {true, true, 00, "OLIVIER                          Maybe it'll be the same with us. Let's just be patient."},
+                                {true, true, 00, "ELEANOR                          It'll be strange to have married friends our age. Do you think"},
+                                {true, true, 00, "ELEANOR                          Diana will be jealous?"},
+                                {true, true, 00, "OLIVIER                          I think she'll have a great time here. S'il te plait detends-toi!"},
+                                {true, true, 00, "ELEANOR                          Je suppose que tu as raison, Vee."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -7974,22 +8351,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 6:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Aw, super! I love it, it's so    cozy in here."},
-                                {true, true, 00, "                                                                  DIANA                            I hope y'all don't mind me spend-ing ungodly amounts of time here."},
-                                {true, true, 00, "                                                                  ELEANOR                          Of course not! As long as you    don't mind helping sometimes."},
-                                {true, true, 00, "                                                                  OLIVIER                          Remember, living like this means that we're going to work hard."},
-                                {true, true, 00, "                                                                  OLIVIER                          I'll probably be spending most ofmy time chopping wood, or"},
-                                {true, true, 00, "                                                                  OLIVIER                          working out in the garden pullingweeds and watering."},
-                                {true, true, 00, "                                                                  ELEANOR                          You said that you were interestedin working for the boat captain?"},
-                                {true, true, 00, "                                                                  DIANA                            Oh, yes. I'll be going down to   the docks today, in fact."},
-                                {true, true, 00, "                                                                  DIANA                            Maybe I'll be a proper boat      captain before too long!"},
-                                {true, true, 00, "                                                                  ELEANOR                          I know you'll do great, Diana!"},
-                                {true, true, 00, "                                                                  OLIVIER                          This isn't what you thought you'dbe doing at 22, huh?"},
-                                {true, true, 00, "                                                                  DIANA                            Well, I guess I didn't know what I thought I'd be doing."},
-                                {true, true, 00, "                                                                  DIANA                            Y'all didn't think you'd be      moving here, huh?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I supposed I'd probably still be working with plants, that's it."},
-                                {true, true, 00, "                                                                  ELEANOR                          I'm still alive and so is Vee,   and that's all I could want."},
-                                {true, true, 00, "                                                                  DIANA                            Yeah.. Please stay that way, why don't you two?"},
+                                {true, true, 00, "DIANA                            Aw, super! I love it, it's so    cozy in here."},
+                                {true, true, 00, "DIANA                            I hope y'all don't mind me spend-ing ungodly amounts of time here."},
+                                {true, true, 00, "ELEANOR                          Of course not! As long as you    don't mind helping sometimes."},
+                                {true, true, 00, "OLIVIER                          Remember, living like this means that we're going to work hard."},
+                                {true, true, 00, "OLIVIER                          I'll probably be spending most ofmy time chopping wood, or"},
+                                {true, true, 00, "OLIVIER                          working out in the garden pullingweeds and watering."},
+                                {true, true, 00, "ELEANOR                          You said that you were interestedin working for the boat captain?"},
+                                {true, true, 00, "DIANA                            Oh, yes. I'll be going down to   the docks today, in fact."},
+                                {true, true, 00, "DIANA                            Maybe I'll be a proper boat      captain before too long!"},
+                                {true, true, 00, "ELEANOR                          I know you'll do great, Diana!"},
+                                {true, true, 00, "OLIVIER                          This isn't what you thought you'dbe doing at 22, huh?"},
+                                {true, true, 00, "DIANA                            Well, I guess I didn't know what I thought I'd be doing."},
+                                {true, true, 00, "DIANA                            Y'all didn't think you'd be      moving here, huh?"},
+                                {true, true, 00, "OLIVIER                          I supposed I'd probably still be working with plants, that's it."},
+                                {true, true, 00, "ELEANOR                          I'm still alive and so is Vee,   and that's all I could want."},
+                                {true, true, 00, "DIANA                            Yeah.. Please stay that way, why don't you two?"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8009,28 +8386,28 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 0:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Salut, guys."},
-                                {true, true, 00, "                                                                  ELEANOR                          Salut, Maple! Do you want some   stew? I baked some."},
-                                {true, true, 00, "                                                                  MAPLE                            Oh, that sounds great! I'd love  some, your stew is amazing."},
-                                {true, true, 00, "                                                                  OLIVIER                          Diana brought a new board game infrom inland, we were interested"},
-                                {true, true, 00, "                                                                  OLIVIER                          in playing it tonight. Would you like to invite the others?"},
-                                {true, true, 00, "                                                                  MAPLE                            But not me? Excuse you, haha."},
-                                {true, true, 00, "                                                                  MAPLE                            Hey, um.. I'm sorry about last   week's board game."},
-                                {true, true, 00, "                                                                  ELEANOR                          It's very fine, Maple. It's very easy to get angry in games."},
-                                {true, true, 00, "                                                                  MAPLE                            Your cabin doesn't seem to smell like smoke anymore, though."},
-                                {true, true, 00, "                                                                  ELEANOR                          Have you tried the new islander'sgumbo yet?"},
-                                {true, true, 00, "                                                                  MAPLE                            Are you asking me if I feel      threatened by it? No, not yet."},
-                                {true, true, 00, "                                                                  MAPLE                            There's nothing that adding more Tabasco can't fix."},
-                                {true, true, 00, "                                                                  MAPLE                            Look, I know I don't see you guysall the time, but-"},
-                                {true, true, 00, "                                                                  MAPLE                            Thanks for your ingredients.     Y'all are a godsend."},
-                                {true, true, 00, "                                                                  OLIVIER                          Thank you for your work, too. I  will admit, it didn't make any"},
-                                {true, true, 00, "                                                                  OLIVIER                          sense that this island would workon its own."},
-                                {true, true, 00, "                                                                  OLIVIER                          It's almost like you have a good luck charm."},
-                                {true, true, 00, "                                                                  MAPLE                            Yeah... Anything that Enoki wantsis something she gets."},
-                                {true, true, 00, "                                                                  MAPLE                            It's only a matter of time beforeshe doesn't get something that"},
-                                {true, true, 00, "                                                                  MAPLE                            she wants and she throws a fit,  though."},
-                                {true, true, 00, "                                                                  OLIVIER                          I see. Well, if there's anything we can do for you, let us know."},
-                                {true, true, 00, "                                                                  MAPLE                            Same for you both."},
+                                {true, true, 00, "MAPLE                            Salut, guys."},
+                                {true, true, 00, "ELEANOR                          Salut, Maple! Do you want some   stew? I baked some."},
+                                {true, true, 00, "MAPLE                            Oh, that sounds great! I'd love  some, your stew is amazing."},
+                                {true, true, 00, "OLIVIER                          Diana brought a new board game infrom inland, we were interested"},
+                                {true, true, 00, "OLIVIER                          in playing it tonight. Would you like to invite the others?"},
+                                {true, true, 00, "MAPLE                            But not me? Excuse you, haha."},
+                                {true, true, 00, "MAPLE                            Hey, um.. I'm sorry about last   week's board game."},
+                                {true, true, 00, "ELEANOR                          It's very fine, Maple. It's very easy to get angry in games."},
+                                {true, true, 00, "MAPLE                            Your cabin doesn't seem to smell like smoke anymore, though."},
+                                {true, true, 00, "ELEANOR                          Have you tried the new islander'sgumbo yet?"},
+                                {true, true, 00, "MAPLE                            Are you asking me if I feel      threatened by it? No, not yet."},
+                                {true, true, 00, "MAPLE                            There's nothing that adding more Tabasco can't fix."},
+                                {true, true, 00, "MAPLE                            Look, I know I don't see you guysall the time, but-"},
+                                {true, true, 00, "MAPLE                            Thanks for your ingredients.     Y'all are a godsend."},
+                                {true, true, 00, "OLIVIER                          Thank you for your work, too. I  will admit, it didn't make any"},
+                                {true, true, 00, "OLIVIER                          sense that this island would workon its own."},
+                                {true, true, 00, "OLIVIER                          It's almost like you have a good luck charm."},
+                                {true, true, 00, "MAPLE                            Yeah... Anything that Enoki wantsis something she gets."},
+                                {true, true, 00, "MAPLE                            It's only a matter of time beforeshe doesn't get something that"},
+                                {true, true, 00, "MAPLE                            she wants and she throws a fit,  though."},
+                                {true, true, 00, "OLIVIER                          I see. Well, if there's anything we can do for you, let us know."},
+                                {true, true, 00, "MAPLE                            Same for you both."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8039,21 +8416,21 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 1:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ENOKI                            Salut!! How are you two today?"},
-                                {true, true, 00, "                                                                  ELEANOR                          We're doing well! Would you like some stew?"},
-                                {true, true, 00, "                                                                  ENOKI                            Don't mind if I 'dew', hehe."},
-                                {true, true, 00, "                                                                  OLIVIER                          You coming to the game night     tonight?"},
-                                {true, true, 00, "                                                                  ENOKI                            I wouldn't miss it for anything!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Have you met the new islander    yet?"},
-                                {true, true, 00, "                                                                  ENOKI                            Don't tell Maple...."},
-                                {true, true, 00, "                                                                  ENOKI                            -but I think his gumbo is better."},
-                                {true, true, 00, "                                                                  ENOKI                            You can NOT tell Maple I said    that though."},
-                                {true, true, 00, "                                                                  ELEANOR                          My lips are sealed."},
-                                {true, true, 00, "                                                                  ENOKI                            Hey, you two have a sewing       machine in here?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui."},
-                                {true, true, 00, "                                                                  ENOKI                            You said you make your own       clothes, oui? You, uh.."},
-                                {true, true, 00, "                                                                  ENOKI                            Wouldn't mind giving me a lesson or two?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Pas du tout! I would love to     teach you anytime!"},
+                                {true, true, 00, "ENOKI                            Salut!! How are you two today?"},
+                                {true, true, 00, "ELEANOR                          We're doing well! Would you like some stew?"},
+                                {true, true, 00, "ENOKI                            Don't mind if I 'dew', hehe."},
+                                {true, true, 00, "OLIVIER                          You coming to the game night     tonight?"},
+                                {true, true, 00, "ENOKI                            I wouldn't miss it for anything!"},
+                                {true, true, 00, "ELEANOR                          Have you met the new islander    yet?"},
+                                {true, true, 00, "ENOKI                            Don't tell Maple...."},
+                                {true, true, 00, "ENOKI                            -but I think his gumbo is better."},
+                                {true, true, 00, "ENOKI                            You can NOT tell Maple I said    that though."},
+                                {true, true, 00, "ELEANOR                          My lips are sealed."},
+                                {true, true, 00, "ENOKI                            Hey, you two have a sewing       machine in here?"},
+                                {true, true, 00, "ELEANOR                          Oui."},
+                                {true, true, 00, "ENOKI                            You said you make your own       clothes, oui? You, uh.."},
+                                {true, true, 00, "ENOKI                            Wouldn't mind giving me a lesson or two?"},
+                                {true, true, 00, "ELEANOR                          Pas du tout! I would love to     teach you anytime!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8062,27 +8439,27 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 2:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  AARON                            Salut! I heard that you wanted tohave a game night tonight?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui oui! Although, we would like to have it outside under a tree."},
-                                {true, true, 00, "                                                                  ELEANOR                          I made a quilt that should be bigenough for all of us."},
-                                {true, true, 00, "                                                                  AARON                            Outside just in case Maple gets..upset this time, oui?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Oui, haha."},
-                                {true, true, 00, "                                                                  ELEANOR                          We made some stew if you want    some."},
-                                {true, true, 00, "                                                                  AARON                            I already had some of Maple's    leftover gumbo, but merci!"},
-                                {true, true, 00, "                                                                  AARON                            Speaking of, Guy has been pretty reserved, but he seems nice."},
-                                {true, true, 00, "                                                                  AARON                            I'm just excited to have more    people on the island."},
-                                {true, true, 00, "                                                                  OLIVIER                          We're becoming a proper little   village, aren't we?"},
-                                {true, true, 00, "                                                                  AARON                            Yeah, yeah I guess so."},
-                                {true, true, 00, "                                                                  OLIVIER                          Are you alright, Aaron? You look long in the face."},
-                                {true, true, 00, "                                                                  AARON                            Yes, I'm just thinking. Maple andI aren't doing so well."},
-                                {true, true, 00, "                                                                  OLIVIER                          What do you mean?"},
-                                {true, true, 00, "                                                                  AARON                            Well, she doesn't want to move   out, but she needs to."},
-                                {true, true, 00, "                                                                  OLIVIER                          Can't you just ask her to? Aren'tyou king or something?"},
-                                {true, true, 00, "                                                                  AARON                            I can. Maybe I should. She's justlike this."},
-                                {true, true, 00, "                                                                  AARON                            She goes back and forth between  being super independent, and"},
-                                {true, true, 00, "                                                                  AARON                            then the next day, she's clingy."},
-                                {true, true, 00, "                                                                  OLIVIER                          This sounds like something you   should take up with her, not us."},
-                                {true, true, 00, "                                                                  AARON                            You're right, you're right."},
+                                {true, true, 00, "AARON                            Salut! I heard that you wanted tohave a game night tonight?"},
+                                {true, true, 00, "ELEANOR                          Oui oui! Although, we would like to have it outside under a tree."},
+                                {true, true, 00, "ELEANOR                          I made a quilt that should be bigenough for all of us."},
+                                {true, true, 00, "AARON                            Outside just in case Maple gets..upset this time, oui?"},
+                                {true, true, 00, "OLIVIER                          Oui, haha."},
+                                {true, true, 00, "ELEANOR                          We made some stew if you want    some."},
+                                {true, true, 00, "AARON                            I already had some of Maple's    leftover gumbo, but merci!"},
+                                {true, true, 00, "AARON                            Speaking of, Guy has been pretty reserved, but he seems nice."},
+                                {true, true, 00, "AARON                            I'm just excited to have more    people on the island."},
+                                {true, true, 00, "OLIVIER                          We're becoming a proper little   village, aren't we?"},
+                                {true, true, 00, "AARON                            Yeah, yeah I guess so."},
+                                {true, true, 00, "OLIVIER                          Are you alright, Aaron? You look long in the face."},
+                                {true, true, 00, "AARON                            Yes, I'm just thinking. Maple andI aren't doing so well."},
+                                {true, true, 00, "OLIVIER                          What do you mean?"},
+                                {true, true, 00, "AARON                            Well, she doesn't want to move   out, but she needs to."},
+                                {true, true, 00, "OLIVIER                          Can't you just ask her to? Aren'tyou king or something?"},
+                                {true, true, 00, "AARON                            I can. Maybe I should. She's justlike this."},
+                                {true, true, 00, "AARON                            She goes back and forth between  being super independent, and"},
+                                {true, true, 00, "AARON                            then the next day, she's clingy."},
+                                {true, true, 00, "OLIVIER                          This sounds like something you   should take up with her, not us."},
+                                {true, true, 00, "AARON                            You're right, you're right."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8091,23 +8468,23 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 3:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey, y'all! Scout here."},
-                                {true, true, 00, "                                                                  ELEANOR                          Salut! Would you like some stew?"},
-                                {true, true, 00, "                                                                  SCOUT                            Merci, but I ate just.. uh.. holdon, the last time I ate.."},
-                                {true, true, 00, "                                                                  SCOUT                            Holy cow, I haven't eaten yet.   I'd love some stew!"},
-                                {true, true, 00, "                                                                  ELEANOR                          Hehe, of course."},
-                                {true, true, 00, "                                                                  SCOUT                            You guys catch my Scout TV reportthis morning?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh, we don't have a television."},
-                                {true, true, 00, "                                                                  SCOUT                            Right, right.. Forgot about that,I'm sorry."},
-                                {true, true, 00, "                                                                  SCOUT                            Anyway, apparently my broadcast  was hacked."},
-                                {true, true, 00, "                                                                  OLIVIER                          Hacked? By whom?"},
-                                {true, true, 00, "                                                                  SCOUT                            No clue. The Tremblays aren't    worried about it, though."},
-                                {true, true, 00, "                                                                  ELEANOR                          Will you be coming to our game   night tonight?"},
-                                {true, true, 00, "                                                                  SCOUT                            I'll do my best, there's stuff I gotta do for work."},
-                                {true, true, 00, "                                                                  SCOUT                            We'll see how that goes."},
-                                {true, true, 00, "                                                                  OLIVIER                          Well, we'll save you a seat."},
-                                {true, true, 00, "                                                                  SCOUT                            Merci!"},
-                                {true, true, 00, "                                                                  ELEANOR                          De rien!"},
+                                {true, true, 00, "SCOUT                            Hey, y'all! Scout here."},
+                                {true, true, 00, "ELEANOR                          Salut! Would you like some stew?"},
+                                {true, true, 00, "SCOUT                            Merci, but I ate just.. uh.. holdon, the last time I ate.."},
+                                {true, true, 00, "SCOUT                            Holy cow, I haven't eaten yet.   I'd love some stew!"},
+                                {true, true, 00, "ELEANOR                          Hehe, of course."},
+                                {true, true, 00, "SCOUT                            You guys catch my Scout TV reportthis morning?"},
+                                {true, true, 00, "ELEANOR                          Oh, we don't have a television."},
+                                {true, true, 00, "SCOUT                            Right, right.. Forgot about that,I'm sorry."},
+                                {true, true, 00, "SCOUT                            Anyway, apparently my broadcast  was hacked."},
+                                {true, true, 00, "OLIVIER                          Hacked? By whom?"},
+                                {true, true, 00, "SCOUT                            No clue. The Tremblays aren't    worried about it, though."},
+                                {true, true, 00, "ELEANOR                          Will you be coming to our game   night tonight?"},
+                                {true, true, 00, "SCOUT                            I'll do my best, there's stuff I gotta do for work."},
+                                {true, true, 00, "SCOUT                            We'll see how that goes."},
+                                {true, true, 00, "OLIVIER                          Well, we'll save you a seat."},
+                                {true, true, 00, "SCOUT                            Merci!"},
+                                {true, true, 00, "ELEANOR                          De rien!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8121,22 +8498,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 5:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  OLIVIER                          So, your birthday is coming up ina week..."},
-                                {true, true, 00, "                                                                  ELEANOR                          Oui?"},
-                                {true, true, 00, "                                                                  OLIVIER                          I would surprise you, but I don'twant to disappoint you with-"},
-                                {true, true, 00, "                                                                  ELEANOR                          ..."},
-                                {true, true, 00, "                                                                  OLIVIER                          ...Do you want me to just        surprise you?"},
-                                {true, true, 00, "                                                                  OLIVIER                          ..."},
-                                {true, true, 00, "                                                                  OLIVIER                          Are you still thinking about thatceremony?"},
-                                {true, true, 00, "                                                                  ELEANOR                          I'm never going to forget that   night, not ever."},
-                                {true, true, 00, "                                                                  ELEANOR                          I can't decide if it's a good or a bad feeling."},
-                                {true, true, 00, "                                                                  ELEANOR                          You gave me enough of a birthday gift for the rest of my life."},
-                                {true, true, 00, "                                                                  OLIVIER                          But you wouldn't complain if I   got you a new sewing machine."},
-                                {true, true, 00, "                                                                  ELEANOR                          ..."},
-                                {true, true, 00, "                                                                  OLIVIER                          Not saying that it's what I'm    going to get for sure, but.."},
-                                {true, true, 00, "                                                                  ELEANOR                          Don't you have some vegetables toprune? I need to get started"},
-                                {true, true, 00, "                                                                  ELEANOR                          on canning for the winter."},
-                                {true, true, 00, "                                                                  OLIVIER                          Right, right, just uh-...        Yeah, nevermind."},
+                                {true, true, 00, "OLIVIER                          So, your birthday is coming up ina week..."},
+                                {true, true, 00, "ELEANOR                          Oui?"},
+                                {true, true, 00, "OLIVIER                          I would surprise you, but I don'twant to disappoint you with-"},
+                                {true, true, 00, "ELEANOR                          ..."},
+                                {true, true, 00, "OLIVIER                          ...Do you want me to just        surprise you?"},
+                                {true, true, 00, "OLIVIER                          ..."},
+                                {true, true, 00, "OLIVIER                          Are you still thinking about thatceremony?"},
+                                {true, true, 00, "ELEANOR                          I'm never going to forget that   night, not ever."},
+                                {true, true, 00, "ELEANOR                          I can't decide if it's a good or a bad feeling."},
+                                {true, true, 00, "ELEANOR                          You gave me enough of a birthday gift for the rest of my life."},
+                                {true, true, 00, "OLIVIER                          But you wouldn't complain if I   got you a new sewing machine."},
+                                {true, true, 00, "ELEANOR                          ..."},
+                                {true, true, 00, "OLIVIER                          Not saying that it's what I'm    going to get for sure, but.."},
+                                {true, true, 00, "ELEANOR                          Don't you have some vegetables toprune? I need to get started"},
+                                {true, true, 00, "ELEANOR                          on canning for the winter."},
+                                {true, true, 00, "OLIVIER                          Right, right, just uh-...        Yeah, nevermind."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8145,23 +8522,23 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 6:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Alright, guys, we have to talk."},
-                                {true, true, 00, "                                                                  OLIVIER                          What's up?"},
-                                {true, true, 00, "                                                                  DIANA                            Some dude hacked Scout's TV      program this morning."},
-                                {true, true, 00, "                                                                  DIANA                            He was a Mons d'Plonj, I think?  He was threatening the island."},
-                                {true, true, 00, "                                                                  ELEANOR                          O-Oh.. Oh no.. He wasn't with thewitches, was he?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Vee, have they found us?"},
-                                {true, true, 00, "                                                                  DIANA                            No, he looked like some twerp.   Apparently Maple knows him?"},
-                                {true, true, 00, "                                                                  DIANA                            The Tremblays aren't worried."},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh.. Thank goodness.."},
-                                {true, true, 00, "                                                                  DIANA                            Have you met that new guy up     north, though? Cesar?"},
-                                {true, true, 00, "                                                                  DIANA                            He seems shady, but Enoki trust  him. He has a shop or something."},
-                                {true, true, 00, "                                                                  DIANA                            That new Guy.. er.. guy, he seemsfine. He makes good food."},
-                                {true, true, 00, "                                                                  OLIVIER                          Hey, El, calm down, you're going to hyperventilate."},
-                                {true, true, 00, "                                                                  ELEANOR                          I'm sorry.. I'm sorry.."},
-                                {true, true, 00, "                                                                  DIANA                            Hey, Eleanor, it's going to be   okay. Wanna come to my place?"},
-                                {true, true, 00, "                                                                  DIANA                            We can relax and eat snacks I    imported from inland."},
-                                {true, true, 00, "                                                                  DIANA                            Yes, that sounds like fun.       Merci."},
+                                {true, true, 00, "DIANA                            Alright, guys, we have to talk."},
+                                {true, true, 00, "OLIVIER                          What's up?"},
+                                {true, true, 00, "DIANA                            Some dude hacked Scout's TV      program this morning."},
+                                {true, true, 00, "DIANA                            He was a Mons d'Plonj, I think?  He was threatening the island."},
+                                {true, true, 00, "ELEANOR                          O-Oh.. Oh no.. He wasn't with thewitches, was he?"},
+                                {true, true, 00, "ELEANOR                          Vee, have they found us?"},
+                                {true, true, 00, "DIANA                            No, he looked like some twerp.   Apparently Maple knows him?"},
+                                {true, true, 00, "DIANA                            The Tremblays aren't worried."},
+                                {true, true, 00, "ELEANOR                          Oh.. Thank goodness.."},
+                                {true, true, 00, "DIANA                            Have you met that new guy up     north, though? Cesar?"},
+                                {true, true, 00, "DIANA                            He seems shady, but Enoki trust  him. He has a shop or something."},
+                                {true, true, 00, "DIANA                            That new Guy.. er.. guy, he seemsfine. He makes good food."},
+                                {true, true, 00, "OLIVIER                          Hey, El, calm down, you're going to hyperventilate."},
+                                {true, true, 00, "ELEANOR                          I'm sorry.. I'm sorry.."},
+                                {true, true, 00, "DIANA                            Hey, Eleanor, it's going to be   okay. Wanna come to my place?"},
+                                {true, true, 00, "DIANA                            We can relax and eat snacks I    imported from inland."},
+                                {true, true, 00, "DIANA                            Yes, that sounds like fun.       Merci."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8170,19 +8547,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 7:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ELEANOR                          Bonjour! You must be Guy."},
-                                {true, true, 00, "                                                                  GUY                              Oui. The name's Guy. Guy Pizza."},
-                                {true, true, 00, "                                                                  ELEANOR                          Guy... Pizza?"},
-                                {true, true, 00, "                                                                  GUY                              It was funnier when I was a pizzaguy."},
-                                {true, true, 00, "                                                                  OLIVIER                          Well, welcome to the island!"},
-                                {true, true, 00, "                                                                  GUY                              Nice to meet y'all. I'm gonna go back and finish setting up."},
-                                {true, true, 00, "                                                                  GUY                              I've always wanted a full-size   kitchen, and I'm gonna make good"},
-                                {true, true, 00, "                                                                  GUY                              use of it, you'll see."},
-                                {true, true, 00, "                                                                  ELEANOR                          We're having a game night tonightand we were wondering,"},
-                                {true, true, 00, "                                                                  ELEANOR                          Would you like to join us?"},
-                                {true, true, 00, "                                                                  GUY                              I would, but I'm too excited     about this kitchen."},
-                                {true, true, 00, "                                                                  ELEANOR                          I.. see. I hope you have fun withyour kitchen."},
-                                {true, true, 00, "                                                                  GUY                              Oh, I will. I will."},
+                                {true, true, 00, "ELEANOR                          Bonjour! You must be Guy."},
+                                {true, true, 00, "GUY                              Oui. The name's Guy. Guy Pizza."},
+                                {true, true, 00, "ELEANOR                          Guy... Pizza?"},
+                                {true, true, 00, "GUY                              It was funnier when I was a pizzaguy."},
+                                {true, true, 00, "OLIVIER                          Well, welcome to the island!"},
+                                {true, true, 00, "GUY                              Nice to meet y'all. I'm gonna go back and finish setting up."},
+                                {true, true, 00, "GUY                              I've always wanted a full-size   kitchen, and I'm gonna make good"},
+                                {true, true, 00, "GUY                              use of it, you'll see."},
+                                {true, true, 00, "ELEANOR                          We're having a game night tonightand we were wondering,"},
+                                {true, true, 00, "ELEANOR                          Would you like to join us?"},
+                                {true, true, 00, "GUY                              I would, but I'm too excited     about this kitchen."},
+                                {true, true, 00, "ELEANOR                          I.. see. I hope you have fun withyour kitchen."},
+                                {true, true, 00, "GUY                              Oh, I will. I will."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8196,12 +8573,12 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         if (true)
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ELEANOR                          What's going on outside?"},
-                                {true, true, 00, "                                                                  AARON                            I don't know, but follow me,     we're going to wait this out in "},
-                                {true, true, 00, "                                                                  AARON                            Scout's bunker until we can get  things sorted."},
-                                {true, true, 00, "                                                                  AARON                            Where's Diana?"},
-                                {true, true, 00, "                                                                  OLIVIER                          She's out boating with Guy today and won't be back for hours."},
-                                {true, true, 00, "                                                                  AARON                            Thank goodness. Follow me, I'll  get us out of here."},
+                                {true, true, 00, "ELEANOR                          What's going on outside?"},
+                                {true, true, 00, "AARON                            I don't know, but follow me,     we're going to wait this out in "},
+                                {true, true, 00, "AARON                            Scout's bunker until we can get  things sorted."},
+                                {true, true, 00, "AARON                            Where's Diana?"},
+                                {true, true, 00, "OLIVIER                          She's out boating with Guy today and won't be back for hours."},
+                                {true, true, 00, "AARON                            Thank goodness. Follow me, I'll  get us out of here."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                         }
@@ -8227,15 +8604,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     if (me == 4)
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  This is Eleanor's library."},
+                            {true, true, 00, "This is Eleanor's library."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
                     else if (me != 5)
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  The door is locked."},
-                            {true, true, 00, "                                                                  You decide that it's probably notyour business."},
+                            {true, true, 00, "The door is locked."},
+                            {true, true, 00, "You decide that it's probably notyour business."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                     }
@@ -8301,29 +8678,29 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 0:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Hey! So, you're Diana?"},
-                                {true, true, 00, "                                                                  DIANA                            Hiya! Finally! Another redhead!"},
-                                {true, true, 00, "                                                                  MAPLE                            Oh, I'm not a red head, I'm more of a honey-blonde."},
-                                {true, true, 00, "                                                                  MAPLE                            I'm a wood elf, so it looks a bitorange sometimes."},
-                                {true, true, 00, "                                                                  DIANA                            Oh, you are? Then.."},
-                                {true, true, 00, "                                                                  MAPLE                            Why are my ears round?"},
-                                {true, true, 00, "                                                                  DIANA                            I don't want to ask if you don't feel comfortable."},
-                                {true, true, 00, "                                                                  MAPLE                            Oh, it's fine. They were clipped when I was a baby."},
-                                {true, true, 00, "                                                                  MAPLE                            I'm Maple, by the way.           Maple Tremblay."},
-                                {true, true, 00, "                                                                  DIANA                            Heureux de te rencontrer!"},
-                                {true, true, 00, "                                                                  DIANA                            These cabins are so nice! You're,uh, older brother make em?"},
-                                {true, true, 00, "                                                                  MAPLE                            Mostly. I go out and find gems inlocal caves sometimes."},
-                                {true, true, 00, "                                                                  MAPLE                            We make enough to live pretty    well out here."},
-                                {true, true, 00, "                                                                  DIANA                            Do you live in that trailer I sawmoving in?"},
-                                {true, true, 00, "                                                                  MAPLE                            Yep. I'm on the couch."},
-                                {true, true, 00, "                                                                  DIANA                            Do you not want a cabin? One of  them looks empty."},
-                                {true, true, 00, "                                                                  MAPLE                            You see, Aaron and Enoki want to make a castle or something."},
-                                {true, true, 00, "                                                                  MAPLE                            I'm gonna take over their trailerwhen that happens."},
-                                {true, true, 00, "                                                                  DIANA                            So... is this place, like,       seriously a country?"},
-                                {true, true, 00, "                                                                  MAPLE                            I mean.. if we act like it is,   then it is, isn't it?"},
-                                {true, true, 00, "                                                                  DIANA                            Is it really that easy?"},
-                                {true, true, 00, "                                                                  MAPLE                            Until we fight a war? We'll see. Nice to meet you."},
-                                {true, true, 00, "                                                                  DIANA                            Yeah, nice to meet you too!"},
+                                {true, true, 00, "MAPLE                            Hey! So, you're Diana?"},
+                                {true, true, 00, "DIANA                            Hiya! Finally! Another redhead!"},
+                                {true, true, 00, "MAPLE                            Oh, I'm not a red head, I'm more of a honey-blonde."},
+                                {true, true, 00, "MAPLE                            I'm a wood elf, so it looks a bitorange sometimes."},
+                                {true, true, 00, "DIANA                            Oh, you are? Then.."},
+                                {true, true, 00, "MAPLE                            Why are my ears round?"},
+                                {true, true, 00, "DIANA                            I don't want to ask if you don't feel comfortable."},
+                                {true, true, 00, "MAPLE                            Oh, it's fine. They were clipped when I was a baby."},
+                                {true, true, 00, "MAPLE                            I'm Maple, by the way.           Maple Tremblay."},
+                                {true, true, 00, "DIANA                            Heureux de te rencontrer!"},
+                                {true, true, 00, "DIANA                            These cabins are so nice! You're,uh, older brother make em?"},
+                                {true, true, 00, "MAPLE                            Mostly. I go out and find gems inlocal caves sometimes."},
+                                {true, true, 00, "MAPLE                            We make enough to live pretty    well out here."},
+                                {true, true, 00, "DIANA                            Do you live in that trailer I sawmoving in?"},
+                                {true, true, 00, "MAPLE                            Yep. I'm on the couch."},
+                                {true, true, 00, "DIANA                            Do you not want a cabin? One of  them looks empty."},
+                                {true, true, 00, "MAPLE                            You see, Aaron and Enoki want to make a castle or something."},
+                                {true, true, 00, "MAPLE                            I'm gonna take over their trailerwhen that happens."},
+                                {true, true, 00, "DIANA                            So... is this place, like,       seriously a country?"},
+                                {true, true, 00, "MAPLE                            I mean.. if we act like it is,   then it is, isn't it?"},
+                                {true, true, 00, "DIANA                            Is it really that easy?"},
+                                {true, true, 00, "MAPLE                            Until we fight a war? We'll see. Nice to meet you."},
+                                {true, true, 00, "DIANA                            Yeah, nice to meet you too!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8332,19 +8709,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 1:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ENOKI                            Hey!! Are you Diana?             I'm Enoki Tremblay!"},
-                                {true, true, 00, "                                                                  DIANA                            Enchante de faire votre          connaissance!"},
-                                {true, true, 00, "                                                                  ENOKI                            Is everything comfortable for youso far?"},
-                                {true, true, 00, "                                                                  DIANA                            Dude, I'm still not sure if I'm  dreaming or not."},
-                                {true, true, 00, "                                                                  DIANA                            This feels way too good to be    real, it's crazy."},
-                                {true, true, 00, "                                                                  ENOKI                            I'm a pretty lucky gal, so when  I want something to happen, well,"},
-                                {true, true, 00, "                                                                  ENOKI                            Things tend to turn out, and I   wanted this to turn out."},
-                                {true, true, 00, "                                                                  ENOKI                            I heard you've got somethin' withCapt. Nicholas?"},
-                                {true, true, 00, "                                                                  DIANA                            Yeah! He's looking for someone totake over this area."},
-                                {true, true, 00, "                                                                  DIANA                            I'll eventually be ferrying      across Superieur."},
-                                {true, true, 00, "                                                                  ENOKI                            Aw, fun!! You gotta take us in a ride sometime."},
-                                {true, true, 00, "                                                                  ENOKI                            If you ever need us for anything,you let us know, alright?"},
-                                {true, true, 00, "                                                                  DIANA                            D'accord!"},
+                                {true, true, 00, "ENOKI                            Hey!! Are you Diana?             I'm Enoki Tremblay!"},
+                                {true, true, 00, "DIANA                            Enchante de faire votre          connaissance!"},
+                                {true, true, 00, "ENOKI                            Is everything comfortable for youso far?"},
+                                {true, true, 00, "DIANA                            Dude, I'm still not sure if I'm  dreaming or not."},
+                                {true, true, 00, "DIANA                            This feels way too good to be    real, it's crazy."},
+                                {true, true, 00, "ENOKI                            I'm a pretty lucky gal, so when  I want something to happen, well,"},
+                                {true, true, 00, "ENOKI                            Things tend to turn out, and I   wanted this to turn out."},
+                                {true, true, 00, "ENOKI                            I heard you've got somethin' withCapt. Nicholas?"},
+                                {true, true, 00, "DIANA                            Yeah! He's looking for someone totake over this area."},
+                                {true, true, 00, "DIANA                            I'll eventually be ferrying      across Superieur."},
+                                {true, true, 00, "ENOKI                            Aw, fun!! You gotta take us in a ride sometime."},
+                                {true, true, 00, "ENOKI                            If you ever need us for anything,you let us know, alright?"},
+                                {true, true, 00, "DIANA                            D'accord!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8353,16 +8730,16 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 2:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Bienvenu! You're Aaron Tremblay, oui?"},
-                                {true, true, 00, "                                                                  AARON                            Bienvenu! How's the cabin workingfor you?"},
-                                {true, true, 00, "                                                                  DIANA                            Oh, it's perfect!! It feels too  good to be true, honestly."},
-                                {true, true, 00, "                                                                  DIANA                            I'm starting up my first boat    short introduction today."},
-                                {true, true, 00, "                                                                  DIANA                            Do you know Capt. Nicholas well?"},
-                                {true, true, 00, "                                                                  AARON                            I'll be honest, I spend most of  my time chopping wood."},
-                                {true, true, 00, "                                                                  AARON                            But he seems like a very nice    person from what I know."},
-                                {true, true, 00, "                                                                  AARON                            I won't stay long, I was just    stopping by to check in."},
-                                {true, true, 00, "                                                                  AARON                            Just let me know if you need     anything, alright?"},
-                                {true, true, 00, "                                                                  DIANA                            Absolutely! Thanks!"},
+                                {true, true, 00, "DIANA                            Bienvenu! You're Aaron Tremblay, oui?"},
+                                {true, true, 00, "AARON                            Bienvenu! How's the cabin workingfor you?"},
+                                {true, true, 00, "DIANA                            Oh, it's perfect!! It feels too  good to be true, honestly."},
+                                {true, true, 00, "DIANA                            I'm starting up my first boat    short introduction today."},
+                                {true, true, 00, "DIANA                            Do you know Capt. Nicholas well?"},
+                                {true, true, 00, "AARON                            I'll be honest, I spend most of  my time chopping wood."},
+                                {true, true, 00, "AARON                            But he seems like a very nice    person from what I know."},
+                                {true, true, 00, "AARON                            I won't stay long, I was just    stopping by to check in."},
+                                {true, true, 00, "AARON                            Just let me know if you need     anything, alright?"},
+                                {true, true, 00, "DIANA                            Absolutely! Thanks!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8371,22 +8748,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 3:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey! It's me, Scout. Just wanted to introduce myself."},
-                                {true, true, 00, "                                                                  DIANA                            Ah! Nice to meet you! I'll admit I wasn't sure this was real."},
-                                {true, true, 00, "                                                                  DIANA                            I'm glad I wasn't.. you know..   killed or something."},
-                                {true, true, 00, "                                                                  SCOUT                            I'll admit, I'm actually a bit   new here, too-"},
-                                {true, true, 00, "                                                                  SCOUT                            I moved over here from a nearby  island when I met the"},
-                                {true, true, 00, "                                                                  SCOUT                            Trembalys and decided I'd jump   over here."},
-                                {true, true, 00, "                                                                  SCOUT                            It wasn't exactly easy diggint a new bunker, but it was"},
-                                {true, true, 00, "                                                                  SCOUT                            worth it. It's nicer over here."},
-                                {true, true, 00, "                                                                  DIANA                            Well, you seem to be doing fine. You a scientist?"},
-                                {true, true, 00, "                                                                  SCOUT                            Yeah, it's a little funny. This  company's got me here"},
-                                {true, true, 00, "                                                                  SCOUT                            for some reason to do experimentsbut on an island? No clue why."},
-                                {true, true, 00, "                                                                  DIANA                            You find out anything cool?"},
-                                {true, true, 00, "                                                                  SCOUT                            I made this device that makes    bunkers real fast."},
-                                {true, true, 00, "                                                                  SCOUT                            No idea what I'll use it for, butit's got potential."},
-                                {true, true, 00, "                                                                  DIANA                            Hey, you feel like making me a   bunker sometime?"},
-                                {true, true, 00, "                                                                  SCOUT                            Aw sure, I'd love to!"},
+                                {true, true, 00, "SCOUT                            Hey! It's me, Scout. Just wanted to introduce myself."},
+                                {true, true, 00, "DIANA                            Ah! Nice to meet you! I'll admit I wasn't sure this was real."},
+                                {true, true, 00, "DIANA                            I'm glad I wasn't.. you know..   killed or something."},
+                                {true, true, 00, "SCOUT                            I'll admit, I'm actually a bit   new here, too-"},
+                                {true, true, 00, "SCOUT                            I moved over here from a nearby  island when I met the"},
+                                {true, true, 00, "SCOUT                            Trembalys and decided I'd jump   over here."},
+                                {true, true, 00, "SCOUT                            It wasn't exactly easy diggint a new bunker, but it was"},
+                                {true, true, 00, "SCOUT                            worth it. It's nicer over here."},
+                                {true, true, 00, "DIANA                            Well, you seem to be doing fine. You a scientist?"},
+                                {true, true, 00, "SCOUT                            Yeah, it's a little funny. This  company's got me here"},
+                                {true, true, 00, "SCOUT                            for some reason to do experimentsbut on an island? No clue why."},
+                                {true, true, 00, "DIANA                            You find out anything cool?"},
+                                {true, true, 00, "SCOUT                            I made this device that makes    bunkers real fast."},
+                                {true, true, 00, "SCOUT                            No idea what I'll use it for, butit's got potential."},
+                                {true, true, 00, "DIANA                            Hey, you feel like making me a   bunker sometime?"},
+                                {true, true, 00, "SCOUT                            Aw sure, I'd love to!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8396,19 +8773,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 4:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Hey, Vee! Fancy seeing you here  in my /new cabin/, huh?"},
-                                {true, true, 00, "                                                                  OLIVIER                          It only took you about a day to  make it look just like your"},
-                                {true, true, 00, "                                                                  OLIVIER                          place back home, didn't it?"},
-                                {true, true, 00, "                                                                  DIANA                            If all things go well, this'll beout new 'back home', right?"},
-                                {true, true, 00, "                                                                  OLIVIER                          It all depends if we can trust   these people."},
-                                {true, true, 00, "                                                                  OLIVIER                          You've got something to defend   yourself on you, right?"},
-                                {true, true, 00, "                                                                  DIANA                            Right, I have my flare gun on me."},
-                                {true, true, 00, "                                                                  DIANA                            I really home I never have to useit, though."},
-                                {true, true, 00, "                                                                  OLIVIER                          Me too. But they seem nice       enough."},
-                                {true, true, 00, "                                                                  OLIVIER                          At least they're not going to tryand sacrifice us, hehe."},
-                                {true, true, 00, "                                                                  DIANA                            Hehe, no kidding. If any of El's family shows up,"},
-                                {true, true, 00, "                                                                  DIANA                            You're giving me a call, right?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Of course, of course."},
+                                {true, true, 00, "DIANA                            Hey, Vee! Fancy seeing you here  in my /new cabin/, huh?"},
+                                {true, true, 00, "OLIVIER                          It only took you about a day to  make it look just like your"},
+                                {true, true, 00, "OLIVIER                          place back home, didn't it?"},
+                                {true, true, 00, "DIANA                            If all things go well, this'll beout new 'back home', right?"},
+                                {true, true, 00, "OLIVIER                          It all depends if we can trust   these people."},
+                                {true, true, 00, "OLIVIER                          You've got something to defend   yourself on you, right?"},
+                                {true, true, 00, "DIANA                            Right, I have my flare gun on me."},
+                                {true, true, 00, "DIANA                            I really home I never have to useit, though."},
+                                {true, true, 00, "OLIVIER                          Me too. But they seem nice       enough."},
+                                {true, true, 00, "OLIVIER                          At least they're not going to tryand sacrifice us, hehe."},
+                                {true, true, 00, "DIANA                            Hehe, no kidding. If any of El's family shows up,"},
+                                {true, true, 00, "DIANA                            You're giving me a call, right?"},
+                                {true, true, 00, "OLIVIER                          Of course, of course."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8417,26 +8794,26 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 5:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ELEANOR                          It looks just like your room at  home!"},
-                                {true, true, 00, "                                                                  DIANA                            Yep, did you expect anything lessfrom me? Hehe."},
-                                {true, true, 00, "                                                                  ELEANOR                          Well, I love it anyway. It's verycozy."},
-                                {true, true, 00, "                                                                  ELEANOR                          If you need anything, please let me know,"},
-                                {true, true, 00, "                                                                  ELEANOR                          I have set up my room, and we nowhave a crystal ball room!"},
-                                {true, true, 00, "                                                                  ELEANOR                          I'm still working on my summoningskills, they're rusty."},
-                                {true, true, 00, "                                                                  DIANA                            And you're absolutely sure that  using magic won't cause"},
-                                {true, true, 00, "                                                                  DIANA                            Any.. er.. witches to find out   where we are?"},
-                                {true, true, 00, "                                                                  ELEANOR                          I'm positive. I even think that  if this is good enough,"},
-                                {true, true, 00, "                                                                  ELEANOR                          We can invite my family to come  by, I'd love to show them"},
-                                {true, true, 00, "                                                                  ELEANOR                          this place. It seems peaceful."},
-                                {true, true, 00, "                                                                  DIANA                            We'll see. We haven't exactly hada peaceful life until now."},
-                                {true, true, 00, "                                                                  DIANA                            Hey, you seen those Tremblays yetor talked to them?"},
-                                {true, true, 00, "                                                                  DIANA                            It feels like we've got one of   them for each of us."},
-                                {true, true, 00, "                                                                  DIANA                            They have a redhead and a couple with the 'farmer' type"},
-                                {true, true, 00, "                                                                  DIANA                            and that Enoki seems cute, but   you're the cuter one."},
-                                {true, true, 00, "                                                                  ELEANOR                          Aw, Merci!"},
-                                {true, true, 00, "                                                                  DIANA                            I can't help but be a little     suspicious, but I think"},
-                                {true, true, 00, "                                                                  DIANA                            We're in for a good time."},
-                                {true, true, 00, "                                                                  ELEANOR                          Me too."},
+                                {true, true, 00, "ELEANOR                          It looks just like your room at  home!"},
+                                {true, true, 00, "DIANA                            Yep, did you expect anything lessfrom me? Hehe."},
+                                {true, true, 00, "ELEANOR                          Well, I love it anyway. It's verycozy."},
+                                {true, true, 00, "ELEANOR                          If you need anything, please let me know,"},
+                                {true, true, 00, "ELEANOR                          I have set up my room, and we nowhave a crystal ball room!"},
+                                {true, true, 00, "ELEANOR                          I'm still working on my summoningskills, they're rusty."},
+                                {true, true, 00, "DIANA                            And you're absolutely sure that  using magic won't cause"},
+                                {true, true, 00, "DIANA                            Any.. er.. witches to find out   where we are?"},
+                                {true, true, 00, "ELEANOR                          I'm positive. I even think that  if this is good enough,"},
+                                {true, true, 00, "ELEANOR                          We can invite my family to come  by, I'd love to show them"},
+                                {true, true, 00, "ELEANOR                          this place. It seems peaceful."},
+                                {true, true, 00, "DIANA                            We'll see. We haven't exactly hada peaceful life until now."},
+                                {true, true, 00, "DIANA                            Hey, you seen those Tremblays yetor talked to them?"},
+                                {true, true, 00, "DIANA                            It feels like we've got one of   them for each of us."},
+                                {true, true, 00, "DIANA                            They have a redhead and a couple with the 'farmer' type"},
+                                {true, true, 00, "DIANA                            and that Enoki seems cute, but   you're the cuter one."},
+                                {true, true, 00, "ELEANOR                          Aw, Merci!"},
+                                {true, true, 00, "DIANA                            I can't help but be a little     suspicious, but I think"},
+                                {true, true, 00, "DIANA                            We're in for a good time."},
+                                {true, true, 00, "ELEANOR                          Me too."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8474,29 +8851,29 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 0:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  MAPLE                            Diana! Hey!"},
-                                {true, true, 00, "                                                                  DIANA                            Hey, Maple!                      How's it shakin', bacon?"},
-                                {true, true, 00, "                                                                  MAPLE                            Not bad, just a little bored."},
-                                {true, true, 00, "                                                                  DIANA                            Dude, you see that broadcast thismorning?"},
-                                {true, true, 00, "                                                                  MAPLE                            With Rufus hijacking it? He's a  twerp, we're fine."},
-                                {true, true, 00, "                                                                  MAPLE                            He probably thinks he's a super  villain or something."},
-                                {true, true, 00, "                                                                  DIANA                            Boys like that just crack me up, seriously haha."},
-                                {true, true, 00, "                                                                  MAPLE                            Talk about it. But let me know ifyou spot him."},
-                                {true, true, 00, "                                                                  MAPLE                            Fried alligator's pretty tasty   this time of year."},
-                                {true, true, 00, "                                                                  DIANA                            Will do."},
-                                {true, true, 00, "                                                                  DIANA                            So what've you been up to lately?"},
-                                {true, true, 00, "                                                                  MAPLE                            You seen Scout? Poor guy, he's   definitely got a crush on me."},
-                                {true, true, 00, "                                                                  MAPLE                            It's kind of sweet right now, butI'm eventually going to have to"},
-                                {true, true, 00, "                                                                  MAPLE                            let him know he's really not my  type."},
-                                {true, true, 00, "                                                                  DIANA                            Girl, I don't envy you, haha.    So, what is your type?"},
-                                {true, true, 00, "                                                                  MAPLE                            I want someone who makes me      excited and.. is loose, y'know?"},
-                                {true, true, 00, "                                                                  MAPLE                            All these boys act like I'm a    goddess or something and it's"},
-                                {true, true, 00, "                                                                  MAPLE                            kind of patronizing. I could makeem into a barbeque if I wanted."},
-                                {true, true, 00, "                                                                  DIANA                            Maybe that's why they treat you  like that, they're scared, hehe."},
-                                {true, true, 00, "                                                                  MAPLE                            I need to find another fire elf  somewhere, probably."},
-                                {true, true, 00, "                                                                  DIANA                            There aren't very many this far  southeast."},
-                                {true, true, 00, "                                                                  MAPLE                            Yeah, I'll keep looking then, I  guess, but it's a small island."},
-                                {true, true, 00, "                                                                  DIANA                            That it is, haha. You care care  of yourself, Maple."},
+                                {true, true, 00, "MAPLE                            Diana! Hey!"},
+                                {true, true, 00, "DIANA                            Hey, Maple!                      How's it shakin', bacon?"},
+                                {true, true, 00, "MAPLE                            Not bad, just a little bored."},
+                                {true, true, 00, "DIANA                            Dude, you see that broadcast thismorning?"},
+                                {true, true, 00, "MAPLE                            With Rufus hijacking it? He's a  twerp, we're fine."},
+                                {true, true, 00, "MAPLE                            He probably thinks he's a super  villain or something."},
+                                {true, true, 00, "DIANA                            Boys like that just crack me up, seriously haha."},
+                                {true, true, 00, "MAPLE                            Talk about it. But let me know ifyou spot him."},
+                                {true, true, 00, "MAPLE                            Fried alligator's pretty tasty   this time of year."},
+                                {true, true, 00, "DIANA                            Will do."},
+                                {true, true, 00, "DIANA                            So what've you been up to lately?"},
+                                {true, true, 00, "MAPLE                            You seen Scout? Poor guy, he's   definitely got a crush on me."},
+                                {true, true, 00, "MAPLE                            It's kind of sweet right now, butI'm eventually going to have to"},
+                                {true, true, 00, "MAPLE                            let him know he's really not my  type."},
+                                {true, true, 00, "DIANA                            Girl, I don't envy you, haha.    So, what is your type?"},
+                                {true, true, 00, "MAPLE                            I want someone who makes me      excited and.. is loose, y'know?"},
+                                {true, true, 00, "MAPLE                            All these boys act like I'm a    goddess or something and it's"},
+                                {true, true, 00, "MAPLE                            kind of patronizing. I could makeem into a barbeque if I wanted."},
+                                {true, true, 00, "DIANA                            Maybe that's why they treat you  like that, they're scared, hehe."},
+                                {true, true, 00, "MAPLE                            I need to find another fire elf  somewhere, probably."},
+                                {true, true, 00, "DIANA                            There aren't very many this far  southeast."},
+                                {true, true, 00, "MAPLE                            Yeah, I'll keep looking then, I  guess, but it's a small island."},
+                                {true, true, 00, "DIANA                            That it is, haha. You care care  of yourself, Maple."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8505,24 +8882,24 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 1:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ENOKI                            Hey, girl!"},
-                                {true, true, 00, "                                                                  DIANA                            Enoki, ma cherie! You want some  snacks?"},
-                                {true, true, 00, "                                                                  ENOKI                            I always want snacks."},
-                                {true, true, 00, "                                                                  DIANA                            Haha, of course. So what's your  day been like?"},
-                                {true, true, 00, "                                                                  ENOKI                            Good, good, but I'm a little     worried."},
-                                {true, true, 00, "                                                                  DIANA                            Aw, how come?"},
-                                {true, true, 00, "                                                                  ENOKI                            Well, it's about Aaron and Maple.They've been fighting."},
-                                {true, true, 00, "                                                                  DIANA                            That's not good! Do tell."},
-                                {true, true, 00, "                                                                  ENOKI                            Well, Aaron's always bottled up  how he feels about things,"},
-                                {true, true, 00, "                                                                  ENOKI                            While Maple tells you to your    face and hurts feelings."},
-                                {true, true, 00, "                                                                  DIANA                            That's not a good combination."},
-                                {true, true, 00, "                                                                  ENOKI                            It always blows over, but it     makes me sad in the meantime."},
-                                {true, true, 00, "                                                                  DIANA                            I don't have siblings, but that'sjust how it goes, right?"},
-                                {true, true, 00, "                                                                  ENOKI                            You a lonely only too? Yeah, I   always wanted a little sister."},
-                                {true, true, 00, "                                                                  DIANA                            Little bro for me. Less drama."},
-                                {true, true, 00, "                                                                  ENOKI                            True, true."},
-                                {true, true, 00, "                                                                  DIANA                            Keep me up to date, k?"},
-                                {true, true, 00, "                                                                  ENOKI                            K."},
+                                {true, true, 00, "ENOKI                            Hey, girl!"},
+                                {true, true, 00, "DIANA                            Enoki, ma cherie! You want some  snacks?"},
+                                {true, true, 00, "ENOKI                            I always want snacks."},
+                                {true, true, 00, "DIANA                            Haha, of course. So what's your  day been like?"},
+                                {true, true, 00, "ENOKI                            Good, good, but I'm a little     worried."},
+                                {true, true, 00, "DIANA                            Aw, how come?"},
+                                {true, true, 00, "ENOKI                            Well, it's about Aaron and Maple.They've been fighting."},
+                                {true, true, 00, "DIANA                            That's not good! Do tell."},
+                                {true, true, 00, "ENOKI                            Well, Aaron's always bottled up  how he feels about things,"},
+                                {true, true, 00, "ENOKI                            While Maple tells you to your    face and hurts feelings."},
+                                {true, true, 00, "DIANA                            That's not a good combination."},
+                                {true, true, 00, "ENOKI                            It always blows over, but it     makes me sad in the meantime."},
+                                {true, true, 00, "DIANA                            I don't have siblings, but that'sjust how it goes, right?"},
+                                {true, true, 00, "ENOKI                            You a lonely only too? Yeah, I   always wanted a little sister."},
+                                {true, true, 00, "DIANA                            Little bro for me. Less drama."},
+                                {true, true, 00, "ENOKI                            True, true."},
+                                {true, true, 00, "DIANA                            Keep me up to date, k?"},
+                                {true, true, 00, "ENOKI                            K."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8531,13 +8908,13 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 2:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Hey, Aaron!                      What can I do you for?"},
-                                {true, true, 00, "                                                                  AARON                            Nothing much, you know about the game night tonight?"},
-                                {true, true, 00, "                                                                  DIANA                            Yeah! I'm definitely coming. Hey,you saw that broadcast?"},
-                                {true, true, 00, "                                                                  AARON                            I talked to Maple, and she seems to have known the Plonj guy."},
-                                {true, true, 00, "                                                                  AARON                            She's not worried about it."},
-                                {true, true, 00, "                                                                  DIANA                            Oh, thank goodness.              See ya tonight?"},
-                                {true, true, 00, "                                                                  AARON                            Sure thing!"},
+                                {true, true, 00, "DIANA                            Hey, Aaron!                      What can I do you for?"},
+                                {true, true, 00, "AARON                            Nothing much, you know about the game night tonight?"},
+                                {true, true, 00, "DIANA                            Yeah! I'm definitely coming. Hey,you saw that broadcast?"},
+                                {true, true, 00, "AARON                            I talked to Maple, and she seems to have known the Plonj guy."},
+                                {true, true, 00, "AARON                            She's not worried about it."},
+                                {true, true, 00, "DIANA                            Oh, thank goodness.              See ya tonight?"},
+                                {true, true, 00, "AARON                            Sure thing!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8546,22 +8923,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 3:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  SCOUT                            Hey! It's me, Scout."},
-                                {true, true, 00, "                                                                  DIANA                            Hey Scout! What're you on about?"},
-                                {true, true, 00, "                                                                  SCOUT                            It looks like this month's Scout TV is a wrap."},
-                                {true, true, 00, "                                                                  SCOUT                            Now I've just gotta worry about  the Scout Expo next month."},
-                                {true, true, 00, "                                                                  DIANA                            You keep bringing that up, what  is that exactly?"},
-                                {true, true, 00, "                                                                  SCOUT                            Oh, it's this thing where I take all my inventions and I"},
-                                {true, true, 00, "                                                                  SCOUT                            show em off. I usually take a    video and put it on the"},
-                                {true, true, 00, "                                                                  SCOUT                            world wide web, but now I've     actually got friends to show"},
-                                {true, true, 00, "                                                                  SCOUT                            the stuff off to!"},
-                                {true, true, 00, "                                                                  DIANA                            Aw, that sounds like fun! What'veyou got, for example?"},
-                                {true, true, 00, "                                                                  SCOUT                            No spoilers! Gotta wait for the  expo, you know."},
-                                {true, true, 00, "                                                                  DIANA                            Of course, of course.            That was a test."},
-                                {true, true, 00, "                                                                  SCOUT                            ...ok, so I made this device-"},
-                                {true, true, 00, "                                                                  DIANA                            No, you can't tell me, remember?"},
-                                {true, true, 00, "                                                                  SCOUT                            But I- I... hmm... okay, fine.   This is hard."},
-                                {true, true, 00, "                                                                  DIANA                            I figured it would be, hehe."},
+                                {true, true, 00, "SCOUT                            Hey! It's me, Scout."},
+                                {true, true, 00, "DIANA                            Hey Scout! What're you on about?"},
+                                {true, true, 00, "SCOUT                            It looks like this month's Scout TV is a wrap."},
+                                {true, true, 00, "SCOUT                            Now I've just gotta worry about  the Scout Expo next month."},
+                                {true, true, 00, "DIANA                            You keep bringing that up, what  is that exactly?"},
+                                {true, true, 00, "SCOUT                            Oh, it's this thing where I take all my inventions and I"},
+                                {true, true, 00, "SCOUT                            show em off. I usually take a    video and put it on the"},
+                                {true, true, 00, "SCOUT                            world wide web, but now I've     actually got friends to show"},
+                                {true, true, 00, "SCOUT                            the stuff off to!"},
+                                {true, true, 00, "DIANA                            Aw, that sounds like fun! What'veyou got, for example?"},
+                                {true, true, 00, "SCOUT                            No spoilers! Gotta wait for the  expo, you know."},
+                                {true, true, 00, "DIANA                            Of course, of course.            That was a test."},
+                                {true, true, 00, "SCOUT                            ...ok, so I made this device-"},
+                                {true, true, 00, "DIANA                            No, you can't tell me, remember?"},
+                                {true, true, 00, "SCOUT                            But I- I... hmm... okay, fine.   This is hard."},
+                                {true, true, 00, "DIANA                            I figured it would be, hehe."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8571,19 +8948,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 4:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Hey, Vee! How'd you be?"},
-                                {true, true, 00, "                                                                  OLIVIER                          Good, good."},
-                                {true, true, 00, "                                                                  DIANA                            You're not here to ask if I can  host the game night here, right?"},
-                                {true, true, 00, "                                                                  OLIVIER                          No, no! Goodness.. We're doing itoutside."},
-                                {true, true, 00, "                                                                  OLIVIER                          If all goes well, we won't burn  down the island, haha."},
-                                {true, true, 00, "                                                                  OLIVIER                          Is everyone doing well back on   shore?"},
-                                {true, true, 00, "                                                                  DIANA                            Wonderful! My parents want to    come up and visit sometime."},
-                                {true, true, 00, "                                                                  DIANA                            I need to clean up though.. maybeI pretend your place is mine."},
-                                {true, true, 00, "                                                                  OLIVIER                          In your dreams, haha."},
-                                {true, true, 00, "                                                                  OLIVIER                          I need to invite Eleanor and my  family up here sometime."},
-                                {true, true, 00, "                                                                  DIANA                            Oh, they'd love this place."},
-                                {true, true, 00, "                                                                  DIANA                            Hopefully nothing goes horribly  wrong."},
-                                {true, true, 00, "                                                                  OLIVIER                          Of course, of course haha."},
+                                {true, true, 00, "DIANA                            Hey, Vee! How'd you be?"},
+                                {true, true, 00, "OLIVIER                          Good, good."},
+                                {true, true, 00, "DIANA                            You're not here to ask if I can  host the game night here, right?"},
+                                {true, true, 00, "OLIVIER                          No, no! Goodness.. We're doing itoutside."},
+                                {true, true, 00, "OLIVIER                          If all goes well, we won't burn  down the island, haha."},
+                                {true, true, 00, "OLIVIER                          Is everyone doing well back on   shore?"},
+                                {true, true, 00, "DIANA                            Wonderful! My parents want to    come up and visit sometime."},
+                                {true, true, 00, "DIANA                            I need to clean up though.. maybeI pretend your place is mine."},
+                                {true, true, 00, "OLIVIER                          In your dreams, haha."},
+                                {true, true, 00, "OLIVIER                          I need to invite Eleanor and my  family up here sometime."},
+                                {true, true, 00, "DIANA                            Oh, they'd love this place."},
+                                {true, true, 00, "DIANA                            Hopefully nothing goes horribly  wrong."},
+                                {true, true, 00, "OLIVIER                          Of course, of course haha."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8592,26 +8969,26 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 5:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  ELEANOR                          Bonjour!"},
-                                {true, true, 00, "                                                                  DIANA                            Salut, ma charie! Quoi de neuf?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh, is that sourdough I smell?"},
-                                {true, true, 00, "                                                                  DIANA                            It shouldn't be, haha. I really  need to pick up my room..."},
-                                {true, true, 00, "                                                                  DIANA                            How've you been lately? Any news?"},
-                                {true, true, 00, "                                                                  ELEANOR                          Oh, nothing much. I've been      sewing a new quilt."},
-                                {true, true, 00, "                                                                  DIANA                            Fancy. What are you making it    out of?"},
-                                {true, true, 00, "                                                                  ELEANOR                          I took all of my clothes from my home village to the island."},
-                                {true, true, 00, "                                                                  ELEANOR                          They're ready to retire, but I   can't bear to part from them."},
-                                {true, true, 00, "                                                                  ELEANOR                          They're so much of who I am, so  I'm making a quilt."},
-                                {true, true, 00, "                                                                  DIANA                            Aw, that's wonderful."},
-                                {true, true, 00, "                                                                  DIANA                            You been making any art lately?"},
-                                {true, true, 00, "                                                                  ELEANOR                          A bit, a bit! There are so many  pretty landscapes here."},
-                                {true, true, 00, "                                                                  DIANA                            Oui. I could play guitar by the  ocean for the rest of my life."},
-                                {true, true, 00, "                                                                  DIANA                            Well, I say ocean, I mean lake.  Same difference."},
-                                {true, true, 00, "                                                                  DIANA                            Eleanor, I think I'm meant for   the sea."},
-                                {true, true, 00, "                                                                  ELEANOR                          That sounds like a fun life."},
-                                {true, true, 00, "                                                                  DIANA                            Arrrrrrrg, it's pirate time."},
-                                {true, true, 00, "                                                                  DIANA                            But it'll be okay, I'll visit allthe time when I'm sailing!"},
-                                {true, true, 00, "                                                                  ELEANOR                          S'il vous plait!"},
+                                {true, true, 00, "ELEANOR                          Bonjour!"},
+                                {true, true, 00, "DIANA                            Salut, ma charie! Quoi de neuf?"},
+                                {true, true, 00, "ELEANOR                          Oh, is that sourdough I smell?"},
+                                {true, true, 00, "DIANA                            It shouldn't be, haha. I really  need to pick up my room..."},
+                                {true, true, 00, "DIANA                            How've you been lately? Any news?"},
+                                {true, true, 00, "ELEANOR                          Oh, nothing much. I've been      sewing a new quilt."},
+                                {true, true, 00, "DIANA                            Fancy. What are you making it    out of?"},
+                                {true, true, 00, "ELEANOR                          I took all of my clothes from my home village to the island."},
+                                {true, true, 00, "ELEANOR                          They're ready to retire, but I   can't bear to part from them."},
+                                {true, true, 00, "ELEANOR                          They're so much of who I am, so  I'm making a quilt."},
+                                {true, true, 00, "DIANA                            Aw, that's wonderful."},
+                                {true, true, 00, "DIANA                            You been making any art lately?"},
+                                {true, true, 00, "ELEANOR                          A bit, a bit! There are so many  pretty landscapes here."},
+                                {true, true, 00, "DIANA                            Oui. I could play guitar by the  ocean for the rest of my life."},
+                                {true, true, 00, "DIANA                            Well, I say ocean, I mean lake.  Same difference."},
+                                {true, true, 00, "DIANA                            Eleanor, I think I'm meant for   the sea."},
+                                {true, true, 00, "ELEANOR                          That sounds like a fun life."},
+                                {true, true, 00, "DIANA                            Arrrrrrrg, it's pirate time."},
+                                {true, true, 00, "DIANA                            But it'll be okay, I'll visit allthe time when I'm sailing!"},
+                                {true, true, 00, "ELEANOR                          S'il vous plait!"},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8639,26 +9016,26 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                         case 7:
                         {
                             line lc[32] = {
-                                {true, true, 00, "                                                                  DIANA                            Hey! Guy, was it? You that guy?"},
-                                {true, true, 00, "                                                                  GUY                              Yeah, that's me. This your place?"},
-                                {true, true, 00, "                                                                  DIANA                            You bet. It's not much. you like your place?"},
-                                {true, true, 00, "                                                                  GUY                              Ever since I was a kid, it's beena dream to have my very own"},
-                                {true, true, 00, "                                                                  GUY                              Industrial-sized kitchen that I  can roll out of bed to."},
-                                {true, true, 00, "                                                                  DIANA                            That's a pretty hyper-specific   dream, but I get it."},
-                                {true, true, 00, "                                                                  GUY                              You don't even have a kitchen, doyou?"},
-                                {true, true, 00, "                                                                  DIANA                            I mean, I've got a stovetop and  a mini-fridge, haha."},
-                                {true, true, 00, "                                                                  DIANA                            I do all the importing here, so  I eat pre-packaged a lot."},
-                                {true, true, 00, "                                                                  GUY                              That's not super healthy y'know."},
-                                {true, true, 00, "                                                                  DIANA                            Yeah, I'll worry about that laterwhen it matters."},
-                                {true, true, 00, "                                                                  DIANA                            Everyone gets old and fat        someday, y'know."},
-                                {true, true, 00, "                                                                  GUY                              Not me. I'll be old and thin."},
-                                {true, true, 00, "                                                                  DIANA                            We'll catch up in fifty and see  how that's going, huh?"},
-                                {true, true, 00, "                                                                  GUY                              You bet."},
-                                {true, true, 00, "                                                                  DIANA                            We're having game night tonight, you coming?"},
-                                {true, true, 00, "                                                                  GUY                              Nah, I'll be messing with my     kitchen tonight."},
-                                {true, true, 00, "                                                                  DIANA                            Ah.. I see, I see. Fair enough."},
-                                {true, true, 00, "                                                                  DIANA                            You do you, dude."},
-                                {true, true, 00, "                                                                  GUY                              Will do."},
+                                {true, true, 00, "DIANA                            Hey! Guy, was it? You that guy?"},
+                                {true, true, 00, "GUY                              Yeah, that's me. This your place?"},
+                                {true, true, 00, "DIANA                            You bet. It's not much. you like your place?"},
+                                {true, true, 00, "GUY                              Ever since I was a kid, it's beena dream to have my very own"},
+                                {true, true, 00, "GUY                              Industrial-sized kitchen that I  can roll out of bed to."},
+                                {true, true, 00, "DIANA                            That's a pretty hyper-specific   dream, but I get it."},
+                                {true, true, 00, "GUY                              You don't even have a kitchen, doyou?"},
+                                {true, true, 00, "DIANA                            I mean, I've got a stovetop and  a mini-fridge, haha."},
+                                {true, true, 00, "DIANA                            I do all the importing here, so  I eat pre-packaged a lot."},
+                                {true, true, 00, "GUY                              That's not super healthy y'know."},
+                                {true, true, 00, "DIANA                            Yeah, I'll worry about that laterwhen it matters."},
+                                {true, true, 00, "DIANA                            Everyone gets old and fat        someday, y'know."},
+                                {true, true, 00, "GUY                              Not me. I'll be old and thin."},
+                                {true, true, 00, "DIANA                            We'll catch up in fifty and see  how that's going, huh?"},
+                                {true, true, 00, "GUY                              You bet."},
+                                {true, true, 00, "DIANA                            We're having game night tonight, you coming?"},
+                                {true, true, 00, "GUY                              Nah, I'll be messing with my     kitchen tonight."},
+                                {true, true, 00, "DIANA                            Ah.. I see, I see. Fair enough."},
+                                {true, true, 00, "DIANA                            You do you, dude."},
+                                {true, true, 00, "GUY                              Will do."},
                                 {true, true, 00, "COM: Endscene"}};
                             dialogue_page_lite(lc);
                             break;
@@ -8675,22 +9052,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     {
                         //corinne.set_blending_enabled(false);
                         line lc[32] = {
-                            {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-                            {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-                            {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-                            {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-                            {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
-                            {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+                            {true, true, 00, "OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
+                            {true, true, 00, "GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
+                            {true, true, 00, "OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
+                            {true, true, 00, "GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
+                            {true, true, 00, "OLIVIER                          A ghost???"},
+                            {true, true, 00, "GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
+                            {true, true, 00, "OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
+                            {true, true, 00, "OLIVIER                          Now that I think about it.. I    suppose not."},
+                            {true, true, 00, "OLIVIER                          It's where I spend most of my    life anyway."},
+                            {true, true, 00, "GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
+                            {true, true, 00, "GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
+                            {true, true, 00, "GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8699,22 +9076,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     {
                         //corinne.set_blending_enabled(false);
                         line lc[32] = {
-                            {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-                            {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-                            {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-                            {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-                            {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
-                            {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+                            {true, true, 00, "OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
+                            {true, true, 00, "GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
+                            {true, true, 00, "OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
+                            {true, true, 00, "GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
+                            {true, true, 00, "OLIVIER                          A ghost???"},
+                            {true, true, 00, "GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
+                            {true, true, 00, "OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
+                            {true, true, 00, "OLIVIER                          Now that I think about it.. I    suppose not."},
+                            {true, true, 00, "OLIVIER                          It's where I spend most of my    life anyway."},
+                            {true, true, 00, "GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
+                            {true, true, 00, "GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
+                            {true, true, 00, "GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
                             {true, true, 00, "COM: Endscene"} };
                         dialogue_page_lite(lc);
                         break;
@@ -8756,21 +9133,15 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 }
                 case 68:
                 {
-                    line lc[32] = {
-                        {true, true, 00, "                                                                  CESAR'S BIZAAR                   'GONE FISHING, BE BACK FEB. 28th'"},
-                        {true, true, 00, "COM: Endscene"} };
-                    dialogue_page_lite(lc);
-                    /*
                     dt.spawn_x = 7;
                     dt.spawn_y = 0;
                     dt.world_index = 99;
-                    */
                     return dt;
                 }
                 case 69:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  CESAR'S BIZAAR                   'WE ONLY HAVE TWO ITEMS,         DEAL WITH IT'"},
+                        {true, true, 00, "CESAR'S BIZAAR                   'WE ONLY HAVE TWO ITEMS,         DEAL WITH IT'"},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -8784,22 +9155,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     case 0:
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  MAPLE                            So... Guy, you, uh.. put tomatoesin your Jumbalaya?"},
-                            {true, true, 00, "                                                                  GUY                              Just as God intended."},
-                            {true, true, 00, "                                                                  MAPLE                            Just as G- Just as God intended??"},
-                            {true, true, 00, "                                                                  MAPLE                            ...You're kidding me, right?"},
-                            {true, true, 00, "                                                                  GUY                              Let me guess, you're one-a those who likes her roux burnt."},
-                            {true, true, 00, "                                                                  MAPLE                            Define 'burnt'."},
-                            {true, true, 00, "                                                                  GUY                              Like so burnt, all the color's   gone and you can't taste it."},
-                            {true, true, 00, "                                                                  MAPLE                            What do you mean 'can't' taste   it? Of course you can!"},
-                            {true, true, 00, "                                                                  GUY                              Yeah, cuz you bury it in a pile  of random spices."},
-                            {true, true, 00, "                                                                  MAPLE                            My spice choice is NOT random."},
-                            {true, true, 00, "                                                                  GUY                              Now if you'll excuse me, I don't need to sweep the kitchen"},
-                            {true, true, 00, "                                                                  GUY                              floor to make a good jumbalaya."},
-                            {true, true, 00, "                                                                  MAPLE                            You Creoles are psycotic."},
-                            {true, true, 00, "                                                                  GUY                              Not like you Cajuns are, honey.  I tell you what. Gumbo contest."},
-                            {true, true, 00, "                                                                  GUY                              You make some gumbo and we get   everyone else to judge. Deal?"},
-                            {true, true, 00, "                                                                  MAPLE                            Deal.                            Easy."},
+                            {true, true, 00, "MAPLE                            So... Guy, you, uh.. put tomatoesin your Jambalaya?"},
+                            {true, true, 00, "GUY                              Just as God intended."},
+                            {true, true, 00, "MAPLE                            Just as G- Just as God intended??"},
+                            {true, true, 00, "MAPLE                            ...You're kidding me, right?"},
+                            {true, true, 00, "GUY                              Let me guess, you're one-a those who likes her roux burnt."},
+                            {true, true, 00, "MAPLE                            Define 'burnt'."},
+                            {true, true, 00, "GUY                              Like so burnt, all the color's   gone and you can't taste it."},
+                            {true, true, 00, "MAPLE                            What do you mean 'can't' taste   it? Of course you can!"},
+                            {true, true, 00, "GUY                              Yeah, cuz you bury it in a pile  of random spices."},
+                            {true, true, 00, "MAPLE                            My spice choice is NOT random."},
+                            {true, true, 00, "GUY                              Now if you'll excuse me, I don't need to sweep the kitchen"},
+                            {true, true, 00, "GUY                              floor to make a good jambalaya."},
+                            {true, true, 00, "MAPLE                            You Creoles are psychotic."},
+                            {true, true, 00, "GUY                              Not like you Cajuns are, honey.  I tell you what. Gumbo contest."},
+                            {true, true, 00, "GUY                              You make some gumbo and we get   everyone else to judge. Deal?"},
+                            {true, true, 00, "MAPLE                            Deal.                            Easy."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8807,16 +9178,16 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     case 1:
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  ENOKI                            Ooooooo... I love your kitchen!! It's so big!"},
-                            {true, true, 00, "                                                                  GUY                              Merci. I'm pretty keen on rollingout of bed to some cornbread."},
-                            {true, true, 00, "                                                                  ENOKI                            I wish I could do that, hehe."},
-                            {true, true, 00, "                                                                  GUY                              Say, uh.. That Maple belle, how'sher gumbo like compared to mine?"},
-                            {true, true, 00, "                                                                  ENOKI                            Are you two in a competition?    Ooh, now I don't wanna choose."},
-                            {true, true, 00, "                                                                  ENOKI                            I don't wanna on your bad side   right as soon as you moved in,"},
-                            {true, true, 00, "                                                                  ENOKI                            But you gotta know that Maple andI are like best friends."},
-                            {true, true, 00, "                                                                  GUY                              Maybe I can cook up something    that'll make you reconsider."},
-                            {true, true, 00, "                                                                  ENOKI                            That'll be pretty tough. I don't like food /that/ much."},
-                            {true, true, 00, "                                                                  GUY                              But... Ah, nevermind, have it    your own way, cheri."},
+                            {true, true, 00, "ENOKI                            Ooooooo... I love your kitchen!! It's so big!"},
+                            {true, true, 00, "GUY                              Merci. I'm pretty keen on rollingout of bed to some cornbread."},
+                            {true, true, 00, "ENOKI                            I wish I could do that, hehe."},
+                            {true, true, 00, "GUY                              Say, uh.. That Maple belle, how'sher gumbo like compared to mine?"},
+                            {true, true, 00, "ENOKI                            Are you two in a competition?    Ooh, now I don't wanna choose."},
+                            {true, true, 00, "ENOKI                            I don't wanna on your bad side   right as soon as you moved in,"},
+                            {true, true, 00, "ENOKI                            But you gotta know that Maple andI are like best friends."},
+                            {true, true, 00, "GUY                              Maybe I can cook up something    that'll make you reconsider."},
+                            {true, true, 00, "ENOKI                            That'll be pretty tough. I don't like food /that/ much."},
+                            {true, true, 00, "GUY                              But... Ah, nevermind, have it    your own way, cheri."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8824,22 +9195,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     case 2:
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  AARON                            It smells so nice in here!"},
-                            {true, true, 00, "                                                                  GUY                              Oui, as it ought to."},
-                            {true, true, 00, "                                                                  AARON                            So, uh.. I heard that you moved  in because you want customers?"},
-                            {true, true, 00, "                                                                  GUY                              Right."},
-                            {true, true, 00, "                                                                  AARON                            Well, uh.. Obviously we're not a huge group of people here.."},
-                            {true, true, 00, "                                                                  AARON                            And I'm obviously doing my best  to make this place a good home.."},
-                            {true, true, 00, "                                                                  GUY                              Uh huh?"},
-                            {true, true, 00, "                                                                  AARON                            I just, uh, hope you know that wearen't quite big enough to have"},
-                            {true, true, 00, "                                                                  AARON                            Our own currency yet, and a few  of don't really keep cash.."},
-                            {true, true, 00, "                                                                  GUY                              I charge five dollars per meal,  and I expect customers."},
-                            {true, true, 00, "                                                                  AARON                            I'll tell you what. This cabin iswhat, ten thousand? Twenty?"},
-                            {true, true, 00, "                                                                  AARON                            I can't do math in my head, I    never graduated high school."},
-                            {true, true, 00, "                                                                  AARON                            Enoki can do crazy math in her   head, but she isn't here."},
-                            {true, true, 00, "                                                                  AARON                            How about free food for all of usfor the rest of the year,"},
-                            {true, true, 00, "                                                                  AARON                            And that'll pay for the food.    C'est bon?"},
-                            {true, true, 00, "                                                                  GUY                              ...I'll think about it."},
+                            {true, true, 00, "AARON                            It smells so nice in here!"},
+                            {true, true, 00, "GUY                              Oui, as it ought to."},
+                            {true, true, 00, "AARON                            So, uh.. I heard that you moved  in because you want customers?"},
+                            {true, true, 00, "GUY                              Right."},
+                            {true, true, 00, "AARON                            Well, uh.. Obviously we're not a huge group of people here.."},
+                            {true, true, 00, "AARON                            And I'm obviously doing my best  to make this place a good home.."},
+                            {true, true, 00, "GUY                              Uh huh?"},
+                            {true, true, 00, "AARON                            I just, uh, hope you know that wearen't quite big enough to have"},
+                            {true, true, 00, "AARON                            Our own currency yet, and a few  of don't really keep cash.."},
+                            {true, true, 00, "GUY                              I charge five dollars per meal,  and I expect customers."},
+                            {true, true, 00, "AARON                            I'll tell you what. This cabin iswhat, ten thousand? Twenty?"},
+                            {true, true, 00, "AARON                            I can't do math in my head, I    never graduated high school."},
+                            {true, true, 00, "AARON                            Enoki can do crazy math in her   head, but she isn't here."},
+                            {true, true, 00, "AARON                            How about free food for all of usfor the rest of the year,"},
+                            {true, true, 00, "AARON                            And that'll pay for the food.    C'est bon?"},
+                            {true, true, 00, "GUY                              ...I'll think about it."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8847,22 +9218,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     case 3:
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-                            {true, true, 00, "                                                                  OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-                            {true, true, 00, "                                                                  OLIVIER                          A ghost???"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-                            {true, true, 00, "                                                                  OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-                            {true, true, 00, "                                                                  OLIVIER                          Now that I think about it.. I    suppose not."},
-                            {true, true, 00, "                                                                  OLIVIER                          It's where I spend most of my    life anyway."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-                            {true, true, 00, "                                                                  GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+                            {true, true, 00, "OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
+                            {true, true, 00, "GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
+                            {true, true, 00, "OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
+                            {true, true, 00, "GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
+                            {true, true, 00, "OLIVIER                          A ghost???"},
+                            {true, true, 00, "GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
+                            {true, true, 00, "OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
+                            {true, true, 00, "OLIVIER                          Now that I think about it.. I    suppose not."},
+                            {true, true, 00, "OLIVIER                          It's where I spend most of my    life anyway."},
+                            {true, true, 00, "GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
+                            {true, true, 00, "GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
+                            {true, true, 00, "GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
+                            {true, true, 00, "GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8870,22 +9241,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     case 4:
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  OLIVIER                          Bonjour!"},
-                            {true, true, 00, "                                                                  GUY                              Oui. J'suppose you're the garden boy?"},
-                            {true, true, 00, "                                                                  GUY                              You grow lots of celery, onions, and bell peppers?"},
-                            {true, true, 00, "                                                                  OLIVIER                          Well of course!"},
-                            {true, true, 00, "                                                                  GUY                              I'll tell you what. You continue to give me fresh supply,"},
-                            {true, true, 00, "                                                                  GUY                              And I'll get you free gumbo."},
-                            {true, true, 00, "                                                                  OLIVIER                          What about my wife?"},
-                            {true, true, 00, "                                                                  GUY                              She the one with the Wendy's hairor the Wendy's outfit?"},
-                            {true, true, 00, "                                                                  OLIVIER                          ...she's the one with the brown  hair."},
-                            {true, true, 00, "                                                                  GUY                              Got it, Dave."},
-                            {true, true, 00, "                                                                  OLIVIER                          ...Olivier. Olivier Landry."},
-                            {true, true, 00, "                                                                  OLIVIER                          Isn't your name Guy?"},
-                            {true, true, 00, "                                                                  GUY                              Correct."},
-                            {true, true, 00, "                                                                  OLIVIER                          Don't you go by 'Guy Pizza'?"},
-                            {true, true, 00, "                                                                  GUY                              It's more of a joke, but don't   tell no one, you hear?"},
-                            {true, true, 00, "                                                                  OLIVIER                          I hear, I hear."},
+                            {true, true, 00, "OLIVIER                          Bonjour!"},
+                            {true, true, 00, "GUY                              Oui. J'suppose you're the garden boy?"},
+                            {true, true, 00, "GUY                              You grow lots of celery, onions, and bell peppers?"},
+                            {true, true, 00, "OLIVIER                          Well of course!"},
+                            {true, true, 00, "GUY                              I'll tell you what. You continue to give me fresh supply,"},
+                            {true, true, 00, "GUY                              And I'll get you free gumbo."},
+                            {true, true, 00, "OLIVIER                          What about my wife?"},
+                            {true, true, 00, "GUY                              She the one with the Wendy's hairor the Wendy's outfit?"},
+                            {true, true, 00, "OLIVIER                          ...she's the one with the brown  hair."},
+                            {true, true, 00, "GUY                              Got it, Dave."},
+                            {true, true, 00, "OLIVIER                          ...Olivier. Olivier Landry."},
+                            {true, true, 00, "OLIVIER                          Isn't your name Guy?"},
+                            {true, true, 00, "GUY                              Correct."},
+                            {true, true, 00, "OLIVIER                          Don't you go by 'Guy Pizza'?"},
+                            {true, true, 00, "GUY                              It's more of a joke, but don't   tell no one, you hear?"},
+                            {true, true, 00, "OLIVIER                          I hear, I hear."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8893,19 +9264,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     case 5:
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  ELEANOR                          Bonjour! Comment allez-vous?"},
-                            {true, true, 00, "                                                                  GUY                              C'est bon, how are you?"},
-                            {true, true, 00, "                                                                  ELEANOR                          This place makes me pretty       hungry, it smells great!"},
-                            {true, true, 00, "                                                                  GUY                              Oh yeah?"},
-                            {true, true, 00, "                                                                  ELEANOR                          I prefer baking to cooking, but  this is a wonderful kitchen."},
-                            {true, true, 00, "                                                                  GUY                              Yeah, what you make?"},
-                            {true, true, 00, "                                                                  ELEANOR                          My favorite thing to make is key lime pie, but sometimes I"},
-                            {true, true, 00, "                                                                  ELEANOR                          just need to make a lot of pecan praline. Do you like praline?"},
-                            {true, true, 00, "                                                                  GUY                              Like praline?"},
-                            {true, true, 00, "                                                                  GUY                              LIKE praline?"},
-                            {true, true, 00, "                                                                  GUY                              Yeah, it's pretty good."},
-                            {true, true, 00, "                                                                  GUY                              You get me some praline, and I'llget you free food, how's that?"},
-                            {true, true, 00, "                                                                  ELEANOR                          It's a deal!"},
+                            {true, true, 00, "ELEANOR                          Bonjour! Comment allez-vous?"},
+                            {true, true, 00, "GUY                              C'est bon, how are you?"},
+                            {true, true, 00, "ELEANOR                          This place makes me pretty       hungry, it smells great!"},
+                            {true, true, 00, "GUY                              Oh yeah?"},
+                            {true, true, 00, "ELEANOR                          I prefer baking to cooking, but  this is a wonderful kitchen."},
+                            {true, true, 00, "GUY                              Yeah, what you make?"},
+                            {true, true, 00, "ELEANOR                          My favorite thing to make is key lime pie, but sometimes I"},
+                            {true, true, 00, "ELEANOR                          just need to make a lot of pecan praline. Do you like praline?"},
+                            {true, true, 00, "GUY                              Like praline?"},
+                            {true, true, 00, "GUY                              LIKE praline?"},
+                            {true, true, 00, "GUY                              Yeah, it's pretty good."},
+                            {true, true, 00, "GUY                              You get me some praline, and I'llget you free food, how's that?"},
+                            {true, true, 00, "ELEANOR                          It's a deal!"},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8913,22 +9284,22 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     case 6:
                     {
                         line lc[32] = {
-                            {true, true, 00, "                                                                  DIANA                            Hey, there! Guy Pizza, is it?"},
-                            {true, true, 00, "                                                                  GUY                              Guy Pizza, the one and only."},
-                            {true, true, 00, "                                                                  DIANA                            I can see why, haha. You Italian?"},
-                            {true, true, 00, "                                                                  GUY                              Nah, I'm from Donaldsonville.    New name, new life."},
-                            {true, true, 00, "                                                                  DIANA                            And so you chose 'pizza'?"},
-                            {true, true, 00, "                                                                  GUY                              People called me 'pizza guy' for ages, and my name's Guy..."},
-                            {true, true, 00, "                                                                  GUY                              It was just natural. Plus, it    makes folks hungry."},
-                            {true, true, 00, "                                                                  DIANA                            Yeah, for pizza. Do you make     pizza often?"},
-                            {true, true, 00, "                                                                  GUY                              Not often, no."},
-                            {true, true, 00, "                                                                  DIANA                            I guess it's not too late to     change your mind, you know."},
-                            {true, true, 00, "                                                                  GUY                              You got any suggestions?"},
-                            {true, true, 00, "                                                                  DIANA                            Guy... Mysterious. That sounds   mysterious."},
-                            {true, true, 00, "                                                                  GUY                              I'm not a magician."},
-                            {true, true, 00, "                                                                  DIANA                            You're also not a pizza."},
-                            {true, true, 00, "                                                                  GUY                              Fair play."},
-                            {true, true, 00, "                                                                  GUY                              I'll take your suggestion into   account, we'll just say that."},
+                            {true, true, 00, "DIANA                            Hey, there! Guy Pizza, is it?"},
+                            {true, true, 00, "GUY                              Guy Pizza, the one and only."},
+                            {true, true, 00, "DIANA                            I can see why, haha. You Italian?"},
+                            {true, true, 00, "GUY                              Nah, I'm from Donaldsonville.    New name, new life."},
+                            {true, true, 00, "DIANA                            And so you chose 'pizza'?"},
+                            {true, true, 00, "GUY                              People called me 'pizza guy' for ages, and my name's Guy..."},
+                            {true, true, 00, "GUY                              It was just natural. Plus, it    makes folks hungry."},
+                            {true, true, 00, "DIANA                            Yeah, for pizza. Do you make     pizza often?"},
+                            {true, true, 00, "GUY                              Not often, no."},
+                            {true, true, 00, "DIANA                            I guess it's not too late to     change your mind, you know."},
+                            {true, true, 00, "GUY                              You got any suggestions?"},
+                            {true, true, 00, "DIANA                            Guy... Mysterious. That sounds   mysterious."},
+                            {true, true, 00, "GUY                              I'm not a magician."},
+                            {true, true, 00, "DIANA                            You're also not a pizza."},
+                            {true, true, 00, "GUY                              Fair play."},
+                            {true, true, 00, "GUY                              I'll take your suggestion into   account, we'll just say that."},
                             {true, true, 00, "COM: Endscene"}};
                         dialogue_page_lite(lc);
                         break;
@@ -8948,7 +9319,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 case 71:
                 {
                     line lc[5] = {
-                        {true, true, 00, "                                                                  AARON                            Huh.. No one seems to be home."},
+                        {true, true, 00, "AARON                            Huh.. No one seems to be home."},
                         {true, true, 00, "COM: Endscene"}};
                     dialogue_page_lite(lc);
                     break;
@@ -8970,13 +9341,16 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     }
                 };
                 }
-            }
-        }
+            
+                so->xp += 2;
+                xphud.acknowledge();
+}
+        
+}
         else {
             current_room.a_notif.set_visible(false);
         }
 
-        /*
         // Hat logic
         if (active_hat)
         {
@@ -9006,7 +9380,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
             {
                 hat.set_position(so->hat_x, so->hat_y);
 
-                if (so->hat_y > current_room.chari.at(follow_id).entity.y())
+                if (so->hat_y > current_room.chari.at(current_room.follow_id).entity.y())
                 {
                     hat.put_above();
                 }
@@ -9015,7 +9389,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     hat.put_below();
                 }
 
-                if (abs(so->hat_x - current_room.chari.at(follow_id).entity.x().integer()) + abs(so->hat_y - current_room.chari.at(follow_id).entity.y().integer()) < 32)
+                if (abs(so->hat_x - current_room.chari.at(current_room.follow_id).entity.x().integer()) + abs(so->hat_y - current_room.chari.at(current_room.follow_id).entity.y().integer()) < 32)
                 {
                     current_room.a_notif = bn::sprite_items::a_button_2.create_sprite(so->hat_x, so->hat_y - 28, 1);
                     current_room.a_notif.set_camera(current_room.camera);
@@ -9025,11 +9399,10 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 if (bn::keypad::l_pressed())
                 {
                     bn::sound_items::squeak.play();
-                    so->hat_char = current_room.chari.at(follow_id).identity;
+                    so->hat_char = current_room.chari.at(current_room.follow_id).identity;
                 }
             }
         }
-        */
 
         current_room.update_objects();
 
@@ -9090,37 +9463,37 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                     }
 
                     line lc[32] = {
-                        {true, true, 00, "                                                                  MAPLE                            ...."},
-                        {true, true, 00, "                                                                  ENOKI                            Well, there's no passage."},
-                        {true, true, 00, "                                                                  MAPLE                            You don't say."},
-                        {true, true, 00, "                                                                  ENOKI                            That's weird."},
-                        {true, true, 00, "                                                                  MAPLE                            Enoki... Look here."},
-                        {true, true, 00, "                                                                  MAPLE                            I guess it doesn't make any sense"},
-                        {true, true, 00, "                                                                  MAPLE                            to be angry, so I won't be, but.."},
-                        {true, true, 00, "                                                                  MAPLE                            You need to stop being like this."},
-                        {true, true, 00, "                                                                  MAPLE                            You and Aaron just spent all this"},
-                        {true, true, 00, "                                                                  MAPLE                            money on a barely furnished"},
-                        {true, true, 00, "                                                                  MAPLE                            castle without basic faculties"},
-                        {true, true, 00, "                                                                  MAPLE                            for what? So you could play like"},
-                        {true, true, 00, "                                                                  MAPLE                            you're a princess? While I'm over"},
-                        {true, true, 00, "                                                                  MAPLE                            in Carolina, sacrificing the best"},
-                        {true, true, 00, "                                                                  MAPLE                            parts of my life for an apartment"},
-                        {true, true, 00, "                                                                  MAPLE                            with the bare essentials?"},
-                        {true, true, 00, "                                                                  MAPLE                            Enoki... Please."},
-                        {true, true, 00, "                                                                  MAPLE                            I don't want to be the bad guy."},
-                        {true, true, 00, "                                                                  MAPLE                            I know you didn't really have a"},
-                        {true, true, 00, "                                                                  MAPLE                            childhood or parents, I get it."},
-                        {true, true, 00, "                                                                  MAPLE                            That's me too."},
-                        {true, true, 00, "                                                                  MAPLE                            But you can't keep going on like"},
-                        {true, true, 00, "                                                                  MAPLE                            this. Do you understand?"},
-                        {true, true, 00, "                                                                  ENOKI                            I do understand."}, //j'ai compris?
-                        {true, true, 00, "                                                                  MAPLE                            It's 5:00 in the morning, I'm"},
-                        {true, true, 00, "                                                                  MAPLE                            going back to bed. I'll see y'all"},
-                        {true, true, 00, "                                                                  MAPLE                            in the morning, oui?"},
-                        {true, true, 00, "                                                                  ENOKI                            Oui.."},
-                        {true, true, 00, "                                                                  MAPLE                            Hey, don't beat yourself up about"},
-                        {true, true, 00, "                                                                  MAPLE                            it. S'il te plait.. Bonne nuit."},
-                        {true, true, 00, "                                                                  ENOKI                            Bonne nuit.."},
+                        {true, true, 00, "MAPLE                            ...."},
+                        {true, true, 00, "ENOKI                            Well, there's no passage."},
+                        {true, true, 00, "MAPLE                            You don't say."},
+                        {true, true, 00, "ENOKI                            That's weird."},
+                        {true, true, 00, "MAPLE                            Enoki... Look here."},
+                        {true, true, 00, "MAPLE                            I guess it doesn't make any sense"},
+                        {true, true, 00, "MAPLE                            to be angry, so I won't be, but.."},
+                        {true, true, 00, "MAPLE                            You need to stop being like this."},
+                        {true, true, 00, "MAPLE                            You and Aaron just spent all this"},
+                        {true, true, 00, "MAPLE                            money on a barely furnished"},
+                        {true, true, 00, "MAPLE                            castle without basic faculties"},
+                        {true, true, 00, "MAPLE                            for what? So you could play like"},
+                        {true, true, 00, "MAPLE                            you're a princess? While I'm over"},
+                        {true, true, 00, "MAPLE                            in Carolina, sacrificing the best"},
+                        {true, true, 00, "MAPLE                            parts of my life for an apartment"},
+                        {true, true, 00, "MAPLE                            with the bare essentials?"},
+                        {true, true, 00, "MAPLE                            Enoki... Please."},
+                        {true, true, 00, "MAPLE                            I don't want to be the bad guy."},
+                        {true, true, 00, "MAPLE                            I know you didn't really have a"},
+                        {true, true, 00, "MAPLE                            childhood or parents, I get it."},
+                        {true, true, 00, "MAPLE                            That's me too."},
+                        {true, true, 00, "MAPLE                            But you can't keep going on like"},
+                        {true, true, 00, "MAPLE                            this. Do you understand?"},
+                        {true, true, 00, "ENOKI                            I do understand."}, //j'ai compris?
+                        {true, true, 00, "MAPLE                            It's 5:00 in the morning, I'm"},
+                        {true, true, 00, "MAPLE                            going back to bed. I'll see y'all"},
+                        {true, true, 00, "MAPLE                            in the morning, oui?"},
+                        {true, true, 00, "ENOKI                            Oui.."},
+                        {true, true, 00, "MAPLE                            Hey, don't beat yourself up about"},
+                        {true, true, 00, "MAPLE                            it. S'il te plait.. Bonne nuit."},
+                        {true, true, 00, "ENOKI                            Bonne nuit.."},
                         {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
 
@@ -9136,7 +9509,7 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
 
             if (corinne->visible())
             {
-                if (abs(current_room.chari.at(follow_id).entity.x().integer() - corinne->x().integer()) + abs(current_room.chari.at(follow_id).entity.y().integer() - corinne->y().integer()) < 48)
+                if (abs(current_room.chari.at(current_room.follow_id).entity.x().integer() - corinne->x().integer()) + abs(current_room.chari.at(current_room.follow_id).entity.y().integer() - corinne->y().integer()) < 48)
                 {
                     corinne->set_blending_enabled(true);
                     bn::blending::set_transparency_alpha(0.5);
@@ -9147,19 +9520,19 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
                 }
             }
 
-            if (current_room.chari.at(follow_id).identity == 4 && bn::keypad::r_pressed() && corinne->visible() == false)
+            if (current_room.chari.at(current_room.follow_id).identity == 4 && bn::keypad::r_pressed() && corinne->visible() == false)
             {
                 corinne->set_visible(true);
-                corinne->set_x(current_room.chari.at(follow_id).entity.x());
+                corinne->set_x(current_room.chari.at(current_room.follow_id).entity.x());
                 bn::sound_items::pop.play();
 
-                if (current_room.chari.at(follow_id).entity.y() < (current_room.height * 32) / 2)
+                if (current_room.chari.at(current_room.follow_id).entity.y() < (current_room.height * 32) / 2)
                 {
-                    corinne->set_y(current_room.chari.at(follow_id).entity.y() + 192);
+                    corinne->set_y(current_room.chari.at(current_room.follow_id).entity.y() + 192);
                 }
                 else
                 {
-                    corinne->set_y(current_room.chari.at(follow_id).entity.y() - 192);
+                    corinne->set_y(current_room.chari.at(current_room.follow_id).entity.y() - 192);
                 }
 
                 short int s_x = (corinne->x().integer() + 16) / 32;
@@ -9189,8 +9562,30 @@ dungeon_return dungeon(dungeon_return &dt, save_struct *so, bool door_noise = tr
     }
 }
 
+class after_effect {
+    public:
+        bn::sprite_ptr me = bn::sprite_items::underground_tiles.create_sprite(0, 0, 4);
+        bool done = false;
+
+        after_effect() {
+            done = false;
+        }
+
+        void update() {
+            if (me.horizontal_scale() > 0.2) {
+                me.set_scale(me.horizontal_scale() - 0.05, me.vertical_scale() - 0.05);
+                me.put_below();
+            }
+            else {
+                done = true;
+            }
+        }
+};
+
 dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_noise = true)
 {
+    bn::vector<after_effect, 2> aes;
+
     if (dt.world_index == 2)
     {
         line lc[32] = {
@@ -9741,6 +10136,15 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
         if (window_y > -80)
             window_y -= 10;
 
+        // the fancy effect
+        for (int t = 0; t < aes.size(); t++) {
+            aes.at(t).update();
+            if (aes.at(t).done) {
+                aes.clear();
+                break;
+            }
+        }
+
         // set current_room.camera follow point
         current_room.follow_x = current_room.chari.at(current_room.follow_id).entity.x().integer();
         current_room.follow_y = current_room.chari.at(current_room.follow_id).entity.y().integer();
@@ -9764,6 +10168,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                     local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
                     collisions.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
                     current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+
+                    after_effect ae;
+                    ae.me.set_position(rel_x * 32, (rel_y+1) * 32);
+                    ae.me.set_camera(current_room.camera);
+                    aes.push_back(ae);
+                    BN_LOG("new aes");
                 }
             }
             if (local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 3)
@@ -9775,6 +10185,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                     local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
                     collisions.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
                     current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+
+                    after_effect ae;
+                    ae.me.set_position(rel_x * 32, (rel_y-1) * 32);
+                    ae.me.set_camera(current_room.camera);
+                    aes.push_back(ae);
+                    BN_LOG("new aes");
                 }
             }
             if (local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 1)
@@ -9786,6 +10202,11 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                     local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
                     collisions.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
                     current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+
+                    after_effect ae;
+                    ae.me.set_position((rel_x + 1) * 32, rel_y * 32);
+                    ae.me.set_camera(current_room.camera);
+                    aes.push_back(ae);
                 }
             }
             if (local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 2)
@@ -9797,6 +10218,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                     local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
                     collisions.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
                     current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+
+                    after_effect ae;
+                    ae.me.set_position((rel_x-1) * 32, rel_y * 32);
+                    ae.me.set_camera(current_room.camera);
+                    aes.push_back(ae);
+                    BN_LOG("new aes");
                 }
             }
         }
@@ -9871,12 +10298,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 case 2:
                 {
                     line lc[10] = {
-                        {true, true, 00, "                                                                  MAPLE                            What the.."},
-                        {true, true, 00, "                                                                  MAPLE                            What the heck is this?"},
-                        {true, true, 00, "                                                                  SCOUT                            Maybe my bunker tool needs to be"},
-                        {true, true, 00, "                                                                  SCOUT                            recalibrated."},
-                        {true, true, 00, "                                                                  MAPLE                            Well, fix it. I don't want to die"},
-                        {true, true, 00, "                                                                  MAPLE                            down here."},
+                        {true, true, 00, "MAPLE                            What the.."},
+                        {true, true, 00, "MAPLE                            What the heck is this?"},
+                        {true, true, 00, "SCOUT                            Maybe my bunker tool needs to be"},
+                        {true, true, 00, "SCOUT                            recalibrated."},
+                        {true, true, 00, "MAPLE                            Well, fix it. I don't want to die"},
+                        {true, true, 00, "MAPLE                            down here."},
                         {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
@@ -9884,31 +10311,31 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 case 3:
                 {
                     line lc[32] = {
-                        {true, true, 00, "                                                                  ELEANOR                          Vee, do we need to go any"},
-                        {true, true, 00, "                                                                  ELEANOR                          further? I'm scared."},
-                        {true, true, 00, "                                                                  OLIVIER                          I'll stay behind with my wife."},
-                        {true, true, 00, "                                                                  OLIVIER                          We can protect ourselves. I'm   "},
-                        {true, true, 00, "                                                                  OLIVIER                          sure we're far enough from"},
-                        {true, true, 00, "                                                                  OLIVIER                          whatever was going on."},
-                        {true, true, 00, "                                                                  AARON                            Alright.. If you say so. Fais"},
-                        {true, true, 00, "                                                                  AARON                            attention, oui?"},
-                        {true, true, 00, "                                                                  OLIVIER                          Oui."},
-                        {true, true, 00, "                                                                  AARON                            Enoki, are you going to stay"},
-                        {true, true, 00, "                                                                  AARON                            with them?"},
-                        {true, true, 00, "                                                                  ENOKI                            Bad things happen to me"},
-                        {true, true, 00, "                                                                  ENOKI                            whenever I'm too far away from  "},
-                        {true, true, 00, "                                                                  ENOKI                            a Tremblay, so I'll say no."},
-                        {true, true, 00, "                                                                  AARON                            Very well, then. So, it's"},
-                        {true, true, 00, "                                                                  AARON                            you, Maple, and Scout.. oui?  "},
-                        {true, true, 00, "                                                                  SCOUT                            Oui."},
-                        {true, true, 00, "                                                                  SCOUT                            But maybe it should just be me."},
-                        {true, true, 00, "                                                                  SCOUT                            I'm the 'scout', right?"},
-                        {true, true, 00, "                                                                  MAPLE                            No, you're not going into there"},
-                        {true, true, 00, "                                                                  MAPLE                            by yourself. I'm coming with."},
-                        {true, true, 00, "                                                                  SCOUT                            Maybe Aaron and Enoki stay?"},
-                        {true, true, 00, "                                                                  AARON                            ...Fine. You two go."},
-                        {true, true, 00, "                                                                  MAPLE                            Allons-zi. Into the tacky"},
-                        {true, true, 00, "                                                                  MAPLE                            hallway."},
+                        {true, true, 00, "ELEANOR                          Vee, do we need to go any"},
+                        {true, true, 00, "ELEANOR                          further? I'm scared."},
+                        {true, true, 00, "OLIVIER                          I'll stay behind with my wife."},
+                        {true, true, 00, "OLIVIER                          We can protect ourselves. I'm   "},
+                        {true, true, 00, "OLIVIER                          sure we're far enough from"},
+                        {true, true, 00, "OLIVIER                          whatever was going on."},
+                        {true, true, 00, "AARON                            Alright.. If you say so. Fais"},
+                        {true, true, 00, "AARON                            attention, oui?"},
+                        {true, true, 00, "OLIVIER                          Oui."},
+                        {true, true, 00, "AARON                            Enoki, are you going to stay"},
+                        {true, true, 00, "AARON                            with them?"},
+                        {true, true, 00, "ENOKI                            Bad things happen to me"},
+                        {true, true, 00, "ENOKI                            whenever I'm too far away from  "},
+                        {true, true, 00, "ENOKI                            a Tremblay, so I'll say no."},
+                        {true, true, 00, "AARON                            Very well, then. So, it's"},
+                        {true, true, 00, "AARON                            you, Maple, and Scout.. oui?  "},
+                        {true, true, 00, "SCOUT                            Oui."},
+                        {true, true, 00, "SCOUT                            But maybe it should just be me."},
+                        {true, true, 00, "SCOUT                            I'm the 'scout', right?"},
+                        {true, true, 00, "MAPLE                            No, you're not going into there"},
+                        {true, true, 00, "MAPLE                            by yourself. I'm coming with."},
+                        {true, true, 00, "SCOUT                            Maybe Aaron and Enoki stay?"},
+                        {true, true, 00, "AARON                            ...Fine. You two go."},
+                        {true, true, 00, "MAPLE                            Allons-zi. Into the tacky"},
+                        {true, true, 00, "MAPLE                            hallway."},
                         {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
@@ -9923,12 +10350,12 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 case 5:
                 {
                     line lc[10] = {
-                        {true, true, 00, "                                                                  OLIVIER                          Is that gasoline?"},
-                        {true, true, 00, "                                                                  SCOUT                            It, uh.. seems like.."},
-                        {true, true, 00, "                                                                  AARON                            Seems like what?"},
-                        {true, true, 00, "                                                                  SCOUT                            It, er- someone might have"},
-                        {true, true, 00, "                                                                  SCOUT                            already been here."},
-                        {true, true, 00, "                                                                  MAPLE                            Oh I don't like that."},
+                        {true, true, 00, "OLIVIER                          Is that gasoline?"},
+                        {true, true, 00, "SCOUT                            It, uh.. seems like.."},
+                        {true, true, 00, "AARON                            Seems like what?"},
+                        {true, true, 00, "SCOUT                            It, er- someone might have"},
+                        {true, true, 00, "SCOUT                            already been here."},
+                        {true, true, 00, "MAPLE                            Oh I don't like that."},
                         {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
@@ -9937,8 +10364,8 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 {
                     if (current_room.chari.at(current_room.follow_id).identity != 3) {
                         line lc[10] = {
-                            {true, true, 00, "                                                                  SCOUT                            Hey, y'all don't worry,"},
-                            {true, true, 00, "                                                                  SCOUT                            I can take care of this."},
+                            {true, true, 00, "SCOUT                            Hey, y'all don't worry,"},
+                            {true, true, 00, "SCOUT                            I can take care of this."},
                             {true, true, 00, "COM: Endscene"} };
                         dialogue_page_lite(lc);
                     }
@@ -9963,7 +10390,7 @@ dungeon_return rufus_dungeon(dungeon_return &dt, save_struct *so, bool door_nois
                 case 9:
                 {
                     line lc[10] = {
-                        {true, true, 00, "                                                                  You wonder what fire might be    able to do to this button."},
+                        {true, true, 00, "You wonder what fire might be    able to do to this button."},
                         {true, true, 00, "COM: Endscene"} };
                     dialogue_page_lite(lc);
                     break;
@@ -10451,6 +10878,13 @@ void startup()
 
 void load_save()
 {
+    // Clear if need be
+    if (all_save.save_init != 137) {
+        for (int t = 0; t < 3; t++) {
+            all_save.so[t].clear();
+        }
+    }
+
     auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
     auto ui = bn::regular_bg_items::file_select_bg.create_bg(0, 0);
     auto arrow = bn::sprite_items::arrow.create_sprite(-98, -32);
@@ -10488,7 +10922,7 @@ void load_save()
             }
         }
         if (all_save.so[1].xp == -1) all_save.so[1].xp = 0;
-        ss1 << ": " << (all_save.so[0].checkpoint * 6.6) << "%%";
+        ss1 << ": " << (all_save.so[1].checkpoint * 6.6) << "%%";
         sprintf(buf2, ss1.str().c_str());
     } else {
         sprintf(buf2, "Slot 2: 0%%");
@@ -10592,6 +11026,11 @@ void load_save()
     timer(64);
 
     so = &all_save.so[c];
+
+    // remove panels
+    for (int t = 0; t < 7; t++) {
+        so->popups[t] = false;
+    }
 }
 
 void cutscenes(int c)
@@ -10766,6 +11205,8 @@ bool victory_page(int chari, int score)
 
 dungeon_return tree_cut()
 {
+    popup(3);
+
     bn::music_items_info::span[2].first.play(bn::fixed(50) / 100);
     short int score = 0;
     short int total = 0;
@@ -10947,27 +11388,15 @@ dungeon_return tree_cut()
                     }
 
                     if (penalty) {
-                        short int ugh = std_rand() % 7;
+                        short int ugh = std_rand() % 3;
                         switch (ugh) {
-                            case 0:
-                                bn::sound_items::aaron_ugh_01.play();
-                                break;
                             case 1:
-                                bn::sound_items::aaron_ugh_02.play();
-                                break;
-                            case 2:
-                                bn::sound_items::aaron_ugh_03.play();
-                                break;
-                            case 3:
-                                bn::sound_items::aaron_ugh_01.play();
-                                break;
-                            case 4:
                                 bn::sound_items::aaron_ugh_05.play();
                                 break;
-                            case 5:
+                            case 2:
                                 bn::sound_items::aaron_ugh_06.play();
                                 break;
-                            case 6:
+                            case 3:
                                 bn::sound_items::aaron_ugh_07.play();
                                 break;
                             default:
@@ -11100,6 +11529,8 @@ public:
 
 dungeon_return rabbit_game()
 {
+    popup(1);
+
     short int score = 0;
     {
         room myRoom(9, 5, 4, 2);
@@ -11315,6 +11746,8 @@ dungeon_return rabbit_game()
 
 dungeon_return underground()
 {
+    popup(2);
+
     short int score = 0;
     bool is_returned = false;
     bool is_victory = false;
@@ -11406,7 +11839,7 @@ dungeon_return underground()
             1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
             1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+            1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1};
         for (short int t = 0; t < current_room.width * current_room.height; t++) {
             local_tileset.push_back(local[t]);
             collisions.push_back(local_col[t]);
@@ -11468,8 +11901,11 @@ dungeon_return underground()
             score_text = bn::to_string<8>(score);
             file_spr.clear();
             file_gen.generate(0, -48, score_text, file_spr);
+            current_room.a_notif.set_visible(false);
 
             if (abs((current_room.start_y * 32) - maple.entity.y().integer()) < 32 && abs((current_room.start_x * 32) - maple.entity.x().integer()) < 32) {
+                current_room.start_notif(0);
+                
                 if (bn::keypad::a_pressed()) {
                     is_returned = true;
                     windows.at(0).set_show_sprites(true);
@@ -11917,6 +12353,8 @@ void victory_toutes(int emotion, int total) {
 
 dungeon_return crystal_ball() {
 
+    popup(5);
+
     short int score = 0;
     short int total = 0;
 
@@ -12077,6 +12515,8 @@ struct rock {
 
 dungeon_return boat_game() {
 
+    popup(6);
+
     short int score = 0;
     short int total = 0;
 
@@ -12100,24 +12540,24 @@ dungeon_return boat_game() {
         bn::music_items_info::span[30].first.play(0.8);
 
         boat_camera camera;
-        camera.y = 300;
-        //camera.y += bn::fixed::from_data(8192 * 256);
+        camera.y = -16;
         bn::affine_bg_ptr bg = bn::affine_bg_items::bg_ocean.create_bg(-376, -336);
-        bn::affine_bg_ptr bg_trees = bn::affine_bg_items::bg_sky_trees.create_bg(0, -276); // -212
 
-        auto boat = bn::sprite_items::avocado.create_sprite(0, 112);
-        auto wave = bn::sprite_items::avocado.create_sprite(0, 112, 3);
+        auto boat = bn::sprite_items::avocado.create_sprite(0, 48, 0);
+        auto wave = bn::sprite_items::avocado.create_sprite(0, 48, 3);
         auto wave_anim = bn::create_sprite_animate_action_forever(wave, 2, bn::sprite_items::avocado.tiles_item(), 3, 4, 3, 4);
-        boat.set_blending_enabled(true);
 
         bn::vector<bn::sprite_ptr, 4> sky_ptr;
-        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16,-132,0)); // -68
-        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 64,-132,1));
-        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 128,-132,2));
-        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 192,-132,3));
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16,-68,0)); // -68
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 64,-68,1));
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 128,-68,2));
+        sky_ptr.push_back(bn::sprite_items::bg_sky.create_sprite(-120 + 16 + 192,-68,3));
+
+        for (int t = 0; t < 4; t++) {
+            sky_ptr.at(t).set_z_order(0);
+        }
 
         bg.set_z_order(1);
-        bg_trees.set_z_order(0);
 
         int16_t pa_values[bn::display::height()];
         bn::affine_bg_pa_register_hbe_ptr pa_hbe = bn::affine_bg_pa_register_hbe_ptr::create(bg, pa_values);
@@ -12141,8 +12581,6 @@ dungeon_return boat_game() {
         }
 
         short int isMoving = 0;
-        bn::fixed_t<12> boat_transparency = 1;
-
         short int distance = 16;
         short int tick = 0;
 
@@ -12153,23 +12591,8 @@ dungeon_return boat_game() {
         while(completed_size > 0.02) {
 
             if (distance < 1) completed = true;
-
-            bn::fixed_t<12> me_level = distance * 0.125;
-            current_hud.update(me_level, score);
-
             if (distance < 0) distance = 0;
-
             if (total < score) total = score;
-
-            bn::blending::set_transparency_alpha(boat_transparency);
-
-            if (boat_transparency < 1) {
-                boat_transparency += 0.02;
-            }
-
-            if (boat_transparency > 1) {
-                boat_transparency = 1;
-            }
 
             if (!completed) {
                 isMoving = !bn::keypad::down_held();
@@ -12190,7 +12613,6 @@ dungeon_return boat_game() {
 
                 if (abs(rs[t].entity.x() - boat.x()) < 24 && abs(rs[t].entity.y() - boat.y()) < 24) {
                     rs[t].m_y += 96;
-                    boat_transparency = 0.25;
                     bn::sound_items::firehit.play();
                     score = score / 10;
                 }
@@ -12218,6 +12640,7 @@ dungeon_return boat_game() {
                         rs[t].m_y += 1;
                     }
                 } else {
+                    if (rs[t].size < 0)  rs[t].size = 0.01;
                     rs[t].entity.set_scale(rs[t].size);
                     rs[t].entity.set_y(rs[t].m_y);
 
@@ -12246,6 +12669,7 @@ dungeon_return boat_game() {
             bn::fixed dir_x = 0;
             bn::fixed dir_z = bn::fixed::from_data(12); //-30
 
+            wave.set_visible(true);
             if (isMoving == 0) {
                 dir_z = bn::fixed::from_data(1); // 1
                 wave.set_visible(false);
@@ -12261,15 +12685,7 @@ dungeon_return boat_game() {
 
             // Intro animation
             short int sky_y = sky_ptr.at(0).y().integer();
-            if (sky_y < -68) {
-                if (sky_y > -92) camera.y = camera.y - 3;
-                for (short int t = 0; t < sky_ptr.size(); t++) {
-                    sky_ptr.at(t).set_y(sky_y + 1);
-                }
-                bg_trees.set_y(bg_trees.y().integer() + 1);
-                boat.set_y(boat.y().integer() - 1);
-                wave.set_y(wave.y().integer() - 1);
-            } else {
+            if (true) {
                 boat = bn::sprite_items::avocado.create_sprite(0, 48, 0);
                 if (isMoving > 0) {
                     if (bn::keypad::left_held()) {
@@ -12292,8 +12708,6 @@ dungeon_return boat_game() {
                     }
                 }
             }
-
-            bg_trees.set_x(x_offset);
 
             camera.cos = bn::lut_cos(camera.phi).data() >> 4;
             camera.sin = bn::lut_sin(camera.phi).data() >> 4;
@@ -12324,18 +12738,17 @@ dungeon_return boat_game() {
             dx_hbe.reload_values_ref();
             dy_hbe.reload_values_ref();
 
-            /*
             for (short int t = 0; t < sky_ptr.size(); t++) {
                 sky_ptr.at(t).put_above();
             }
-            */
 
             if (completed) {
                 boat.set_y(boat.y().integer() - 64);
-                wave.set_y(wave.y().integer() - 64);
+                wave.set_y(boat.y());
                 for (short int t = 0; t < 8; t++) {
                     rs[t].entity.set_visible(false);
                 }
+                if (completed_size < 0) completed_size = 0.01;
                 boat.set_scale(completed_size);
                 wave.set_scale(completed_size);
                 bn::fixed_t<12> new_completed_size = completed_size - 0.02;
@@ -12344,6 +12757,8 @@ dungeon_return boat_game() {
                 }
             }
 
+            bn::fixed_t<12> me_level = distance * 0.125;
+            current_hud.update(me_level, score);
             bn::core::update();
         }
 
@@ -12416,7 +12831,7 @@ dungeon_return store() {
     bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
     bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
 
-    sprintf(xp_val, "XP: %d", so->xp);
+    sprintf(xp_val, "$%d", so->xp);
     file1_gen.generate(64, -48, xp_val, xp_spr);
     short int skip = 0;
     bn::core::update();
@@ -12436,7 +12851,7 @@ dungeon_return store() {
                 bn::core::update();
 
                 line lc[32] = {
-                    {true, true, 00, "                                                                  Merci!!                          I know you'll love it!"},
+                    {true, true, 00, "Merci!!                          I know you'll love it!"},
                     {true, true, 00, "COM: Endscene"}};
                 dialogue_page_lite(lc);
 
@@ -12460,7 +12875,7 @@ dungeon_return store() {
             item_spr.clear();
             file2_gen.generate(-114, -58, "BANANA HAT", item_spr);
             desc_spr.clear();
-            file3_gen.generate(-114, -70, "Price: 75 XP", desc_spr);
+            file3_gen.generate(-114, -70, "Price: $75", desc_spr);
 
             if (item_hat.y() > 32 - 8) item_hat.set_y(item_hat.y() - 1);
             if (item_bal.y() <  32) item_bal.set_y(item_bal.y() + 1);
@@ -12638,7 +13053,7 @@ dungeon_return kitchen() {
                                         sprintf(buf1, "Rice Bowl");
                                         break;
                                     case 8:
-                                        sprintf(buf1, "Jumbalaya");
+                                        sprintf(buf1, "Jambalaya");
                                         break;
                                     case 9:
                                         sprintf(buf1, "Gumbo");
@@ -12936,24 +13351,8 @@ void final_battle() {
 
             bn::sound_items::firehit.play();
 
-            if (std_rand() % 16 == 1) {
-                bn::sound_items::mina_aw.play();
-            }
-
-            short int ugh = std_rand() % 12;
+            short int ugh = std_rand() % 6;
             switch (ugh) {
-                case 0:
-                    bn::sound_items::aaron_ugh_01.play();
-                    break;
-                case 1:
-                    bn::sound_items::aaron_ugh_02.play();
-                    break;
-                case 2:
-                    bn::sound_items::aaron_ugh_03.play();
-                    break;
-                case 3:
-                    bn::sound_items::aaron_ugh_01.play();
-                    break;
                 case 4:
                     bn::sound_items::aaron_ugh_05.play();
                     break;
@@ -12980,10 +13379,6 @@ void final_battle() {
                 rufus_change = true;
                 bn::sound_items::rufus_01.play();
                 axe.set_x(axe.x() + 1);
-
-                if (std_rand() % 24 == 1) {
-                    bn::sound_items::mina_whoo.play();
-                }
             }
 
             aaron_action = 2;
@@ -13329,6 +13724,7 @@ int checkpoint(int level)
     case 2: {
         bn::music_items_info::span[8].first.play(0.8);
         exec_dialogue(18);
+        popup(0);
         break;
     }
 
@@ -13359,6 +13755,7 @@ int checkpoint(int level)
     case 7: {
         intros(2);
         exec_dialogue(21);
+        popup(4);
         break; 
     }
     case 8: {
@@ -13450,9 +13847,21 @@ int main()
 {
     bn::core::init(); // Initialize Butano libraries
 
+    /*
+    dungeon_return dt;
+    dt.spawn_x = 16;
+    dt.spawn_y = 19;
+    dt.world_index = 1;
+    rufus_dungeon(dt, so, false);
+    */
+
     startup();
     bn::sram::read(all_save);         // Read save data from cartridge
     load_save();
+
+    if (strcmp(so->island_name, "cyshpia") == 0) {
+        exec_dialogue(36);
+    }
 
     while (so->checkpoint < 99) {
         so->checkpoint = checkpoint(so->checkpoint);
