@@ -9,11 +9,11 @@
 //
 //	cruz_02_bn_graphics, 256x256@4, 
 //	+ palette 16 entries, not compressed
-//	+ 510 tiles (t|f|p reduced) not compressed
+//	+ 405 tiles (t|f|p reduced) not compressed
 //	+ regular map (flat), not compressed, 32x32 
-//	Total size: 32 + 16320 + 2048 = 18400
+//	Total size: 32 + 12960 + 2048 = 15040
 //
-//	Time-stamp: 2022-01-26, 07:36:08
+//	Time-stamp: 2022-02-20, 01:35:23
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -22,8 +22,8 @@
 #ifndef GRIT_CRUZ_02_BN_GRAPHICS_H
 #define GRIT_CRUZ_02_BN_GRAPHICS_H
 
-#define cruz_02_bn_graphicsTilesLen 16320
-extern const bn::tile cruz_02_bn_graphicsTiles[bn::max(4080 / 8, 1)];
+#define cruz_02_bn_graphicsTilesLen 12960
+extern const bn::tile cruz_02_bn_graphicsTiles[bn::max(3240 / 8, 1)];
 
 #define cruz_02_bn_graphicsMapLen 2048
 extern const bn::regular_bg_map_cell cruz_02_bn_graphicsMap[1024];
@@ -38,7 +38,7 @@ extern const bn::color cruz_02_bn_graphicsPal[16];
 namespace bn::regular_bg_items
 {
     constexpr inline regular_bg_item cruz_02(
-            regular_bg_tiles_item(span<const tile>(cruz_02_bn_graphicsTiles, 510), bpp_mode::BPP_4, compression_type::NONE), 
+            regular_bg_tiles_item(span<const tile>(cruz_02_bn_graphicsTiles, 405), bpp_mode::BPP_4, compression_type::NONE), 
             bg_palette_item(span<const color>(cruz_02_bn_graphicsPal, 16), bpp_mode::BPP_4, compression_type::NONE),
             regular_bg_map_item(cruz_02_bn_graphicsMap[0], size(32, 32), compression_type::NONE));
 }

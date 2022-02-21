@@ -9,11 +9,11 @@
 //
 //	titlebackground_bn_graphics, 256x256@4, 
 //	+ palette 16 entries, not compressed
-//	+ 586 tiles (t|f|p reduced) not compressed
+//	+ 541 tiles (t|f|p reduced) not compressed
 //	+ regular map (flat), not compressed, 32x32 
-//	Total size: 32 + 18752 + 2048 = 20832
+//	Total size: 32 + 17312 + 2048 = 19392
 //
-//	Time-stamp: 2022-02-13, 20:32:08
+//	Time-stamp: 2022-02-21, 01:35:59
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -22,8 +22,8 @@
 #ifndef GRIT_TITLEBACKGROUND_BN_GRAPHICS_H
 #define GRIT_TITLEBACKGROUND_BN_GRAPHICS_H
 
-#define titlebackground_bn_graphicsTilesLen 18752
-extern const bn::tile titlebackground_bn_graphicsTiles[bn::max(4688 / 8, 1)];
+#define titlebackground_bn_graphicsTilesLen 17312
+extern const bn::tile titlebackground_bn_graphicsTiles[bn::max(4328 / 8, 1)];
 
 #define titlebackground_bn_graphicsMapLen 2048
 extern const bn::regular_bg_map_cell titlebackground_bn_graphicsMap[1024];
@@ -38,7 +38,7 @@ extern const bn::color titlebackground_bn_graphicsPal[16];
 namespace bn::regular_bg_items
 {
     constexpr inline regular_bg_item titlebackground(
-            regular_bg_tiles_item(span<const tile>(titlebackground_bn_graphicsTiles, 586), bpp_mode::BPP_4, compression_type::NONE), 
+            regular_bg_tiles_item(span<const tile>(titlebackground_bn_graphicsTiles, 541), bpp_mode::BPP_4, compression_type::NONE), 
             bg_palette_item(span<const color>(titlebackground_bn_graphicsPal, 16), bpp_mode::BPP_4, compression_type::NONE),
             regular_bg_map_item(titlebackground_bn_graphicsMap[0], size(32, 32), compression_type::NONE));
 }
