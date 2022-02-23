@@ -618,7 +618,7 @@ public:
 
 class save_all_struct {
 public:
-	save_struct so[3];
+	save_struct current_save[3];
 	int save_init = 0;
 	int language = 0;
 };
@@ -628,17 +628,23 @@ public:
 #define tile_count 400
 
 // Reserved global memory
-BN_DATA_EWRAM save_all_struct all_save;
-BN_DATA_EWRAM save_struct* so = NULL;
-BN_DATA_EWRAM bn::vector<unsigned short int, tile_count> local_tileset;
-BN_DATA_EWRAM bn::vector<bn::rect_window, 2> windows;
-BN_DATA_EWRAM bn::vector<unsigned short int, tile_count> collisions;
+struct global_data {
+	save_all_struct all_save;
+	save_struct* current_save;
+	bn::vector<unsigned short int, tile_count> local_tileset;
+	bn::vector<bn::rect_window, 2> rendered_windows;
+	bn::vector<unsigned short int, tile_count> collisions;
+	int rand_state;
+	bn::random bn_random;
+};
 
-int rand_state = 0;
-int std_rand(void)
+global_data* globals;
+
+BN_DATA_EWRAM int rand_state = 0;
+int std_rnd(int x = 0)
 {
 	rand_state = (rand_state * 137 + 12345) % 2048;
-	return abs(rand_state);
+	return abs(rand_state) % x;
 }
 
 int std_abs(int x) {
@@ -786,7 +792,7 @@ void dialogue_page(line n[32]) {
 	chari_r.set_horizontal_flip(true);
 	bn::blending::set_intensity_alpha(0);
 
-	auto cascade_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
+	bn::optional<bn::regular_bg_ptr> cascade_bg = bn::regular_bg_items::velvet.create_bg(0, 0);
 	short int cascade_id = 0;
 
 	auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 64 - 16);
@@ -885,7 +891,7 @@ void dialogue_page(line n[32]) {
 		else if (strcmp(n[pos].text, "BG: Trailer Home") == 0) {
 			backdrops.clear();
 			backdrops.push_back(&bn::regular_bg_items::bg_trailer_home);
-			cascade_bg.set_position(88, -64);
+			cascade_bg.value().set_position(88, -64);
 		}
 		else if (strcmp(n[pos].text, "S01:01") == 0) {
 			backdrops.clear();
@@ -1546,14 +1552,15 @@ void dialogue_page(line n[32]) {
 
 			cascade_id = 0;
 			short int cascade_offset = 0;
-			short int c_x = cascade_bg.x().integer();
-			short int c_y = cascade_bg.y().integer();
+			short int c_x = cascade_bg.value().x().integer();
+			short int c_y = cascade_bg.value().y().integer();
 			while (!bn::keypad::a_pressed() && !bn::keypad::b_held()) {
 
 				a_button.set_y(lerp(a_button.y(), -50, 0.2));
 
 				// Handle moving backgrounds
 				if (backdrops.size() > 0) {
+					cascade_bg.reset();
 					cascade_bg = backdrops.at(cascade_id)->create_bg(c_x, c_y);
 					if (backdrops.size() > 1) {
 						cascade_offset++;
@@ -1703,7 +1710,7 @@ void dialogue_page_lite(line n[32]) {
 		else {
 
 			// SFX
-			bn::sound_items::pop.play((std_rand() % 100) / 100);
+			bn::sound_items::pop.play((std_rnd(100)) / 100);
 
 			// Fresh init
 			bn::vector<bn::sprite_ptr, 33> text_sprite0;
@@ -2067,7 +2074,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 			{true, true, 0, "S02:07"},
 			{true, true, 0, "MAPLE                            I'll say NO!"},
 			{true, true, 0, "PIZZA GUY                        I dunno, living on an island by  yourself sounds kinda nice."},
-			{true, true, 0, "MAPLE                            It's the nicest thing on the     planet, but they're gonna ruin itcos they're the most incompetant people on the planet!"},
+			{true, true, 0, "MAPLE                            It's the nicest thing on the     planet, but they're gonna ruin itcos they're the most incompetent people on the planet!"},
 			{true, true, 0, "PIZZA GUY                        If I were you, I'd go up and     teach 'em how to run the island."},
 			{true, true, 0, "MAPLE                            I guess I'm gonna have to huh?   They're gonna die up there or    freeze to death!"},
 			{true, true, 0, "MAPLE                            But I can't. I've gotta be the   better person and stay in adult  world."},
@@ -2647,7 +2654,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 
 	case 34: {
 
-		if (true) {
+		{
 			line lc[32] = {
 				{fals, fals, 0,  "S07:06"},
 				{fals, fals, 0,  "BG: fadeout"},
@@ -2669,7 +2676,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 			dialogue_page(lc);
 		}
 
-		if (true) {
+		{
 			line lc[32] = {
 				{true, true, 00, "BG: groovy"},
 				{true, true, 00, "S07:09"},
@@ -2689,7 +2696,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 				{true, true, 00, "RUFUS                            and others very different to     ours, but do you know what I     discovered in nearly every one?"},
 				{true, true, 00, "S07:13"},
 				{true, true, 00, "RUFUS                            There was this strange trend of  strong-willed, conventionally    attractive women who seemed to   act as the moral good"},
-				{true, true, 00, "RUFUS                            and savior of every world, with  strange-looking men serving as   the butt of every joke, or as    incompetant villains"},
+				{true, true, 00, "RUFUS                            and savior of every world, with  strange-looking men serving as   the butt of every joke, or as    incompetent villains"},
 				{true, true, 00, "RUFUS                            only to be replaced by the much  more competant, misunderstood    female villains who were only badbecause a man somehow"},
 				{true, true, 00, "RUFUS                            turned them evil. And you know   what I thought?"},
 				{true, true, 00, "MAPLE                            Hold on-"},
@@ -2704,7 +2711,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 			dialogue_page(lc);
 		}
 
-		if (true) {
+		{
 			line lc[32] = {
 				{true, true, 00, "S07:15"},
 				{true, true, 00, "ENOKI                            Monsieur Rufus, may I go to the  restroom?"},
@@ -2807,7 +2814,6 @@ int exec_dialogue(int x, int checkpoint = 0) {
 				{true, true, 00, "ENOKI                            Maple, come back!"},
 				{true, true, 00, "MAPLE                            ..."},
 				{true, true, 00, "S09:09"},
-				{true, true, 00, "AARON                            Maple, get up."},
 				{true, true, 00, "MAPLE                            ..."},
 				{true, true, 00, "AARON                            Maple, we need to talk.          Right now."},
 				{true, true, 00, "S09:10"},
@@ -2815,7 +2821,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 				{true, true, 00, "AARON                            Maria, I love you, but it needs  to just be Maple and I."},
 				{true, true, 00, "S09:11"},
 				{true, true, 00, "ENOKI                            Maria..."},
-				{true, true, 00, "ENOKI                            A-Alright, I'll go check on the others."},
+				{true, true, 00, "ENOKI                            A-Alright, I'll go check on the  others."},
 				{fals, fals, 0,  "COM: Endscene"}
 			};
 			dialogue_page(lc);
@@ -2849,7 +2855,8 @@ int exec_dialogue(int x, int checkpoint = 0) {
 				{true, true, 00, "ENOKI                            A-Aar.. AARON, WAIT!"},
 				{true, true, 00, "AARON                            We need to get those doors open."},
 				{true, true, 00, "RUFUS                            Hey, I can find a way to disable the door, I'm sure of it, a-at   least.. I think, you don't need  to-"},
-				{true, true, 00, "AARON                            I'm doing it."},
+				{true, true, 00, "ENOKI                            P-Please don't.. I don't want youtaking something that'll change  you."},
+				{true, true, 00, "AARON                            I'll be fine, you've got nothing to worry about."},
 				{fals, fals, 0,  "COM: Endscene"}
 			};
 			dialogue_page(lc);
@@ -2862,7 +2869,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 			}
 
 			line l2[10] = {
-				{true, true, 00, "N-No... I can't lose you..."},
+				{true, true, 00, "I-I just... I can't lose you..."},
 				{true, true, 00, "COM: Endscene"} };
 			dialogue_page_lite(l2);
 
@@ -2920,7 +2927,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 				{true, true, 00, "BG: 2"},
 				{true, true, 00, "S10:01"},
 				{true, true, 00, "AARON                            I paid off the island in cash. Weshould easily have enough to renta house back in Louisiana."},
-				{true, true, 00, "AARON                            A cajun isn't home outside of    Louisiana anyway, oui?"},
+				{true, true, 00, "AARON                            It was only a matter of time     before we needed to head back to Louisiana anyway, oui?"},
 				{true, true, 00, "AARON                            I should have enough to give you all a few months' rent wherever  you want to live as you return tonormal life."},
 				{true, true, 00, "AARON                            I want to say that I was proud tobe your king while it lasted.    Thank you all."},
 				{true, true, 00, "S10:02"},
@@ -3191,28 +3198,28 @@ public:
 		bool newUp = 0;
 		bool newDown = 0;
 
-		if (collisions.size() > 0) {
-			col[0] = collisions.at(close[0] + close[2]) == 1;
-			col[1] = collisions.at(close[0] + close[3]) == 1;
-			col[2] = collisions.at(close[1] + close[2]) == 1;
-			col[3] = collisions.at(close[1] + close[3]) == 1;
-			col[4] = collisions.at(close[0] + close[2]) == 1;
-			col[5] = collisions.at(close[1] + close[2]) == 1;
-			col[6] = collisions.at(close[0] + close[3]) == 1;
-			col[7] = collisions.at(close[1] + close[3]) == 1;
+		if (globals->collisions.size() > 0) {
+			col[0] = globals->collisions.at(close[0] + close[2]) == 1;
+			col[1] = globals->collisions.at(close[0] + close[3]) == 1;
+			col[2] = globals->collisions.at(close[1] + close[2]) == 1;
+			col[3] = globals->collisions.at(close[1] + close[3]) == 1;
+			col[4] = globals->collisions.at(close[0] + close[2]) == 1;
+			col[5] = globals->collisions.at(close[1] + close[2]) == 1;
+			col[6] = globals->collisions.at(close[0] + close[3]) == 1;
+			col[7] = globals->collisions.at(close[1] + close[3]) == 1;
 
-			gol[0] = collisions.at(anti_close[0] + anti_close[2]) == 1;
-			gol[1] = collisions.at(anti_close[0] + anti_close[3]) == 1;
-			gol[2] = collisions.at(anti_close[1] + anti_close[2]) == 1;
-			gol[3] = collisions.at(anti_close[1] + anti_close[3]) == 1;
-			gol[4] = collisions.at(anti_close[0] + anti_close[2]) == 1;
-			gol[5] = collisions.at(anti_close[1] + anti_close[2]) == 1;
-			gol[6] = collisions.at(anti_close[0] + anti_close[3]) == 1;
-			gol[7] = collisions.at(anti_close[1] + anti_close[3]) == 1;
+			gol[0] = globals->collisions.at(anti_close[0] + anti_close[2]) == 1;
+			gol[1] = globals->collisions.at(anti_close[0] + anti_close[3]) == 1;
+			gol[2] = globals->collisions.at(anti_close[1] + anti_close[2]) == 1;
+			gol[3] = globals->collisions.at(anti_close[1] + anti_close[3]) == 1;
+			gol[4] = globals->collisions.at(anti_close[0] + anti_close[2]) == 1;
+			gol[5] = globals->collisions.at(anti_close[1] + anti_close[2]) == 1;
+			gol[6] = globals->collisions.at(anti_close[0] + anti_close[3]) == 1;
+			gol[7] = globals->collisions.at(anti_close[1] + anti_close[3]) == 1;
 
 			/*
 			if (role == 1) {
-				BN_LOG(
+				LOG(
 					col[0], ",", col[1], ",", col[2], ",", col[3], ",", col[4], ",", col[5], ",", col[6], ",", col[7], " - ",
 					gol[0], ",", gol[1], ",", gol[2], ",", gol[3], ",", gol[4], ",", gol[5], ",", gol[6], ",", gol[7]
 				);
@@ -3571,7 +3578,7 @@ public:
 
 	void update()
 	{
-		short int flap = std_rand() % 2;
+		short int flap = std_rnd(2);
 		if (flap == 0)
 		{
 			sprite_anim.update();
@@ -3589,8 +3596,8 @@ public:
 
 		if (to_x == 0 && to_y == 0)
 		{
-			to_x = std_rand() % room_width;
-			to_y = std_rand() % room_width;
+			to_x = std_rnd(room_width);
+			to_y = std_rnd(room_width);
 		}
 		else
 		{
@@ -3659,14 +3666,14 @@ public:
 void popup(int scene) {
 
 	// Check to see if you've seen it before
-	if (!so->popups[scene]) {
+	if (!globals->current_save->popups[scene]) {
 		bn::core::update();
-		so->popups[scene] = true;
+		globals->current_save->popups[scene] = true;
 		bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
 		bn::regular_bg_ptr background = bn::regular_bg_items::fun_background.create_bg(0, 0);
 		bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-80, -48);
 
-		int my_chari = so->last_char_id;
+		int my_chari = globals->current_save->last_char_id;
 		if (my_chari < 0 || my_chari > 7) my_chari = 0;
 
 		auto dg_bg1 = bn::sprite_items::dialogue_bg_2.create_sprite(-64, 0);
@@ -4096,28 +4103,28 @@ public:
 
 	void place(int x, int y) {
 		short int z = x + (y * width);
-		if (z < local_tileset.size() && z > -1) {
-			if (local_tileset.at(z) > 0 && local_tileset.at(z) < 64) {
-				bn::sprite_ptr s = environment->create_sprite(x * 32, y * 32, local_tileset.at(z) - 1);
+		if (z < globals->local_tileset.size() && z > -1) {
+			if (globals->local_tileset.at(z) > 0 && globals->local_tileset.at(z) < 64) {
+				bn::sprite_ptr s = environment->create_sprite(x * 32, y * 32, globals->local_tileset.at(z) - 1);
 				s.set_camera(camera);
 
 				// Set Palette
-				if (environment == &bn::sprite_items::ocean_terrain && so->checkpoint == 5) {
+				if (environment == &bn::sprite_items::ocean_terrain && globals->current_save->checkpoint == 5) {
 					s.set_palette(bn::sprite_items::underground_tiles.palette_item());
 				}
 
 				// Set Z order
-				if (environment == &bn::sprite_items::ocean_terrain && local_tileset.at(z) == 1) {
+				if (environment == &bn::sprite_items::ocean_terrain && globals->local_tileset.at(z) == 1) {
 					s.set_z_order(1);
 				}
-				else if (environment == &bn::sprite_items::pools_tiles && local_tileset.at(z) == 1) {
+				else if (environment == &bn::sprite_items::pools_tiles && globals->local_tileset.at(z) == 1) {
 					s.set_z_order(1);
 				}
 				else {
 					s.set_z_order(296);
 				}
 				if (tile_hop.size() < 88) tile_hop.push_back(s);
-				if (ref_hop.size() < 88) ref_hop.push_back(local_tileset.at(z) - 1);
+				if (ref_hop.size() < 88) ref_hop.push_back(globals->local_tileset.at(z) - 1);
 			}
 		}
 	}
@@ -4155,7 +4162,7 @@ public:
 
 		// Handle active character
 		for (unsigned short int t = 0; t < chari.size(); t++) {
-			if (chari.at(t).identity == so->last_char_id) {
+			if (chari.at(t).identity == globals->current_save->last_char_id) {
 				follow_id = t;
 				break;
 			}
@@ -4275,13 +4282,13 @@ public:
 			{
 				bn::sound_items::firecrackle.play();
 
-				if (so->checkpoint == 8 && so->xp < 201)
+				if (globals->current_save->checkpoint == 8 && globals->current_save->xp < 201)
 				{
-					so->xp++;
+					globals->current_save->xp++;
 				}
-				else if (so->checkpoint == 10 && so->xp < 301)
+				else if (globals->current_save->checkpoint == 10 && globals->current_save->xp < 301)
 				{
-					so->xp++;
+					globals->current_save->xp++;
 				}
 			}
 			else
@@ -4320,7 +4327,7 @@ public:
 
 			chari.at(new_chari).entity.set_blending_enabled(true);
 			chari.at(new_chari).role = 1;
-			so->last_char_id = chari.at(new_chari).identity;
+			globals->current_save->last_char_id = chari.at(new_chari).identity;
 			follow_id = new_chari;
 		}
 
@@ -4361,23 +4368,23 @@ public:
 	void update() {
 
 		// Set up chapter
-		if (so->checkpoint < 15) {
+		if (globals->current_save->checkpoint < 15) {
 			chap = 3;
-			if (so->xp > 300) so->xp = 300;
+			if (globals->current_save->xp > 300) globals->current_save->xp = 300;
 		}
-		if (so->checkpoint < 9) {
+		if (globals->current_save->checkpoint < 9) {
 			chap = 2;
-			if (so->xp > 200) so->xp = 200;
+			if (globals->current_save->xp > 200) globals->current_save->xp = 200;
 		}
-		if (so->checkpoint < 6) {
+		if (globals->current_save->checkpoint < 6) {
 			chap = 1;
-			if (so->xp > 100) so->xp = 100;
+			if (globals->current_save->xp > 100) globals->current_save->xp = 100;
 		}
-		if (so->checkpoint == 0) {
+		if (globals->current_save->checkpoint == 0) {
 			chap = 1;
-			if (so->xp > 50) so->xp = 50;
+			if (globals->current_save->xp > 50) globals->current_save->xp = 50;
 		}
-		x_to = 76 + (so->xp / chap) * 0.32;
+		x_to = 76 + (globals->current_save->xp / chap) * 0.32;
 
 		// Configure X position
 		if (x_to > pointer.x()) {
@@ -4403,11 +4410,11 @@ public:
 dungeon_return dungeon(dungeon_return& dt) {
 
 	// Prep memory
-	local_tileset.clear();
-	collisions.clear();
-	windows.clear();
+	globals->local_tileset.clear();
+	globals->collisions.clear();
+	globals->rendered_windows.clear();
 
-	if (so->checkpoint > 1)
+	if (globals->current_save->checkpoint > 1)
 	{
 		if (bn::music::playing())
 			bn::music::stop();
@@ -4424,7 +4431,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 	bn::vector<anim_object, 3> anim_objects;
 
 	// Create initial characters
-	switch (so->last_char_id)
+	switch (globals->current_save->last_char_id)
 	{
 	default:
 	{
@@ -4438,7 +4445,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(default_chari);
 			break;
 		}
-		else if (so->checkpoint < 13)
+		else if (globals->current_save->checkpoint < 13)
 		{
 			character default_chari(bn::sprite_items::maple_walking_spring, current_room.start_x, current_room.start_y, current_room.width);
 			default_chari.entity.set_camera(current_room.camera);
@@ -4494,7 +4501,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 	}
 	case 1:
 	{
-		if (so->checkpoint < 1)
+		if (globals->current_save->checkpoint < 1)
 		{
 			character default_chari(bn::sprite_items::enoki_walking_pj, current_room.start_x, current_room.start_y, false, current_room.width);
 			default_chari.entity.set_camera(current_room.camera);
@@ -4504,7 +4511,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(default_chari);
 			break;
 		}
-		else if (so->checkpoint < 12)
+		else if (globals->current_save->checkpoint < 12)
 		{
 			character default_chari(bn::sprite_items::enoki_walking_spring, current_room.start_x, current_room.start_y, false, current_room.width);
 			default_chari.entity.set_camera(current_room.camera);
@@ -4612,14 +4619,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 			17, 0, 0, 0, 0, 0, 0, 0, 0, 18, 2, 0,
 			7, 3, 3, 3, 3, 3, 3, 3, 16, 3, 6, 0 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
-		if (so->last_char_id == 1)
+		if (globals->current_save->last_char_id == 1)
 		{
 			character maple(bn::sprite_items::maple_walking, 8, 3, false, current_room.width);
 			maple.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
@@ -4630,7 +4637,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(maple);
 		}
 
-		if (so->last_char_id < 1)
+		if (globals->current_save->last_char_id < 1)
 		{
 			character enoki(bn::sprite_items::enoki_walking_pj, 8, 3, false, current_room.width);
 			enoki.entity.set_position((current_room.start_x + 1) * 32, current_room.start_y * 32);
@@ -4676,14 +4683,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 			1, 1, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 1, 1,
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
-		if (so->last_char_id == 1)
+		if (globals->current_save->last_char_id == 1)
 		{
 			character maple(bn::sprite_items::maple_walking, 8, 3, false, current_room.width);
 			maple.entity.set_position(current_room.chari.at(0).entity.x(), current_room.chari.at(0).entity.y());
@@ -4694,7 +4701,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(maple);
 		}
 
-		if (so->last_char_id < 1)
+		if (globals->current_save->last_char_id < 1)
 		{
 			character enoki(bn::sprite_items::enoki_walking_pj, 8, 3, false, current_room.width);
 			enoki.entity.set_position(current_room.chari.at(0).entity.x(), current_room.chari.at(0).entity.y());
@@ -4741,14 +4748,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 			1, 1, 0, 34, 0, 4, 0, 0, 0, 33, 1,
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
-		if (so->last_char_id == 1)
+		if (globals->current_save->last_char_id == 1)
 		{
 			character maple(bn::sprite_items::maple_walking, 8, 3, false, current_room.width);
 			maple.entity.set_position(current_room.chari.at(0).entity.x(), current_room.chari.at(0).entity.y());
@@ -4759,7 +4766,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(maple);
 		}
 
-		if (so->last_char_id < 1)
+		if (globals->current_save->last_char_id < 1)
 		{
 			character enoki(bn::sprite_items::enoki_walking_pj, 8, 3, false, current_room.width);
 			enoki.entity.set_position(current_room.chari.at(0).entity.x(), current_room.chari.at(0).entity.y());
@@ -4821,14 +4828,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 			1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
-		if (so->last_char_id == 1)
+		if (globals->current_save->last_char_id == 1)
 		{
 			character maple(bn::sprite_items::maple_walking, 8, 3, false, current_room.width);
 			maple.entity.set_position(22 * 32, 1 * 32);
@@ -4839,7 +4846,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(maple);
 		}
 
-		if (so->last_char_id < 1)
+		if (globals->current_save->last_char_id < 1)
 		{
 			character enoki(bn::sprite_items::enoki_walking_pj, 8, 3, false, current_room.width);
 			enoki.entity.set_position(22 * 32, 1 * 32);
@@ -4861,7 +4868,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		//character enoki(bn::sprite_items::enoki_walking_pj, current_room, current_room.start_x - 0.9, current_room.start_y, false);
 		/*
-				if (local_tileset.at((current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
+				if (globals->local_tileset.at((current_room.start_x - 1) + (current_room.start_y * current_room.width)] > 0) {
 					enoki.entity.set_position(4 + current_room.start_x * 32, current_room.start_y * 32);
 					maple.entity.set_position(-4 + current_room.start_x * 32, (current_room.start_y * 32));
 				}
@@ -4881,15 +4888,15 @@ dungeon_return dungeon(dungeon_return& dt) {
 	// Main overworld plot
 	case 4:
 	{
-		if (so->checkpoint == 5)
+		if (globals->current_save->checkpoint == 5)
 		{
 			bn::music_items_info::span[21].first.play(0.8);
 		}
-		else if (so->checkpoint < 12)
+		else if (globals->current_save->checkpoint < 12)
 		{
 			bn::music_items_info::span[11].first.play(0.8);
 		}
-		else if (so->checkpoint < 14)
+		else if (globals->current_save->checkpoint < 14)
 		{
 			if (bn::music::playing())
 				bn::music::stop();
@@ -4898,7 +4905,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		current_room.configure(20, 20, 9, 17);
 
-		if (so->checkpoint < 7)
+		if (globals->current_save->checkpoint < 7)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				00, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
@@ -4944,14 +4951,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				43, 26, 26, 26, 13, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0,
 				26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
-		else if (so->checkpoint < 9)
+		else if (globals->current_save->checkpoint < 9)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
@@ -4997,14 +5004,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				43, 26, 26, 26, 13, 26, 26, 26, 52, 10, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0,
 				26, 26, 26, 26, 26, 26, 26, 26, 53, 26, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
-		else if (so->checkpoint < 11)
+		else if (globals->current_save->checkpoint < 11)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
@@ -5050,14 +5057,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				43, 26, 26, 26, 13, 26, 26, 26, 52, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0,
 				26, 26, 26, 26, 26, 26, 26, 26, 53, 26, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
-		else if (so->checkpoint == 12)
+		else if (globals->current_save->checkpoint == 12)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
@@ -5103,11 +5110,11 @@ dungeon_return dungeon(dungeon_return& dt) {
 				43, 26, 26, 26, 13, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0,
 				26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 
 			current_room.chari.at(0).can_follow = false;
@@ -5130,7 +5137,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			enoki.can_follow = true;
 			current_room.chari.push_back(enoki);
 		}
-		else if (so->checkpoint == 13)
+		else if (globals->current_save->checkpoint == 13)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
@@ -5176,14 +5183,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				43, 26, 26, 26, 13, 26, 26, 26, 26, 10, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0,
 				26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 0, 0, 0 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 
-			if (so->last_char_id != 2)
+			if (globals->current_save->last_char_id != 2)
 			{
 				character vee(bn::sprite_items::aaron_walking_oo, 3, 2, false, current_room.width);
 				vee.entity.set_position(1 * 32, 1 * 32);
@@ -5194,7 +5201,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(vee);
 			}
 
-			if (so->last_char_id != 4)
+			if (globals->current_save->last_char_id != 4)
 			{
 				character vee(bn::sprite_items::vee_walking_spring, 3, 2, false, current_room.width);
 				vee.entity.set_position(2 * 32, 1 * 32);
@@ -5205,7 +5212,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(vee);
 			}
 
-			if (so->last_char_id != 5)
+			if (globals->current_save->last_char_id != 5)
 			{
 				character eleanor(bn::sprite_items::eleanor_walking_spring, 4, 4, false, current_room.width);
 				eleanor.entity.set_position(3 * 32, 1 * 32);
@@ -5220,7 +5227,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 		current_room.primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
 		current_room.environment = &bn::sprite_items::ocean_terrain;
 
-		if (so->checkpoint == 5)
+		if (globals->current_save->checkpoint == 5)
 			current_room.primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
 		current_room.primary_bg.set_camera(current_room.camera);
 		break;
@@ -5243,17 +5250,17 @@ dungeon_return dungeon(dungeon_return& dt) {
 			4, 9, 0, 0, 0, 0, 0, 0, 0, 0, 54,
 			5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 55 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.primary_bg = bn::regular_bg_items::bg_trailer_home.create_bg(0, 0);
 		current_room.primary_bg.set_camera(current_room.camera);
 
-		if (so->last_char_id != 0)
+		if (globals->current_save->last_char_id != 0)
 		{
 			character maple(bn::sprite_items::maple_walking_spring, 5, 1, false, current_room.width);
 			maple.entity.set_position(5 * 32, 1 * 32);
@@ -5263,7 +5270,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(maple);
 		}
 
-		if (so->last_char_id != 1)
+		if (globals->current_save->last_char_id != 1)
 		{
 			character enoki(bn::sprite_items::enoki_walking_spring, 6, 2, false, current_room.width);
 			enoki.entity.set_position(6 * 32, 2 * 32);
@@ -5273,7 +5280,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(enoki);
 		}
 
-		if (so->last_char_id != 2)
+		if (globals->current_save->last_char_id != 2)
 		{
 			character aaron(bn::sprite_items::aaron_walking_spring, 4, 1, false, current_room.width);
 			aaron.entity.set_position(4 * 32, 1 * 32);
@@ -5288,13 +5295,13 @@ dungeon_return dungeon(dungeon_return& dt) {
 	}
 	case 6:
 	{
-		if (so->checkpoint < 12)
+		if (globals->current_save->checkpoint < 12)
 		{
 			bn::music_items_info::span[17].first.play(0.8);
 		}
 		current_room.configure(9, 11, 7, 3);
 
-		if (so->checkpoint == 12)
+		if (globals->current_save->checkpoint == 12)
 		{
 			const short int local[current_room.width * current_room.height] = {
 				00, 0, 0, 0, 0, 0, 0, 12, 0,
@@ -5321,14 +5328,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				1, 1, 0, 0, 0, 0, 0, 0, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 
-			if (so->last_char_id != 0)
+			if (globals->current_save->last_char_id != 0)
 			{
 				character maple(bn::sprite_items::maple_walking_oo, 5, 1, false, current_room.width);
 				maple.entity.set_position(7 * 32, 4 * 32);
@@ -5339,7 +5346,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(maple);
 			}
 
-			if (so->last_char_id != 1)
+			if (globals->current_save->last_char_id != 1)
 			{
 				character enoki(bn::sprite_items::enoki_walking_oo, 6, 2, false, current_room.width);
 				enoki.entity.set_position(7 * 32, 3 * 32);
@@ -5350,7 +5357,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(enoki);
 			}
 		}
-		else if (so->checkpoint == 13)
+		else if (globals->current_save->checkpoint == 13)
 		{
 			const short int local[current_room.width * current_room.height] = {
 				00, 0, 0, 0, 0, 0, 0, 12, 0,
@@ -5377,14 +5384,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				1, 1, 0, 0, 0, 0, 0, 0, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 
-			if (so->last_char_id != 0)
+			if (globals->current_save->last_char_id != 0)
 			{
 				character maple(bn::sprite_items::maple_walking_oo, 5, 1, false, current_room.width);
 				maple.entity.set_position(4 * 32, 7 * 32);
@@ -5395,7 +5402,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(maple);
 			}
 
-			if (so->last_char_id != 1)
+			if (globals->current_save->last_char_id != 1)
 			{
 				character enoki(bn::sprite_items::enoki_walking_oo, 6, 2, false, current_room.width);
 				enoki.entity.set_position(4 * 32, 8 * 32);
@@ -5406,7 +5413,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(enoki);
 			}
 
-			if (so->last_char_id != 2)
+			if (globals->current_save->last_char_id != 2)
 			{
 				character maple(bn::sprite_items::aaron_walking_oo, 5, 1, false, current_room.width);
 				maple.entity.set_position(7 * 32, 4 * 32);
@@ -5417,7 +5424,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(maple);
 			}
 
-			if (so->last_char_id != 4)
+			if (globals->current_save->last_char_id != 4)
 			{
 				character enoki(bn::sprite_items::vee_walking_spring, 6, 2, false, current_room.width);
 				enoki.entity.set_position(7 * 32, 5 * 32);
@@ -5428,7 +5435,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(enoki);
 			}
 
-			if (so->last_char_id != 5)
+			if (globals->current_save->last_char_id != 5)
 			{
 				character enoki(bn::sprite_items::eleanor_walking_spring, 6, 2, false, current_room.width);
 				enoki.entity.set_position(7 * 32, 6 * 32);
@@ -5466,15 +5473,15 @@ dungeon_return dungeon(dungeon_return& dt) {
 				1, 1, 27, 0, 30, 0, 0, 0, 1,
 				1, 1, 1, 1, 1, 1, 1, 1, 1 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
 
-		if (so->last_char_id != 3)
+		if (globals->current_save->last_char_id != 3)
 		{
 			character scout(bn::sprite_items::scout_walking_spring, 4, 8, false, current_room.width);
 			scout.entity.set_position(4 * 32, 8 * 32);
@@ -5493,7 +5500,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 	// Additional housing area
 	case 8:
 	{
-		if (so->checkpoint < 12)
+		if (globals->current_save->checkpoint < 12)
 		{
 			bn::music_items_info::span[27].first.play(0.8);
 		}
@@ -5505,7 +5512,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		current_room.configure(20, 20, 9, 17);
 
-		if (so->checkpoint < 10)
+		if (globals->current_save->checkpoint < 10)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -5551,11 +5558,11 @@ dungeon_return dungeon(dungeon_return& dt) {
 				1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27 };
 
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
-		else if (so->checkpoint < 12)
+		else if (globals->current_save->checkpoint < 12)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -5600,14 +5607,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				27, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 27, 1,
 				1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
-		else if (so->checkpoint == 12)
+		else if (globals->current_save->checkpoint == 12)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -5652,14 +5659,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 				27, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 27, 1,
 				1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
-		else if (so->checkpoint == 13)
+		else if (globals->current_save->checkpoint == 13)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
 				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -5704,19 +5711,19 @@ dungeon_return dungeon(dungeon_return& dt) {
 				27, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 27, 1,
 				1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27, 1, 27 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			current_room.environment = &bn::sprite_items::ocean_terrain;
 
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 		}
 
-		if (so->checkpoint == 13)
+		if (globals->current_save->checkpoint == 13)
 		{
-			if (so->last_char_id != 2)
+			if (globals->current_save->last_char_id != 2)
 			{
 				character aaron(bn::sprite_items::aaron_walking_spring, 3, 2, false, current_room.width);
 				aaron.entity.set_position(6 * 32, 7 * 32);
@@ -5727,7 +5734,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(aaron);
 			}
 
-			if (so->last_char_id != 4)
+			if (globals->current_save->last_char_id != 4)
 			{
 				character vee(bn::sprite_items::vee_walking_spring, 3, 2, false, current_room.width);
 				vee.entity.set_position(7 * 32, 7 * 32);
@@ -5738,7 +5745,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(vee);
 			}
 
-			if (so->last_char_id != 5)
+			if (globals->current_save->last_char_id != 5)
 			{
 				character eleanor(bn::sprite_items::eleanor_walking_spring, 4, 4, false, current_room.width);
 				eleanor.entity.set_position(8 * 32, 7 * 32);
@@ -5752,7 +5759,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		current_room.primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
 
-		if (so->checkpoint == 5)
+		if (globals->current_save->checkpoint == 5)
 			current_room.primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
 		current_room.primary_bg.set_camera(current_room.camera);
 		current_room.environment = &bn::sprite_items::ocean_terrain;
@@ -5761,13 +5768,13 @@ dungeon_return dungeon(dungeon_return& dt) {
 	}
 	case 9:
 	{
-		if (so->checkpoint < 12)
+		if (globals->current_save->checkpoint < 12)
 		{
 			bn::music_items_info::span[26].first.play(0.8);
 		}
 		current_room.chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
-		if (so->checkpoint < 12)
+		if (globals->current_save->checkpoint < 12)
 		{
 			current_room.configure(7, 7, 3, 5);
 			const short int local_col[current_room.width * current_room.height] = {
@@ -5789,11 +5796,11 @@ dungeon_return dungeon(dungeon_return& dt) {
 				0, 0, 0, 0, 0, 0, 0 };
 
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 
-			if (so->last_char_id != 4)
+			if (globals->current_save->last_char_id != 4)
 			{
 				character vee(bn::sprite_items::vee_walking_spring, 3, 2, false, current_room.width);
 				vee.entity.set_position(3 * 32, 2 * 32);
@@ -5803,7 +5810,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				current_room.chari.push_back(vee);
 			}
 
-			if (so->last_char_id != 5)
+			if (globals->current_save->last_char_id != 5)
 			{
 				character eleanor(bn::sprite_items::eleanor_walking_spring, 4, 4, false, current_room.width);
 				eleanor.entity.set_position(4 * 32, 4 * 32);
@@ -5834,16 +5841,16 @@ dungeon_return dungeon(dungeon_return& dt) {
 				0, 0, 0, 0, 0, 0, 0,
 				0, 0, 0, 0, 0, 0, 0 };
 
-			local_tileset.clear();
-			collisions.clear();
+			globals->local_tileset.clear();
+			globals->collisions.clear();
 			for (short int t = 0; t < current_room.width * current_room.height; t++) {
-				local_tileset.push_back(local[t]);
-				collisions.push_back(local_col[t]);
+				globals->local_tileset.push_back(local[t]);
+				globals->collisions.push_back(local_col[t]);
 			}
 
-			if (so->checkpoint < 12)
+			if (globals->current_save->checkpoint < 12)
 			{
-				if (so->last_char_id != 4)
+				if (globals->current_save->last_char_id != 4)
 				{
 					character vee(bn::sprite_items::vee_walking_spring, 3, 2, false, current_room.width);
 					vee.entity.set_position(3 * 32, 2 * 32);
@@ -5854,7 +5861,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 					current_room.chari.push_back(vee);
 				}
 
-				if (so->last_char_id != 5)
+				if (globals->current_save->last_char_id != 5)
 				{
 					character eleanor(bn::sprite_items::eleanor_walking_spring, 4, 4, false, current_room.width);
 					eleanor.entity.set_position(4 * 32, 4 * 32);
@@ -5867,7 +5874,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			}
 			else
 			{
-				if (so->last_char_id != 4)
+				if (globals->current_save->last_char_id != 4)
 				{
 					character vee(bn::sprite_items::vee_walking_spring, 3, 2, false, current_room.width);
 					vee.entity.set_position(3 * 32, 2 * 32);
@@ -5878,7 +5885,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 					current_room.chari.push_back(vee);
 				}
 
-				if (so->last_char_id != 5)
+				if (globals->current_save->last_char_id != 5)
 				{
 					character eleanor(bn::sprite_items::eleanor_walking_spring, 4, 4, false, current_room.width);
 					eleanor.entity.set_position(4 * 32, 2 * 32);
@@ -5920,11 +5927,11 @@ dungeon_return dungeon(dungeon_return& dt) {
 			0, 0, 0, 0, 0, 0, 0 };
 
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
-		if (so->last_char_id != 6)
+		if (globals->current_save->last_char_id != 6)
 		{
 			character vee(bn::sprite_items::diana_walking_spring, 3, 2, false, current_room.width);
 			vee.entity.set_position(3 * 32, 2 * 32);
@@ -5990,11 +5997,11 @@ dungeon_return dungeon(dungeon_return& dt) {
 			2, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 3, 0, 0, 0, 2,
 			2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 0, 2, 2, 2, 2 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		anim_object fp;
@@ -6032,8 +6039,8 @@ dungeon_return dungeon(dungeon_return& dt) {
 			0, 0, 0, 0, 0, 0, 0 };
 
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.primary_bg = bn::regular_bg_items::bg_library.create_bg(0, 0);
@@ -6065,14 +6072,14 @@ dungeon_return dungeon(dungeon_return& dt) {
 			0, 0, 0, 0, 0, 0, 0,
 			0, 0, 0, 0, 0, 0, 0 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
-		if (so->last_char_id != 7)
+		if (globals->current_save->last_char_id != 7)
 		{
 			character guy(bn::sprite_items::guy_walking_spring, 2, 2, false, current_room.width);
 			guy.entity.set_position(2 * 32, 2 * 32);
@@ -6136,11 +6143,11 @@ dungeon_return dungeon(dungeon_return& dt) {
 			34, 36, 38, 0, 1, 0, 42, 2, 42, 11, 26, 26,
 			35, 37, 39, 1, 27, 1, 43, 3, 43, 12, 26, 26 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.primary_bg = bn::regular_bg_items::grassy_knoll.create_bg(0, 0);
@@ -6162,10 +6169,10 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 	for (short int t = 0; t < current_room.chari.size(); t++)
 	{
-		if (so->hat_char == current_room.chari.at(t).identity)
+		if (globals->current_save->hat_char == current_room.chari.at(t).identity)
 			active_hat = true;
 	}
-	if (so->hat_world == dt.world_index)
+	if (globals->current_save->hat_world == dt.world_index)
 		active_hat = true;
 	if (active_hat)
 		hat.set_visible(true);
@@ -6176,19 +6183,19 @@ dungeon_return dungeon(dungeon_return& dt) {
 	bn::blending::set_transparency_alpha(1);
 	bool jukebox = false;
 
-	windows.clear();
+	globals->rendered_windows.clear();
 	{
 		bn::rect_window external_window = bn::rect_window::external();
 		external_window.set_show_bg(current_room.primary_bg, false);
 		external_window.set_show_sprites(false);
 		external_window.set_boundaries(-80, -120, 80, 120);
-		windows.push_back(external_window);
+		globals->rendered_windows.push_back(external_window);
 
 		bn::rect_window internal_window = bn::rect_window::internal();
 		internal_window.set_show_bg(current_room.primary_bg, true);
 		internal_window.set_show_sprites(true);
 		internal_window.set_camera(current_room.camera);
-		windows.push_back(internal_window);
+		globals->rendered_windows.push_back(internal_window);
 	}
 
 	short int window_y = 80;
@@ -6201,11 +6208,11 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		unsigned short int follow_z = ((current_room.follow_x + 16) / 32) + (((current_room.follow_y + 16) / 32) * current_room.width);
 
-		windows.at(0).set_boundaries(-80, -120, window_y, 120);
+		globals->rendered_windows.at(0).set_boundaries(-80, -120, window_y, 120);
 		if (window_y > -80)
 			window_y -= 10;
 
-		short int possible_action = collisions.at(follow_z);
+		short int possible_action = globals->collisions.at(follow_z);
 
 		if (possible_action > 1)
 		{
@@ -6434,7 +6441,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 				case 14:
 				{
-					if (so->checkpoint > 3 || so->last_char_id == 0)
+					if (globals->current_save->checkpoint > 3 || globals->current_save->last_char_id == 0)
 					{
 						dt.spawn_x = 5;
 						dt.spawn_y = 3;
@@ -6507,7 +6514,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 				case 17:
 				{
-					if (so->checkpoint < 7)
+					if (globals->current_save->checkpoint < 7)
 					{
 						if (me == 0)
 						{
@@ -6556,7 +6563,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							dialogue_page_lite(lc);
 						}
 					}
-					else if (so->checkpoint < 10)
+					else if (globals->current_save->checkpoint < 10)
 					{
 						if (me == 0)
 						{
@@ -6626,7 +6633,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							dialogue_page_lite(lc);
 						}
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						if (me == 0)
 						{
@@ -6694,7 +6701,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Tremblay bookcase?
 				case 18:
 				{
-					if (so->checkpoint < 7)
+					if (globals->current_save->checkpoint < 7)
 					{
 						if (me == 0)
 						{
@@ -6766,7 +6773,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						}
 					}
 
-					else if (so->checkpoint < 10)
+					else if (globals->current_save->checkpoint < 10)
 					{
 						if (me < 3)
 						{
@@ -6791,7 +6798,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							dialogue_page_lite(lc);
 						}
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						if (me < 3)
 						{
@@ -6842,7 +6849,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				};
 				case 20:
 				{
-					if (so->checkpoint < 12 || current_room.chari.at(current_room.follow_id).identity != 2 || so->checkpoint == 13)
+					if (globals->current_save->checkpoint < 12 || current_room.chari.at(current_room.follow_id).identity != 2 || globals->current_save->checkpoint == 13)
 					{
 						dt.spawn_x = 7;
 						dt.spawn_y = 3;
@@ -6950,7 +6957,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Dirt in jars
 				case 27:
 				{
-					if (so->checkpoint < 7)
+					if (globals->current_save->checkpoint < 7)
 					{
 						if (me == 0)
 						{
@@ -7013,7 +7020,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							break;
 						}
 					}
-					else if (so->checkpoint < 10)
+					else if (globals->current_save->checkpoint < 10)
 					{
 						if (me == 0)
 						{
@@ -7052,7 +7059,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							break;
 						}
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						if (me == 0)
 						{
@@ -7120,7 +7127,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// le Scout comic book bit
 				case 28:
 				{
-					if (so->checkpoint < 7)
+					if (globals->current_save->checkpoint < 7)
 					{
 						if (me == 0)
 						{
@@ -7184,7 +7191,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							break;
 						}
 					}
-					else if (so->checkpoint < 10)
+					else if (globals->current_save->checkpoint < 10)
 					{
 
 						if (me == 0)
@@ -7314,7 +7321,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							break;
 						}
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						if (me == 0)
 						{
@@ -7446,7 +7453,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Scout's computer
 				case 29:
 				{
-					if (so->checkpoint < 7)
+					if (globals->current_save->checkpoint < 7)
 					{
 						if (me == 0)
 						{
@@ -7535,7 +7542,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Scout meet-point
 				case 30:
 				{
-					if (so->checkpoint < 7)
+					if (globals->current_save->checkpoint < 7)
 					{
 						if (me == 0)
 						{
@@ -7648,7 +7655,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						}
 						break;
 					}
-					else if (so->checkpoint < 10)
+					else if (globals->current_save->checkpoint < 10)
 					{
 						if (me < 3)
 						{
@@ -7747,7 +7754,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							break;
 						}
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						if (me < 7)
 						{
@@ -7785,9 +7792,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 							break;
 						}
 					}
-					else if (so->checkpoint == 12)
+					else if (globals->current_save->checkpoint == 12)
 					{
-						so->checkpoint = 13;
+						globals->current_save->checkpoint = 13;
 						line lc[32] = {
 							{true, true, 00, "ENOKI                            Salut? Scout, you down here?    "},
 							{true, true, 00, "SCOUT                            Yeah! We're here! Where's        Aaron?"},
@@ -7838,7 +7845,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 						break;
 					}
-					else if (so->checkpoint == 13)
+					else if (globals->current_save->checkpoint == 13)
 					{
 						if (true)
 						{
@@ -7909,7 +7916,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 							dialogue_page_lite(lc);
 						}
 
-						so->checkpoint = 14;
+						globals->current_save->checkpoint = 14;
 						dt.world_index = 0;
 
 
@@ -8023,7 +8030,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				};
 				case 42:
 				{
-					if (so->checkpoint < 12 || current_room.chari.at(current_room.follow_id).identity == 2)
+					if (globals->current_save->checkpoint < 12 || current_room.chari.at(current_room.follow_id).identity == 2)
 					{
 						dt.spawn_x = 18;
 						dt.spawn_y = 1;
@@ -8081,7 +8088,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Guy's house signage
 				case 47:
 				{
-					if (so->checkpoint < 10)
+					if (globals->current_save->checkpoint < 10)
 					{
 						line lc[5] = {
 							{true, true, 00, " - SOME RANDOM GUY'S HOUSE -"},
@@ -8110,9 +8117,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 				};
 				case 49:
 				{
-					if (so->checkpoint == 12)
+					if (globals->current_save->checkpoint == 12)
 					{
-						so->checkpoint = 13;
+						globals->current_save->checkpoint = 13;
 					}
 
 					dt.spawn_x = 6;
@@ -8161,7 +8168,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Eleanor + Olivier meet 'n greet
 				case 55:
 				{
-					if (so->checkpoint < 10)
+					if (globals->current_save->checkpoint < 10)
 					{
 						switch (me)
 						{
@@ -8345,7 +8352,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						}
 						break;
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						switch (me)
 						{
@@ -8538,7 +8545,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						}
 						break;
 					}
-					else if (so->checkpoint < 14)
+					else if (globals->current_save->checkpoint < 14)
 					{
 
 						if (true)
@@ -8554,9 +8561,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 							dialogue_page_lite(lc);
 						}
 
-						if (so->checkpoint == 12)
+						if (globals->current_save->checkpoint == 12)
 						{
-							so->checkpoint = 13;
+							globals->current_save->checkpoint = 13;
 						}
 
 						dt.spawn_x = 6;
@@ -8637,7 +8644,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Diana meet n' greet
 				case 62:
 				{
-					if (so->checkpoint < 10)
+					if (globals->current_save->checkpoint < 10)
 					{
 						switch (me)
 						{
@@ -8810,7 +8817,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						}
 						}
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						switch (me)
 						{
@@ -9020,7 +9027,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				// Corinne meet 'n greet
 				case 63:
 				{
-					if (so->checkpoint < 10)
+					if (globals->current_save->checkpoint < 10)
 					{
 						//corinne.set_blending_enabled(false);
 						line lc[32] = {
@@ -9044,7 +9051,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						dialogue_page_lite(lc);
 						break;
 					}
-					else if (so->checkpoint < 12)
+					else if (globals->current_save->checkpoint < 12)
 					{
 						//corinne.set_blending_enabled(false);
 						line lc[32] = {
@@ -9318,7 +9325,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 				}
 
-				so->xp += 2;
+				globals->current_save->xp += 2;
 				xphud.acknowledge();
 			}
 
@@ -9330,12 +9337,12 @@ dungeon_return dungeon(dungeon_return& dt) {
 		// Hat logic
 		if (active_hat)
 		{
-			if (so->hat_char > -1)
+			if (globals->current_save->hat_char > -1)
 			{
 				short int my_id = 0;
 				for (int i = 0; i < current_room.chari.size(); i++)
 				{
-					if (current_room.chari.at(i).identity == so->hat_char)
+					if (current_room.chari.at(i).identity == globals->current_save->hat_char)
 						my_id = i;
 				}
 
@@ -9345,18 +9352,18 @@ dungeon_return dungeon(dungeon_return& dt) {
 				if (bn::keypad::l_pressed())
 				{
 					bn::sound_items::pop.play();
-					so->hat_x = current_room.chari.at(my_id).entity.x().integer();
-					so->hat_y = current_room.chari.at(my_id).entity.y().integer() + 1;
-					so->hat_world = dt.world_index;
-					so->hat_char = -1;
+					globals->current_save->hat_x = current_room.chari.at(my_id).entity.x().integer();
+					globals->current_save->hat_y = current_room.chari.at(my_id).entity.y().integer() + 1;
+					globals->current_save->hat_world = dt.world_index;
+					globals->current_save->hat_char = -1;
 					l_button.set_visible(false);
 				}
 			}
 			else
 			{
-				hat.set_position(so->hat_x, so->hat_y);
+				hat.set_position(globals->current_save->hat_x, globals->current_save->hat_y);
 
-				if (so->hat_y > current_room.chari.at(current_room.follow_id).entity.y())
+				if (globals->current_save->hat_y > current_room.chari.at(current_room.follow_id).entity.y())
 				{
 					hat.put_above();
 				}
@@ -9365,9 +9372,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 					hat.put_below();
 				}
 
-				if (abs(so->hat_x - current_room.chari.at(current_room.follow_id).entity.x().integer()) + abs(so->hat_y - current_room.chari.at(current_room.follow_id).entity.y().integer()) < 32)
+				if (abs(globals->current_save->hat_x - current_room.chari.at(current_room.follow_id).entity.x().integer()) + abs(globals->current_save->hat_y - current_room.chari.at(current_room.follow_id).entity.y().integer()) < 32)
 				{
-					current_room.a_notif = bn::sprite_items::a_button_2.create_sprite(so->hat_x, so->hat_y - 28, 1);
+					current_room.a_notif = bn::sprite_items::a_button_2.create_sprite(globals->current_save->hat_x, globals->current_save->hat_y - 28, 1);
 					current_room.a_notif.set_camera(current_room.camera);
 					current_room.a_notif.set_visible(true);
 				}
@@ -9375,7 +9382,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				if (bn::keypad::l_pressed())
 				{
 					bn::sound_items::squeak.play();
-					so->hat_char = current_room.chari.at(current_room.follow_id).identity;
+					globals->current_save->hat_char = current_room.chari.at(current_room.follow_id).identity;
 				}
 			}
 		}
@@ -9516,21 +9523,21 @@ dungeon_return dungeon(dungeon_return& dt) {
 				short int s_y = (corinne->y().integer() + 16) / 32;
 				corinne->set_position(s_x * 32, s_y * 32);
 
-				if (collisions.at(s_x + (current_room.width * (s_y + 1))) == 0)
+				if (globals->collisions.at(s_x + (current_room.width * (s_y + 1))) == 0)
 				{
-					collisions.at(s_x + (current_room.width * (s_y + 1))) = 63;
+					globals->collisions.at(s_x + (current_room.width * (s_y + 1))) = 63;
 				}
-				else if (collisions.at(s_x + (current_room.width * (s_y - 1))) == 0)
+				else if (globals->collisions.at(s_x + (current_room.width * (s_y - 1))) == 0)
 				{
-					collisions.at(s_x + (current_room.width * (s_y - 1))) = 63;
+					globals->collisions.at(s_x + (current_room.width * (s_y - 1))) = 63;
 				}
-				else if (collisions.at(s_x + (current_room.width * s_y) - 1) == 0)
+				else if (globals->collisions.at(s_x + (current_room.width * s_y) - 1) == 0)
 				{
-					collisions.at(s_x + (current_room.width * s_y) - 1) = 63;
+					globals->collisions.at(s_x + (current_room.width * s_y) - 1) = 63;
 				}
-				else if (collisions.at(s_x + (current_room.width * s_y) + 1) == 0)
+				else if (globals->collisions.at(s_x + (current_room.width * s_y) + 1) == 0)
 				{
-					collisions.at(s_x + (current_room.width * s_y) + 1) = 63;
+					globals->collisions.at(s_x + (current_room.width * s_y) + 1) = 63;
 				}
 			}
 			break;
@@ -9680,7 +9687,7 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 	// Handle active character
 	current_room.chari.at(0).role = 1;
 	current_room.follow_id = 0;
-	so->last_char_id = current_room.chari.at(0).identity;
+	globals->current_save->last_char_id = current_room.chari.at(0).identity;
 
 	// World generation
 	switch (dt.world_index)
@@ -9720,11 +9727,11 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			0,0,0,5,1,1,0,5,0,1,12,1,12,0,0,0,0,0,0,0,0,16,0,12,1,12,
 			1,1,1,1,1,1,1,1,1,1,12,1,1,1,1,1,1,1,1,1,1,1,1,1,1,12 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.primary_bg.set_camera(current_room.camera);
@@ -9735,7 +9742,7 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 		current_room.configure(18, 21, 16, 19);
 		const short int local_col[current_room.width * current_room.height] = {
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 7, 1,
+			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 1,
 			1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
 			1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1,
 			1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1,
@@ -9757,9 +9764,9 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 		const short int local[current_room.width * current_room.height] = {
 			1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,9,1,
-			1,0,0,0,15,0,0,0,0,0,0,15,0,0,0,0,0,1,
+			1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
 			1,0,12,1,12,0,0,0,0,0,0,0,0,12,1,12,1,1,
-			1,0,12,13,12,0,0,0,0,0,0,0,0,12,13,12,0,1,
+			1,0,12,0,12,0,0,0,0,0,0,0,0,12,0,12,0,1,
 			1,15,1,1,1,0,0,0,0,0,0,0,0,1,12,1,0,1,
 			1,0,1,13,1,1,6,7,8,6,7,8,6,6,7,8,0,11,
 			1,0,1,14,0,0,15,5,0,0,0,1,12,0,0,16,0,10,
@@ -9778,11 +9785,11 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			1,0,0,0,16,0,16,0,0,0,0,0,0,0,5,1,0,1,
 			1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.primary_bg.set_camera(current_room.camera);
@@ -9835,11 +9842,11 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			1, 5, 5, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
 			1, 6, 6, 6, 10, 6, 8, 6, 6, 6, 6, 7, 8, 6, 0, 6, 7, 8, 11 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.primary_bg.set_camera(current_room.camera);
@@ -9979,11 +9986,11 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			0, 1, 0, 0, 0, 1,
 			0, 1, 1, 0, 1, 1 };
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.primary_bg.set_camera(current_room.camera);
@@ -10009,52 +10016,52 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 		{
 			short int absloc = x + (y * current_room.width);
 
-			if (local_tileset.at(absloc) == 2)
+			if (globals->local_tileset.at(absloc) == 2)
 			{
 				gem gemy;
 				gemy.entity.set_camera(current_room.camera);
 				gemy.entity.set_position(x * 32, y * 32);
 				gems.push_back(gemy);
 			}
-			else if (local_tileset.at(absloc) == 12)
+			else if (globals->local_tileset.at(absloc) == 12)
 			{
 				xy gassy;
 				gassy.x = x;
 				gassy.y = y;
-				collisions.at(x + (y * current_room.width)) = 1;
+				globals->collisions.at(x + (y * current_room.width)) = 1;
 				gas_tanks.push_back(gassy);
 			}
-			else if (local_tileset.at(absloc) == 13)
+			else if (globals->local_tileset.at(absloc) == 13)
 			{
 				button buttony;
 				buttony.x = x;
 				buttony.y = y;
 				buttons.push_back(buttony);
 			}
-			else if (local_tileset.at(absloc) == 14)
+			else if (globals->local_tileset.at(absloc) == 14)
 			{
 				button buttony;
 				buttony.x = x;
 				buttony.y = y;
 				buttony.short_toggle = true;
 				buttons.push_back(buttony);
-				local_tileset.at(absloc) = 13;
+				globals->local_tileset.at(absloc) = 13;
 			}
-			else if (local_tileset.at(absloc) == 15)
+			else if (globals->local_tileset.at(absloc) == 15)
 			{
 				gate gatey;
 				gatey.x = x;
 				gatey.y = y;
-				collisions.at(x + (y * current_room.width)) = 1;
+				globals->collisions.at(x + (y * current_room.width)) = 1;
 				gates.push_back(gatey);
 			}
-			else if (local_tileset.at(absloc) == 16)
+			else if (globals->local_tileset.at(absloc) == 16)
 			{
 				moving_block pushy;
 				pushy.entity.set_camera(current_room.camera);
 				pushy.entity.set_position(x * 32, y * 32);
-				collisions.at(absloc) = 1;
-				local_tileset.at(absloc) = 0;
+				globals->collisions.at(absloc) = 1;
+				globals->local_tileset.at(absloc) = 0;
 				blocks.push_back(pushy);
 			}
 		}
@@ -10064,13 +10071,11 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 	if (dt.world_index == 1)
 	{
 		gates.at(0).triggered_by = 0;
-		gates.at(1).triggered_by = 1;
-		gates.at(2).triggered_by = 2;
-		gates.at(3).triggered_by = 4;
-		gates.at(4).triggered_by = 6;
-		gates.at(5).triggered_by = 7;
-		gates.at(6).triggered_by = 3;
-		gates.at(7).triggered_by = 5;
+		gates.at(1).triggered_by = 2;
+		gates.at(2).triggered_by = 4;
+		gates.at(3).triggered_by = 5;
+		gates.at(4).triggered_by = 1;
+		gates.at(5).triggered_by = 3;
 	}
 	else if (dt.world_index == 2)
 	{
@@ -10085,19 +10090,19 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 	short int last_x = dt.spawn_x;
 	short int last_y = dt.spawn_y;
 
-	windows.clear();
+	globals->rendered_windows.clear();
 	{
 		bn::rect_window external_window = bn::rect_window::external();
 		external_window.set_show_bg(current_room.primary_bg, false);
 		external_window.set_show_sprites(false);
 		external_window.set_boundaries(-80, -120, 80, 120);
-		windows.push_back(external_window);
+		globals->rendered_windows.push_back(external_window);
 
 		bn::rect_window internal_window = bn::rect_window::internal();
 		internal_window.set_show_bg(current_room.primary_bg, true);
 		internal_window.set_show_sprites(true);
 		internal_window.set_camera(current_room.camera);
-		windows.push_back(internal_window);
+		globals->rendered_windows.push_back(internal_window);
 	}
 
 	short int window_y = 80;
@@ -10105,7 +10110,7 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 	while (true)
 	{
 		// Control window
-		windows.at(0).set_boundaries(-80, -120, window_y, 120);
+		globals->rendered_windows.at(0).set_boundaries(-80, -120, window_y, 120);
 		if (window_y > -80)
 			window_y -= 10;
 
@@ -10132,14 +10137,14 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 
 		if (current_room.chari.at(current_room.follow_id).identity == 3)
 		{
-			if (local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 0)
+			if (globals->local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 0)
 			{
 				current_room.start_notif(0);
 				if (bn::keypad::a_pressed())
 				{
 					bn::sound_items::firecrackle.play();
-					local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
-					collisions.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
+					globals->local_tileset.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
+					globals->collisions.at(rel_x + ((rel_y + 1) * current_room.width)) = 0;
 					current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
 
 					after_effect ae;
@@ -10148,14 +10153,14 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 					aes.push_back(ae);
 				}
 			}
-			if (local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 3)
+			if (globals->local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 3)
 			{
 				current_room.start_notif(0);
 				if (bn::keypad::a_pressed())
 				{
 					bn::sound_items::firecrackle.play();
-					local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
-					collisions.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
+					globals->local_tileset.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
+					globals->collisions.at(rel_x + ((rel_y - 1) * current_room.width)) = 0;
 					current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
 
 					after_effect ae;
@@ -10164,14 +10169,14 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 					aes.push_back(ae);
 				}
 			}
-			if (local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 1)
+			if (globals->local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 1)
 			{
 				current_room.start_notif(0);
 				if (bn::keypad::a_pressed())
 				{
 					bn::sound_items::firecrackle.play();
-					local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
-					collisions.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
+					globals->local_tileset.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
+					globals->collisions.at(rel_x + 1 + ((rel_y)*current_room.width)) = 0;
 					current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
 
 					after_effect ae;
@@ -10180,14 +10185,14 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 					aes.push_back(ae);
 				}
 			}
-			if (local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 2)
+			if (globals->local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) == 5 && current_room.chari.at(current_room.follow_id).dir == 2)
 			{
 				current_room.start_notif(0);
 				if (bn::keypad::a_pressed())
 				{
 					bn::sound_items::firecrackle.play();
-					local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
-					collisions.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
+					globals->local_tileset.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
+					globals->collisions.at(rel_x - 1 + ((rel_y)*current_room.width)) = 0;
 					current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
 
 					after_effect ae;
@@ -10213,7 +10218,7 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 					{
 						bn::sound_items::pop.play();
 						buttons.at(t).toggled = true;
-						local_tileset.at(f_z) = 14;
+						globals->local_tileset.at(f_z) = 14;
 						current_room.last_camera_x = 0;
 						current_room.last_camera_y = 0;
 						current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
@@ -10250,7 +10255,7 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 		// Control actions
 		unsigned short int follow_z = ((current_room.follow_x + 16) / 32) + (((current_room.follow_y + 16) / 32) * current_room.width);
 
-		unsigned short int possible_action = collisions.at(follow_z);
+		unsigned short int possible_action = globals->collisions.at(follow_z);
 		if (possible_action > 1)
 		{
 			current_room.start_notif(0);
@@ -10399,43 +10404,43 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			// Push block
 			if (rel_x == my_x)
 			{
-				if (rel_y == my_y + 1 && collisions.at(my_z - current_room.width) != 1 && current_room.chari.at(current_room.follow_id).dir == 3)
+				if (rel_y == my_y + 1 && globals->collisions.at(my_z - current_room.width) != 1 && current_room.chari.at(current_room.follow_id).dir == 3)
 				{
 					current_room.start_notif(0);
 					if (bn::keypad::a_pressed())
 					{
 						blocks.at(t).moving_y = -2;
-						collisions.at(my_z) = 0;
+						globals->collisions.at(my_z) = 0;
 					}
 				}
-				else if (rel_y == my_y - 1 && collisions.at(my_z + current_room.width) != 1 && current_room.chari.at(current_room.follow_id).dir == 0)
+				else if (rel_y == my_y - 1 && globals->collisions.at(my_z + current_room.width) != 1 && current_room.chari.at(current_room.follow_id).dir == 0)
 				{
 					current_room.start_notif(0);
 					if (bn::keypad::a_pressed())
 					{
 						blocks.at(t).moving_y = 2;
-						collisions.at(my_z) = 0;
+						globals->collisions.at(my_z) = 0;
 					}
 				}
 			}
 			else if (rel_y == my_y)
 			{
-				if (rel_x == my_x + 1 && collisions.at(my_z - 1) != 1 && current_room.chari.at(current_room.follow_id).dir == 2)
+				if (rel_x == my_x + 1 && globals->collisions.at(my_z - 1) != 1 && current_room.chari.at(current_room.follow_id).dir == 2)
 				{
 					current_room.start_notif(0);
 					if (bn::keypad::a_pressed())
 					{
 						blocks.at(t).moving_x = -2;
-						collisions.at(my_z) = 0;
+						globals->collisions.at(my_z) = 0;
 					}
 				}
-				else if (rel_x == my_x - 1 && collisions.at(my_z + 1) != 1 && current_room.chari.at(current_room.follow_id).dir == 1)
+				else if (rel_x == my_x - 1 && globals->collisions.at(my_z + 1) != 1 && current_room.chari.at(current_room.follow_id).dir == 1)
 				{
 					current_room.start_notif(0);
 					if (bn::keypad::a_pressed())
 					{
 						blocks.at(t).moving_x = 2;
-						collisions.at(my_z) = 0;
+						globals->collisions.at(my_z) = 0;
 					}
 				}
 			}
@@ -10444,14 +10449,14 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			if (blocks.at(t).moving_x != 0)
 			{
 				if (
-					collisions.at(
+					globals->collisions.at(
 						my_z + (blocks.at(t).moving_x / 2)) == 1)
 				{
 					bn::sound_items::firehit.play();
 					if (blocks.at(t).moving_x < 0)
 						my_x++;
 					blocks.at(t).moving_x = 0;
-					collisions.at(my_z) = 1;
+					globals->collisions.at(my_z) = 1;
 
 					blocks.at(t).entity.set_position(my_x * 32, my_y * 32);
 				}
@@ -10463,14 +10468,14 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			if (blocks.at(t).moving_y != 0)
 			{
 				if (
-					collisions.at(
+					globals->collisions.at(
 						my_z + ((blocks.at(t).moving_y / 2) * current_room.width)) == 1)
 				{
 					bn::sound_items::firehit.play();
 					if (blocks.at(t).moving_y < 0)
 						my_y++;
 					blocks.at(t).moving_y = 0;
-					collisions.at(my_z) = 1;
+					globals->collisions.at(my_z) = 1;
 
 					blocks.at(t).entity.set_position(my_x * 32, my_y * 32);
 				}
@@ -10494,7 +10499,7 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 				{
 					short int my_z = my_x + (my_y * current_room.width);
 					bn::sound_items::ding.play();
-					local_tileset.at(my_z) = 0;
+					globals->local_tileset.at(my_z) = 0;
 					gems.at(t).entity.set_visible(false);
 					last_x = my_x;
 					last_y = my_y;
@@ -10511,13 +10516,13 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			unsigned short int my_y = buttons.at(t).y;
 			unsigned short int my_z = my_x + (my_y * current_room.width);
 
-			if ((my_x == rel_x && my_y == rel_y) || collisions.at(my_z) == 1)
+			if ((my_x == rel_x && my_y == rel_y) || globals->collisions.at(my_z) == 1)
 			{
 				if (!buttons.at(t).toggled)
 				{
 					bn::sound_items::pop.play();
 					buttons.at(t).toggled = true;
-					local_tileset.at(my_z) = 14;
+					globals->local_tileset.at(my_z) = 14;
 				}
 			}
 			else if (buttons.at(t).short_toggle)
@@ -10526,29 +10531,29 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 				{
 					bn::sound_items::pop.play();
 					buttons.at(t).toggled = false;
-					local_tileset.at(my_z) = 13;
+					globals->local_tileset.at(my_z) = 13;
 				}
 			}
 		}
 		for (unsigned short int t = 0; t < gates.size(); t++)
 		{
 			button* bt = &buttons.at(gates.at(t).triggered_by);
-			if (local_tileset.at(bt->x + (bt->y * current_room.width)) == 14)
+			if (globals->local_tileset.at(bt->x + (bt->y * current_room.width)) == 14)
 			{
-				local_tileset.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 0;
-				collisions.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 0;
+				globals->local_tileset.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 0;
+				globals->collisions.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 0;
 			}
 			else
 			{
-				local_tileset.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 15;
-				collisions.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 1;
+				globals->local_tileset.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 15;
+				globals->collisions.at(gates.at(t).x + (gates.at(t).y * current_room.width)) = 1;
 			}
 		}
 
 		// things
-		if (local_tileset.at(rel_x + (rel_y * current_room.width)) == 4)
+		if (globals->local_tileset.at(rel_x + (rel_y * current_room.width)) == 4)
 		{
-			local_tileset.at(rel_x + (rel_y * current_room.width)) = 0;
+			globals->local_tileset.at(rel_x + (rel_y * current_room.width)) = 0;
 		}
 
 		current_room.update_objects();
@@ -10559,7 +10564,8 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 void keyboard() {
 	bn::core::update();
 
-	bn::vector<char, 16> ss;
+	bn::string<16> string;
+	bn::ostringstream ss(string);
 	bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
 	bn::vector<bn::sprite_ptr, 16> file1_spr;
 	auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
@@ -10607,9 +10613,8 @@ void keyboard() {
 				file1_spr.clear();
 				unsigned short int plus = 0;
 				if (!lower) plus = 36;
-				ss.push_back(basis[x_state + plus + (y_state * 12)]);
-				std::string s(ss.begin(), ss.end());
-				file1_gen.generate(-104, height, s.c_str(), file1_spr);
+				ss << (basis[x_state + plus + (y_state * 12)]);
+				file1_gen.generate(-104, height, ss.str().c_str(), file1_spr);
 			}
 			else {
 				bn::sound_items::firehit.play();
@@ -10618,10 +10623,9 @@ void keyboard() {
 
 		if (bn::keypad::b_pressed()) {
 			if (ss.size() > 0) {
-				ss.pop_back();
+				string.pop_back();
 				file1_spr.clear();
-				std::string s(ss.begin(), ss.end());
-				file1_gen.generate(-104, height, s.c_str(), file1_spr);
+				file1_gen.generate(-104, height, string.c_str(), file1_spr);
 				bn::sound_items::cnaut.play();
 			}
 			else {
@@ -10650,8 +10654,7 @@ void keyboard() {
 					bn::core::update();
 				}
 			}
-			std::string s(ss.begin(), ss.end());
-			file1_gen.generate(-104, height, s.c_str(), file1_spr);
+			file1_gen.generate(-104, height, string.c_str(), file1_spr);
 			bn::sound_items::firehit.play();
 		}
 
@@ -10661,8 +10664,8 @@ void keyboard() {
 		bn::core::update();
 	}
 
-	for (int tt = 0; tt < ss.size(); tt++) so->island_name[tt] = ss.at(tt);
-	bn::sram::write(all_save);
+	for (int tt = 0; tt < ss.size(); tt++) globals->current_save->island_name[tt] = string.at(tt);
+	bn::sram::write(globals->all_save);
 }
 
 void timer(int delay)
@@ -10853,11 +10856,11 @@ void startup()
 void load_save()
 {
 	// Clear if need be
-	if (all_save.save_init != 137) {
+	if (globals->all_save.save_init != 137) {
 		for (int t = 0; t < 3; t++) {
-			all_save.so[t].clear();
+			globals->all_save.current_save[t].clear();
 		}
-		all_save.save_init = 137;
+		globals->all_save.save_init = 137;
 	}
 
 	auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
@@ -10871,70 +10874,73 @@ void load_save()
 	bn::vector<bn::sprite_ptr, 12> file2_spr;
 	bn::vector<bn::sprite_ptr, 12> file3_spr;
 
-	char buf1[32] = { 0 };
-	char buf2[32] = { 0 };
-	char buf3[32] = { 0 };
+	bn::string<32> buf1;
+	bn::string<32> buf2;
+	bn::string<32> buf3;
 
-	if (all_save.so[0].island_name[0] < 255 && all_save.so[0].island_name[0] > 0) {
-		std::stringstream ss1;
+	if (globals->all_save.current_save[0].island_name[0] < 255 && globals->all_save.current_save[0].island_name[0] > 0) {
+		bn::ostringstream ss1(buf1);
 		for (short int t = 0; t < 16; t++) {
-			if (all_save.so[0].island_name[t] < 255) {
-				ss1 << all_save.so[0].island_name[t];
+			if (globals->all_save.current_save[0].island_name[t] < 255) {
+				ss1 << globals->all_save.current_save[0].island_name[t];
 			}
 		}
-		if (all_save.so[0].xp == -1) all_save.so[0].xp = 0;
-		ss1 << ": " << (all_save.so[0].checkpoint * 6.6) << "%%";
-		sprintf(buf1, ss1.str().c_str());
+		if (globals->all_save.current_save[0].xp == -1) globals->all_save.current_save[0].xp = 0;
+		ss1 << ": ";
+		ss1 << (int)(globals->all_save.current_save[0].checkpoint * 6.6);
+		ss1 << "%";
 	}
 	else {
-		sprintf(buf1, "Slot 1: 0%%");
+		buf1 = "Slot 1: 0%";
 	}
 
-	if (all_save.so[1].island_name[0] < 255 && all_save.so[1].island_name[0] > 0) {
-		std::stringstream ss1;
+	if (globals->all_save.current_save[1].island_name[0] < 255 && globals->all_save.current_save[1].island_name[0] > 0) {
+		bn::ostringstream ss1(buf2);
 		for (short int t = 0; t < 16; t++) {
-			if (all_save.so[1].island_name[t] < 255) {
-				ss1 << all_save.so[1].island_name[t];
+			if (globals->all_save.current_save[1].island_name[t] < 255) {
+				ss1 << globals->all_save.current_save[1].island_name[t];
 			}
 		}
-		if (all_save.so[1].xp == -1) all_save.so[1].xp = 0;
-		ss1 << ": " << (all_save.so[1].checkpoint * 6.6) << "%%";
-		sprintf(buf2, ss1.str().c_str());
+		if (globals->all_save.current_save[1].xp == -1) globals->all_save.current_save[1].xp = 0;
+		ss1 << ": ";
+		ss1 << (int)(globals->all_save.current_save[1].checkpoint * 6.6);
+		ss1 << "%%";
 	}
 	else {
-		sprintf(buf2, "Slot 2: 0%%");
+		buf2 = "Slot 2: 0%";
 	}
 
-	if (all_save.so[2].island_name[0] < 255 && all_save.so[2].island_name[0] > 0) {
-		std::stringstream ss1;
+	if (globals->all_save.current_save[2].island_name[0] < 255 && globals->all_save.current_save[2].island_name[0] > 0) {
+		bn::ostringstream ss1(buf3);
 		for (short int t = 0; t < 16; t++) {
-			if (all_save.so[2].island_name[t] < 255) {
-				ss1 << all_save.so[2].island_name[t];
+			if (globals->all_save.current_save[2].island_name[t] < 255) {
+				ss1 << globals->all_save.current_save[2].island_name[t];
 			}
 		}
-		if (all_save.so[2].xp == -1) all_save.so[2].xp = 0;
-		ss1 << ": " << (all_save.so[0].checkpoint * 6.6) << "%%";
-		sprintf(buf3, ss1.str().c_str());
+		if (globals->all_save.current_save[2].xp == -1) globals->all_save.current_save[2].xp = 0;
+		ss1 << ": ";
+		ss1 << (int)(globals->all_save.current_save[0].checkpoint * 6.6);
+		ss1 << "%%";
 	}
 	else {
-		sprintf(buf3, "Slot 3: 0%%");
+		buf3 = "Slot 3: 0%";
 	}
 
-	file1_gen.generate(-72, -32, buf1, file1_spr);
-	file2_gen.generate(-72, 0, buf2, file2_spr);
-	file3_gen.generate(-72, 32, buf3, file3_spr);
+	file1_gen.generate(-72, -32, buf1.c_str(), file1_spr);
+	file2_gen.generate(-72, 0, buf2.c_str(), file2_spr);
+	file3_gen.generate(-72, 32, buf3.c_str(), file3_spr);
 
 	auto file1_icon = bn::sprite_items::save_tiles.create_sprite(98, -34, 0);
 	auto file2_icon = bn::sprite_items::save_tiles.create_sprite(98, -34 + 34, 0);
 	auto file3_icon = bn::sprite_items::save_tiles.create_sprite(98, -34 + 68, 0);
 
-	if (all_save.so[0].last_char_id > -1 && all_save.so[0].last_char_id < 7) file1_icon = bn::sprite_items::save_tiles.create_sprite(98, -34, all_save.so[0].last_char_id);
+	if (globals->all_save.current_save[0].last_char_id > -1 && globals->all_save.current_save[0].last_char_id < 7) file1_icon = bn::sprite_items::save_tiles.create_sprite(98, -34, globals->all_save.current_save[0].last_char_id);
 	else file1_icon.set_visible(false);
 
-	if (all_save.so[1].last_char_id > -1 && all_save.so[1].last_char_id < 7) file2_icon = bn::sprite_items::save_tiles.create_sprite(98, 0, all_save.so[1].last_char_id);
+	if (globals->all_save.current_save[1].last_char_id > -1 && globals->all_save.current_save[1].last_char_id < 7) file2_icon = bn::sprite_items::save_tiles.create_sprite(98, 0, globals->all_save.current_save[1].last_char_id);
 	else file2_icon.set_visible(false);
 
-	if (all_save.so[2].last_char_id > -1 && all_save.so[2].last_char_id < 7) file3_icon = bn::sprite_items::save_tiles.create_sprite(98, 34, all_save.so[2].last_char_id);
+	if (globals->all_save.current_save[2].last_char_id > -1 && globals->all_save.current_save[2].last_char_id < 7) file3_icon = bn::sprite_items::save_tiles.create_sprite(98, 34, globals->all_save.current_save[2].last_char_id);
 	else file3_icon.set_visible(false);
 
 	short int t = 0;
@@ -10945,8 +10951,8 @@ void load_save()
 	while (!bn::keypad::a_pressed())
 	{
 		if (bn::keypad::l_held() && bn::keypad::r_held()) {
-			all_save.so[c].clear();
-			bn::sram::write(all_save);
+			globals->all_save.current_save[c].clear();
+			bn::sram::write(globals->all_save);
 			bn::core::reset();
 		}
 
@@ -11008,11 +11014,11 @@ void load_save()
 	bn::music::stop();
 	timer(64);
 
-	so = &all_save.so[c];
+	globals->current_save = &globals->all_save.current_save[c];
 
 	// remove panels
 	for (int tt = 0; tt < 7; tt++) {
-		so->popups[tt] = false;
+		globals->current_save->popups[tt] = false;
 	}
 }
 
@@ -11112,18 +11118,18 @@ bool victory_page(int chari, int score)
 	}
 	}
 
-	short int xp = so->xp;
+	short int xp = globals->current_save->xp;
 	if (xp == -1) xp = 0;
 
 	bn::fixed_t<12> new_xp = xp + (modifier * score);
-	if (so->checkpoint < 8) {
+	if (globals->current_save->checkpoint < 8) {
 		if (new_xp > 100) new_xp = 100;
 	}
-	else if (so->checkpoint < 10) {
+	else if (globals->current_save->checkpoint < 10) {
 		if (new_xp > 200) new_xp = 100;
 	}
 
-	so->xp = new_xp.integer(); // Add score to save total
+	globals->current_save->xp = new_xp.integer(); // Add score to save total
 
 	int grade = 3;
 	bn::fixed_t<12> new_addition = (modifier * score);
@@ -11133,12 +11139,12 @@ bool victory_page(int chari, int score)
 	if (new_addition < 10) grade = 3;
 
 	int chap = 4;
-	if (so->checkpoint < 11) chap = 3;
-	if (so->checkpoint < 9) chap = 2;
-	if (so->checkpoint < 5) chap = 1;
+	if (globals->current_save->checkpoint < 11) chap = 3;
+	if (globals->current_save->checkpoint < 9) chap = 2;
+	if (globals->current_save->checkpoint < 5) chap = 1;
 
 	bn::core::update();
-	victory v(grade, chari, score, so->xp, chap);
+	victory v(grade, chari, score, globals->current_save->xp, chap);
 	while (!bn::keypad::a_pressed())
 	{
 		v.update();
@@ -11229,7 +11235,7 @@ dungeon_return tree_cut()
 
 		for (short int t = 0; t < max_chop; t++)
 		{
-			short int x_pos = -(calc_width / 2) + (std_rand() % calc_width);
+			short int x_pos = -(calc_width / 2) + (std_rnd(calc_width));
 			x_pos = (x_pos / 16) * 16;
 			chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
 		}
@@ -11360,7 +11366,7 @@ dungeon_return tree_cut()
 					}
 
 					if (penalty) {
-						short int ugh = std_rand() % 3;
+						short int ugh = std_rnd(3);
 						switch (ugh) {
 						case 1:
 							bn::sound_items::aaron_ugh_05.play();
@@ -11389,7 +11395,7 @@ dungeon_return tree_cut()
 
 					for (short int t = 0; t < max_chop; t++)
 					{
-						short int x_pos = -(calc_width / 2) + (std_rand() % calc_width);
+						short int x_pos = -(calc_width / 2) + (std_rnd(calc_width));
 						x_pos = (x_pos / 4) * 4;
 						chop.push_back(bn::sprite_items::chop_bar.create_sprite(x_pos, 0));
 					}
@@ -11516,8 +11522,8 @@ dungeon_return rabbit_game()
 
 		bool isHolding = false;
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 
 		if (bn::music::playing()) bn::music::stop();
 		bn::music_items_info::span[18].first.play(0.8);
@@ -11622,19 +11628,19 @@ dungeon_return rabbit_game()
 			}
 
 			// Random init
-			if (std_rand() % 20 == 1)
+			if (std_rnd(20) == 2)
 			{
 				for (short int t = 0; t < max_rabbits; t++)
 				{
-					if (std_rand() % 3 == 1)
+					if (std_rnd(3) == 2)
 					{
 						rabbits.at(t).moving = false;
 					}
 					else
 					{
 						rabbits.at(t).moving = true;
-						signed int c_x = (std_rand() % 4) - 2;
-						signed int c_y = (std_rand() % 4) - 2;
+						signed int c_x = (std_rnd(4)) - 2;
+						signed int c_y = (std_rnd(4)) - 2;
 
 						if (rabbits.at(t).sprite.x().integer() > 190)
 						{
@@ -11663,8 +11669,8 @@ dungeon_return rabbit_game()
 			for (short int t = 0; t < max_rabbits; t++)
 			{
 				if (
-					(std::abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
-					(std::abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16))
+					(std_abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
+					(std_abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16))
 				{
 					myRoom.start_notif(0);
 				}
@@ -11692,8 +11698,8 @@ dungeon_return rabbit_game()
 					for (short int t = 0; t < max_rabbits; t++)
 					{
 						if (
-							(std::abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
-							(std::abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16))
+							(std_abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
+							(std_abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16))
 						{
 							bn::sound_items::squeak.play();
 							isHolding = true;
@@ -11737,21 +11743,21 @@ dungeon_return underground()
 		bn::vector<bn::sprite_ptr, 16> file_spr;
 		bn::vector<bn::sprite_ptr, 16> bars;
 
-		windows.clear();
+		globals->rendered_windows.clear();
 		{
 			bn::rect_window external_window = bn::rect_window::external();
 			external_window.set_show_bg(back_floor, false);
 			external_window.set_show_bg(back_black, true);
 			external_window.set_show_sprites(false);
 			external_window.set_boundaries(-80, -120, 80, 120);
-			windows.push_back(external_window);
+			globals->rendered_windows.push_back(external_window);
 
 			bn::rect_window internal_window = bn::rect_window::internal();
 			internal_window.set_show_bg(back_floor, true);
 			internal_window.set_show_bg(back_black, false);
 			internal_window.set_show_sprites(true);
 			internal_window.set_camera(current_room.camera);
-			windows.push_back(internal_window);
+			globals->rendered_windows.push_back(internal_window);
 		}
 
 		character maple = character(
@@ -11762,8 +11768,8 @@ dungeon_return underground()
 			current_room.width);
 		current_room.chari.push_back(maple);
 
-		local_tileset.clear();
-		collisions.clear();
+		globals->local_tileset.clear();
+		globals->collisions.clear();
 
 		const short int local_col[current_room.width * current_room.height] = {
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -11808,8 +11814,8 @@ dungeon_return underground()
 			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 };
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
-			local_tileset.push_back(local[t]);
-			collisions.push_back(local_col[t]);
+			globals->local_tileset.push_back(local[t]);
+			globals->collisions.push_back(local_col[t]);
 		}
 
 		current_room.environment = &bn::sprite_items::underground_tiles;
@@ -11822,13 +11828,13 @@ dungeon_return underground()
 			creepy_crawly bug;
 			bug.sprite.set_camera(current_room.camera);
 
-			short int mx = std_rand() % (current_room.width - 6);
-			short int my = std_rand() % (current_room.height - 6);
+			short int mx = std_rnd(current_room.width - 6);
+			short int my = std_rnd(current_room.height - 6);
 			short int mz = abs(mx + (my * current_room.width));
-			while (local_tileset.at(mz) > 0)
+			while (globals->local_tileset.at(mz) > 0)
 			{
-				mx = std_rand() % (current_room.width - 6);
-				my = std_rand() % (current_room.height - 6);
+				mx = std_rnd(current_room.width - 6);
+				my = std_rnd(current_room.height - 6);
 				mz = abs(mx + (my * current_room.width));
 			}
 
@@ -11841,10 +11847,10 @@ dungeon_return underground()
 		short int aby = 0;
 		short int abz = 0;
 
-		while (local_tileset.at(abz) > 0)
+		while (globals->local_tileset.at(abz) > 0)
 		{
-			abx = std_abs(std_rand() % (current_room.width - 6));
-			aby = std_abs(std_rand() % (current_room.height - 6));
+			abx = std_abs(std_rnd(current_room.width - 6));
+			aby = std_abs(std_rnd(current_room.height - 6));
 			abz = std_abs(abx + (current_room.width * aby));
 		}
 
@@ -11868,13 +11874,13 @@ dungeon_return underground()
 
 				if (bn::keypad::a_pressed()) {
 					is_returned = true;
-					windows.at(0).set_show_sprites(true);
+					globals->rendered_windows.at(0).set_show_sprites(true);
 				}
 
 				if (!treasure.visible()) {
 					is_returned = true;
 					is_victory = true;
-					windows.at(0).set_show_sprites(true);
+					globals->rendered_windows.at(0).set_show_sprites(true);
 				}
 			}
 
@@ -11899,7 +11905,7 @@ dungeon_return underground()
 				// Maple collision
 				if (abs(mx1 - bugs.at(tt).sprite.x().integer()) + abs(my1 - bugs.at(tt).sprite.y().integer()) < 16)
 				{
-					if (std_rand() % 2 == 1) {
+					if (std_rnd(2) == 1) {
 						bn::sound_items::maple_ugh_01.play();
 					}
 					else {
@@ -11909,10 +11915,10 @@ dungeon_return underground()
 					// Move the treasure
 					short int abxx = 0;
 					short int abyy = 0;
-					while (local_tileset.at(abxx + (current_room.width * abyy)) > 0)
+					while (globals->local_tileset.at(abxx + (current_room.width * abyy)) > 0)
 					{
-						abxx = std_rand() % (current_room.width - 6);
-						abyy = std_rand() % (current_room.height - 6);
+						abxx = std_rnd(current_room.width - 6);
+						abyy = std_rnd(current_room.height - 6);
 					}
 
 					treasure.set_position(abxx * 32, abyy * 32);
@@ -11933,8 +11939,8 @@ dungeon_return underground()
 						{
 							bn::sound_items::pop.play();
 
-							short int mxx = (std_rand() % (current_room.width));
-							short int myy = (std_rand() % (current_room.height));
+							short int mxx = (std_rnd(current_room.width));
+							short int myy = (std_rnd(current_room.height));
 
 							bugs.at(tt).sprite.set_position(mxx * 32, myy * 32);
 							bugs.at(tt).to_x = 0;
@@ -11958,7 +11964,7 @@ dungeon_return underground()
 			short int y_from = maple.entity.y().integer() - 24 - 48 - (brightness);
 			short int x_to = maple.entity.x().integer() + 24 + 48 + (brightness);
 			short int y_to = maple.entity.y().integer() + 24 + 48 + (brightness);
-			windows.at(1).set_boundaries(y_from, x_from, y_to, x_to);
+			globals->rendered_windows.at(1).set_boundaries(y_from, x_from, y_to, x_to);
 
 			if (treasure.visible())
 			{
@@ -12078,7 +12084,7 @@ dungeon_return computer() {
 	bn::sound_items::pc_whir.play();
 
 	short int ticks = 0;
-	double alpha = 0;
+	bn::fixed_t<12> alpha = 0;
 	short int select = 0;
 	while (!bn::keypad::b_pressed()) {
 
@@ -12218,13 +12224,13 @@ void victory_toutes(int emotion, int total) {
 
 	bn::core::update();
 
-	so->xp += (total / 10);
+	globals->current_save->xp += (total / 10);
 
-	windows.clear();
+	globals->rendered_windows.clear();
 	{
 		bn::rect_window external_window = bn::rect_window::external();
 		external_window.set_show_sprites(true);
-		windows.push_back(external_window);
+		globals->rendered_windows.push_back(external_window);
 	}
 
 	auto bg = bn::regular_bg_items::bg_toutes.create_bg(0, 0);
@@ -12235,9 +12241,9 @@ void victory_toutes(int emotion, int total) {
 	bg_static.set_blending_enabled(true);
 	bn::blending::set_transparency_alpha(0.4);
 
-	windows.at(0).set_show_bg(bg, true);
-	windows.at(0).set_show_bg(bg_static, false);
-	windows.at(0).set_boundaries(-80, -120, 80, 120);
+	globals->rendered_windows.at(0).set_show_bg(bg, true);
+	globals->rendered_windows.at(0).set_show_bg(bg_static, false);
+	globals->rendered_windows.at(0).set_boundaries(-80, -120, 80, 120);
 
 	short int w = 0;
 	{
@@ -12246,10 +12252,10 @@ void victory_toutes(int emotion, int total) {
 		internal_window.set_show_bg(bg_static, true);
 		internal_window.set_show_sprites(true);
 		internal_window.set_boundaries(-130, 96 - w - 12, 130, 96 + w - 12);
-		windows.push_back(internal_window);
+		globals->rendered_windows.push_back(internal_window);
 	}
 
-	char buf[36] = { 0 };
+	bn::string<36> buf;
 
 	bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
 	bn::vector<bn::sprite_ptr, 12> file1_spr;
@@ -12258,16 +12264,16 @@ void victory_toutes(int emotion, int total) {
 	b_button.set_visible(false);
 
 	int chap = 2;
-	if (so->checkpoint > 8) chap = 3;
+	if (globals->current_save->checkpoint > 8) chap = 3;
 
 	bool ready = false;
-	victory v(emotion, 6, total, so->xp, chap);
+	victory v(emotion, 6, total, globals->current_save->xp, chap);
 	while (!bn::keypad::a_pressed()) {
 
 		v.update();
 
 		if (w < 36) {
-			windows.at(1).set_boundaries(-130, 116 - w - 12, 172, 116 + w - 12);
+			globals->rendered_windows.at(1).set_boundaries(-130, 116 - w - 12, 172, 116 + w - 12);
 			w++;
 		}
 
@@ -12282,18 +12288,18 @@ void victory_toutes(int emotion, int total) {
 
 			switch (emotion) {
 			case 2: {
-				sprintf(buf, "You've got a.. sock.");
-				file1_gen.generate(-112, 64, buf, file1_spr);
+				buf = "You've got a.. sock.";
+				file1_gen.generate(-112, 64, buf.c_str(), file1_spr);
 				break;
 			}
 			case 1: {
-				sprintf(buf, "You've got.. mousse!");
-				file1_gen.generate(-112, 64, buf, file1_spr);
+				buf = "You've got.. mousse!";
+				file1_gen.generate(-112, 64, buf.c_str(), file1_spr);
 				break;
 			}
 			case 0: {
-				sprintf(buf, "You've got.. a twenty!");
-				file1_gen.generate(-112, 64, buf, file1_spr);
+				buf = "You've got.. a twenty!";
+				file1_gen.generate(-112, 64, buf.c_str(), file1_spr);
 				break;
 			}
 			default: {}
@@ -12305,17 +12311,17 @@ void victory_toutes(int emotion, int total) {
 		bn::core::update();
 	}
 
-	windows.clear();
+	globals->rendered_windows.clear();
 	{
 		bn::rect_window external_window = bn::rect_window::external();
 		external_window.set_show_sprites(false);
 		external_window.set_boundaries(-80, -120, 80, 120);
-		windows.push_back(external_window);
+		globals->rendered_windows.push_back(external_window);
 
 		bn::rect_window internal_window = bn::rect_window::internal();
 		internal_window.set_boundaries(0, 0, 0, 0);
 		internal_window.set_show_sprites(true);
-		windows.push_back(internal_window);
+		globals->rendered_windows.push_back(internal_window);
 	}
 }
 
@@ -12326,7 +12332,7 @@ dungeon_return crystal_ball() {
 	short int score = 0;
 	short int total = 0;
 
-	if (true) {
+	{
 		bn::vector<bn::sprite_ptr, 16> buttons;
 		bn::vector<int, 16> buttons_n;
 
@@ -12349,7 +12355,7 @@ dungeon_return crystal_ball() {
 		b_button.set_visible(true);
 
 		for (short int t = 0; t < 4; t++) {
-			short int nb = (std_rand() % 7);
+			short int nb = (std_rnd(7));
 			short int wd = 16;
 
 			if (buttons.size() > 0) wd = buttons.at(buttons.size() - 1).x().integer() + 36;
@@ -12432,7 +12438,7 @@ dungeon_return crystal_ball() {
 				buttons.erase(buttons.begin());
 				buttons_n.erase(buttons_n.begin());
 
-				short int nb = (std_rand() % 7);
+				short int nb = (std_rnd(7));
 				short int wd = 16;
 
 				if (buttons.size() > 0) wd = buttons.at(buttons.size() - 1).x().integer() + 36;
@@ -12579,16 +12585,16 @@ dungeon_return boat_game() {
 				}
 
 				if (rs[t].m_y > 128) {
-					if (std_rand() % (36 - (16 - (distance / 2))) == 1) {
+					if (std_rnd(36 - (16 - (distance / 2))) == 1) {
 
 						rs[t].size = 0.01;
 						rs[t].entity.set_scale(rs[t].size);
-						rs[t].entity.set_x((std_rand() % 120) - 60);
+						rs[t].entity.set_x((std_rnd(120)) - 60);
 						rs[t].speed = rs[t].entity.x().integer() / 10;
 
-						if (std_rand() % (6 - (distance / 10)) == 1) {
+						if (std_rnd(6 - (distance / 10)) == 1) {
 							rs[t].entity.set_visible(false);
-							rs[t].m_y = (0 - (std_rand() % 1280));
+							rs[t].m_y = (0 - (std_rnd(1280)));
 							rs[t].entity.set_y(rs[t].m_y);
 						}
 						else {
@@ -12651,7 +12657,7 @@ dungeon_return boat_game() {
 			boat.put_above();
 
 			// Intro animation
-			if (true) {
+			{
 				boat = bn::sprite_items::avocado.create_sprite(0, 48, 0);
 				if (isMoving > 0) {
 					if (bn::keypad::left_held()) {
@@ -12731,21 +12737,20 @@ dungeon_return boat_game() {
 	}
 
 	{
-		char buf[36] = { 0 };
-		char bf3[36] = { 0 };
-
+		bn::string<36> buf;
+		bn::string<36> bf3;
 		bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
 		bn::vector<bn::sprite_ptr, 32> file1_spr;
 		bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
 		bn::vector<bn::sprite_ptr, 32> file3_spr;
 
-		so->xp += (total / 4.675);
+		globals->current_save->xp += (total / 4.675);
 
 		bn::music::stop();
-		sprintf(buf, "'Well done! I'll take the");
-		file1_gen.generate(-96, -12, buf, file1_spr);
-		sprintf(bf3, "boat on the way back.'");
-		file3_gen.generate(-96, 0, bf3, file3_spr);
+		buf = "'Well done! I'll take the";
+		file1_gen.generate(-96, -12, buf.c_str(), file1_spr);
+		bf3 = "boat on the way back.'";
+		file3_gen.generate(-96, 0, bf3.c_str(), file3_spr);
 
 		int grade = 0;
 		if (total < 40) grade = 1;
@@ -12753,11 +12758,11 @@ dungeon_return boat_game() {
 		if (total < 20) grade = 3;
 
 		int chap = 4;
-		if (so->checkpoint < 11) chap = 3;
-		if (so->checkpoint < 9) chap = 2;
-		if (so->checkpoint < 5) chap = 1;
+		if (globals->current_save->checkpoint < 11) chap = 3;
+		if (globals->current_save->checkpoint < 9) chap = 2;
+		if (globals->current_save->checkpoint < 5) chap = 1;
 
-		victory v(grade, 7, total, so->xp, chap);
+		victory v(grade, 7, total, globals->current_save->xp, chap);
 		while (!bn::keypad::a_pressed()) {
 			auto docks = bn::regular_bg_items::bg_dock.create_bg(0, 0);
 			v.update();
@@ -12779,12 +12784,11 @@ dungeon_return store() {
 	auto item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 0);
 	auto item_bal = bn::sprite_items::funny_items.create_sprite(80, 32, 2);
 
-	if (so->hat_world > -1) item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 2);
+	if (globals->current_save->hat_world > -1) item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 2);
 
 	item_hat.set_scale(2, 2);
 	item_bal.set_scale(2, 2);
 
-	char xp_val[8] = { 0 };
 	bn::sprite_text_generator text_gen(common::variable_8x16_sprite_font);
 	bn::vector<bn::sprite_ptr, 8> xp_spr;
 	bn::vector<bn::sprite_ptr, 16> item_spr;
@@ -12793,17 +12797,25 @@ dungeon_return store() {
 	bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
 	bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
 
+	bn::string<64> string;
+	bn::ostringstream string_stream(string);
+
+	xp_spr.clear();
+	string_stream << "$";
+	string_stream << globals->current_save->xp;
+	file1_gen.generate(64, -48, string_stream.str().c_str(), xp_spr);
+
 	bn::core::update();
 	while (!bn::keypad::b_pressed()) {
 
 		if (bn::keypad::a_pressed()) {
-			if (so->hat_world == -1 && item == -1 && so->xp >= 75) {
+			if (globals->current_save->hat_world == -1 && item == -1 && globals->current_save->xp >= 75) {
 				bn::sound_items::ching.play();
 				item_hat = bn::sprite_items::funny_items.create_sprite(-80, 32, 2);
 				item_hat.set_scale(2, 2);
-				so->xp -= 75;
-				so->hat_char = so->last_char_id;
-				so->hat_world = 14;
+				globals->current_save->xp -= 75;
+				globals->current_save->hat_char = globals->current_save->last_char_id;
+				globals->current_save->hat_world = 14;
 
 				b_button.set_visible(false);
 				bn::core::update();
@@ -12814,8 +12826,9 @@ dungeon_return store() {
 				dialogue_page_lite(lc);
 
 				xp_spr.clear();
-				sprintf(xp_val, "$%i", so->xp);
-				file1_gen.generate(64, -48, xp_val, xp_spr);
+				string_stream << "$";
+				string_stream << globals->current_save->xp;
+				file1_gen.generate(64, -48, string_stream.str().c_str(), xp_spr);
 
 				b_button.set_visible(true);
 
@@ -12871,7 +12884,7 @@ dungeon_return kitchen() {
 
 	bn::music_items_info::span[34].first.play(0.8);
 
-	char buf1[32] = {};
+	bn::string<32> buf1;
 
 	// Cooking bit
 	{
@@ -12884,7 +12897,7 @@ dungeon_return kitchen() {
 		hud current_hud;
 		while (chari < 7) {
 
-			short int je_veus_de = 8 + std_rand() % 4;
+			short int je_veus_de = 8 + std_rnd(4);
 
 			switch (chari) {
 			case 0:
@@ -12987,8 +13000,8 @@ dungeon_return kitchen() {
 				}
 
 				file1_spr.clear();
-				file1_gen.generate(-112, 72, buf1, file1_spr);
-				memset(buf1, 0, sizeof(buf1));
+				file1_gen.generate(-112, 72, buf1.c_str(), file1_spr);
+				buf1 = "";
 
 				for (int t = 0; t < 6; t++) {
 					if (food[t].entity.y() < -24 && t != sel) {
@@ -12997,38 +13010,38 @@ dungeon_return kitchen() {
 					if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16) {
 						switch (t - 1) {
 						case 0:
-							sprintf(buf1, "Holy Trinity");
+							buf1 = "Holy Trinity";
 							break;
 						case 1:
-							sprintf(buf1, "Proteins");
+							buf1 = "Meat";
 							break;
 						case 2:
-							sprintf(buf1, "Roux");
+							buf1 = "Roux";
 							break;
 						case 3:
 							switch (food[t].type) {
 							case 1:
-								sprintf(buf1, "Rice Bowl");
+								buf1 = "Rice Bowl";
 								break;
 							case 8:
-								sprintf(buf1, "Jambalaya");
+								buf1 = "Jambalaya";
 								break;
 							case 9:
-								sprintf(buf1, "Gumbo");
+								buf1 = "Gumbo";
 								break;
 							case 10:
-								sprintf(buf1, "Gumbo + Rice");
+								buf1 = "Gumbo + Rice";
 								break;
 							case 11:
-								sprintf(buf1, "Ettoufee");
+								buf1 = "Ettoufee";
 								break;
 							default:
-								sprintf(buf1, "Empty Bowl");
+								buf1 = "Empty Bowl";
 								break;
 							}
 							break;
 						case 4:
-							sprintf(buf1, "Spices");
+							buf1 = "Spices";
 							break;
 						default: {};
 						}
@@ -13133,7 +13146,7 @@ dungeon_return kitchen() {
 					else if (sel == 5) {
 						if (abs(food[4].entity.x() - hand.x()) + abs(food[4].entity.y() - hand.y()) < 16) {
 							food[5].entity.set_visible(false);
-							score += std_rand() % 100;
+							score += std_rnd(100);
 						}
 					}
 
@@ -13223,8 +13236,8 @@ dungeon_return kitchen() {
 		auto face_b_like = bn::create_sprite_animate_action_forever(face_spr, 4, bn::sprite_items::bg_monch_face.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7);
 		auto pc_bg = bn::regular_bg_items::bg_monch.create_bg(0, 0);
 
-		so->xp += (score / 22);
-		victory v(0, 8, score, so->xp, 3);
+		globals->current_save->xp += (score / 22);
+		victory v(0, 8, score, globals->current_save->xp, 3);
 		while (!bn::keypad::a_pressed()) {
 			v.update();
 			face_b_like.update();
@@ -13315,9 +13328,9 @@ void final_battle() {
 		}
 
 		// handle random movement
-		if (std_rand() % 12 == 1) {
+		if (std_rnd(12) == 1) {
 			short int old_logic = rufus_logic;
-			rufus_logic = std_rand() % 12;
+			rufus_logic = std_rnd(12);
 			if (old_logic != rufus_logic) {
 				if (rufus_x > 100) rufus_logic = 0;
 				rufus_change = true;
@@ -13360,7 +13373,7 @@ void final_battle() {
 
 			bn::sound_items::firehit.play();
 
-			short int ugh = std_rand() % 6;
+			short int ugh = std_rnd(6);
 			switch (ugh) {
 			case 4:
 				bn::sound_items::aaron_ugh_05.play();
@@ -13382,7 +13395,7 @@ void final_battle() {
 
 		if (bn::keypad::a_pressed() && aaron_action != 3) {
 
-			if (std_rand() % 3 == 2) {
+			if (std_rnd(3) == 2) {
 				bn::sound_items::firehit.play();
 
 				if (abs(rufus_x - aaron_x) < 96) {
@@ -13395,7 +13408,8 @@ void final_battle() {
 				aaron_action = 2;
 				aaron_change = true;
 			}
-			else {
+			else if (abs(rufus_x - aaron_x) < 96) {
+
 				ax.set_x(ax.x() - 3);
 
 				rufus_action = 2;
@@ -13405,7 +13419,7 @@ void final_battle() {
 
 				bn::sound_items::firehit.play();
 
-				short int ugh = std_rand() % 6;
+				short int ugh = std_rnd(6);
 				switch (ugh) {
 				case 4:
 					bn::sound_items::aaron_ugh_05.play();
@@ -13626,12 +13640,12 @@ void core_gameplay(int x, int y, int world, int until)
 	// Ensures the 'brown screen' doesn't happen
 	bn::bg_palettes::set_transparent_color(bn::color(0, 0, 0));
 	bn::core::update();
-	rand_state = so->xp;
+	globals->rand_state = globals->current_save->xp;
 
 	// Configure defaults
 	dungeon_return dt(x, y, world);
 
-	if (so->last_char_id < 0 || so->last_char_id > 7) so->last_char_id = 0;
+	if (globals->current_save->last_char_id < 0 || globals->current_save->last_char_id > 7) globals->current_save->last_char_id = 0;
 	dt.spawn_x = x;
 	dt.spawn_y = y;
 	dt.world_index = world;
@@ -13640,20 +13654,20 @@ void core_gameplay(int x, int y, int world, int until)
 	do
 	{
 		// March event
-		if (so->checkpoint == 4 && so->xp > 99 && so->last_char_id != 4) {
-			so->checkpoint = 5;
+		if (globals->current_save->checkpoint == 4 && globals->current_save->xp > 99 && globals->current_save->last_char_id != 4) {
+			globals->current_save->checkpoint = 5;
 			break;
 		}
 
 		// June event
-		if (so->checkpoint == 8 && so->xp > 199) {
-			so->checkpoint = 9;
+		if (globals->current_save->checkpoint == 8 && globals->current_save->xp > 199) {
+			globals->current_save->checkpoint = 9;
 			break;
 		}
 
 		// June event
-		if (so->checkpoint == 10 && so->xp > 299) {
-			so->checkpoint = 12;
+		if (globals->current_save->checkpoint == 10 && globals->current_save->xp > 299) {
+			globals->current_save->checkpoint = 12;
 			break;
 		}
 
@@ -13693,8 +13707,8 @@ void core_gameplay(int x, int y, int world, int until)
 			case 7: {
 				bn::blending::set_transparency_alpha(0);
 				bn::music_items_info::span[33].first.play(0.8);
-				if (so->hat_world == -1) {
-					if (so->last_char_id == 1) {
+				if (globals->current_save->hat_world == -1) {
+					if (globals->current_save->last_char_id == 1) {
 						exec_dialogue(31);
 					}
 					else {
@@ -13717,7 +13731,7 @@ void core_gameplay(int x, int y, int world, int until)
 			dt = dungeon(dt);
 		}
 
-		bn::sram::write(all_save);
+		bn::sram::write(globals->all_save);
 		bn::core::update();
 	} while (!(dt.world_index == until));
 }
@@ -13731,9 +13745,9 @@ void credits() {
 		bn::vector<bn::sprite_ptr, 42> file1_spr;
 		bn::vector<bn::sprite_ptr, 42> file2_spr;
 		bn::vector<bn::sprite_ptr, 42> file3_spr;
-		char buf1[48] = { 0 };
-		char buf2[48] = { 0 };
-		char buf3[48] = { 0 };
+		bn::string<48> buf1;
+		bn::string<48> buf2;
+		bn::string<48> buf3;
 		short int reg = 3;
 
 		const line_min lc[177] = {
@@ -13966,14 +13980,14 @@ void credits() {
 			{""}
 		};
 
-		sprintf(buf1, lc[0].text);
-		sprintf(buf2, lc[1].text);
-		sprintf(buf3, lc[2].text);
+		buf1 = lc[0].text;
+		buf2 = lc[1].text;
+		buf3 = lc[2].text;
 
 		file1_spr.clear();
-		file1_gen.generate(-112, 96, buf1, file1_spr);
-		file2_gen.generate(-112, 96 + 14, buf2, file2_spr);
-		file3_gen.generate(-112, 96 + 28, buf3, file3_spr);
+		file1_gen.generate(-112, 96, buf1.c_str(), file1_spr);
+		file2_gen.generate(-112, 96 + 14, buf2.c_str(), file2_spr);
+		file3_gen.generate(-112, 96 + 28, buf3.c_str(), file3_spr);
 
 		short int ending = 176;
 		short int scroll_on = 0;
@@ -13986,9 +14000,9 @@ void credits() {
 					file1_spr.at(t).set_y(file1_spr.at(t).y() - 1);
 				}
 				if (file1_spr.at(0).y().integer() < -104 && reg < ending - 1) {
-					sprintf(buf1, lc[reg].text);
+					buf1 = lc[reg].text;
 					file1_spr.clear();
-					file1_gen.generate(-112, 96, buf1, file1_spr);
+					file1_gen.generate(-112, 96, buf1.c_str(), file1_spr);
 					reg++;
 				}
 
@@ -13996,9 +14010,9 @@ void credits() {
 					file2_spr.at(t).set_y(file2_spr.at(t).y() - 1);
 				}
 				if (file2_spr.at(0).y().integer() < -104 && reg < ending - 1) {
-					sprintf(buf2, lc[reg].text);
+					buf2 = lc[reg].text;
 					file2_spr.clear();
-					file2_gen.generate(-112, 96, buf2, file2_spr);
+					file2_gen.generate(-112, 96, buf2.c_str(), file2_spr);
 					reg++;
 				}
 
@@ -14006,9 +14020,9 @@ void credits() {
 					file3_spr.at(t).set_y(file3_spr.at(t).y() - 1);
 				}
 				if (file3_spr.at(0).y().integer() < -104 && reg < ending - 1) {
-					sprintf(buf3, lc[reg].text);
+					buf3 = lc[reg].text;
 					file3_spr.clear();
-					file3_gen.generate(-112, 96, buf3, file3_spr);
+					file3_gen.generate(-112, 96, buf3.c_str(), file3_spr);
 					reg++;
 				}
 			}
@@ -14025,9 +14039,9 @@ void credits() {
 int checkpoint(int level)
 {
 
-	if (so->checkpoint < 1)
+	if (globals->current_save->checkpoint < 1)
 	{
-		so->checkpoint = 0;
+		globals->current_save->checkpoint = 0;
 		level = 0;
 	}
 
@@ -14060,7 +14074,7 @@ int checkpoint(int level)
 	case 1: {
 		intros(1);
 		exec_dialogue(16);
-		so->last_char_id = 0;
+		globals->current_save->last_char_id = 0;
 		core_gameplay(9, 16, 4, 5);
 		break;
 	}
@@ -14086,7 +14100,7 @@ int checkpoint(int level)
 	}
 	case 5: {
 		//core_gameplay(5, 8, 4, 5);
-		so->checkpoint++;
+		globals->current_save->checkpoint++;
 		break;
 	}
 	case 6: {
@@ -14105,10 +14119,10 @@ int checkpoint(int level)
 		break;
 	}
 	case 8: {
-		if (so->last_char_id == 3) {
+		if (globals->current_save->last_char_id == 3) {
 			core_gameplay(8, 10, 4, 0);
 		}
-		else if (so->last_char_id < 3) {
+		else if (globals->current_save->last_char_id < 3) {
 			core_gameplay(9, 6, 4, 0);
 		}
 		else {
@@ -14126,10 +14140,10 @@ int checkpoint(int level)
 	}
 
 	case 10: {
-		if (so->last_char_id == 3) {
+		if (globals->current_save->last_char_id == 3) {
 			core_gameplay(8, 10, 4, 0);
 		}
-		else if (so->last_char_id < 3) {
+		else if (globals->current_save->last_char_id < 3) {
 			core_gameplay(9, 6, 4, 0);
 		}
 		else {
@@ -14139,7 +14153,7 @@ int checkpoint(int level)
 	}
 
 	case 11: {
-		so->checkpoint = 10;
+		globals->current_save->checkpoint = 10;
 		break;
 	}
 
@@ -14149,13 +14163,13 @@ int checkpoint(int level)
 		if (bn::music::playing()) bn::music::stop();
 
 		exec_dialogue(32);
-		so->last_char_id = 2;
+		globals->current_save->last_char_id = 2;
 		core_gameplay(9, 6, 4, 0);
 		break;
 	}
 
 	case 13: {
-		so->checkpoint = 12;
+		globals->current_save->checkpoint = 12;
 		break;
 	}
 
@@ -14190,10 +14204,14 @@ int checkpoint(int level)
 	return level + 1;
 }
 
+BN_DATA_EWRAM global_data global_inst = {};
+
 int main()
 {
 	bn::core::init(); // Initialize Butano libraries
 	
+	globals = &global_inst;
+
 	/*
 	dungeon_return dt;
 	dt.spawn_x = 16;
@@ -14203,15 +14221,15 @@ int main()
 	*/
 
 	startup();
-	bn::sram::read(all_save);         // Read save data from cartridge
+	bn::sram::read(globals->all_save);         // Read save data from cartridge
 	load_save();
 
-	if (strncmp(so->island_name, "maytwofive", 10) == 0) {
+	if (strncmp(globals->current_save->island_name, "maytwofive", 10) == 0) {
 		exec_dialogue(36);
 	}
 
-	while (so->checkpoint < 99) {
-		so->checkpoint = checkpoint(so->checkpoint);
+	while (globals->current_save->checkpoint < 99) {
+		globals->current_save->checkpoint = checkpoint(globals->current_save->checkpoint);
 	}
 
 	// Get to the end?
