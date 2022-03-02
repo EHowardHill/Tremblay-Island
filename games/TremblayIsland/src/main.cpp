@@ -624,27 +624,31 @@ public:
 };
 
 // defined expressions
-#define fals false
-#define tile_count 400
+constexpr auto fals = false;
+constexpr auto tile_count = 400;
 
 // Reserved global memory
-struct global_data {
-	save_all_struct all_save;
-	save_struct* current_save;
-	bn::vector<unsigned short int, tile_count> local_tileset;
-	bn::vector<bn::rect_window, 2> rendered_windows;
-	bn::vector<unsigned short int, tile_count> collisions;
-	int rand_state;
-	bn::random bn_random;
+class global_data {
+	public:
+		save_all_struct all_save;
+		save_struct* current_save;
+		bn::vector<unsigned short int, tile_count> local_tileset;
+		bn::vector<bn::rect_window, 2> rendered_windows;
+		bn::vector<unsigned short int, tile_count> collisions;
+		int rand_state;
+		bn::random bn_random;
+
+		global_data() {
+			rand_state = 0;
+		}
 };
 
 global_data* globals;
 
-BN_DATA_EWRAM int rand_state = 0;
 int std_rnd(int x = 0)
 {
-	rand_state = (rand_state * 137 + 12345) % 2048;
-	return abs(rand_state) % x;
+	globals->rand_state = (globals->rand_state * 137 + 12345) % 2048;
+	return abs(globals->rand_state) % x;
 }
 
 int std_abs(int x) {
@@ -867,6 +871,11 @@ void dialogue_page(line n[32]) {
 		}
 		else if (strcmp(n[pos].text, "SF: Boom") == 0) {
 			bn::sound_items::boom.play();
+		}
+		else if (strcmp(n[pos].text, "SF: rufus") == 0) {
+			bn::sound_items::rufus_02.play();
+
+			//SE: rufus
 
 			// Set backgrounds
 		}
@@ -1477,7 +1486,7 @@ void dialogue_page(line n[32]) {
 		}
 		else {
 
-			BN_LOG(n[pos].text);
+			//BN_LOG(n[pos].text);
 
 			// Process initial transparency states
 			if (n[pos].img != 0) {
@@ -1726,7 +1735,7 @@ void dialogue_page_lite(line n[32]) {
 				arrow.set_visible(false);
 			}
 
-			BN_LOG(n[pos].text);
+			//BN_LOG(n[pos].text);
 			strncpy(line0, n[pos].text + 0, 33);
 			strncpy(line1, n[pos].text + 33, 33);
 			strncpy(line2, n[pos].text + 66, 33);
@@ -2662,6 +2671,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 				{true, true, 00, "MAPLE                            What... the actual heck am I     looking at right now?"},
 				{true, true, 00, "S07:07"},
 				{true, true, 00, "BG: rain"},
+				{true, true, 00, "SF: rufus"},
 				{true, true, 00, "RUFUS                            Ichabod Williams and             Maple Tremblay, what a surprise! Fancy seeing you two here."},
 				{true, true, 00, "RUFUS                            Finally, I've got a full set."},
 				{true, true, 00, "S07:08"},
@@ -3546,13 +3556,9 @@ public:
 	bn::sprite_animate_action<4> entity_anim = bn::create_sprite_animate_action_forever(entity, 18, entity_item.tiles_item(), 00, 00, 00, 1);
 
 	void update() {
-		ticker++;
-		if (ticker > 8) {
-			ticker = 0;
-			entity_anim.update();
-			entity = entity_anim.sprite();
-			entity.set_z_order(1);
-		}
+		entity_anim.update();
+		entity = entity_anim.sprite();
+		entity.set_z_order(1);
 	}
 };
 
@@ -3699,7 +3705,7 @@ void popup(int scene) {
 			break;
 		}
 		case 2: {
-			char txt1[192] = "Try to find the gem and avoidthe bats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!";
+			char txt1[192] = "Try to find the gem and avoid thebats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!";
 			strncpy(text, txt1, 192);
 			my_chari = 0;
 			break;
@@ -4241,12 +4247,6 @@ public:
 			refresh_tiles(cam_x, cam_y);
 		}
 
-		// Handle animated objects
-		for (unsigned short int t = 0; t < anim_objects.size(); t++) {
-			anim_objects.at(t).update();
-			anim_objects.at(t).entity.set_camera(camera);
-		}
-
 		// Pause
 		if (bn::keypad::start_pressed())
 		{
@@ -4445,7 +4445,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 			current_room.chari.push_back(default_chari);
 			break;
 		}
-		else if (globals->current_save->checkpoint < 13)
+		else if (globals->current_save->checkpoint < 12)
 		{
 			character default_chari(bn::sprite_items::maple_walking_spring, current_room.start_x, current_room.start_y, current_room.width);
 			default_chari.entity.set_camera(current_room.camera);
@@ -4787,7 +4787,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 		del.id = 1;
 		del.entity_item = bn::sprite_items::del_sleep;
 		del.entity = del.entity_item.create_sprite(0, 0);
-		del.entity_anim = bn::create_sprite_animate_action_forever(del.entity, 20, del.entity_item.tiles_item(), 00, 1, 00, 0);
+		del.entity_anim = bn::create_sprite_animate_action_forever(del.entity, 20, del.entity_item.tiles_item(), 0, 1, 0, 0);
 		del.entity.set_visible(true);
 		del.entity.set_camera(current_room.camera);
 		del.entity.set_position(256, 48);
@@ -6470,7 +6470,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						dialogue_page_lite(lc);
 					}
 
-					if (me == 1)
+					else if (me == 1)
 					{
 						line lc[32] = {
 
@@ -6484,7 +6484,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						dialogue_page_lite(lc);
 					}
 
-					if (me == 2)
+					else if (me == 2)
 					{
 						line lc[32] = {
 
@@ -6492,8 +6492,8 @@ dungeon_return dungeon(dungeon_return& dt) {
 							{true, true, 00, "(Maybe she thinks we're finally  moved in for good, so she-"},
 							{true, true, 00, "-feels comfortable here.)"},
 							{true, true, 00, "(I know it's probably too soon tocall, but Aaron Tremblay-"},
-							{true, true, 00, "-you've done it. You've got your own place, and you've got yourself-"},
-							{true, true, 00, "-a wife to leave her clothes on  the floor.)"},
+							{true, true, 00, "-you've done it. You've got your own place, and you've got"},
+							{true, true, 00, "a wife to leave her clothes on   the floor.)"},
 							{true, true, 00, "(I can't think of anything else  I could want, now.)"},
 							{true, true, 00, "(Well.....                       I miss my car.)"},
 							{true, true, 00, "(Maybe I'll talk to Scout about  putting in a racetrack.)"},
@@ -6501,10 +6501,17 @@ dungeon_return dungeon(dungeon_return& dt) {
 						dialogue_page_lite(lc);
 					}
 
-					if (me == 3)
+					else if (me == 3)
 					{
 						line lc[32] = {
 							{true, true, 00, "(Yeah, I definitely need to not  be here.)"},
+							{true, true, 00, "COM: Endscene"} };
+						dialogue_page_lite(lc);
+					}
+
+					else {
+						line lc[32] = {
+							{true, true, 00, "(These clothes have obviously    been here for a while.)"},
 							{true, true, 00, "COM: Endscene"} };
 						dialogue_page_lite(lc);
 					}
@@ -9055,22 +9062,21 @@ dungeon_return dungeon(dungeon_return& dt) {
 					{
 						//corinne.set_blending_enabled(false);
 						line lc[32] = {
-							{true, true, 00, "OLIVIER                          O-Oh! Excuse me, ma'am. Where didyou come from?"},
-							{true, true, 00, "GRAND-MERE CORINNE               This greenhouse is still quite   nice, was it moved?"},
-							{true, true, 00, "OLIVIER                          Oh.. Well, I was told that it wastransported from inland."},
-							{true, true, 00, "GRAND-MERE CORINNE               Well, you see, I once owned this greenhouse, young man."},
-							{true, true, 00, "GRAND-MERE CORINNE               I don't see any point in having  ambiguity; I am a ghost."},
-							{true, true, 00, "OLIVIER                          A ghost???"},
-							{true, true, 00, "GRAND-MERE CORINNE               It seems I am doomed to haunt    this greenhouse forever."},
-							{true, true, 00, "OLIVIER                          My apologize, that seems... it   seems like a terrible fate."},
-							{true, true, 00, "GRAND-MERE CORINNE               Would you consider it horrible tospend an eternity here?"},
-							{true, true, 00, "OLIVIER                          Now that I think about it.. I    suppose not."},
-							{true, true, 00, "OLIVIER                          It's where I spend most of my    life anyway."},
-							{true, true, 00, "GRAND-MERE CORINNE               I see you enjoy taking care of   these plants, son."},
-							{true, true, 00, "GRAND-MERE CORINNE               Before I leave, I will remind youof one wisdom."},
-							{true, true, 00, "GRAND-MERE CORINNE               Even if your care of these plantsseems meaningless,"},
-							{true, true, 00, "GRAND-MERE CORINNE               Wonderful things come to the     diligent."},
-							{true, true, 00, "GRAND-MERE CORINNE               It was very nice to meet you.    Until next time!"},
+							{true, true, 00, "OLIVIER                          Good afternoon, Grand-mere!"},
+							{true, true, 00, "GRAND-MERE CORINNE               Good afternoon, Olivier. It's    nice to have visitors."},
+							{true, true, 00, "OLIVIER                          How has your day been?"},
+							{true, true, 00, "GRAND-MERE CORINNE               Oh, just as usual.. Eternal      unrest. A ghost's life."},
+							{true, true, 00, "GRAND-MERE CORINNE               Or lack thereof, hehe."},
+							{true, true, 00, "OLIVIER                          The afterlife seems rather dull."},
+							{true, true, 00, "GRAND-MERE CORINNE               It doesn't have to be. Say.. can you tell me about that man?"},
+							{true, true, 00, "OLIVIER                          Man?"},
+							{true, true, 00, "GRAND-MERE CORINNE               Yes, the strapping boat captain. With the beard?"},
+							{true, true, 00, "OLIVIER                          Oh, the captain? Do you.. like   him?"},
+							{true, true, 00, "GRAND-MERE CORINNE               This sounds rather morbid, but   how many years do you suppose"},
+							{true, true, 00, "GRAND-MERE CORINNE               he has left?"},
+							{true, true, 00, "GRAND-MERE CORINNE               I wouldn't suppose he'd enjoy an afterlife here."},
+							{true, true, 00, "OLIVIER                          That.. uh.. question may be      better asked to him."},
+							{true, true, 00, "GRAND-MERE CORINNE               Of course, of course."},
 							{true, true, 00, "COM: Endscene"} };
 						dialogue_page_lite(lc);
 						break;
@@ -9389,6 +9395,12 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		current_room.update_objects();
 
+		// Handle animated objects
+		for (unsigned short int t = 0; t < anim_objects.size(); t++) {
+			anim_objects.at(t).update();
+			anim_objects.at(t).entity.set_camera(current_room.camera);
+		}
+
 		bn::core::update();
 
 		// World-specific special events
@@ -9416,9 +9428,13 @@ dungeon_return dungeon(dungeon_return& dt) {
 					if (my_x >= 2 && my_x <= 3 && my_y >= 2 && my_y <= 3)
 					{
 						current_room.p.at(i).dur = 16;
+						//current_room.p.erase(current_room.p.begin() + i);
+
 						anim_objects.at(0).entity_anim = bn::create_sprite_animate_action_forever(anim_objects.at(0).entity, 18, anim_objects.at(0).entity_item.tiles_item(), 2, 1, 00, 1);
 						anim_objects.at(0).entity.set_horizontal_flip(!anim_objects.at(0).entity.horizontal_flip());
-						anim_objects.at(0).entity_anim.update();
+						break;
+
+						//anim_objects.at(0).entity_anim.update();
 					}
 				}
 			}
@@ -9557,7 +9573,7 @@ public:
 	}
 
 	void update() {
-		if (me.horizontal_scale() > 0.2) {
+		if ((me.horizontal_scale() - 0.05) > 0) {
 			me.set_scale(me.horizontal_scale() - 0.05, me.vertical_scale() - 0.05);
 			me.put_below();
 		}
@@ -9751,8 +9767,8 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1,
 			1, 0, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1,
 			1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1,
-			1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 1,
-			1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1,
+			1, 0, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1,
+			1, 0, 1, 0, 1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1,
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0, 1,
 			1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 1,
 			1, 0, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1,
@@ -9773,10 +9789,10 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			1,0,1,1,1,0,1,16,0,16,0,1,0,0,0,16,0,11,
 			1,0,1,5,1,0,1,0,0,0,0,1,0,0,0,16,0,10,
 			1,0,1,0,5,0,1,1,5,1,1,1,16,16,16,10,0,11,
-			1,0,1,0,0,5,12,1,5,0,1,0,0,0,0,11,15,10,
-			1,0,1,0,5,0,1,1,14,0,1,0,0,0,0,10,0,11,
-			1,15,1,1,1,15,1,1,5,5,15,0,14,0,0,11,13,10,
-			1,0,0,0,0,0,10,12,1,1,1,1,0,0,0,10,0,11,
+			1,0,1,0,0,5,12,1,5,0,1,0,0,0,0,11,0,10,
+			1,0,1,0,5,0,1,1,14,0,1,0,0,0,0,10,15,11,
+			1,15,1,1,1,15,1,1,5,5,15,0,14,0,0,11,0,10,
+			1,0,0,0,0,0,10,12,1,1,1,1,0,0,0,10,13,11,
 			1,0,0,16,10,0,11,0,1,0,0,1,12,0,0,11,0,10,
 			1,0,0,0,11,0,10,0,0,0,16,1,1,1,1,1,0,11,
 			1,0,0,0,10,2,11,0,0,0,0,0,0,0,0,1,0,10,
@@ -10210,46 +10226,51 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			short int f_y = (current_room.p.at(t).fireball.y().integer() + 16) / 32;
 			short int f_z = f_x + (f_y * current_room.width);
 
-			for (int i = 0; i < buttons.size(); i++)
-			{
-				if (buttons.at(i).x == f_x && buttons.at(i).y == f_y && !buttons.at(i).short_toggle)
+			if (current_room.p.at(t).fireball.visible()) {
+				for (int i = 0; i < buttons.size(); i++)
 				{
-					if (!buttons.at(t).toggled)
+					if (buttons.at(i).x == f_x && buttons.at(i).y == f_y && !buttons.at(i).short_toggle)
 					{
-						bn::sound_items::pop.play();
-						buttons.at(t).toggled = true;
-						globals->local_tileset.at(f_z) = 14;
-						current_room.last_camera_x = 0;
-						current_room.last_camera_y = 0;
-						current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+						if (!buttons.at(t).toggled)
+						{
+							bn::sound_items::pop.play();
+							buttons.at(t).toggled = true;
+							globals->local_tileset.at(f_z) = 14;
+							current_room.last_camera_x = 0;
+							current_room.last_camera_y = 0;
+							current_room.p.at(t).fireball.set_visible(false);
+							current_room.refresh_tiles(current_room.camera.x() / 32, current_room.camera.y() / 32);
+						}
 					}
 				}
-			}
 
-			for (int i = 0; i < gas_tanks.size(); i++)
-			{
-				if (gas_tanks.at(i).x == f_x && gas_tanks.at(i).y == f_y)
+				for (int i = 0; i < gas_tanks.size(); i++)
 				{
-					dt.spawn_x = last_x;
-					dt.spawn_y = last_y;
-
-					// death explosion
-					for (int n = 0; n < current_room.chari.size(); n++)
+					if (gas_tanks.at(i).x == f_x && gas_tanks.at(i).y == f_y)
 					{
-						current_room.chari.at(n).entity.set_visible(false);
-					}
-					current_room.primary_bg = bn::regular_bg_items::bg_explosion.create_bg(0, 0);
-					bn::sound_items::boom.play();
-					bn::music::stop();
+						dt.spawn_x = last_x;
+						dt.spawn_y = last_y;
 
-					for (int n = 0; n < 64; n++)
-					{
-						bn::core::update();
-					}
+						// death explosion
+						for (int n = 0; n < current_room.chari.size(); n++)
+						{
+							current_room.chari.at(n).entity.set_visible(false);
+						}
+						current_room.primary_bg = bn::regular_bg_items::bg_explosion.create_bg(0, 0);
+						bn::sound_items::boom.play();
+						bn::music::stop();
 
-					return dt;
+						for (int n = 0; n < 64; n++)
+						{
+							bn::core::update();
+						}
+
+						return dt;
+					}
 				}
+
 			}
+
 		}
 
 		// Control actions
@@ -11512,13 +11533,24 @@ dungeon_return rabbit_game()
 
 	short int score = 0;
 	{
-		room myRoom(9, 5, 4, 2);
+		room current_room(9, 5, 4, 2);
+
+		globals->collisions.clear();
+		const short int local_col[current_room.width * current_room.height] = {
+			1, 1, 1, 1, 1, 1, 1, 1, 1,
+			1, 0, 0, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 0, 0, 0, 0, 1, 
+			1, 0, 0, 0, 0, 0, 0, 0, 1, 
+			1, 1, 1, 1, 1, 1, 1, 1, 1};
+		for (short int t = 0; t < current_room.width * current_room.height; t++) {
+			globals->collisions.push_back(local_col[t]);
+		}
 
 		bn::vector<rabbit, 32> rabbits;
 		auto max_rabbits = 32;
 
 		bn::regular_bg_ptr garden_bg = bn::regular_bg_items::garden_bg.create_bg(0, 0);
-		garden_bg.set_camera(myRoom.camera);
+		garden_bg.set_camera(current_room.camera);
 
 		bool isHolding = false;
 
@@ -11531,16 +11563,16 @@ dungeon_return rabbit_game()
 		character enoki(bn::sprite_items::enoki_walking_spring, 8, 2, true);
 		enoki.role = 1;
 		enoki.identity = 1;
-		myRoom.chari.push_back(enoki);
+		current_room.chari.push_back(enoki);
 
-		bn::sprite_ptr enoki_hold = bn::sprite_items::enoki_walking_spring.create_sprite(myRoom.start_x, myRoom.start_y, 12);
-		enoki_hold.set_camera(myRoom.camera);
+		bn::sprite_ptr enoki_hold = bn::sprite_items::enoki_walking_spring.create_sprite(current_room.start_x, current_room.start_y, 12);
+		enoki_hold.set_camera(current_room.camera);
 		enoki_hold.set_visible(false);
 
 		for (short int t = 0; t < max_rabbits; t++)
 		{
 			rabbit r;
-			r.sprite.set_camera(myRoom.camera);
+			r.sprite.set_camera(current_room.camera);
 			rabbits.push_back(r);
 		}
 
@@ -11551,16 +11583,16 @@ dungeon_return rabbit_game()
 
 		hud current_hud;
 
-		myRoom.init_render(0, 0);
+		current_room.init_render(0, 0);
 		while (playing)
 		{
-			myRoom.a_notif.set_visible(false);
+			current_room.a_notif.set_visible(false);
 
 			score_meter++;
 			if (score_meter == 50)
 			{
 				score_meter = 0;
-				if (score > 0)
+				if (score > 10)
 					score -= 10;
 			}
 
@@ -11580,7 +11612,7 @@ dungeon_return rabbit_game()
 
 				if (dir != last_dir) {
 					enoki_hold = bn::sprite_items::enoki_walking_spring.create_sprite(enoki_hold.x(), enoki_hold.y(), 12 + dir);
-					enoki_hold.set_camera(myRoom.camera);
+					enoki_hold.set_camera(current_room.camera);
 					last_dir = dir;
 				}
 			}
@@ -11672,7 +11704,7 @@ dungeon_return rabbit_game()
 					(std_abs(rabbits.at(t).sprite.x().integer() - enoki.entity.x().integer()) < 8) &&
 					(std_abs(rabbits.at(t).sprite.y().integer() - enoki.entity.y().integer()) < 16))
 				{
-					myRoom.start_notif(0);
+					current_room.start_notif(0);
 				}
 			}
 
@@ -11710,7 +11742,7 @@ dungeon_return rabbit_game()
 				}
 			}
 
-			myRoom.update_objects();
+			current_room.update_objects();
 			bn::core::update();
 		}
 	}
@@ -11730,7 +11762,7 @@ dungeon_return underground()
 	bool is_victory = false;
 
 	{
-		room current_room(20, 20, 17, 18);
+		room current_room(20, 20, 17, 17);
 
 		bn::music_items_info::span[19].first.play(0.8);
 		bn::regular_bg_ptr back_floor = bn::regular_bg_items::velvet.create_bg(0, 0);
@@ -11790,8 +11822,8 @@ dungeon_return underground()
 			1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
 			1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
 			1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
-			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1 };
+			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 1, 1,
+			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 		const short int local[current_room.width * current_room.height] = {
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
@@ -11811,7 +11843,7 @@ dungeon_return underground()
 			1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
 			1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1,
 			1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1,
-			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
+			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1,
 			1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1 };
 		for (short int t = 0; t < current_room.width * current_room.height; t++) {
 			globals->local_tileset.push_back(local[t]);
@@ -12588,7 +12620,8 @@ dungeon_return boat_game() {
 					if (std_rnd(36 - (16 - (distance / 2))) == 1) {
 
 						rs[t].size = 0.01;
-						rs[t].entity.set_scale(rs[t].size);
+						//test
+						//rs[t].entity.set_scale(rs[t].size);
 						rs[t].entity.set_x((std_rnd(120)) - 60);
 						rs[t].speed = rs[t].entity.x().integer() / 10;
 
@@ -12610,8 +12643,8 @@ dungeon_return boat_game() {
 					}
 				}
 				else {
-					if (rs[t].size < 0)  rs[t].size = 0.01;
-					rs[t].entity.set_scale(rs[t].size);
+					if (rs[t].size <= 0)  rs[t].size = 0.01;
+					//rs[t].entity.set_scale(rs[t].size);
 					rs[t].entity.set_y(rs[t].m_y);
 
 					if (isMoving == 1) {
@@ -12720,7 +12753,7 @@ dungeon_return boat_game() {
 				for (short int t = 0; t < 8; t++) {
 					rs[t].entity.set_visible(false);
 				}
-				if (completed_size < 0) completed_size = 0.01;
+				if (completed_size <= 0) completed_size = 0.01;
 				boat.set_scale(completed_size);
 				wave.set_scale(completed_size);
 				bn::fixed_t<12> new_completed_size = completed_size - 0.02;
@@ -12801,6 +12834,7 @@ dungeon_return store() {
 	bn::ostringstream string_stream(string);
 
 	xp_spr.clear();
+	string = "";
 	string_stream << "$";
 	string_stream << globals->current_save->xp;
 	file1_gen.generate(64, -48, string_stream.str().c_str(), xp_spr);
@@ -12826,6 +12860,7 @@ dungeon_return store() {
 				dialogue_page_lite(lc);
 
 				xp_spr.clear();
+				string = "";
 				string_stream << "$";
 				string_stream << globals->current_save->xp;
 				file1_gen.generate(64, -48, string_stream.str().c_str(), xp_spr);
@@ -13750,28 +13785,35 @@ void credits() {
 		bn::string<48> buf3;
 		short int reg = 3;
 
-		const line_min lc[177] = {
+		const line_min lc[217] = {
 			{"MAPLE TREMBLAY"},
 			{"Natalie Anderson"},
 			{" - - - - "},
+
 			{"MARIA 'ENOKI' TREMBLAY"},
 			{"Brianna Beamer / Mely-Anne Dupuis"},
 			{" - - - - "},
+
 			{"AARON TREMBLAY"},
 			{"Josh Hollwarth"},
 			{" - - - - "},
+
 			{"RUFUS THIBODEAUX"},
 			{"Patrick Williams"},
 			{" - - - - "},
+
 			{"built with Butano"},
 			{"github.com/GValiente/butano"},
 			{" - - - - "},
+
 			{"Scout desktop sketch by"},
 			{"@yae.ruu (Instagram)"},
 			{" - - - - "},
+
 			{"based on characters"},
 			{"from 'Vous Voila' by"},
 			{"Ethan Hill"},
+
 			{"created by"},
 			{"Ethan Hill"},
 			{" - - - - "},
@@ -13784,57 +13826,57 @@ void credits() {
 			{"jess"},
 			{"Mithril"},
 
+			{"The Creative Fund by BackerKit"},
 			{"Gabe"},
 			{"Michael Nock"},
-			{"Sam"},
 
+			{"Sam"},
 			{"Dean McFarland"},
 			{"Ash"},
-			{"Jonathan Mellis"},
 
+			{"Jonathan Mellis"},
 			{"Alex Fehr"},
 			{"Seth Varela"},
-			{"Nathan Jaffrey"},
 
+			{"Nathan Jaffrey"},
 			{"geemuboi"},
 			{"Maicon Hieronymus"},
-			{"Jay Marsh"},
 
+			{"Jay Marsh"},
 			{"Brian Revell"},
 			{"exelotl"},
-			{"Madelyn Watts"},
 
+			{"Madelyn Watts"},
 			{"Scott curbow"},
 			{"20JPorter"},
-			{"Anna Stevens"},
 
+			{"Anna Stevens"},
 			{"Ashley SheyLe Heckert"},
 			{"Panagiotis konstantatos"},
-			{"StripeFruit"},
 
+			{"StripeFruit"},
 			{"Sean"},
 			{"Josiah Schiewe"},
-			{"CrisKa"},
 
+			{"CrisKa"},
 			{"Glyn Thomas Gowing"},
 			{"John Burns"},
-			{"Andrew Brown"},
 
+			{"Andrew Brown"},
 			{"Brendon Miller"},
 			{"Hexadigital"},
-			{"Markus Kitsinger"},
 
+			{"Markus Kitsinger"},
 			{"Jon Klein"},
 			{"Jared Collins"},
-			{"Amra"},
 
+			{"Amra"},
 			{"Steven Bedford"},
 			{"Shae Trimmer"},
-			{"Christopher Chavez"},
 
+			{"Christopher Chavez"},
 			{"Jaicee Orchard"},
 			{"Christian Lane"},
-			{"Luka"},
 
 			{"Andrew Kennedy"},
 			{"Jordan"},
@@ -13846,30 +13888,30 @@ void credits() {
 
 			{"Caylen Williams"},
 			{"noah"},
-			{"Christopher C-C"},
+			{"Meepo64"},
 
+			{"Christopher C-C"},
 			{"Patrice Tremblay"},
 			{"Danilo de Brito Oliveira"},
-			{"Lucas Suggate"},
 
+			{"Lucas Suggate"},
 			{"Santiago Valero Lopez"},
 			{"paillocher sylvain"},
-			{"Callie"},
 
+			{"Callie"},
 			{"patrick a estes"},
 			{"Russ Perry Jr"},
-			{"Zachary"},
 
+			{"Zachary"},
 			{"Michael Lathrop"},
 			{"jonathan moniz"},
-			{"Aaron Kaluszka"},
 
+			{"Aaron Kaluszka"},
 			{"Carmine Red"},
 			{"ovenheater"},
-			{"Doug Cornforth"},
 
+			{"Doug Cornforth"},
 			{"EnthusiasmEnthusiast"},
-			{"DENNIS P."},
 			{"Steven"},
 
 			{"Wick.brstm"},
@@ -13877,40 +13919,40 @@ void credits() {
 			{"Michelle Alvarado"},
 
 			{"James Paine"},
+			{"BlueShadow17"},
 			{"Ryan Garland"},
-			{"Melissa Jordan"},
 
+			{"Melissa Jordan"},
 			{"Tony Marchese"},
 			{"William F"},
-			{"Jesse Glenn"},
 
+			{"Jesse Glenn"},
 			{"Juan Velez"},
 			{"Tony"},
-			{"Jeffery Murphy"},
 
+			{"Jeffery Murphy"},
 			{"Thoughts"},
 			{"Laurent Dufresne"},
-			{"W"},
 
+			{"W"},
 			{"Cesar Arminio"},
 			{"JC Hersey"},
-			{"Christer Hakansson"},
 
+			{"Christer Hakansson"},
 			{"Andre Schreieck"},
 			{"Rik"},
+
+			{"Plusgalaxy39"},
 			{"Taylor Whaley"},
-
 			{"Barry Carenza"},
-			{"Alex Nelson"},
-			{"Gino Stolfa"},
 
+			{"Gino Stolfa"},
 			{"Ben Singletary"},
 			{"Robert F. Place"},
-			{"Dominic Giambra"},
 
+			{"Dominic Giambra"},
 			{"Giles Hamson"},
 			{"Christian Aliferis"},
-			{"ELIAS TORRES SUAREZ"},
 
 			{"Nchatxu Vang"},
 			{"Mr.SackBoySon"},
@@ -13945,26 +13987,78 @@ void credits() {
 			{"John Pettit"},
 
 			{"Martin M"},
-			{"thetoxicone"},
 			{"Willem"},
-
 			{"Niki Coppola"},
+
 			{"Paul Stedman"},
 			{"Tom Nichols"},
-
 			{"Leif Conti-Groome"},
+
 			{"Henry Seymour"},
 			{"Eric"},
-
 			{"Ethan N Holloway"},
+
 			{"Ronald Le"},
 			{"Nicholas Paul Wilson"},
-
 			{"Kurt K"},
-			{ " - - - - " },
-			{ " - - - - " },
 
-			{" - - - - "},
+			{"Avery"},
+			{"Gary Mullen"},
+			{"Noah"},
+
+			{"Gautham Yerroju"},
+			{"David Herrera"},
+			{"michael darrow"},
+
+			{"Cassandra Pohlkotte"},
+			{"Voosh"},
+			{"Zach Curley"},
+
+			{"Samer Najjar"},
+			{"Anthony Rappazzo"},
+			{"Kendra Jones"},
+
+			{"Adrienne M."},
+			{"Fray Coache"},
+			{"metalrocks5150"},
+
+			{"Jackson D. Q-Wrenslater"},
+			{"SerMolok"},
+			{"Lee Broadley"},
+
+			{"Blake McKean"},
+			{"Brad Parker"},
+			{"Mike D"},
+
+			{"YourNerdyJoe"},
+			{"Foghorn Ladytown"},
+			{"Deontiae Moore"},
+
+			{"Billy Harwood-Sloan"},
+			{"Boggie"},
+			{"Magic Nathan 65"},
+
+			{"Kevin"},
+			{"Nathan"},
+			{"Kit Kong"},
+
+			{"Wendy Wentworth Smiseck"},
+			{"Lewis J Cabibi II"},
+			{"Joshua Kohn"},
+
+			{"Suede"},
+			{"Click_Kom"},
+			{"Chad McManus"},
+			{"jsh1up"},
+
+			{"Petr Hollay"},
+			{"Jammy"},
+
+			{"Dayna"},
+			{"James"},
+			{"Thomas McGuire"},
+
+			{" - - - - " },
 			{"SPECIAL THANKS:"},
 			{" - - - - "},
 
@@ -13976,8 +14070,8 @@ void credits() {
 			{"Merci d'avoir joue!"},
 			{" - LA FIN - "},
 
-			{" - - - - "},
-			{""}
+			{" . . . . "},
+			{" - - - - "}
 		};
 
 		buf1 = lc[0].text;
@@ -13989,7 +14083,7 @@ void credits() {
 		file2_gen.generate(-112, 96 + 14, buf2.c_str(), file2_spr);
 		file3_gen.generate(-112, 96 + 28, buf3.c_str(), file3_spr);
 
-		short int ending = 176;
+		short int ending = 215;
 		short int scroll_on = 0;
 		while (reg < ending) {
 			scroll_on += 1;
@@ -14210,7 +14304,8 @@ int main()
 {
 	bn::core::init(); // Initialize Butano libraries
 	
-	globals = &global_inst;
+	// 'new' allows me to store this in the heap instead of the stack
+	globals = new global_data();
 
 	/*
 	dungeon_return dt;
