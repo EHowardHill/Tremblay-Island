@@ -3146,7 +3146,7 @@ public:
 	bool can_follow = true;
 	bool is_npc = false;
 
-	short int last_x, last_y;
+	short int last_x, last_y, loop_x, loop_y;
 	short int room_width = 0;
 
 	bn::sprite_item entity_item = bn::sprite_items::maple_walking;
@@ -3183,6 +3183,17 @@ public:
 		int x_int = entity.x().integer();
 		int y_int = entity.y().integer();
 
+		short int col[8] = { 0 };
+		short int gol[8] = { 0 };
+		bool canLeft = true;
+		bool canRite = true;
+		bool canUp = true;
+		bool canDn = true;
+		bool newLeft = 0;
+		bool newRite = 0;
+		bool newUp = 0;
+		bool newDown = 0;
+
 		int close[4] = {
 			roundDown(x_int + 6),
 			roundUp(x_int - 6),
@@ -3196,17 +3207,6 @@ public:
 			roundUp(y_int + 6) * room_width,
 			roundDown(y_int) * room_width
 		};
-
-		short int col[8] = { 0 };
-		short int gol[8] = { 0 };
-		bool canLeft = true;
-		bool canRite = true;
-		bool canUp = true;
-		bool canDn = true;
-		bool newLeft = 0;
-		bool newRite = 0;
-		bool newUp = 0;
-		bool newDown = 0;
 
 		if (globals->collisions.size() > 0) {
 			col[0] = globals->collisions.at(close[0] + close[2]) == 1;
@@ -3227,15 +3227,6 @@ public:
 			gol[6] = globals->collisions.at(anti_close[0] + anti_close[3]) == 1;
 			gol[7] = globals->collisions.at(anti_close[1] + anti_close[3]) == 1;
 
-			/*
-			if (role == 1) {
-				LOG(
-					col[0], ",", col[1], ",", col[2], ",", col[3], ",", col[4], ",", col[5], ",", col[6], ",", col[7], " - ",
-					gol[0], ",", gol[1], ",", gol[2], ",", gol[3], ",", gol[4], ",", gol[5], ",", gol[6], ",", gol[7]
-				);
-			}
-			*/
-
 			canLeft = !(((col[4] & col[5]) ^ col[0]) || ((col[6] & col[7]) ^ col[1]));
 			canRite = !(((col[4] & col[5]) ^ col[2]) || ((col[6] & col[7]) ^ col[3]));
 			canUp = !(((col[0] & col[1]) ^ col[4]) || ((col[2] & col[3]) ^ col[5]));
@@ -3245,16 +3236,6 @@ public:
 			newUp = (!gol[0] & !gol[1] & !gol[3] & !gol[4] & !gol[6] & !gol[7] & gol[2] & gol[5]);
 			newLeft = (!gol[0] & !gol[2] & !gol[3] & !gol[4] & !gol[5] & !gol[7] & gol[1] & gol[6]);
 			newRite = (!gol[1] & !gol[2] & !gol[3] & !gol[5] & !gol[6] & !gol[7] & gol[0] & gol[4]);
-		}
-
-		if (canLeft || canRite)
-		{
-			last_x = entity.x().integer();
-		}
-
-		if (canUp || canDn)
-		{
-			last_y = entity.y().integer();
 		}
 
 		// If following...
@@ -3274,7 +3255,7 @@ public:
 				if (canLeft)
 				{
 					isXTravel = true;
-					entity.set_x(entity.x() - 1);
+					x_int = entity.x().integer() - 1;
 					dir = 2;
 					if (last_dir != dir)
 						done = false;
@@ -3282,7 +3263,7 @@ public:
 					is_walking = true;
 				}
 				else {
-					entity.set_y(entity.y() + newDown - newUp);
+					y_int = entity.y().integer() + newDown - newUp;
 				}
 			}
 			else if (x > entity.x() + 24 || (x > entity.x() && dist > 72))
@@ -3290,7 +3271,7 @@ public:
 				if (canRite)
 				{
 					isXTravel = true;
-					entity.set_x(entity.x() + 1);
+					x_int = entity.x().integer() + 1;
 					dir = 1;
 					if (last_dir != dir)
 						done = false;
@@ -3298,14 +3279,14 @@ public:
 					is_walking = true;
 				}
 				else {
-					entity.set_y(entity.y() + newLeft - newRite);
+					y_int = entity.y().integer() + newLeft - newRite;
 				}
 			}
 			if (y < entity.y() - 24 || (y < entity.y() && dist > 72))
 			{
 				if (canUp)
 				{
-					entity.set_y(entity.y() - 1);
+					y_int = entity.y().integer() - 1;
 					if (!isXTravel)
 					{
 						dir = 3;
@@ -3316,14 +3297,14 @@ public:
 					}
 				}
 				else {
-					entity.set_x(entity.x() + newDown - newLeft);
+					x_int = entity.x().integer() + newDown - newLeft;
 				}
 			}
 			else if (y > entity.y() + 24 || (y > entity.y() && dist > 72))
 			{
 				if (canDn)
 				{
-					entity.set_y(entity.y() + 1);
+					y_int = entity.y().integer() + 1;
 					if (!isXTravel)
 					{
 						dir = 0;
@@ -3334,7 +3315,7 @@ public:
 					}
 				}
 				else {
-					entity.set_x(entity.x() - newRite + newLeft);
+					x_int = entity.x().integer() - newRite + newLeft;
 				}
 			}
 
@@ -3484,7 +3465,9 @@ public:
 			if (delta_x < -1) delta_x = -1;
 			if (delta_y > 1) delta_y = 1;
 			if (delta_y < -1) delta_y = -1;
-			entity.set_position(entity.x() + delta_x, entity.y() + delta_y);
+
+			x_int += delta_x;
+			y_int += delta_y;
 		}
 
 		// If generic dude....
@@ -3536,12 +3519,58 @@ public:
 		}
 
 		// Handle update
-		if (!canLeft && !canRite)
-			entity.set_x(last_x);
-		if (!canUp && !canDn)
-			entity.set_y(last_y);
+		int canHorz = 0;
+		int canVert = 0;
 
+		if (!canLeft && !canRite) {
+			x_int = last_x;
+			canHorz = 1;
+		}
+
+		if (!canUp && !canDn) {
+			y_int = last_y;
+			canVert = 1;
+		}
+
+		close[0] = roundDown(x_int + 6);
+		close[1] = roundUp(x_int - 6);
+		close[2] = roundDown(y_int + 6) * room_width;
+		close[3] = roundUp(y_int) * room_width;
+
+		if (globals->collisions.size() > 0) {
+			col[0] = globals->collisions.at(close[0] + close[2]) == 1;
+			col[1] = globals->collisions.at(close[0] + close[3]) == 1;
+			col[2] = globals->collisions.at(close[1] + close[2]) == 1;
+			col[3] = globals->collisions.at(close[1] + close[3]) == 1;
+			col[4] = globals->collisions.at(close[0] + close[2]) == 1;
+			col[5] = globals->collisions.at(close[1] + close[2]) == 1;
+			col[6] = globals->collisions.at(close[0] + close[3]) == 1;
+			col[7] = globals->collisions.at(close[1] + close[3]) == 1;
+
+			canLeft = !(((col[4] & col[5]) ^ col[0]) || ((col[6] & col[7]) ^ col[1]));
+			canRite = !(((col[4] & col[5]) ^ col[2]) || ((col[6] & col[7]) ^ col[3]));
+			canUp = !(((col[0] & col[1]) ^ col[4]) || ((col[2] & col[3]) ^ col[5]));
+			canDn = !(((col[0] & col[1]) ^ col[6]) || ((col[2] & col[3]) ^ col[7]));
+		}
+
+		if (!canLeft && !canRite) {
+			x_int = last_x;
+		}
+
+		if (!canUp && !canDn) {
+			y_int = last_y;
+		}
+		entity.set_position(x_int, y_int);
 		entity = entity_anim.sprite();
+
+		if (canLeft || canRite) {
+			last_x = x_int;
+		}
+
+		if (canUp || canDn) {
+			last_y = y_int;
+		}
+
 	}
 };
 
@@ -3882,7 +3911,8 @@ public:
 		bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
 		score = new_score;
 		wing_scale = new_value;
-		if (wing_scale == 0) wing_scale = 0.01;
+		if (wing_scale < 0.01) wing_scale = 0.01;
+		if (wing_scale > 2) wing_scale = 2;
 
 		rotation = (rotation + 1) % 360;
 
@@ -4908,26 +4938,26 @@ dungeon_return dungeon(dungeon_return& dt) {
 		if (globals->current_save->checkpoint < 7)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
-				00, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-				00, 1, 1, 1, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
-				00, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-				00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-				00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+				0, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			const short int local[current_room.width * current_room.height] = {
 				39, 1, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 43, 42, 12, 13,
@@ -4961,26 +4991,26 @@ dungeon_return dungeon(dungeon_return& dt) {
 		else if (globals->current_save->checkpoint < 9)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-				01, 42, 41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-				00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 1, 1, 61, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-				00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1, 42, 41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+				1, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 1, 1, 61, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			const short int local[current_room.width * current_room.height] = {
 				39, 27, 44, 27, 27, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 43, 42, 12, 13,
@@ -5014,26 +5044,26 @@ dungeon_return dungeon(dungeon_return& dt) {
 		else if (globals->current_save->checkpoint < 11)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-				01, 42, 41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 66, 1, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-				00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 1, 1, 61, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-				00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1, 42, 41, 0, 0, 0, 0, 0, 22, 24, 0, 0, 0, 0, 0, 1, 66, 1, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+				1, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 23, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 1, 1, 61, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			const short int local[current_room.width * current_room.height] = {
 				39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
@@ -5067,26 +5097,26 @@ dungeon_return dungeon(dungeon_return& dt) {
 		else if (globals->current_save->checkpoint == 12)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-				01, 42, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-				00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-				00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1, 42, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+				1, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			const short int local[current_room.width * current_room.height] = {
 				39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
@@ -5140,26 +5170,26 @@ dungeon_return dungeon(dungeon_return& dt) {
 		else if (globals->current_save->checkpoint == 13)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0,
-				01, 0, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
-				00, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				00, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
-				01, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
-				01, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
-				00, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+				1, 0, 41, 0, 0, 0, 0, 0, 22, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0,
+				1, 26, 25, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 21, 0, 0, 0, 0, 1, 20, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0,
+				1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+				1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 			const short int local[current_room.width * current_room.height] = {
 				39, 44, 27, 27, 39, 27, 27, 27, 44, 0, 27, 27, 27, 27, 27, 42, 2, 42, 12, 13,
@@ -5200,6 +5230,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 				vee.identity = 2;
 				current_room.chari.push_back(vee);
 			}
+			else {
+				current_room.chari.at(0).follow_id = 2;
+			}
 
 			if (globals->current_save->last_char_id != 4)
 			{
@@ -5211,6 +5244,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 				vee.identity = 4;
 				current_room.chari.push_back(vee);
 			}
+			else {
+				current_room.chari.at(0).follow_id = 0;
+			}
 
 			if (globals->current_save->last_char_id != 5)
 			{
@@ -5221,6 +5257,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 				eleanor.follow_id = 1;
 				eleanor.identity = 5;
 				current_room.chari.push_back(eleanor);
+			}
+			else {
+				current_room.chari.at(0).follow_id = 1;
 			}
 		}
 
@@ -5733,6 +5772,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 				aaron.identity = 2;
 				current_room.chari.push_back(aaron);
 			}
+			else {
+				current_room.chari.at(0).follow_id = 2;
+			}
 
 			if (globals->current_save->last_char_id != 4)
 			{
@@ -5744,6 +5786,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 				vee.identity = 4;
 				current_room.chari.push_back(vee);
 			}
+			else {
+				current_room.chari.at(0).follow_id = 0;
+			}
 
 			if (globals->current_save->last_char_id != 5)
 			{
@@ -5754,6 +5799,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 				eleanor.follow_id = 1;
 				eleanor.identity = 5;
 				current_room.chari.push_back(eleanor);
+			}
+			else {
+				current_room.chari.at(0).follow_id = 1;
 			}
 		}
 
@@ -9851,8 +9899,8 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 			1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 10,
 			1, 15, 1, 1, 10, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 0, 10,
 			1, 0, 0, 0, 10, 0, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 10,
-			1, 14, 0, 0, 10, 13, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 0, 10,
-			1, 0, 0, 0, 10, 0, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 10,
+			1, 14, 0, 0, 10, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 0, 10,
+			1, 0, 0, 0, 10, 13, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 10,
 			1, 0, 0, 0, 10, 16, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 0, 10,
 			1, 5, 5, 5, 10, 0, 0, 0, 0, 12, 0, 12, 0, 12, 0, 0, 0, 0, 10,
 			1, 5, 5, 5, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10,
@@ -10599,8 +10647,10 @@ void keyboard() {
 
 	while (!bn::keypad::start_pressed()) {
 
+		BN_LOG(x_state, " ", y_state);
+
 		if (bn::keypad::left_pressed()) {
-			if ((basis[x_state - 1 + (y_state * 12)] != ' ') || (y_state == 2)) {
+			if (((basis[x_state - 1 + (y_state * 12)] != ' ') || (y_state == 2)) && !(x_state == 7 && y_state == 2)) {
 				x_state--;
 				if (x_state < 0) x_state = 11;
 				sel.set_x(-100 + 18 * x_state);
@@ -10925,7 +10975,7 @@ void load_save()
 		if (globals->all_save.current_save[1].xp == -1) globals->all_save.current_save[1].xp = 0;
 		ss1 << ": ";
 		ss1 << (int)(globals->all_save.current_save[1].checkpoint * 6.6);
-		ss1 << "%%";
+		ss1 << "%";
 	}
 	else {
 		buf2 = "Slot 2: 0%";
@@ -10940,8 +10990,8 @@ void load_save()
 		}
 		if (globals->all_save.current_save[2].xp == -1) globals->all_save.current_save[2].xp = 0;
 		ss1 << ": ";
-		ss1 << (int)(globals->all_save.current_save[0].checkpoint * 6.6);
-		ss1 << "%%";
+		ss1 << (int)(globals->all_save.current_save[2].checkpoint * 6.6);
+		ss1 << "%";
 	}
 	else {
 		buf3 = "Slot 3: 0%";
@@ -12621,7 +12671,7 @@ dungeon_return boat_game() {
 
 						rs[t].size = 0.01;
 						//test
-						//rs[t].entity.set_scale(rs[t].size);
+						rs[t].entity.set_scale(rs[t].size);
 						rs[t].entity.set_x((std_rnd(120)) - 60);
 						rs[t].speed = rs[t].entity.x().integer() / 10;
 
@@ -12644,7 +12694,7 @@ dungeon_return boat_game() {
 				}
 				else {
 					if (rs[t].size <= 0)  rs[t].size = 0.01;
-					//rs[t].entity.set_scale(rs[t].size);
+					rs[t].entity.set_scale(rs[t].size);
 					rs[t].entity.set_y(rs[t].m_y);
 
 					if (isMoving == 1) {
@@ -13045,7 +13095,7 @@ dungeon_return kitchen() {
 					if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16) {
 						switch (t - 1) {
 						case 0:
-							buf1 = "Holy Trinity";
+							buf1 = "Vegetables";
 							break;
 						case 1:
 							buf1 = "Meat";
@@ -13196,19 +13246,19 @@ dungeon_return kitchen() {
 				}
 
 				if (bn::keypad::up_held()) {
-					hand.set_y(hand.y().integer() - 1);
+					if (hand.y().integer() > -80) hand.set_y(hand.y().integer() - 1);
 				}
 
 				if (bn::keypad::down_held()) {
-					hand.set_y(hand.y().integer() + 1);
+					if (hand.y().integer() < 80) hand.set_y(hand.y().integer() + 1);
 				}
 
 				if (bn::keypad::left_held()) {
-					hand.set_x(hand.x().integer() - 1);
+					if (hand.x().integer() > -120) hand.set_x(hand.x().integer() - 1);
 				}
 
 				if (bn::keypad::right_held()) {
-					hand.set_x(hand.x().integer() + 1);
+					if (hand.x().integer() < 120) hand.set_x(hand.x().integer() + 1);
 				}
 
 				if (bn::keypad::b_pressed()) {
