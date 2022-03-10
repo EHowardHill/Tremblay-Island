@@ -11193,11 +11193,19 @@ bool victory_page(int chari, int score)
 	if (xp == -1) xp = 0;
 
 	bn::fixed_t<12> new_xp = xp + (modifier * score);
-	if (globals->current_save->checkpoint < 8) {
-		if (new_xp > 100) new_xp = 100;
+
+	if (globals->current_save->checkpoint < 15) {
+		if (new_xp > 300) new_xp = 300;
 	}
-	else if (globals->current_save->checkpoint < 10) {
-		if (new_xp > 200) new_xp = 100;
+	else if (globals->current_save->checkpoint < 9) {
+		if (new_xp > 200) new_xp = 200;
+	}
+	else {
+		if (globals->current_save->checkpoint < 6) {
+			if (new_xp > 100) new_xp = 100;
+		}
+		else
+			if (new_xp > 50) new_xp = 50;
 	}
 
 	globals->current_save->xp = new_xp.integer(); // Add score to save total
@@ -12306,7 +12314,23 @@ void victory_toutes(int emotion, int total) {
 
 	bn::core::update();
 
-	globals->current_save->xp += (total / 10);
+	int new_xp = globals->current_save->xp + (total / 10);
+
+	if (globals->current_save->checkpoint < 15) {
+		if (new_xp > 300) new_xp = 300;
+	}
+	else if (globals->current_save->checkpoint < 9) {
+		if (new_xp > 200) new_xp = 200;
+	}
+	else {
+		if (globals->current_save->checkpoint < 6) {
+			if (new_xp > 100) new_xp = 100;
+		}
+		else
+			if (new_xp > 50) new_xp = 50;
+	}
+
+	globals->current_save->xp = new_xp;
 
 	globals->rendered_windows.clear();
 	{
@@ -12827,7 +12851,23 @@ dungeon_return boat_game() {
 		bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
 		bn::vector<bn::sprite_ptr, 32> file3_spr;
 
-		globals->current_save->xp += (total / 4.675);
+		int new_xp = globals->current_save->xp + (total / 4.675);
+
+		if (globals->current_save->checkpoint < 15) {
+			if (new_xp > 300) new_xp = 300;
+		}
+		else if (globals->current_save->checkpoint < 9) {
+			if (new_xp > 200) new_xp = 200;
+		}
+		else {
+			if (globals->current_save->checkpoint < 6) {
+				if (new_xp > 100) new_xp = 100;
+			}
+			else
+				if (new_xp > 50) new_xp = 50;
+		}
+
+		globals->current_save->xp = new_xp;
 
 		bn::music::stop();
 		buf = "'Well done! I'll take the";
@@ -13321,7 +13361,24 @@ dungeon_return kitchen() {
 		auto face_b_like = bn::create_sprite_animate_action_forever(face_spr, 4, bn::sprite_items::bg_monch_face.tiles_item(), 0, 1, 2, 3, 4, 5, 6, 7);
 		auto pc_bg = bn::regular_bg_items::bg_monch.create_bg(0, 0);
 
-		globals->current_save->xp += (score / 22);
+		int new_xp = globals->current_save->xp + (score / 22);
+
+		if (globals->current_save->checkpoint < 15) {
+			if (new_xp > 300) new_xp = 300;
+		}
+		else if (globals->current_save->checkpoint < 9) {
+			if (new_xp > 200) new_xp = 200;
+		}
+		else {
+			if (globals->current_save->checkpoint < 6) {
+				if (new_xp > 100) new_xp = 100;
+			}
+			else
+				if (new_xp > 50) new_xp = 50;
+		}
+
+		globals->current_save->xp = new_xp;
+
 		victory v(0, 8, score, globals->current_save->xp, 3);
 		while (!bn::keypad::a_pressed()) {
 			v.update();
@@ -14276,9 +14333,8 @@ int checkpoint(int level)
 	}
 
 	case 9: {
-		intros(3);
-
 		exec_dialogue(29);
+		intros(3);
 		exec_dialogue(28);
 		break;
 	}
@@ -14302,12 +14358,16 @@ int checkpoint(int level)
 	}
 
 	case 12: {
-		intros(4);
+		{
+			intros(4);
+			if (bn::music::playing()) bn::music::stop();
+		}
+		
+		{
+			exec_dialogue(32);
+			globals->current_save->last_char_id = 2;
+		}
 
-		if (bn::music::playing()) bn::music::stop();
-
-		exec_dialogue(32);
-		globals->current_save->last_char_id = 2;
 		core_gameplay(9, 6, 4, 0);
 		break;
 	}
