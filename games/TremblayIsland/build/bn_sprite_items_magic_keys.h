@@ -7,12 +7,12 @@
 
 //======================================================================
 //
-//	magic_keys_bn_graphics, 32x224@4, 
+//	magic_keys_bn_graphics, 32x256@4, 
 //	+ palette 16 entries, not compressed
-//	+ 112 tiles not compressed
-//	Total size: 32 + 3584 = 3616
+//	+ 128 tiles not compressed
+//	Total size: 32 + 4096 = 4128
 //
-//	Time-stamp: 2022-01-26, 07:36:10
+//	Time-stamp: 2022-03-10, 19:38:31
 //	Exported by Cearn's GBA Image Transmogrifier, v0.8.16
 //	( http://www.coranac.com/projects/#grit )
 //
@@ -21,8 +21,8 @@
 #ifndef GRIT_MAGIC_KEYS_BN_GRAPHICS_H
 #define GRIT_MAGIC_KEYS_BN_GRAPHICS_H
 
-#define magic_keys_bn_graphicsTilesLen 3584
-extern const bn::tile magic_keys_bn_graphicsTiles[bn::max(896 / 8, 1)];
+#define magic_keys_bn_graphicsTilesLen 4096
+extern const bn::tile magic_keys_bn_graphicsTiles[bn::max(1024 / 8, 1)];
 
 #define magic_keys_bn_graphicsPalLen 32
 extern const bn::color magic_keys_bn_graphicsPal[16];
@@ -34,7 +34,7 @@ extern const bn::color magic_keys_bn_graphicsPal[16];
 namespace bn::sprite_items
 {
     constexpr inline sprite_item magic_keys(sprite_shape_size(sprite_shape::SQUARE, sprite_size::BIG), 
-            sprite_tiles_item(span<const tile>(magic_keys_bn_graphicsTiles, 112), bpp_mode::BPP_4, compression_type::NONE, 7), 
+            sprite_tiles_item(span<const tile>(magic_keys_bn_graphicsTiles, 128), bpp_mode::BPP_4, compression_type::NONE, 8), 
             sprite_palette_item(span<const color>(magic_keys_bn_graphicsPal, 16), bpp_mode::BPP_4, compression_type::NONE));
 }
 

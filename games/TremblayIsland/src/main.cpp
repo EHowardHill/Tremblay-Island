@@ -48,7 +48,6 @@
 
 #include "bn_regular_bg_items_intro_final_1.h"
 #include "bn_regular_bg_items_intro_final_2.h"
-#include "bn_regular_bg_items_tbc.h"
 
 #include "bn_sprite_items_selection.h"
 #include "bn_regular_bg_items_keyboard_bg.h"
@@ -109,7 +108,6 @@
 #include "bn_sprite_items_gumbo.h"
 #include "bn_sprite_items_gumbo_mons.h"
 #include "bn_regular_bg_items_bg_cooking_01.h"
-#include "bn_regular_bg_items_bg_cooking_02.h"
 #include "bn_regular_bg_items_bg_monch.h"
 #include "bn_sprite_items_bg_monch_face.h"
 
@@ -171,10 +169,8 @@
 #include "bn_sprite_items_corinne.h"
 #include "bn_sprite_items_diana_uke.h"
 
-#include "bn_regular_bg_items_dialogue_bg.h"
 #include "bn_sprite_items_funny_items.h"
 #include "bn_regular_bg_items_bg_explosion.h"
-#include "bn_regular_bg_items_bg_skeleton.h"
 
 #include "bn_affine_bg_items_bg_ocean.h"
 
@@ -224,8 +220,6 @@ Guy     7
 #include "common_fixed_8x16_sprite_font.h"
 #include "bn_sprite_items_a_button.h"
 #include "bn_regular_bg_items_cinemint_studios.h"
-#include "bn_regular_bg_items_dialogue_bg.h"
-#include "bn_sprite_items_enoki.h"
 #include "bn_sprite_items_maple01.h"
 #include "bn_sprite_items_maple02.h"
 #include "bn_sprite_items_maple03.h"
@@ -596,6 +590,7 @@ public:
 	short int hat_world = 0;
 	short int hat_char = -1;
 	bool popups[16] = { false };
+	bool keys[16] = {false};
 
 	save_struct() {}
 
@@ -613,6 +608,10 @@ public:
 
 		char def[16] = { 0 };
 		strcpy(island_name, def);
+
+		for (int t = 0; t < 16; t++) {
+			keys[t] = 0;
+		}
 	}
 };
 
@@ -3337,6 +3336,12 @@ public:
 					entity_anim = bn::create_sprite_animate_action_forever(entity, 8, entity_item.tiles_item(), 1, 00, 2, 0);
 					break;
 				}
+			}
+
+			if (dist > 124) {
+				bn::sound_items::cnaut.play();
+				x_int = x;
+				y_int = y;
 			}
 
 			// Walk
@@ -11312,6 +11317,9 @@ dungeon_return tree_cut()
 		bool left = false;
 		short int wood_stage = 0;
 
+		auto key = bn::sprite_items::magic_keys.create_sprite(-128,0,7);
+		key.set_visible(false);
+
 		for (short int t = 0; t < max_chop; t++)
 		{
 			short int x_pos = -(calc_width / 2) + (std_rnd(calc_width));
@@ -11323,6 +11331,14 @@ dungeon_return tree_cut()
 		hud current_hud;
 		while (!bn::keypad::b_pressed())
 		{
+			if (key.visible()) {
+				if (key.x() < 72) {
+					key.set_position(key.x() + 0.75, 0);
+				} else {
+					key.set_visible(false);
+				}
+			}
+
 			// Stage of the stump
 			switch (wood_stage) {
 			default: {
@@ -11472,6 +11488,11 @@ dungeon_return tree_cut()
 					if (max_chop > 16)
 						max_chop = 16;
 
+					if (std_rnd(64) == 2 && globals->current_save->keys[0] != 1) {
+						key.set_visible(true);
+						key.set_position(-72,0);
+					}
+
 					for (short int t = 0; t < max_chop; t++)
 					{
 						short int x_pos = -(calc_width / 2) + (std_rnd(calc_width));
@@ -11485,6 +11506,19 @@ dungeon_return tree_cut()
 
 			if (bn::keypad::a_pressed() && left)
 			{
+				if (key.visible() && std_abs(curs_loc.integer() - key.x().integer()) < 16) {
+					bn::sound_items::cnaut.play();
+					key.set_visible(false);
+					bn::core::update();
+
+					line lc[32] = {
+						{true, true, 00, "You got a key!                   Unlock all the keys for a        a special surprise."},
+						{true, true, 00, "COM: Endscene"} };
+					dialogue_page_lite(lc);
+
+					globals->current_save->keys[0] = 1;
+				}
+
 				bool penalty = true;
 				for (short int t = 0; t < max_chop; t++)
 				{

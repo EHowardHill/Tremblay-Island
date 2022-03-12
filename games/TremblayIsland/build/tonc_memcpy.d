@@ -1,4 +1,4 @@
 tonc_memcpy.o: \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/asm/tonc_memcpy.s \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/asm/../include/tonc_asminc.h
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/asm/../include/tonc_asminc.h:
+ /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/asm/tonc_memcpy.s \
+ /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/asm/../include/tonc_asminc.h
+/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/asm/../include/tonc_asminc.h:
