@@ -138,6 +138,10 @@ main.o: \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_axe_game_bg.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_tree_stump.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_underground_tiles.h \
+ /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_01.h \
+ /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_02.h \
+ /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_03.h \
+ /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_04.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_background.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_scout.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_desktop.h \
@@ -146,6 +150,7 @@ main.o: \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_folder01.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_folder02.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_document.h \
+ /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_attendez.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_pc_highlight.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_bb_sprites.h \
  /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_avocado.h \
@@ -711,6 +716,10 @@ main.o: \
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_axe_game_bg.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_tree_stump.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_underground_tiles.h:
+/home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_01.h:
+/home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_02.h:
+/home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_03.h:
+/home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_cinemint_04.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_background.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_scout.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_desktop.h:
@@ -719,6 +728,7 @@ main.o: \
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_folder01.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_folder02.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_pc_document.h:
+/home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_regular_bg_items_attendez.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_pc_highlight.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_bb_sprites.h:
 /home/ethan/Documents/GitHub/Tremblay-Island/games/TremblayIsland/build/bn_sprite_items_avocado.h:

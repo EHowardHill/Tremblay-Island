@@ -86,6 +86,11 @@
 #include "bn_sprite_items_tree_stump.h"
 #include "bn_sprite_items_underground_tiles.h"
 
+#include "bn_regular_bg_items_cinemint_01.h"
+#include "bn_regular_bg_items_cinemint_02.h"
+#include "bn_regular_bg_items_cinemint_03.h"
+#include "bn_regular_bg_items_cinemint_04.h"
+
 #include "bn_regular_bg_items_pc_background.h"
 #include "bn_regular_bg_items_pc_scout.h"
 #include "bn_regular_bg_items_pc_desktop.h"
@@ -94,6 +99,7 @@
 #include "bn_regular_bg_items_pc_folder01.h"
 #include "bn_regular_bg_items_pc_folder02.h"
 #include "bn_regular_bg_items_pc_document.h"
+#include "bn_regular_bg_items_attendez.h"
 #include "bn_sprite_items_pc_highlight.h"
 #include "bn_sprite_items_bb_sprites.h"
 #include "bn_sprite_items_avocado.h"
@@ -656,6 +662,21 @@ int std_abs(int x) {
 	return x;
 }
 
+void attendez() {
+	{
+		BN_LOG("attendez");
+
+		auto bg = bn::regular_bg_items::attendez.create_bg(0,0);
+		bn::sound_items::ahoy.play();
+
+		for (int t = 0; t < 64; t++) {
+			bn::core::update();
+		}
+
+		bn::sram::write(globals->all_save);
+	}
+}
+
 // Generic classes
 class line {
 public:
@@ -781,11 +802,119 @@ void set_sprite(bn::sprite_ptr chari, int value) {
 	}
 }
 
+int select_minigame() {
+	globals->rendered_windows.clear();
+
+	{
+		bn::rect_window external_window = bn::rect_window::external();
+		external_window.set_show_sprites(true);
+		globals->rendered_windows.push_back(external_window);
+
+		bn::rect_window internal_window = bn::rect_window::internal();
+		internal_window.set_show_sprites(true);
+		globals->rendered_windows.push_back(internal_window);
+	}
+
+	auto velvet = bn::regular_bg_items::velvet.create_bg(0,0);
+	auto arrow = bn::sprite_items::arrow.create_sprite(-106, 0);
+	int t = 0;
+	int select = 0;
+
+	if (bn::music::playing()) bn::music::stop();
+	bn::music_items_info::span[8].first.play(bn::fixed(0.8) / 100);
+
+	bn::vector<bn::sprite_ptr, 7> chari;
+	bn::sprite_ptr c1 = bn::sprite_items::save_tiles.create_sprite(-64,0,0);
+	bn::sprite_ptr c2 = bn::sprite_items::save_tiles.create_sprite(-64,32,1);
+	bn::sprite_ptr c3 = bn::sprite_items::save_tiles.create_sprite(-64,64,2);
+	bn::sprite_ptr c4 = bn::sprite_items::save_tiles.create_sprite(-64,96,3);
+	bn::sprite_ptr c5 = bn::sprite_items::save_tiles.create_sprite(-64,128,5);
+	bn::sprite_ptr c6 = bn::sprite_items::save_tiles.create_sprite(-64,160,6);
+	bn::sprite_ptr c7 = bn::sprite_items::save_tiles.create_sprite(-64,192,7);
+	chari.push_back(c1);
+	chari.push_back(c2);
+	chari.push_back(c3);
+	chari.push_back(c4);
+	chari.push_back(c5);
+	chari.push_back(c6);
+	chari.push_back(c7);
+
+	bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
+	bn::vector<bn::sprite_ptr, 32> text_sprite0;
+
+	bn::sprite_ptr a_button = bn::sprite_items::a_button.create_sprite(-90, -48, 0);
+
+	while (!bn::keypad::a_pressed())
+	{
+		// Scrolling background
+		t++;
+		t = t % 256;
+		velvet.set_position(t, t);
+
+		for (int t = 0; t < chari.size(); t++) {
+			chari.at(t).set_y(lerp(chari.at(t).y(), ((t - select) * 36), bn::fixed(0.2)));
+		}
+
+		text_sprite0.clear();
+		switch (select) {
+			case 0: {
+				text_line.generate(-16, 0, "Maple's Gem Thing", text_sprite0);
+				break;
+			}
+			case 1: {
+				text_line.generate(-16, 0, "Enoki's Garden", text_sprite0);
+				break;
+			}
+			case 2: {
+				text_line.generate(-16, 0, "Aaron's 'Ax Game'", text_sprite0);
+				break;
+			}
+			case 3: {
+				text_line.generate(-16, 0, "Scout's Computer", text_sprite0);
+				break;
+			}
+			case 4: {
+				text_line.generate(-16, 0, "Eleanor's Crystal Ball", text_sprite0);
+				break;
+			}
+			case 5: {
+				text_line.generate(-16, 0, "Diana's 'Boat Game'", text_sprite0);
+				break;
+			}
+			case 6: {
+				text_line.generate(-16, 0, "Guy's 'Kitchen Game'", text_sprite0);
+				break;
+			}
+		}
+
+		if (arrow.y() > 0) arrow.set_y(arrow.y() - 1);
+		if (arrow.y() < 0) arrow.set_y(arrow.y() + 1);
+
+		if (bn::keypad::up_pressed()) {
+			bn::sound_items::ui_sfx02.play();
+			arrow.set_y(4);
+			select--;
+			if (select < 0) select = 6;
+		}
+
+		if (bn::keypad::down_pressed()) {
+			bn::sound_items::ui_sfx02.play();
+			arrow.set_y(-4);
+			select++;
+			if (select > 6) select = 0;
+		}
+
+		bn::core::update();
+	}
+
+	return select;
+}
+
 // Primary page
 void dialogue_page(line n[32]) {
 
 	// Variable initialization
-	bn::vector<const bn::regular_bg_item*, 3> backdrops;
+	bn::vector<const bn::regular_bg_item*, 5> backdrops;
 	bn::sprite_text_generator text_line(common::variable_8x16_sprite_font);
 	bn::sprite_ptr chari_l = bn::sprite_items::maple01.create_sprite(-50, -15);
 	bn::sprite_ptr chari_r = bn::sprite_items::maple01.create_sprite(50, -15);
@@ -1478,14 +1607,22 @@ void dialogue_page(line n[32]) {
 
 			// End dialogue
 		}
+		else if (strcmp(n[pos].text, "BG:CINEMINT") == 0) {
+			backdrops.clear();
+			backdrops.push_back(&bn::regular_bg_items::cinemint_01);
+			backdrops.push_back(&bn::regular_bg_items::cinemint_02);
+			backdrops.push_back(&bn::regular_bg_items::cinemint_03);
+			backdrops.push_back(&bn::regular_bg_items::cinemint_04);
+			backdrops.push_back(&bn::regular_bg_items::cinemint_03);
+
+			// End dialogue
+		}
 		else if (strcmp(n[pos].text, "COM: Endscene") == 0 || bn::keypad::b_held()) {
 			cont = false;
 
 			// Handle sprite/dialogue
 		}
 		else {
-
-			//BN_LOG(n[pos].text);
 
 			// Process initial transparency states
 			if (n[pos].img != 0) {
@@ -1734,7 +1871,6 @@ void dialogue_page_lite(line n[32]) {
 				arrow.set_visible(false);
 			}
 
-			//BN_LOG(n[pos].text);
 			strncpy(line0, n[pos].text + 0, 33);
 			strncpy(line1, n[pos].text + 33, 33);
 			strncpy(line2, n[pos].text + 66, 33);
@@ -2873,7 +3009,10 @@ int exec_dialogue(int x, int checkpoint = 0) {
 
 		// kiss
 		{
-			for (int clicks = 0; clicks < 64 * 2; clicks++) {
+			globals->current_save->checkpoint = 15;
+			bn::sram::write(globals->all_save);
+
+			for (int clicks = 0; clicks < 16 * 2; clicks++) {
 				bn::core::update();
 			}
 
@@ -3046,6 +3185,22 @@ int exec_dialogue(int x, int checkpoint = 0) {
 		break;
 	}
 
+	case 37: {
+		line lc[32] = {
+			{true, fals, 32, "BG:CINEMINT"}, // What was I drinking?
+				{fals, fals, 00, "Ahoy!                            Welcome! Come grab a seat and a  tea or a coffee or something."},
+				{fals, fals, 00, "So what'd you think of my game?  Yeah.. it wasn't super long, but to be completely honest,"},
+				{fals, fals, 00, "I wasn't completely sure I'd be  able to pull it off, haha. I hopeyou had a good time, though."},
+				{fals, fals, 00, "Since you managed to get all the keys, I'm going to let you play  whichever minigames you want!"},
+				{fals, fals, 00, "Just stop by this save file      anytime you want to try them out."},
+				{fals, fals, 00, "Until next time!"},
+			{fals, fals, 0, "COM: Endscene"},
+		};
+		dialogue_page(lc);
+		return 0;
+		break;
+	}
+
 	default: {
 		return 1;
 		break;
@@ -3144,6 +3299,7 @@ public:
 	bool event = false;
 	bool can_follow = true;
 	bool is_npc = false;
+	bool teleport = true;
 
 	short int last_x, last_y, loop_x, loop_y;
 	short int room_width = 0;
@@ -3338,7 +3494,7 @@ public:
 				}
 			}
 
-			if (dist > 124) {
+			if (dist > 124 && teleport) {
 				bn::sound_items::cnaut.play();
 				x_int = x;
 				y_int = y;
@@ -5387,6 +5543,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				maple.role = 0;
 				maple.identity = 0;
 				maple.follow_id = -1;
+				maple.teleport = false;
 				current_room.chari.push_back(maple);
 			}
 
@@ -5398,6 +5555,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				enoki.role = 0;
 				enoki.identity = 1;
 				enoki.follow_id = -1;
+				enoki.teleport = false;
 				current_room.chari.push_back(enoki);
 			}
 		}
@@ -5442,6 +5600,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				maple.entity.set_camera(current_room.camera);
 				maple.role = 0;
 				maple.identity = 0;
+				maple.teleport = false;
 				maple.follow_id = current_room.chari.size() - 1;
 				current_room.chari.push_back(maple);
 			}
@@ -5453,6 +5612,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				enoki.entity.set_camera(current_room.camera);
 				enoki.role = 0;
 				enoki.identity = 1;
+				enoki.teleport = false;
 				enoki.follow_id = current_room.chari.size() - 1;
 				current_room.chari.push_back(enoki);
 			}
@@ -5464,6 +5624,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				maple.entity.set_camera(current_room.camera);
 				maple.role = 0;
 				maple.identity = 2;
+				maple.teleport = false;
 				maple.follow_id = current_room.chari.size() - 1;
 				current_room.chari.push_back(maple);
 			}
@@ -5475,6 +5636,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				enoki.entity.set_camera(current_room.camera);
 				enoki.role = 0;
 				enoki.identity = 4;
+				enoki.teleport = false;
 				enoki.follow_id = current_room.chari.size() - 1;
 				current_room.chari.push_back(enoki);
 			}
@@ -5486,6 +5648,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				enoki.entity.set_camera(current_room.camera);
 				enoki.role = 0;
 				enoki.identity = 5;
+				enoki.teleport = false;
 				enoki.follow_id = current_room.chari.size() - 1;
 				current_room.chari.push_back(enoki);
 			}
@@ -10473,8 +10636,6 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 				my_z++;
 			}
 
-			//BN_LOG(rel_x, " - ", my_x, " and ", rel_y, " - ", my_y);
-
 			// Push block
 			if (rel_x == my_x)
 			{
@@ -10652,8 +10813,6 @@ void keyboard() {
 
 	while (!bn::keypad::start_pressed()) {
 
-		BN_LOG(x_state, " ", y_state);
-
 		if (bn::keypad::left_pressed()) {
 			if (((basis[x_state - 1 + (y_state * 12)] != ' ') || (y_state == 2)) && !(x_state == 7 && y_state == 2)) {
 				x_state--;
@@ -10741,7 +10900,6 @@ void keyboard() {
 	}
 
 	for (int tt = 0; tt < ss.size(); tt++) globals->current_save->island_name[tt] = string.at(tt);
-	bn::sram::write(globals->all_save);
 }
 
 void timer(int delay)
@@ -10753,6 +10911,9 @@ void timer(int delay)
 }
 
 void intros(int t) {
+
+	attendez();
+
 	bn::fixed_t<12> glow = 1;
 
 	auto header = bn::regular_bg_items::cinemint_studios.create_bg(0, 0);
@@ -11028,7 +11189,7 @@ void load_save()
 	{
 		if (bn::keypad::l_held() && bn::keypad::r_held()) {
 			globals->all_save.current_save[c].clear();
-			bn::sram::write(globals->all_save);
+			attendez();
 			bn::core::reset();
 		}
 
@@ -11675,9 +11836,29 @@ dungeon_return rabbit_game()
 
 		hud current_hud;
 
+		auto key = bn::sprite_items::magic_keys.create_sprite(-172,0,7);
+		key.set_camera(current_room.camera);
+		key.set_visible(false);
+
 		current_room.init_render(0, 0);
+		int ready = 0;
 		while (playing)
 		{
+			if (!key.visible()) {
+				ready++;
+				if (globals->current_save->keys[1] != 1 && ready == 1024) {
+					ready = 0;
+					key.set_visible(true);
+				}
+			} else {
+				key.set_x(key.x() + 2);
+				if (key.x() > 256) {
+					key.set_visible(false);
+					key.set_x(-172);
+					key.set_y(std_rnd(240) - 120);
+				}
+			}
+
 			current_room.a_notif.set_visible(false);
 
 			score_meter++;
@@ -11832,6 +12013,19 @@ dungeon_return rabbit_game()
 						}
 					}
 				}
+
+				if (std_abs(enoki.entity.x().integer() - key.x().integer()) + std_abs(enoki.entity.y().integer() - key.y().integer()) < 32) {
+					bn::sound_items::cnaut.play();
+					key.set_visible(false);
+					bn::core::update();
+
+					line lc[32] = {
+						{true, true, 00, "You got a key!                   Unlock all the keys for a        a special surprise."},
+						{true, true, 00, "COM: Endscene"} };
+					dialogue_page_lite(lc);
+
+					globals->current_save->keys[1] = 1;
+				}
 			}
 
 			current_room.update_objects();
@@ -11985,9 +12179,46 @@ dungeon_return underground()
 		treasure.set_camera(current_room.camera);
 		bn::string<8> score_text = bn::to_string<8>(score);
 
+		auto key = bn::sprite_items::magic_keys.create_sprite(-172,0,7);
+		key.set_camera(current_room.camera);
+		key.set_visible(false);
+
+		if (globals->current_save->keys[2] != 1) {
+			while (globals->local_tileset.at(abz) > 0)
+			{
+				abx = std_abs(std_rnd(current_room.width - 6));
+				aby = std_abs(std_rnd(current_room.height - 6));
+				abz = std_abs(abx + (current_room.width * aby));
+			}
+
+			if ((abx * -1) > abx) abx = abx * 1;
+			if ((aby * -1) > aby) aby = aby * 1;	
+
+			BN_LOG(32 * abx, 32 * aby);
+			key.set_position(32 * abx, 32 * aby);
+			key.set_visible(true);
+		}
+
 		current_room.a_notif.set_visible(false);
 		while (!is_returned)
 		{
+			if (key.visible()) {
+				if (std_abs(maple.entity.x().integer() - key.x().integer()) + std_abs(maple.entity.y().integer() - key.y().integer()) < 32) {
+					bn::sound_items::cnaut.play();
+					key.set_visible(false);
+					globals->rendered_windows.at(0).set_show_sprites(true);
+					bn::core::update();
+
+					line lc[32] = {
+						{true, true, 00, "You got a key!                   Unlock all the keys for a        a special surprise."},
+						{true, true, 00, "COM: Endscene"} };
+					dialogue_page_lite(lc);
+
+					globals->rendered_windows.at(0).set_show_sprites(false);
+					globals->current_save->keys[2] = 1;
+				}
+			}
+
 			score_text = bn::to_string<8>(score);
 			file_spr.clear();
 			file_gen.generate(0, -48, score_text, file_spr);
@@ -12507,8 +12738,22 @@ dungeon_return crystal_ball() {
 		short int tick = 0;
 		short int angle = 0;
 
+		auto key = bn::sprite_items::magic_keys.create_sprite(0,0,7);
+		key.set_visible(false);
+
+		int ready = 0;
+		int focus = -1;
+
 		hud current_hud;
 		while (!bn::keypad::b_pressed()) {
+
+			if (focus > -1) {
+				key.set_visible(true);
+				key.set_position(buttons.at(focus - 1).x(), buttons.at(focus - 1).y());
+				key.put_above();
+			} else {
+				key.set_visible(false);
+			}
 
 			// Score hud
 			bn::fixed_t<12> my_width = total + 1;
@@ -12566,13 +12811,38 @@ dungeon_return crystal_ball() {
 			if (bn::keypad::down_pressed())     s = 7;
 
 			if (s > 0) {
+				if (focus > -1) {
+					focus--;
+				}
+
 				if (s - 1 == buttons_n.at(0)) {
 					bn::sound_items::ding.play();
 					score += 5;
+
+					if (focus == 0) {
+						bn::sound_items::cnaut.play();
+						key.set_visible(false);
+						bn::core::update();
+
+						line lc[32] = {
+							{true, true, 00, "You got a key!                   Unlock all the keys for a        a special surprise."},
+							{true, true, 00, "COM: Endscene"} };
+						dialogue_page_lite(lc);
+
+						globals->current_save->keys[3] = 1;
+
+						ready = 0;
+						focus = -1;
+					}
 				}
 				else {
 					bn::sound_items::firehit.play();
 					score = 0;
+
+					if (focus == 0) {
+						ready = 0;
+						focus = -1;
+					}
 				}
 
 				buttons.erase(buttons.begin());
@@ -12585,6 +12855,9 @@ dungeon_return crystal_ball() {
 
 				buttons.push_back(bn::sprite_items::magic_keys.create_sprite(wd, 0 - pow(wd / 5, 2) / 5, nb));
 				buttons_n.push_back(nb);
+
+				if (globals->current_save->keys[3] != 1) ready++;
+				if (ready > 42 && focus == -1) focus = buttons_n.size() - 1;
 			}
 
 			if (buttons.at(0).x() > 0) {
@@ -12728,7 +13001,6 @@ dungeon_return boat_game() {
 					if (std_rnd(36 - (16 - (distance / 2))) == 1) {
 
 						rs[t].size = 0.01;
-						//test
 						rs[t].entity.set_scale(rs[t].size);
 						rs[t].entity.set_x((std_rnd(120)) - 60);
 						rs[t].speed = rs[t].entity.x().integer() / 10;
@@ -13907,7 +14179,6 @@ void core_gameplay(int x, int y, int world, int until)
 			dt = dungeon(dt);
 		}
 
-		bn::sram::write(globals->all_save);
 		bn::core::update();
 	} while (!(dt.world_index == until));
 }
@@ -14271,6 +14542,50 @@ void credits() {
 	}
 }
 
+void handle_minigame() {
+	exec_dialogue(37);
+
+	while(true) {
+		BN_LOG("top o the mornin");
+		int select = select_minigame();
+
+		{
+			switch(select) {
+				case 0: {
+					underground();
+					break;
+				}
+				case 1: {
+					rabbit_game();
+					break;
+				}
+				case 2: {
+					tree_cut();
+					break;
+				}
+				case 3: {
+					computer();
+					break;
+				}
+				case 4: {
+					crystal_ball();
+					break;
+				}
+				case 5: {
+					boat_game();
+					break;
+				}
+				case 6: {
+					kitchen();
+					break;
+				}
+			}
+		}
+
+		bn::core::update();
+	}
+}
+
 int checkpoint(int level)
 {
 
@@ -14421,15 +14736,30 @@ int checkpoint(int level)
 			dt = rufus_dungeon(dt);
 		} while (dt.world_index < 99);
 
-		break;
-	}
-
-	case 15: {
 		intros(5);
 		exec_dialogue(34);
 		final_battle();
 		exec_dialogue(35);
 		credits();
+		break;
+	}
+
+	case 15: {
+
+		bool keys_got = true;
+		for (int t = 0; t < 4; t++) {
+			if (globals->current_save->keys[t] != 1) keys_got = false;
+		}
+
+		if (keys_got) {
+			handle_minigame();
+		} else {
+			intros(5);
+			exec_dialogue(34);
+			final_battle();
+			exec_dialogue(35);
+			credits();
+		}
 		break;
 	}
 
@@ -14462,10 +14792,6 @@ int main()
 	startup();
 	bn::sram::read(globals->all_save);         // Read save data from cartridge
 	load_save();
-
-	if (strncmp(globals->current_save->island_name, "maytwofive", 10) == 0) {
-		exec_dialogue(36);
-	}
 
 	while (globals->current_save->checkpoint < 99) {
 		globals->current_save->checkpoint = checkpoint(globals->current_save->checkpoint);

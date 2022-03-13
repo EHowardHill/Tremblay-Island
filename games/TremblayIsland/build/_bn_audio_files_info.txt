@@ -157,9 +157,6 @@ audio/ui_sfx01.wav
 audio/ui_sfx02.wav
 11176
 1646952165.12
-audio/ui_sfx03.wav
-11056
-1646952165.12
 audio/v01.xm
 118424
 1646952165.12

@@ -55,9 +55,8 @@ namespace bn::sound_items_info
         make_pair(sound_item(61), string_view("start")),
         make_pair(sound_item(70), string_view("ui_sfx01")),
         make_pair(sound_item(71), string_view("ui_sfx02")),
-        make_pair(sound_item(72), string_view("ui_sfx03")),
-        make_pair(sound_item(81), string_view("vee_alright_01")),
-        make_pair(sound_item(82), string_view("vee_hey_01")),
+        make_pair(sound_item(80), string_view("vee_alright_01")),
+        make_pair(sound_item(81), string_view("vee_hey_01")),
     };
 
     constexpr inline span<const pair<sound_item, string_view>> span(array);

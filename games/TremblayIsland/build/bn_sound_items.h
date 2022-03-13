@@ -52,9 +52,8 @@ namespace bn::sound_items
     constexpr inline sound_item start(61);
     constexpr inline sound_item ui_sfx01(70);
     constexpr inline sound_item ui_sfx02(71);
-    constexpr inline sound_item ui_sfx03(72);
-    constexpr inline sound_item vee_alright_01(81);
-    constexpr inline sound_item vee_hey_01(82);
+    constexpr inline sound_item vee_alright_01(80);
+    constexpr inline sound_item vee_hey_01(81);
 }
 
 #endif
