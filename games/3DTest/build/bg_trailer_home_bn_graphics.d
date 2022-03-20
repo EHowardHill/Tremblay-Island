@@ -1,0 +1,1 @@
+bg_trailer_home_bn_graphics.o: bg_trailer_home_bn_graphics.s

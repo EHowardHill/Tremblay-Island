@@ -1,0 +1,3 @@
+graphics/red_sprite.bmp
+2166
+1647487248.6

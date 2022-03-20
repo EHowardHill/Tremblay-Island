@@ -1,0 +1,3 @@
+../../common/graphics/common_fixed_8x16_font.bmp
+7158
+1646952164.75

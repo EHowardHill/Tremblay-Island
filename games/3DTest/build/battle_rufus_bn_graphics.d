@@ -1,0 +1,1 @@
+battle_rufus_bn_graphics.o: battle_rufus_bn_graphics.s

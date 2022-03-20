@@ -1,0 +1,3 @@
+graphics/tree_stump.json
+40
+1646952165.49

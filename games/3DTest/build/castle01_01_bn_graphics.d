@@ -1,0 +1,1 @@
+castle01_01_bn_graphics.o: castle01_01_bn_graphics.s

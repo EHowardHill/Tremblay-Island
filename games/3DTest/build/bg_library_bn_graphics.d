@@ -1,0 +1,1 @@
+bg_library_bn_graphics.o: bg_library_bn_graphics.s

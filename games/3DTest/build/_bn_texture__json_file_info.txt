@@ -1,0 +1,3 @@
+graphics/texture.json
+40
+1647485821.7

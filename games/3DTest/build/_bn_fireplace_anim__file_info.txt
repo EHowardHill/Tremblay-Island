@@ -1,0 +1,3 @@
+graphics/fireplace_anim.bmp
+6262
+1646952165.41

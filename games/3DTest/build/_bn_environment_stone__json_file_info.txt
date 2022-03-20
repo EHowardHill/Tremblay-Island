@@ -1,0 +1,3 @@
+graphics/environment_stone.json
+40
+1646952165.41

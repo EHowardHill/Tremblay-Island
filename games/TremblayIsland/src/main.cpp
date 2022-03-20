@@ -5096,6 +5096,28 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		current_room.configure(20, 20, 9, 17);
 
+		if (globals->current_save->checkpoint < 11 && chari.at(0).identity == 2) {
+			for (int t = 0; t < 1; t++) {
+				if (std_rnd(5) == 2) {
+					anim_object fp;
+					fp.entity_item = bn::sprite_items::ocean_environment;
+					fp.entity = fp.entity_item.create_sprite(0, 0);
+					fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 55, 55, 55, 55);
+					fp.entity.set_visible(false);
+					fp.entity.set_camera(current_room.camera);
+
+					// Setup location
+					int temp_z = 0;
+					do {
+						temp_z = globals->local_tileset[std_rnd(tile_count)];
+					} while (temp_z != 0);
+
+					fp.entity.set_position((temp_z % current_room.width) * 32, (temp_x / current_room.width) % 32);
+					current_room.anim_objects.push_back(fp);
+				}
+			}
+		}
+
 		if (globals->current_save->checkpoint < 7)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
@@ -6553,7 +6575,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 						{true, true, 00, "ENOKI                            Just cos you always get in"},
 						{true, true, 00, "ENOKI                            fights with your ex-boyfriends"},
 						{true, true, 00, "ENOKI                            doesn't mean every couple's like"},
-						{true, true, 00, "ENOKI                            that, tu sais."},
+						{true, true, 00, "ENOKI                            that, tu connais."},
 						{true, true, 00, "ENOKI                            I mean, you've got this nasty"},
 						{true, true, 00, "ENOKI                            habit of-"},
 						{true, true, 00, "MAPLE                            You finish that sentence, and"},
@@ -9569,6 +9591,7 @@ dungeon_return dungeon(dungeon_return& dt) {
 				}
 
 				hat.set_position(current_room.chari.at(my_id).entity.x().integer(), current_room.chari.at(my_id).entity.y().integer() - 22);
+				hat.set_z_order(2);
 				l_button.set_visible(true);
 
 				if (bn::keypad::l_pressed())
@@ -11213,7 +11236,7 @@ void load_save()
 			bn::sound_items::pop.play();
 		}
 
-		arrow.set_y(-32 + (32 * c));
+		arrow.set_y(lerp(arrow.y(), -32 + (32 * c), 0.2));
 		bn::core::update();
 	}
 

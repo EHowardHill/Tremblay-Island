@@ -1,0 +1,3 @@
+graphics/enoki_walking_pj.json
+40
+1646952165.41

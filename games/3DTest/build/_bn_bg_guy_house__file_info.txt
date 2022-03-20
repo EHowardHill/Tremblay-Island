@@ -1,0 +1,3 @@
+graphics/bg_guy_house.bmp
+32882
+1646952165.4

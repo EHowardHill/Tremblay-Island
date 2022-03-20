@@ -1,0 +1,3 @@
+graphics/castle_floor.bmp
+32886
+1646952165.41

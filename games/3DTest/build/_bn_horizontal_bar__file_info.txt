@@ -1,0 +1,3 @@
+graphics/horizontal_bar.bmp
+134
+1646952165.41

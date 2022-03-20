@@ -1,0 +1,3 @@
+graphics/arrow.bmp
+582
+1646952165.4
