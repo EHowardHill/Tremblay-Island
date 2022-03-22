@@ -1,3 +1,0 @@
-graphics/diana_walking_spring.json
-40
-1646952165.41

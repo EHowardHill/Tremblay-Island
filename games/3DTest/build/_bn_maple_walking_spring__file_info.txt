@@ -1,3 +1,0 @@
-graphics/maple_walking_spring.bmp
-8306
-1646952165.41

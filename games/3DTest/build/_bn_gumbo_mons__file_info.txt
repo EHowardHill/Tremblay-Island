@@ -1,3 +1,0 @@
-graphics/gumbo_mons.bmp
-28770
-1646952165.41

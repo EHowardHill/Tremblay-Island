@@ -1,3 +1,0 @@
-graphics/maple_walking.json
-40
-1646952165.41

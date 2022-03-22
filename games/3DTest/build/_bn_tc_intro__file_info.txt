@@ -1,3 +1,0 @@
-graphics/tc_intro.bmp
-32886
-1646952165.49

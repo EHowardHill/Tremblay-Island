@@ -1,3 +1,0 @@
-graphics/toutes_spr.bmp
-12382
-1646952165.49

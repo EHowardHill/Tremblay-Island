@@ -1,1 +1,0 @@
-scout_lab_bn_graphics.o: scout_lab_bn_graphics.s

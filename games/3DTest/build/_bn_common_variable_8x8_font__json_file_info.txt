@@ -1,3 +1,0 @@
-../../common/graphics/common_variable_8x8_font.json
-39
-1646952164.75

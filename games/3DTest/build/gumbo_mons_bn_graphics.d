@@ -1,1 +1,0 @@
-gumbo_mons_bn_graphics.o: gumbo_mons_bn_graphics.s

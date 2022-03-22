@@ -1,1 +1,0 @@
-bg_cooking_01_bn_graphics.o: bg_cooking_01_bn_graphics.s

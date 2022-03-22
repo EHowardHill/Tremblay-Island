@@ -1,3 +1,0 @@
-graphics/battle_rufus.bmp
-335990
-1646952165.4

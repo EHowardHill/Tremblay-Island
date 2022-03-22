@@ -1,1 +1,0 @@
-bg_landry_cottage_bn_graphics.o: bg_landry_cottage_bn_graphics.s

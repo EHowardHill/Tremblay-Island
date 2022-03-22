@@ -1,1 +1,0 @@
-fight_tiles_bn_graphics.o: fight_tiles_bn_graphics.s

@@ -1,3 +1,0 @@
-graphics/ocean.bmp
-32886
-1646952165.41

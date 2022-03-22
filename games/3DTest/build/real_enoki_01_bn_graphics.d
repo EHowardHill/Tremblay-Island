@@ -1,1 +1,0 @@
-real_enoki_01_bn_graphics.o: real_enoki_01_bn_graphics.s

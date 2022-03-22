@@ -1,64 +1,64 @@
 bn_sram.o: \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/src/bn_sram.cpp \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_sram.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_assert.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_type_traits.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_common.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/../hw/include/bn_hw_common.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_config_assert.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_config_doxygen.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_sstream.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_fixed_fwd.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_string_fwd.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_istring_base.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_algorithm.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_functional.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/../hw/include/bn_hw_sram_constants.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_common.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/src/../hw/include/bn_hw_sram.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/src/../hw/include/bn_hw_tonc.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_types.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_memmap.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_memdef.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_bios.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_core.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_input.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_irq.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_math.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_oam.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_tte.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_surface.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_video.h \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_nocash.h
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_sram.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_assert.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_type_traits.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_common.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/../hw/include/bn_hw_common.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_config_assert.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_config_doxygen.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_sstream.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_fixed_fwd.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_string_fwd.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_istring_base.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_algorithm.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_functional.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/../hw/include/bn_hw_sram_constants.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/include/bn_common.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/src/../hw/include/bn_hw_sram.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/src/../hw/include/bn_hw_tonc.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_types.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_memmap.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_memdef.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_bios.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_core.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_input.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_irq.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_math.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_oam.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_tte.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_surface.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_video.h:
-/home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/include/tonc_nocash.h:
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/src/bn_sram.cpp \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_sram.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_assert.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_type_traits.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/../hw/include/bn_hw_common.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_assert.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_doxygen.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_sstream.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed_fwd.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_string_fwd.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_istring_base.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_algorithm.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_functional.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/../hw/include/bn_hw_sram_constants.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/src/../hw/include/bn_hw_sram.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/src/../hw/include/bn_hw_tonc.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_types.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memmap.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memdef.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_bios.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_core.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_input.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_irq.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_math.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_oam.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_tte.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_surface.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_video.h \
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_nocash.h
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_sram.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_assert.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_type_traits.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/../hw/include/bn_hw_common.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_assert.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_config_doxygen.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_sstream.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_fixed_fwd.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_string_fwd.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_istring_base.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_algorithm.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_functional.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/../hw/include/bn_hw_sram_constants.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/src/../hw/include/bn_hw_sram.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/src/../hw/include/bn_hw_tonc.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_types.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memmap.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_memdef.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_bios.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_core.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_input.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_irq.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_math.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_oam.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_tte.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_surface.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_video.h:
+/mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/include/tonc_nocash.h:

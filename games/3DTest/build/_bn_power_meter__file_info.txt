@@ -1,3 +1,0 @@
-graphics/power_meter.bmp
-590
-1646952165.41

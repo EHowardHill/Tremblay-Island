@@ -1,1 +1,0 @@
-aaron_walking_oo_bn_graphics.o: aaron_walking_oo_bn_graphics.s

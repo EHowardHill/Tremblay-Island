@@ -1,3 +1,0 @@
-graphics/yellow_sprite.bmp
-2166
-1647485821.7

@@ -1,3 +1,0 @@
-graphics/ax_bar.bmp
-626
-1646952165.4

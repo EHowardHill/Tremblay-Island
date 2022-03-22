@@ -1,3 +1,0 @@
-graphics/chop_bar.bmp
-242
-1646952165.41

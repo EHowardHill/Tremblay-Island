@@ -1,3 +1,0 @@
-graphics/enoki06.json
-40
-1646952165.41

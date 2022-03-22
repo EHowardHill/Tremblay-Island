@@ -1,3 +1,0 @@
-graphics/sidebar.bmp
-32882
-1646952165.49

@@ -1,3 +1,0 @@
-graphics/bg_diana_room.bmp
-32882
-1646952165.4

@@ -1,2 +1,2 @@
 posprintf.o: \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/posprintf/src/posprintf.s
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/posprintf/src/posprintf.s

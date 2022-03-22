@@ -1,3 +1,0 @@
-graphics/maple_walking_oo.bmp
-8294
-1646952165.41

@@ -1,3 +1,0 @@
-graphics/aaron_walking_oo.bmp
-8278
-1646952165.4

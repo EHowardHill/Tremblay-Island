@@ -1,2 +1,2 @@
 bn_hw_core.o: \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/src/bn_hw_core.s
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/src/bn_hw_core.s

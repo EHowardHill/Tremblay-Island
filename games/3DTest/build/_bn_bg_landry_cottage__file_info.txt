@@ -1,3 +1,0 @@
-graphics/bg_landry_cottage.bmp
-32882
-1646952165.4

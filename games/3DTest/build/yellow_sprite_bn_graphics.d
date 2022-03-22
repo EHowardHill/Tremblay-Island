@@ -1,1 +1,0 @@
-yellow_sprite_bn_graphics.o: yellow_sprite_bn_graphics.s

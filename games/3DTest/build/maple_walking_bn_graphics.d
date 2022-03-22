@@ -1,1 +1,0 @@
-maple_walking_bn_graphics.o: maple_walking_bn_graphics.s

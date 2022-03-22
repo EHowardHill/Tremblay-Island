@@ -34,8 +34,6 @@
 #include "bn_sound_items.h"
 #include "bn_music_items_info.h"
 
-#include "common_info.h"
-
 // Special items
 #include "bn_regular_bg_items_cinemint_studios.h"
 #include "bn_regular_bg_items_titlebackground.h"
@@ -221,9 +219,7 @@ Guy     7
 #include "bn_sound_items.h"
 #include "bn_music_items_info.h"
 #include "common_info.h"
-#include "common_variable_8x8_sprite_font.h"
 #include "common_variable_8x16_sprite_font.h"
-#include "common_fixed_8x16_sprite_font.h"
 #include "bn_sprite_items_a_button.h"
 #include "bn_regular_bg_items_cinemint_studios.h"
 #include "bn_sprite_items_maple01.h"
@@ -578,6 +574,576 @@ Guy     7
 #include "bn_sprite_items_real_aaron_eyes.h"
 #include "bn_sprite_items_real_enoki_eyes.h"
 
+#define flash_address 0
+typedef volatile unsigned long vu32;
+typedef volatile unsigned short vu16;
+
+// LIBSAVGBA
+
+/*
+
+const char * const SavErrCodes[] = {
+    "E_SUCCESS",
+    "E_INVALID_PARAM",
+    "E_OUT_OF_RANGE",
+    "E_VERIFY_FAIL",
+    "E_UNSUPPORTED_DEVICE",
+    "E_TIMEOUT",
+};
+
+const char * const SavErrMsgs[] = {
+    "No error",
+    "Invalid input parameter",
+    "Address is out of range",
+    "Failed to verify written data",
+    "Device type is not supported",
+    "Operation timeout",
+};
+
+#include <stddef.h>
+
+#include <tonc.h>
+
+#include "err_def.h"
+#include "gba_eeprom.h"
+
+#define MEM_EEPROM 0x0D000000
+#define eeprom_mem ((vu16*)MEM_EEPROM)
+
+#define EEPROM_512_gEepromSize 6
+#define EEPROM_8K_gEepromSize 14
+
+#define LOOP_CNT_PER_MILLI_SECOND 1000
+#define EEPROM_WRITE_TIMEOUT_BY_MILLI_SECOND 10
+
+uint8_t gEepromSize;
+
+void eeprom_memcpy(volatile void *dst, volatile const void *src, size_t size)
+{
+    uint16_t REG_IME_old = REG_IME;
+    REG_IME = 0;
+    REG_WAITCNT = (REG_WAITCNT & (~0x700)) | WS_ROM2_N8;
+    DMA_TRANSFER(dst, src, size, 3, DMA_ENABLE);
+    while(REG_DMA3CNT_H & 0x8000);
+    REG_IME = REG_IME_old;
+}
+
+int eeprom_init(uint8_t size)
+{
+    if (size == EEPROM_SIZE_512B || size == EEPROM_SIZE_8KB)
+        gEepromSize = size;
+    else
+        return E_UNSUPPORTED_DEVICE;
+
+    return 0;
+}
+
+int eeprom_read(u32 addr, uint16_t *data)
+{
+    uint16_t buffer[68];
+
+    if (data == NULL)
+    {
+        return E_INVALID_PARAM;
+    }
+
+    if (addr >= 1 << gEepromSize)
+    {
+        return E_OUT_OF_RANGE;
+    }
+
+    buffer[0] = 1;
+    buffer[1] = 1;
+    buffer[2 + gEepromSize] = 0;
+    for (int i = 1 + gEepromSize; i >= 2; i--)
+    {
+        buffer[i] = addr & 1;
+        addr = addr >> 1;
+    }
+    eeprom_memcpy(eeprom_mem, buffer, 3 + gEepromSize);
+
+    eeprom_memcpy(buffer, eeprom_mem, 68);
+
+    for (int i = 3; i >= 0; i--)
+    {
+        data[i] = 0;
+        for (int j = 0; j < 16; j++)
+        {
+            data[i] |= (buffer[4 + 16 * (3 - i) + j] & 1) << (15 - j);
+        }
+    }
+
+    return 0;
+}
+
+int eeprom_write_only(u32 addr, uint16_t *data)
+{
+    uint16_t buffer[81];
+
+    if (data == NULL)
+    {
+        return E_INVALID_PARAM;
+    }
+
+    if (addr >= 1 << gEepromSize)
+    {
+        return E_OUT_OF_RANGE;
+    }
+
+    buffer[0] = 1;
+    buffer[1] = 0;
+    buffer[66 + gEepromSize] = 0;
+    for (int i = 1 + gEepromSize; i >= 2; i--)
+    {
+        buffer[i] = addr & 1;
+        addr = addr >> 1;
+    }
+    for (int i = 0; i < 4; i++)
+    {
+        for (int j = 0; j < 16; j++)
+        {
+            buffer[65 + gEepromSize - 16 * i - j] = (data[i] >> j) & 1;
+        }
+    }
+    eeprom_memcpy(eeprom_mem, buffer, 67 + gEepromSize);
+
+    // After the DMA, keep reading from the chip, by normal LDRH [D000000h], until Bit 0 of the returned data becomes “1” (Ready).
+    // To prevent your program from locking up in case of malfunction, generate a timeout if the chip does not reply after 10ms or longer. 
+    for (vu32 i = 0; i < LOOP_CNT_PER_MILLI_SECOND * EEPROM_WRITE_TIMEOUT_BY_MILLI_SECOND; i++)
+        if (*eeprom_mem & 1)
+            return 0;
+
+    return E_TIMEOUT;
+}
+
+int eeprom_write(u32 addr, uint16_t *data)
+{
+    int err;
+    uint16_t buffer[4];
+
+    err = eeprom_write_only(addr, data);
+    if (err)
+        return err;
+
+    err = eeprom_read(addr, buffer);
+    if (err)
+        return err;
+
+    if (data[0] != buffer[0] || data[1] != buffer[1] ||data[2] != buffer[2] ||data[3] != buffer[3])
+        return E_VERIFY_FAIL;
+
+    return 0;
+}
+
+#include <stddef.h>
+
+#include <tonc_memmap.h>
+
+#include "err_def.h"
+
+IWRAM_CODE
+static void sram_memcpy(volatile unsigned char *dst, const volatile unsigned char *src, size_t size) {
+    for (;size > 0;--size) 
+        *dst++ = *src++;
+}
+
+IWRAM_CODE
+static unsigned int sram_absmemcmp(const volatile unsigned char *dst, const volatile unsigned char *src, size_t size) {
+  while (size-- > 0) {
+    unsigned int a = *dst++;
+    unsigned int b = *src++;
+    if (a != b) 
+        return 1;
+  }
+
+  return 0;
+}
+
+int sram_read(u32 addr, uint8_t *data, size_t size) {
+    if (data == NULL)
+        return E_INVALID_PARAM;
+
+    if (addr > MEM_SRAM)
+        addr -= MEM_SRAM;
+
+    if (addr + size > SRAM_SIZE)
+        return E_OUT_OF_RANGE;
+
+    sram_memcpy(data, &sram_mem[addr], size);
+    
+    return 0;
+}
+
+int sram_write(u32 addr, uint8_t *data, size_t size) {
+    if (data == NULL)
+        return E_INVALID_PARAM;
+
+    if (addr > MEM_SRAM)
+        addr -= MEM_SRAM;
+
+    if (addr + size > SRAM_SIZE)
+        return E_OUT_OF_RANGE;
+
+    sram_memcpy(&sram_mem[addr], data, size);
+
+    if (sram_absmemcmp(&sram_mem[addr], data, size))
+        return E_VERIFY_FAIL;
+
+    return 0;
+}
+
+#include <stddef.h>
+
+#include <tonc.h>
+
+#include "err_def.h"
+#include "gba_flash.h"
+
+#define MEM_FLASH 0x0E000000
+#define FLASH_SIZE 0x10000
+#define flash_mem ((vu8*)MEM_FLASH)
+
+#define FLASH_SECTOR_SIZE_4KB 4096 // all device types, except Atmel
+#define FLASH_SECTOR_SIZE_128B 128 // only Atmel devices
+
+#define LOOP_CNT_PER_MILLI_SECOND 1000
+
+enum FlashCmd {
+    FLASH_CMD_ERASE_CHIP = 1,
+    FLASH_CMD_ERASE_SECTOR = 3,
+    FLASH_CMD_ERASE = 8,
+    FLASH_CMD_ENTER_ID_MODE = 9,
+    FLASH_CMD_WRITE = 0xA,
+    FLASH_CMD_SWITCH_BANK = 0xB,
+    FLASH_CMD_LEAVE_ID_MODE = 0xF,
+};
+
+#define FLASH_CMD_BEGIN flash_mem[0x5555] = 0xAA; flash_mem[0x2AAA] = 0x55;
+#define FLASH_CMD(cmd) FLASH_CMD_BEGIN; flash_mem[0x5555] = (cmd) << 4;
+
+const unsigned char erased_byte_value = 0xFF;
+const unsigned char erased_byte_value_vba = 0;
+
+struct FlashInfo {
+    uint8_t device;
+    uint8_t manufacturer;
+    uint8_t size;
+} gFlashInfo;
+
+const struct FlashInfo flash_chips[] = {
+    {FLASH_DEV_MX29L512, FLASH_MFR_MACRONIX, FLASH_SIZE_64KB},
+    {FLASH_DEV_MN63F805MNP, FLASH_MFR_PANASONIC, FLASH_SIZE_64KB},
+    {FLASH_DEV_LE39FW512, FLASH_MFR_SST, FLASH_SIZE_64KB},
+    {FLASH_DEV_AT29LV512, FLASH_MFR_ATMEL, FLASH_SIZE_64KB},
+    {FLASH_DEV_MX29L010, FLASH_MFR_MACRONIX, FLASH_SIZE_128KB},
+    {FLASH_DEV_LE26FV10N1TS, FLASH_MFR_SANYO, FLASH_SIZE_128KB},
+};
+
+#define FLASH_CHIP_NUM sizeof(flash_chips) / sizeof(flash_chips[0])
+
+IWRAM_CODE
+static void flash_memcpy(volatile unsigned char *dst, const volatile unsigned char *src, size_t size) {
+    for (;size > 0;--size) 
+        *dst++ = *src++;
+}
+
+IWRAM_CODE
+static unsigned int flash_absmemcmp(const volatile unsigned char *dst, const volatile unsigned char *src, size_t size) {
+    while (size-- > 0) {
+        unsigned int a = *dst++;
+        unsigned int b = *src++;
+        if (a != b) 
+            return 1;
+    }
+
+    return 0;
+}
+
+// wait until timeout 
+static void wait(int timeout) {
+    for (vu32 i = 0; i < LOOP_CNT_PER_MILLI_SECOND * timeout; i++);
+}
+
+// wait until [E00xxxxh]=dat (or timeout)
+static int wait_until(u32 addr, const uint8_t *data, int timeout) {
+    for (vu32 i = 0; i < LOOP_CNT_PER_MILLI_SECOND * timeout && flash_absmemcmp(&flash_mem[addr], data, 1); i++);
+
+    if (flash_absmemcmp(&flash_mem[addr], data, 1)) {
+        // Terminate Command after Timeout (only Macronix devices, ID=1CC2h)
+        if (gFlashInfo.manufacturer == FLASH_MFR_MACRONIX && gFlashInfo.device == FLASH_DEV_MX29L512)
+            // force end of write/erase command
+            flash_mem[0x5555] = 0xF0;
+
+        return E_TIMEOUT;
+    }
+
+    return 0;
+}
+
+// Chip Identification (all device types)
+int flash_init(uint8_t size) {
+    // Use 8 clk waitstates for initial detection (WAITCNT Bits 0,1 both set). After detection of certain device types smaller wait values may be used for write/erase, and even smaller wait values for raw reading, see Device Types table.
+    REG_WAITCNT |= WS_SRAM_8;
+
+    // enter ID mode
+    FLASH_CMD(FLASH_CMD_ENTER_ID_MODE);
+
+    // one minor thing the atmel docs say: you have to wait 20ms when entering or exiting ID mode.
+    wait(20);
+
+    // get device & manufacturer
+    flash_memcpy(&gFlashInfo.device, &flash_mem[1], 1);
+    flash_memcpy(&gFlashInfo.manufacturer, &flash_mem[0], 1);
+
+    // terminate ID mode
+    FLASH_CMD(FLASH_CMD_LEAVE_ID_MODE);
+
+    // one minor thing the atmel docs say: you have to wait 20ms when entering or exiting ID mode.
+    wait(20);
+
+    // 128K sanyo flash needs to have the "exit ID mode" written TWICE to work. If you only write it once, it will not exit ID mode.
+    // 64K sanyo flash has the same device/manufacturer ID as the SST part.
+    if (gFlashInfo.manufacturer == FLASH_MFR_SANYO)
+        flash_mem[0x5555] = FLASH_CMD_LEAVE_ID_MODE << 4;
+
+    gFlashInfo.size = 0;
+
+    for (int i = 0; i < FLASH_CHIP_NUM; i++) {
+        if (gFlashInfo.manufacturer == flash_chips[i].manufacturer && gFlashInfo.device == flash_chips[i].device) {
+            gFlashInfo.size = flash_chips[i].size;
+        }
+    }
+
+    if (size)
+        gFlashInfo.size = size;
+    
+    if (!gFlashInfo.size)
+        return E_UNSUPPORTED_DEVICE;
+
+    return 0;
+}
+
+// Erase Entire Chip (all device types)
+int flash_reset() {
+    int err;
+
+    // erase command
+    FLASH_CMD(FLASH_CMD_ERASE);
+
+    // erase entire chip
+    FLASH_CMD(FLASH_CMD_ERASE_CHIP);
+
+    // wait until [E000000h]=FFh (or timeout)
+    err = wait_until(0, &erased_byte_value, 20);
+    // vba/vba-m fills erased memory with zeros. https://github.com/visualboyadvance-m/visualboyadvance-m/pull/855
+    if (err)
+        return wait_until(0, &erased_byte_value_vba, 20);
+
+    return 0;
+}
+
+// Erase 4Kbyte Sector (all device types, except Atmel)
+int flash_erase(u32 addr) {
+    int err;
+
+    // sector size: 4KB
+    addr &= 0xF000;
+
+    // erase command
+    FLASH_CMD(FLASH_CMD_ERASE);
+
+    // erase sector n
+    FLASH_CMD_BEGIN
+    flash_mem[addr] = FLASH_CMD_ERASE_SECTOR << 4;
+
+    // wait until [E00n000h]=FFh (or timeout)
+    err = wait_until(addr, &erased_byte_value, 20);
+    // vba/vba-m fills erased memory with zeros. https://github.com/visualboyadvance-m/visualboyadvance-m/pull/855
+    if (err)
+        return wait_until(0, &erased_byte_value_vba, 20);
+
+    return 0;
+}
+
+// Bank Switching (devices bigger than 64K only)
+void flash_switch_bank(int bank) {
+    // select bank command
+    FLASH_CMD(FLASH_CMD_SWITCH_BANK);
+
+    // write bank number 0..1
+    flash_mem[0] = bank;
+}
+
+// Reading Data Bytes (all device types)
+int flash_read(u32 addr, uint8_t *data, size_t size) {
+    if (data == NULL)
+        return E_INVALID_PARAM;
+
+    if (addr > MEM_FLASH)
+        addr -= MEM_FLASH;
+
+    if (gFlashInfo.size == FLASH_SIZE_128KB)
+    {
+        int bank = 0;
+
+        if (addr + size > FLASH_SIZE * 2)
+            return E_OUT_OF_RANGE;
+
+        if (addr >= FLASH_SIZE)
+        {
+            bank = 1;
+            addr -= FLASH_SIZE;
+        }
+
+        flash_switch_bank(bank);
+    }
+
+    if (addr + size > FLASH_SIZE)
+        return E_OUT_OF_RANGE;
+
+    flash_memcpy(data, &flash_mem[addr], size);
+    
+    return 0;
+}
+
+// Write Single Data Byte (all device types, except Atmel)
+int flash_write_byte(u32 addr, uint8_t data) {
+    // write byte command
+    FLASH_CMD(FLASH_CMD_WRITE);
+
+    // write byte to address xxxx
+    flash_mem[addr] = data;
+
+    // wait until [E00xxxxh]=dat (or timeout)
+    return wait_until(addr, &data, 20);
+}
+
+// Erase-and-Write 128 Bytes Sector (only Atmel devices)
+int flash_erase_and_write_atmel(u32 addr, uint8_t *data) {
+    // disable interrupts
+    uint16_t REG_IME_old = REG_IME;
+    REG_IME = 0;
+
+    // erase/write sector command
+    FLASH_CMD(FLASH_CMD_WRITE);
+
+    // write 128 bytes
+    for (int i = 0; i < FLASH_SECTOR_SIZE_128B - (addr & (FLASH_SECTOR_SIZE_128B - 1)); i++)
+        flash_mem[addr + i] = data[i];
+
+    // restore old IME state
+    REG_IME = REG_IME_old;
+
+    // wait until [E00xxxxh+7Fh]=dat[7Fh] (or timeout)
+    return wait_until(addr | (FLASH_SECTOR_SIZE_128B - 1), &data[(FLASH_SECTOR_SIZE_128B - 1) - (addr & (FLASH_SECTOR_SIZE_128B - 1))], 20);
+}
+
+int flash_write_common(u32 addr, uint8_t *data, size_t size) {
+    int err;
+    int sectors;
+
+    err = flash_erase(addr);
+    if (err)
+        return err;
+
+    sectors = (addr % FLASH_SECTOR_SIZE_4KB + size) / FLASH_SECTOR_SIZE_4KB;
+    if ((addr % FLASH_SECTOR_SIZE_4KB + size) % FLASH_SECTOR_SIZE_4KB != 0)
+        sectors++;
+
+    for (int i = 0; i < sectors; i++) {
+        err = flash_erase(addr + i * FLASH_SECTOR_SIZE_4KB);
+        if (err)
+            return err;
+    }
+
+    for(int i = 0; i < size; i++) {
+        err = flash_write_byte(addr + i, data[i]);
+
+        if (err)
+            return err;
+    }
+
+    return 0;
+}
+
+int flash_write_atmel(u32 addr, uint8_t *data, size_t size) {
+    int err;
+    int sectors;
+
+    if (addr % FLASH_SECTOR_SIZE_128B) {
+        err = flash_erase_and_write_atmel(addr, data);
+        if (err)
+            return err;
+
+        int written = FLASH_SECTOR_SIZE_128B - addr % FLASH_SECTOR_SIZE_128B;
+        if (written >= size)
+            return 0;
+
+        size -= written;
+        addr += written;
+        data += written;
+    }
+
+    sectors = size / FLASH_SECTOR_SIZE_128B;
+    if (size % FLASH_SECTOR_SIZE_128B)
+        sectors++;
+
+    for (int i = 0; i < sectors; i++) {
+        err = flash_erase_and_write_atmel(addr + i * FLASH_SECTOR_SIZE_128B, &data[i * FLASH_SECTOR_SIZE_128B]);
+        if (err)
+            return err;
+    }
+
+    return 0;
+}
+
+int flash_write(u32 addr, uint8_t *data, size_t size) {
+    int err;
+
+    if (data == NULL)
+        return E_INVALID_PARAM;
+
+    if (addr > MEM_FLASH)
+        addr -= MEM_FLASH;
+
+    if (gFlashInfo.size == FLASH_SIZE_128KB)
+    {
+        int bank = 0;
+
+        if (addr + size > FLASH_SIZE * 2)
+            return E_OUT_OF_RANGE;
+
+        if (addr >= FLASH_SIZE)
+        {
+            bank = 1;
+            addr -= FLASH_SIZE;
+        }
+
+        flash_switch_bank(bank);
+    }
+
+    if (addr + size > FLASH_SIZE)
+        return E_OUT_OF_RANGE;
+
+    if (gFlashInfo.manufacturer == FLASH_MFR_ATMEL)
+    {
+        err = flash_write_atmel(addr, data, size);
+    }
+    else
+    {
+        err = flash_write_common(addr, data, size);
+    }
+
+    if (err)
+        return err;
+
+    if (flash_absmemcmp(&flash_mem[addr], data, size))
+        return E_VERIFY_FAIL;
+
+    return 0;
+}
+*/
+
 bn::fixed_t<12> lerp(bn::fixed a, int b, bn::fixed_t<12> t) {
 	return a * (1 - t) + b * t;
 }
@@ -650,6 +1216,71 @@ class global_data {
 
 global_data* globals;
 
+#define AGB_ROM  ((uint8_t*)0x8000000)
+#define AGB_SRAM ((uint8_t*)0xE000000)
+#define AGB_SRAM_SIZE 64*1024
+#define _FLASH_WRITE(pa, pd) { *(((uint16_t *)AGB_ROM)+((pa)/2)) = pd; __asm("nop"); }
+#define REG_IE (*(uint16_t*)(0x4000200))
+#define REG_IF (*(uint16_t*)(0x4000202))
+#define REG_DM0CNT_H *(uint16_t*)0x40000ba
+#define REG_DM1CNT_H *(uint16_t*)0x40000c6
+#define REG_DM3CNT_H *(uint16_t*)0x40000de
+#define REG_DISPCNT *(vu32*)0x4000000
+#define FORCE_BLANK 0x80
+#define BG2_EN 0x400
+
+__attribute__((section(".ewram")))
+int hard_write() {
+	bn::sram::write(globals->all_save);
+
+	uint16_t ie = REG_IE;
+
+	//stop all DMAs
+	REG_DM0CNT_H=0;
+	REG_DM1CNT_H=0;
+	REG_DM3CNT_H=0;
+	REG_DISPCNT&=~0x0100; 				//disable BG 0
+	REG_DISPCNT&=~(7 | FORCE_BLANK); 	//force mode 0, and turn off force blank
+	REG_DISPCNT|=BG2_EN; 				//text on BG2
+
+	unsigned char prev_reg = REG_IE;
+	REG_IE = REG_IE & 0xFFFE;
+
+	int sa = (int)&globals->all_save;
+
+	// Write data
+	for (int i=0; i<(sizeof(save_all_struct)); i+=2) {
+		_FLASH_WRITE(0xAAA, 0xA9);
+		_FLASH_WRITE(0x555, 0x56);
+		_FLASH_WRITE(0xAAA, 0xA0);
+		_FLASH_WRITE(sa+i, (*(uint8_t *)(AGB_SRAM+i+1)) << 8 | (*(uint8_t *)(AGB_SRAM+i)));
+		while (1) {
+			__asm("nop");
+			break;
+			if (*(((uint16_t *)AGB_ROM)+((sa+i)/2)) == ((*(uint8_t *)(AGB_SRAM+i+1)) << 8 | (*(uint8_t *)(AGB_SRAM+i)))) {
+				break;
+			}
+		}
+	}
+	
+	_FLASH_WRITE(sa, 0xF0);
+	REG_IE = prev_reg;			// Restore V Sync register
+	return 0;
+}
+
+int hard_load() {
+	unsigned char* sa = (unsigned char*)&globals->all_save;
+
+	// Write data
+	for (int i=0; i<(sizeof(save_all_struct)); i+=2) {
+		sa[i] = (*(uint8_t *)(AGB_SRAM+i+1)) << 8 | (*(uint8_t *)(AGB_SRAM+i));
+	}
+
+	sa[0] = 0xF0;
+	bn::sram::read(globals->all_save);         // Read save data from cartridge
+	return 0;
+}
+
 int std_rnd(int x = 0)
 {
 	globals->rand_state = (globals->rand_state * 137 + 12345) % 2048;
@@ -664,8 +1295,6 @@ int std_abs(int x) {
 
 void attendez() {
 	{
-		BN_LOG("attendez");
-
 		auto bg = bn::regular_bg_items::attendez.create_bg(0,0);
 		bn::sound_items::ahoy.play();
 
@@ -673,7 +1302,9 @@ void attendez() {
 			bn::core::update();
 		}
 
-		bn::sram::write(globals->all_save);
+		//bn::sram::write(globals->all_save);
+		//flash_write(flash_address, (unsigned char*)&globals->all_save, sizeof(save_all_struct));
+		hard_write();
 	}
 }
 
@@ -3010,7 +3641,9 @@ int exec_dialogue(int x, int checkpoint = 0) {
 		// kiss
 		{
 			globals->current_save->checkpoint = 15;
-			bn::sram::write(globals->all_save);
+			//bn::sram::write(globals->all_save);
+			//flash_write(flash_address, (unsigned char*)&globals->all_save, sizeof(save_all_struct));
+			hard_write();
 
 			for (int clicks = 0; clicks < 16 * 2; clicks++) {
 				bn::core::update();
@@ -5096,28 +5729,6 @@ dungeon_return dungeon(dungeon_return& dt) {
 
 		current_room.configure(20, 20, 9, 17);
 
-		if (globals->current_save->checkpoint < 11 && chari.at(0).identity == 2) {
-			for (int t = 0; t < 1; t++) {
-				if (std_rnd(5) == 2) {
-					anim_object fp;
-					fp.entity_item = bn::sprite_items::ocean_environment;
-					fp.entity = fp.entity_item.create_sprite(0, 0);
-					fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 55, 55, 55, 55);
-					fp.entity.set_visible(false);
-					fp.entity.set_camera(current_room.camera);
-
-					// Setup location
-					int temp_z = 0;
-					do {
-						temp_z = globals->local_tileset[std_rnd(tile_count)];
-					} while (temp_z != 0);
-
-					fp.entity.set_position((temp_z % current_room.width) * 32, (temp_x / current_room.width) % 32);
-					current_room.anim_objects.push_back(fp);
-				}
-			}
-		}
-
 		if (globals->current_save->checkpoint < 7)
 		{
 			const short int local_col[current_room.width * current_room.height] = {
@@ -5452,6 +6063,30 @@ dungeon_return dungeon(dungeon_return& dt) {
 		if (globals->current_save->checkpoint == 5)
 			current_room.primary_bg.set_palette(bn::regular_bg_items::castle_floor.palette_item());
 		current_room.primary_bg.set_camera(current_room.camera);
+
+		/*
+		if (globals->current_save->checkpoint < 11 && current_room.chari.at(0).identity == 2) {
+			for (int t = 0; t < 2; t++) {
+				anim_object fp;
+				fp.entity_item = bn::sprite_items::ocean_terrain;
+				fp.entity = fp.entity_item.create_sprite(0, 0, 56);
+				fp.entity_anim = bn::create_sprite_animate_action_forever(fp.entity, 2, fp.entity_item.tiles_item(), 56, 56, 56, 56);
+				fp.entity.set_visible(true);
+				fp.entity.set_camera(current_room.camera);
+
+				// Setup location
+				int temp_z = 0;
+				do {
+					int new_tile = std_rnd(globals->local_tileset.size());
+					temp_z = globals->local_tileset.at(new_tile);
+				} while (temp_z < 1);
+
+				BN_LOG(temp_z, " - ", (temp_z % 20) * 32, " - ", (temp_z / 20) * 32);
+				fp.entity.set_position((temp_z % 20) * 32, (temp_z / 20) * 32);
+				current_room.anim_objects.push_back(fp);
+			}
+		}
+		*/
 		break;
 	}
 	case 5:
@@ -11116,11 +11751,13 @@ void startup()
 void load_save()
 {
 	// Clear if need be
-	if (globals->all_save.save_init != 137) {
+	BN_LOG("save init is ", globals->all_save.save_init);
+	if (globals->all_save.save_init != 99) {
+		//flash_reset();
 		for (int t = 0; t < 3; t++) {
 			globals->all_save.current_save[t].clear();
 		}
-		globals->all_save.save_init = 137;
+		globals->all_save.save_init = 99;
 	}
 
 	auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
@@ -11138,10 +11775,11 @@ void load_save()
 	bn::string<32> buf2;
 	bn::string<32> buf3;
 
-	if (globals->all_save.current_save[0].island_name[0] < 255 && globals->all_save.current_save[0].island_name[0] > 0) {
+	if (globals->all_save.current_save[0].island_name[0] < 123 && globals->all_save.current_save[0].island_name[0] > 0) {
 		bn::ostringstream ss1(buf1);
 		for (short int t = 0; t < 16; t++) {
-			if (globals->all_save.current_save[0].island_name[t] < 255) {
+			if (globals->all_save.current_save[0].island_name[t] > 31 && globals->all_save.current_save[0].island_name[t] < 123) {
+				BN_LOG((int)globals->all_save.current_save[0].island_name[t]);
 				ss1 << globals->all_save.current_save[0].island_name[t];
 			}
 		}
@@ -11154,10 +11792,11 @@ void load_save()
 		buf1 = "Slot 1: 0%";
 	}
 
-	if (globals->all_save.current_save[1].island_name[0] < 255 && globals->all_save.current_save[1].island_name[0] > 0) {
+	if (globals->all_save.current_save[1].island_name[0] < 123 && globals->all_save.current_save[1].island_name[0] > 0) {
 		bn::ostringstream ss1(buf2);
 		for (short int t = 0; t < 16; t++) {
-			if (globals->all_save.current_save[1].island_name[t] < 255) {
+			if (globals->all_save.current_save[1].island_name[t] > 31 && globals->all_save.current_save[1].island_name[t] < 123) {
+				BN_LOG((int)globals->all_save.current_save[1].island_name[t]);
 				ss1 << globals->all_save.current_save[1].island_name[t];
 			}
 		}
@@ -11170,10 +11809,11 @@ void load_save()
 		buf2 = "Slot 2: 0%";
 	}
 
-	if (globals->all_save.current_save[2].island_name[0] < 255 && globals->all_save.current_save[2].island_name[0] > 0) {
+	if (globals->all_save.current_save[2].island_name[0] < 123 && globals->all_save.current_save[2].island_name[0] > 0) {
 		bn::ostringstream ss1(buf3);
 		for (short int t = 0; t < 16; t++) {
-			if (globals->all_save.current_save[2].island_name[t] < 255) {
+			if (globals->all_save.current_save[2].island_name[t] > 31 && globals->all_save.current_save[2].island_name[t] < 123) {
+				BN_LOG((int)globals->all_save.current_save[2].island_name[t]);
 				ss1 << globals->all_save.current_save[2].island_name[t];
 			}
 		}
@@ -11211,8 +11851,8 @@ void load_save()
 	while (!bn::keypad::a_pressed())
 	{
 		if (bn::keypad::l_held() && bn::keypad::r_held()) {
+			//flash_reset();
 			globals->all_save.current_save[c].clear();
-			attendez();
 			bn::core::reset();
 		}
 
@@ -12217,7 +12857,6 @@ dungeon_return underground()
 			if ((abx * -1) > abx) abx = abx * 1;
 			if ((aby * -1) > aby) aby = aby * 1;	
 
-			BN_LOG(32 * abx, 32 * aby);
 			key.set_position(32 * abx, 32 * aby);
 			key.set_visible(true);
 		}
@@ -14569,7 +15208,6 @@ void handle_minigame() {
 	exec_dialogue(37);
 
 	while(true) {
-		BN_LOG("top o the mornin");
 		int select = select_minigame();
 
 		{
@@ -14795,12 +15433,11 @@ int checkpoint(int level)
 	return level + 1;
 }
 
-BN_DATA_EWRAM global_data global_inst = {};
-
 int main()
 {
 	bn::core::init(); // Initialize Butano libraries
-	
+	//int f = flash_init(FLASH_SIZE_AUTO);
+
 	// 'new' allows me to store this in the heap instead of the stack
 	globals = new global_data();
 
@@ -14813,7 +15450,9 @@ int main()
 	*/
 
 	startup();
-	bn::sram::read(globals->all_save);         // Read save data from cartridge
+	//bn::sram::read(globals->all_save);         // Read save data from cartridge
+	//flash_read(flash_address, (unsigned char*)&globals->all_save, sizeof(save_all_struct));
+	hard_load();
 	load_save();
 
 	while (globals->current_save->checkpoint < 99) {

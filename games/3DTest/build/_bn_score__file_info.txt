@@ -1,3 +1,0 @@
-graphics/score.bmp
-12406
-1646952165.49

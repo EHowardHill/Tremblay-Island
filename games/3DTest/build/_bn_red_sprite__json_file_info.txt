@@ -1,3 +1,0 @@
-graphics/red_sprite.json
-43
-1647485821.7

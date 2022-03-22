@@ -1,1 +1,0 @@
-scout_tv_03_bn_graphics.o: scout_tv_03_bn_graphics.s

@@ -1,1 +1,0 @@
-green_sprite_bn_graphics.o: green_sprite_bn_graphics.s

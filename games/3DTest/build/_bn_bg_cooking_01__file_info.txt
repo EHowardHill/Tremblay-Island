@@ -1,3 +1,0 @@
-graphics/bg_cooking_01.bmp
-32882
-1646952165.4

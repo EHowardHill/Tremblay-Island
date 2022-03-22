@@ -1,3 +1,0 @@
-graphics/fight_tiles.bmp
-1142
-1646952165.41

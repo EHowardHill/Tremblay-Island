@@ -1,2 +1,2 @@
 sin_lut.o: \
- /home/ethan/Documents/GitHub/Tremblay-Island/butano/hw/3rd_party/libtonc/asm/sin_lut.s
+ /mnt/c/users/ethan/Documents/GitHub/vv2k/butano/hw/3rd_party/libtonc/asm/sin_lut.s

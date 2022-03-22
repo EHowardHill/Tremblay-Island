@@ -1,1 +1,0 @@
-cinemint_01_bn_graphics.o: cinemint_01_bn_graphics.s

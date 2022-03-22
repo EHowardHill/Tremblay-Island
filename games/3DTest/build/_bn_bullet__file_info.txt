@@ -1,3 +1,0 @@
-graphics/bullet.bmp
-1590
-1647485821.7

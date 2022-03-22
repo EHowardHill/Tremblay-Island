@@ -1,1 +1,0 @@
-blue_sprite_bn_graphics.o: blue_sprite_bn_graphics.s

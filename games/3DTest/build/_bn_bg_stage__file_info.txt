@@ -1,3 +1,0 @@
-graphics/bg_stage.bmp
-32886
-1646952165.4

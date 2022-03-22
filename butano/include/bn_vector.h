@@ -245,7 +245,7 @@ public:
      */
     [[nodiscard]] reference operator[](size_type index)
     {
-        BN_ASSERT(index >= 0 && index < _size, "Invalid index: ", index, " - ", _size);
+        //BN_ASSERT(index >= 0 && index < _size, "Invalid index: ", index, " - ", _size);
 
         return _data[index];
     }

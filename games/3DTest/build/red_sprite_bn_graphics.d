@@ -1,1 +1,0 @@
-red_sprite_bn_graphics.o: red_sprite_bn_graphics.s

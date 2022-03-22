@@ -1,3 +1,0 @@
-graphics/bb_sprites.bmp
-342
-1646952165.4
