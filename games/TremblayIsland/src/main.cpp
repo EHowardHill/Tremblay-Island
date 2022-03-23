@@ -650,8 +650,9 @@ global_data* globals;
 
 /*************************************************************************************************/
 
-typedef volatile unsigned long vu32;
+typedef volatile uint8_t vu8;
 typedef volatile unsigned short vu16;
+typedef volatile unsigned long vu32;
 
 #define REG_DM0CNT_H *(u16*)0x40000ba
 #define REG_DM1CNT_H *(u16*)0x40000c6
@@ -783,10 +784,10 @@ int flash_write()
 		_FLASH_WRITE(0xAAA, 0xA9);
 		_FLASH_WRITE(0x555, 0x56);
 		_FLASH_WRITE(0xAAA, 0xA0);
-		_FLASH_WRITE(flash_sram_area+i, (*(u8 *)(AGB_SRAM+i+1)) << 8 | (*(u8 *)(AGB_SRAM+i)));
+		_FLASH_WRITE(flash_sram_area+i, (*(vu8 *)(AGB_SRAM+i+1)) << 8 | (*(vu8 *)(AGB_SRAM+i)));
 		while (1) {
 			__asm("nop");
-			if (*(((u16 *)AGB_ROM)+((flash_sram_area+i)/2)) == ((*(u8 *)(AGB_SRAM+i+1)) << 8 | (*(u8 *)(AGB_SRAM+i)))) {
+			if (*(((vu16 *)AGB_ROM)+((flash_sram_area+i)/2)) == ((*(vu8 *)(AGB_SRAM+i+1)) << 8 | (*(vu8 *)(AGB_SRAM+i)))) {
 				break;
 			}
 		}
@@ -798,19 +799,19 @@ int flash_write()
 }
 
 int flash_read() {
-	uint16_t* save = (uint16_t*)&globals->all_save;
-	u8 *addr = AGB_ROM;
+    uint16_t* save = (uint16_t*)&globals->all_save;
+    uint16_t* rom = (uint16_t*)AGB_ROM;
 
-	if (flash_type == 2) {
-		// Read data
-		for (int i=0; i < sizeof(save_all_struct); i+=2) {
-			save[i] = addr[(flash_sram_area + i) / 2];
-		}
-	} else if (flash_type == 0) {
-		bn::sram::read(globals->all_save);         // Read save data from cartridge
-	}
+    if (flash_type == 2) {
+        // Read data
+        for (int i=0; i < sizeof(save_all_struct) / sizeof(uint16_t); i++) {
+            save[i] = rom[i];
+        }
+    } else if (flash_type == 0) {
+        bn::sram::read(globals->all_save);         // Read save data from cartridge
+    }
 
-	return 0;
+    return 0;
 }
 
 /*************************************************************************************************/
