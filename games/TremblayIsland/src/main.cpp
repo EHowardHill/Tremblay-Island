@@ -97,7 +97,6 @@
 #include "bn_regular_bg_items_pc_folder01.h"
 #include "bn_regular_bg_items_pc_folder02.h"
 #include "bn_regular_bg_items_pc_document.h"
-#include "bn_regular_bg_items_attendez.h"
 #include "bn_sprite_items_pc_highlight.h"
 #include "bn_sprite_items_bb_sprites.h"
 #include "bn_sprite_items_avocado.h"
@@ -202,9 +201,6 @@ Guy     7
 #include <sstream>
 #include <list>
 
-#include "bn_core.h"
-#include "bn_keypad.h"
-#include "bn_display.h"
 #include "bn_blending_actions.h"
 #include "bn_blending_fade_alpha.h"
 #include "bn_blending_fade_alpha_hbe_ptr.h"
@@ -221,6 +217,7 @@ Guy     7
 #include "common_info.h"
 #include "common_variable_8x16_sprite_font.h"
 #include "bn_sprite_items_a_button.h"
+#include "bn_sprite_items_chapters.h"
 #include "bn_regular_bg_items_cinemint_studios.h"
 #include "bn_sprite_items_maple01.h"
 #include "bn_sprite_items_maple02.h"
@@ -375,7 +372,6 @@ Guy     7
 #include "bn_regular_bg_items_s0904.h"
 #include "bn_regular_bg_items_s0905.h"
 #include "bn_regular_bg_items_s0906.h"
-#include "bn_regular_bg_items_s0907.h"
 #include "bn_regular_bg_items_s0908.h"
 #include "bn_regular_bg_items_s0909.h"
 #include "bn_regular_bg_items_s0910.h"
@@ -574,7 +570,10 @@ Guy     7
 #include "bn_sprite_items_real_aaron_eyes.h"
 #include "bn_sprite_items_real_enoki_eyes.h"
 
-#define flash_address 0
+// 0 = saving enabled
+// 1 = saving disabled
+
+#define DEVICE_TYPE 0
 
 bn::fixed_t<12> lerp(bn::fixed a, int b, bn::fixed_t<12> t) {
 	return a * (1 - t) + b * t;
@@ -648,181 +647,26 @@ class global_data {
 
 global_data* globals;
 
-/*************************************************************************************************/
-
-typedef volatile uint8_t vu8;
-typedef volatile unsigned short vu16;
-typedef volatile unsigned long vu32;
-
-#define REG_DM0CNT_H *(u16*)0x40000ba
-#define REG_DM1CNT_H *(u16*)0x40000c6
-#define REG_DM3CNT_H *(u16*)0x40000de
-#define REG_DISPCNT *(vu32*)0x4000000
-#define FORCE_BLANK 0x80
-#define BG2_EN 0x400
-#define REG_IE *(vu16*)0x4000200
-#define STATEID 0x57a731d7
-#define STATEID2 0x57a731d8
-#define AGB_ROM  ((u8*)0x8000000)
-#define AGB_SRAM ((u8*)0xE000000)
-#define AGB_SRAM_SIZE 64*1024
-#define _FLASH_WRITE(pa, pd) { *(((u16 *)AGB_ROM)+((pa)/2)) = pd; __asm("nop"); }
-#define u8 uint8_t
-#define u16 uint16_t
-#define u32 uint32_t
-
-u32 total_rom_size = 0;
-u32 flash_size = 0;
-u32 flash_sram_area = 0;
-u8 flash_type = 0;
-
-extern u32 total_rom_size;
-extern u32 flash_sram_area;
-extern u8 flash_type;
-
-__attribute__((section(".ewram.stop_dma_interrupts")))
-void stop_dma_interrupts()
-{
-	//stop all DMAs
-	REG_DM0CNT_H=0;
-	REG_DM1CNT_H=0;
-	REG_DM3CNT_H=0;	
-	REG_DISPCNT&=~0x0100; 				//disable BG 0
-	REG_DISPCNT&=~(7 | FORCE_BLANK); 	//force mode 0, and turn off force blank
-	REG_DISPCNT|=BG2_EN; 				//text on BG2
-}
-
-__attribute__((section(".ewram.get_flash_write")))
-int get_flash_type() {
-	u32 rom_data, data;
-	u16 ie = REG_IE;
-	stop_dma_interrupts();
-	REG_IE = ie & 0xFFFE;
-	rom_data = *(u32 *)AGB_ROM;
-
-	// Flashcard
-	_FLASH_WRITE(0, 0xF0);
-	_FLASH_WRITE(0xAAA, 0xA9);
-	_FLASH_WRITE(0x555, 0x56);
-	_FLASH_WRITE(0xAAA, 0x90);
-	data = *(u32 *)AGB_ROM;
-	_FLASH_WRITE(0, 0xF0);
-	if (rom_data != data) {
-		REG_IE = ie;
-		return 2;
+void flash_write() {
+	if (DEVICE_TYPE == 0) {
+		bn::sram::write(globals->all_save);
 	}
-
-	// Emulator
-	REG_IE = ie;
-	return 0;
 }
 
-__attribute__((section(".ewram.bytecopy")))
-void bytecopy(u8 *dst, const u8 *src, int count) {
-	int i=0;
-	do {
-		dst[i]=src[i];
-		i++;
-	} while(--count);
-}
-
-__attribute__((section(".ewram.flash_write")))
-int flash_write()
-{
-	bn::sram::write(globals->all_save);
-
-	flash_sram_area = 0;
-	int flash_type = get_flash_type();
-	if (flash_type == 0) return 0;			// if emulator
-
-	// Override SRAM flash location if ROM is appended with "SVLC" followed by the address to use
-	if (*(u32 *)(AGB_ROM+total_rom_size) == 0x434C5653) {
-		flash_sram_area = *(u32 *)(AGB_ROM+total_rom_size+4);
+void flash_read() {
+	if (DEVICE_TYPE == 0) {
+		bn::sram::read(globals->all_save);
 	}
-
-	// Determine the size of the flash chip by checking for ROM loops then set the SRAM storage area 0x40000 bytes before the end.
-	// This is due to different sector sizes of different flash chips and should hopefully cover all cases.
-	if (memcmp(AGB_ROM+4, AGB_ROM+4+0x400000, 0x40) == 0) {
-		flash_size = 0x400000;
-	} else if (memcmp(AGB_ROM+4, AGB_ROM+4+0x800000, 0x40) == 0) {
-		flash_size = 0x800000;
-	} else if (memcmp(AGB_ROM+4, AGB_ROM+4+0x1000000, 0x40) == 0) {
-		flash_size = 0x1000000;
-	} else {
-		flash_size = 0x2000000;
-	}
-	if (flash_sram_area == 0) {
-		flash_sram_area = flash_size - 0x40000;
-	}
-
-	// Finally, restore the SRAM data and proceed.
-	bytecopy(AGB_SRAM, ((u8*)AGB_ROM+flash_sram_area), AGB_SRAM_SIZE);
-	u16 ie = REG_IE;
-	stop_dma_interrupts();
-	REG_IE = ie & 0xFFFE;
-
-	// Erase flash sector
-	_FLASH_WRITE(flash_sram_area, 0xF0);
-	_FLASH_WRITE(0xAAA, 0xA9);
-	_FLASH_WRITE(0x555, 0x56);
-	_FLASH_WRITE(0xAAA, 0x80);
-	_FLASH_WRITE(0xAAA, 0xA9);
-	_FLASH_WRITE(0x555, 0x56);
-	_FLASH_WRITE(flash_sram_area, 0x30);
-
-	while (1) {
-		__asm("nop");
-		if (*(((u16 *)AGB_ROM)+(flash_sram_area/2)) == 0xFFFF) {
-			break;
-		}
-	}
-
-	_FLASH_WRITE(flash_sram_area, 0xF0);
-
-	// Write data
-	for (int i=0; i<AGB_SRAM_SIZE; i+=2) {
-		_FLASH_WRITE(0xAAA, 0xA9);
-		_FLASH_WRITE(0x555, 0x56);
-		_FLASH_WRITE(0xAAA, 0xA0);
-		_FLASH_WRITE(flash_sram_area+i, (*(vu8 *)(AGB_SRAM+i+1)) << 8 | (*(vu8 *)(AGB_SRAM+i)));
-		while (1) {
-			__asm("nop");
-			if (*(((vu16 *)AGB_ROM)+((flash_sram_area+i)/2)) == ((*(vu8 *)(AGB_SRAM+i+1)) << 8 | (*(vu8 *)(AGB_SRAM+i)))) {
-				break;
-			}
-		}
-	}
-	_FLASH_WRITE(flash_sram_area, 0xF0);
-
-	REG_IE = ie;
-	return 2;
 }
 
-int flash_read() {
-    uint16_t* save = (uint16_t*)&globals->all_save;
-    uint16_t* rom = (uint16_t*)AGB_ROM;
-
-    if (flash_type == 2) {
-        // Read data
-        for (int i=0; i < sizeof(save_all_struct) / sizeof(uint16_t); i++) {
-            save[i] = rom[i];
-        }
-    } else if (flash_type == 0) {
-        bn::sram::read(globals->all_save);         // Read save data from cartridge
-    }
-
-    return 0;
+void flash_reset() {
+	if (DEVICE_TYPE == 0) {
+		globals = new global_data();
+		bn::sram::write(globals->all_save);
+	}
 }
 
-/*************************************************************************************************/
-
-void hard_write() {
-	flash_write();
-}
-void hard_load() {
-
-}
-
+__attribute__((section(".ewram.std_rnd")))
 int std_rnd(int x = 0)
 {
 	globals->rand_state = (globals->rand_state * 137 + 12345) % 2048;
@@ -833,22 +677,6 @@ int std_abs(int x) {
 	short int nx = x * -1;
 	if (nx > x) return nx;
 	return x;
-}
-
-void attendez() {
-	{
-		auto bg = bn::regular_bg_items::attendez.create_bg(0,0);
-		bn::sound_items::ahoy.play();
-		if (bn::music::playing()) bn::music::stop();
-
-		for (int t = 0; t < 84; t++) {
-			bn::core::update();
-		}
-
-		//bn::sram::write(globals->all_save);
-		//flash_write(flash_address, (unsigned char*)&globals->all_save, sizeof(save_all_struct));
-		int result = flash_write();
-	}
 }
 
 // Generic classes
@@ -1592,10 +1420,6 @@ void dialogue_page(line n[32]) {
 			backdrops.push_back(&bn::regular_bg_items::s0906);
 			backdrops.push_back(&bn::regular_bg_items::s0906_01);
 			backdrops.push_back(&bn::regular_bg_items::s0906_02);
-		}
-		else if (strcmp(n[pos].text, "S09:07") == 0) {
-			backdrops.clear();
-			backdrops.push_back(&bn::regular_bg_items::s0907);
 		}
 		else if (strcmp(n[pos].text, "S09:08") == 0) {
 			backdrops.clear();
@@ -2351,6 +2175,35 @@ int exec_dialogue(int x, int checkpoint = 0) {
 	};
 
 	case 14: {
+		if (DEVICE_TYPE == 0) {
+			line lc[32] = {
+				{true, true, 0, "S02:02"},
+				{true, true, 0, "BG: champ"},
+				{true, true, 0, "                                 Hmm, hmm hmm hmm...."},
+				{true, true, 0, "                                 For goodness' sake, when is that pizza going to show up? Wasn't itsupposed to be here in under     twenty minutes?"},
+				{true, true, 0, "                                 Have I checked my mail today? I  probably should go ahead and     check."},
+				{true, true, 0, "S02:03"},
+				{true, true, 0, "                                 Huh, what's this? From the       Tremblay household? I guess I    haven't heard from Aaron and     Enoki in a while."},
+				{true, true, 0, "                                 Can't wait to read about how muchthey want to move in with me now."},
+				{true, true, 0, "BG: fadeout"},
+				{true, true, 0, "S02:04"},
+				{true, true, 0, "                                             Hey, Maple!"},
+				{true, true, 0, "S02:05"},
+				{true, true, 0, "                                 Hold on, got this backwards."},
+				{true, true, 0, "S02:04"},
+				{true, true, 0, "BG: 0"},
+				{true, true, 0, "                                             'Hey, Maple!'"},
+				{true, true, 0, "                                       'We thought we'd send            you a quick letter to            give you an update.'"},
+				{true, true, 0, "                                       'We sold the castle and          got to make enough to            buy a nice trailer home.'"},
+				{true, true, 0, "                                       'However, that's not all-        we got it set up on our          new island!!'"},
+				{true, true, 0, "S02:05"},
+				{true, true, 0, "                                 I'm...                           That's it,                       I'm gonna kill 'em."},
+				{true, true, 0, "S02:04"},
+				{true, true, 0, "                                       'So, we've decided that          we're going to name it-..'"},
+				{true, true, 0, "COM: Endscene"}
+			};
+			dialogue_page(lc);
+		} else {
 		line lc[32] = {
 			{true, true, 0, "S02:02"},
 			{true, true, 0, "BG: champ"},
@@ -2374,10 +2227,11 @@ int exec_dialogue(int x, int checkpoint = 0) {
 			{true, true, 0, "S02:05"},
 			{true, true, 0, "                                 I'm...                           That's it,                       I'm gonna kill 'em."},
 			{true, true, 0, "S02:04"},
-			{true, true, 0, "                                       'So, we've decided that          we're going to name it-..'"},
+			{true, true, 0, "                                       'See you soon!                   AARON & ENOKI'"},
 			{true, true, 0, "COM: Endscene"}
 		};
 		dialogue_page(lc);
+		}
 		return 0;
 		break;
 	};
@@ -3184,9 +3038,7 @@ int exec_dialogue(int x, int checkpoint = 0) {
 		// kiss
 		{
 			globals->current_save->checkpoint = 15;
-			//bn::sram::write(globals->all_save);
-			//flash_write(flash_address, (unsigned char*)&globals->all_save, sizeof(save_all_struct));
-			hard_write();
+			flash_write();
 
 			for (int clicks = 0; clicks < 16 * 2; clicks++) {
 				bn::core::update();
@@ -7229,9 +7081,9 @@ dungeon_return dungeon(dungeon_return& dt) {
 								{true, true, 00, "MAPLE                            I think we need a VCR."},
 								{true, true, 00, "AARON                            You gonna buy one?"},
 								{true, true, 00, "MAPLE                            Yes. And lots of tapes."},
-								{true, true, 00, "ENOKI                            Ooo, can you get the new Time Raider"},
+								{true, true, 00, "ENOKI                            Ooo, can you get the new Time    Raider"},
 								{true, true, 00, "ENOKI                            movie? I heard they made one!"},
-								{true, true, 00, "MAPLE                            Just to spite you, I think I'll get"},
+								{true, true, 00, "MAPLE                            Just to spite you, I think I'll  get"},
 								{true, true, 00, "MAPLE                            everything I can find BUT that."},
 								{true, true, 00, "ENOKI                            Aw.. I was thinking that maybe"},
 								{true, true, 00, "ENOKI                            y'know, since we all like it,"},
@@ -11113,7 +10965,7 @@ void timer(int delay)
 
 void intros(int t) {
 
-	attendez();
+	flash_write();
 
 	bn::fixed_t<12> glow = 1;
 
@@ -11293,175 +11145,318 @@ void startup()
 
 void load_save()
 {
+	auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
+
+	bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+	bn::vector<bn::sprite_ptr, 12> file1_spr;
+	bn::string<32> buf1;
+
 	// Clear if need be
-	BN_LOG("save init is ", globals->all_save.save_init);
 	if (globals->all_save.save_init != 99) {
-		//flash_reset();
+		flash_reset();
 		for (int t = 0; t < 3; t++) {
 			globals->all_save.current_save[t].clear();
 		}
 		globals->all_save.save_init = 99;
 	}
 
-	auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
-	auto ui = bn::regular_bg_items::file_select_bg.create_bg(0, 0);
-	auto arrow = bn::sprite_items::arrow.create_sprite(-98, -32);
+	if (DEVICE_TYPE == 0) {
+		auto ui = bn::regular_bg_items::file_select_bg.create_bg(0, 0);
+		auto arrow = bn::sprite_items::arrow.create_sprite(-98, -32);
 
-	bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
-	bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
-	bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
-	bn::vector<bn::sprite_ptr, 12> file1_spr;
-	bn::vector<bn::sprite_ptr, 12> file2_spr;
-	bn::vector<bn::sprite_ptr, 12> file3_spr;
+		bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+		bn::sprite_text_generator file3_gen(common::variable_8x16_sprite_font);
+		bn::vector<bn::sprite_ptr, 12> file2_spr;
+		bn::vector<bn::sprite_ptr, 12> file3_spr;
 
-	bn::string<32> buf1;
-	bn::string<32> buf2;
-	bn::string<32> buf3;
+		bn::string<32> buf2;
+		bn::string<32> buf3;
 
-	if (globals->all_save.current_save[0].island_name[0] < 123 && globals->all_save.current_save[0].island_name[0] > 0) {
-		bn::ostringstream ss1(buf1);
-		for (short int t = 0; t < 16; t++) {
-			if (globals->all_save.current_save[0].island_name[t] > 31 && globals->all_save.current_save[0].island_name[t] < 123) {
-				BN_LOG((int)globals->all_save.current_save[0].island_name[t]);
-				ss1 << globals->all_save.current_save[0].island_name[t];
+		if (globals->all_save.current_save[0].island_name[0] < 123 && globals->all_save.current_save[0].island_name[0] > 0) {
+			bn::ostringstream ss1(buf1);
+			for (short int t = 0; t < 16; t++) {
+				if (globals->all_save.current_save[0].island_name[t] > 31 && globals->all_save.current_save[0].island_name[t] < 123) {
+					BN_LOG((int)globals->all_save.current_save[0].island_name[t]);
+					ss1 << globals->all_save.current_save[0].island_name[t];
+				}
 			}
+			if (globals->all_save.current_save[0].xp == -1) globals->all_save.current_save[0].xp = 0;
+			ss1 << ": ";
+			ss1 << (int)(globals->all_save.current_save[0].checkpoint * 6.6);
+			ss1 << "%";
 		}
-		if (globals->all_save.current_save[0].xp == -1) globals->all_save.current_save[0].xp = 0;
-		ss1 << ": ";
-		ss1 << (int)(globals->all_save.current_save[0].checkpoint * 6.6);
-		ss1 << "%";
-	}
-	else {
-		buf1 = "Slot 1: 0%";
-	}
+		else {
+			buf1 = "Slot 1: 0%";
+		}
 
-	if (globals->all_save.current_save[1].island_name[0] < 123 && globals->all_save.current_save[1].island_name[0] > 0) {
-		bn::ostringstream ss1(buf2);
-		for (short int t = 0; t < 16; t++) {
-			if (globals->all_save.current_save[1].island_name[t] > 31 && globals->all_save.current_save[1].island_name[t] < 123) {
-				BN_LOG((int)globals->all_save.current_save[1].island_name[t]);
-				ss1 << globals->all_save.current_save[1].island_name[t];
+		if (globals->all_save.current_save[1].island_name[0] < 123 && globals->all_save.current_save[1].island_name[0] > 0) {
+			bn::ostringstream ss1(buf2);
+			for (short int t = 0; t < 16; t++) {
+				if (globals->all_save.current_save[1].island_name[t] > 31 && globals->all_save.current_save[1].island_name[t] < 123) {
+					BN_LOG((int)globals->all_save.current_save[1].island_name[t]);
+					ss1 << globals->all_save.current_save[1].island_name[t];
+				}
 			}
+			if (globals->all_save.current_save[1].xp == -1) globals->all_save.current_save[1].xp = 0;
+			ss1 << ": ";
+			ss1 << (int)(globals->all_save.current_save[1].checkpoint * 6.6);
+			ss1 << "%";
 		}
-		if (globals->all_save.current_save[1].xp == -1) globals->all_save.current_save[1].xp = 0;
-		ss1 << ": ";
-		ss1 << (int)(globals->all_save.current_save[1].checkpoint * 6.6);
-		ss1 << "%";
-	}
-	else {
-		buf2 = "Slot 2: 0%";
-	}
+		else {
+			buf2 = "Slot 2: 0%";
+		}
 
-	if (globals->all_save.current_save[2].island_name[0] < 123 && globals->all_save.current_save[2].island_name[0] > 0) {
-		bn::ostringstream ss1(buf3);
-		for (short int t = 0; t < 16; t++) {
-			if (globals->all_save.current_save[2].island_name[t] > 31 && globals->all_save.current_save[2].island_name[t] < 123) {
-				BN_LOG((int)globals->all_save.current_save[2].island_name[t]);
-				ss1 << globals->all_save.current_save[2].island_name[t];
+		if (globals->all_save.current_save[2].island_name[0] < 123 && globals->all_save.current_save[2].island_name[0] > 0) {
+			bn::ostringstream ss1(buf3);
+			for (short int t = 0; t < 16; t++) {
+				if (globals->all_save.current_save[2].island_name[t] > 31 && globals->all_save.current_save[2].island_name[t] < 123) {
+					BN_LOG((int)globals->all_save.current_save[2].island_name[t]);
+					ss1 << globals->all_save.current_save[2].island_name[t];
+				}
 			}
+			if (globals->all_save.current_save[2].xp == -1) globals->all_save.current_save[2].xp = 0;
+			ss1 << ": ";
+			ss1 << (int)(globals->all_save.current_save[2].checkpoint * 6.6);
+			ss1 << "%";
 		}
-		if (globals->all_save.current_save[2].xp == -1) globals->all_save.current_save[2].xp = 0;
-		ss1 << ": ";
-		ss1 << (int)(globals->all_save.current_save[2].checkpoint * 6.6);
-		ss1 << "%";
-	}
-	else {
-		buf3 = "Slot 3: 0%";
-	}
-
-	file1_gen.generate(-72, -32, buf1.c_str(), file1_spr);
-	file2_gen.generate(-72, 0, buf2.c_str(), file2_spr);
-	file3_gen.generate(-72, 32, buf3.c_str(), file3_spr);
-
-	auto file1_icon = bn::sprite_items::save_tiles.create_sprite(98, -34, 0);
-	auto file2_icon = bn::sprite_items::save_tiles.create_sprite(98, -34 + 34, 0);
-	auto file3_icon = bn::sprite_items::save_tiles.create_sprite(98, -34 + 68, 0);
-
-	if (globals->all_save.current_save[0].last_char_id > -1 && globals->all_save.current_save[0].last_char_id < 7) file1_icon = bn::sprite_items::save_tiles.create_sprite(98, -34, globals->all_save.current_save[0].last_char_id);
-	else file1_icon.set_visible(false);
-
-	if (globals->all_save.current_save[1].last_char_id > -1 && globals->all_save.current_save[1].last_char_id < 7) file2_icon = bn::sprite_items::save_tiles.create_sprite(98, 0, globals->all_save.current_save[1].last_char_id);
-	else file2_icon.set_visible(false);
-
-	if (globals->all_save.current_save[2].last_char_id > -1 && globals->all_save.current_save[2].last_char_id < 7) file3_icon = bn::sprite_items::save_tiles.create_sprite(98, 34, globals->all_save.current_save[2].last_char_id);
-	else file3_icon.set_visible(false);
-
-	short int t = 0;
-	short int c = 0;
-
-	bn::music_items_info::span[8].first.play(0.8);
-
-	while (!bn::keypad::a_pressed())
-	{
-		if (bn::keypad::l_held() && bn::keypad::r_held()) {
-			//flash_reset();
-			globals->all_save.current_save[c].clear();
-			bn::core::reset();
+		else {
+			buf3 = "Slot 3: 0%";
 		}
 
-		// Scrolling background
-		t++;
-		t = t % 256;
-		velvet.set_position(t, t);
+		file1_gen.generate(-72, -32, buf1.c_str(), file1_spr);
+		file2_gen.generate(-72, 0, buf2.c_str(), file2_spr);
+		file3_gen.generate(-72, 32, buf3.c_str(), file3_spr);
 
-		if (bn::keypad::up_pressed())
+		auto file1_icon = bn::sprite_items::save_tiles.create_sprite(98, -34, 0);
+		auto file2_icon = bn::sprite_items::save_tiles.create_sprite(98, -34 + 34, 0);
+		auto file3_icon = bn::sprite_items::save_tiles.create_sprite(98, -34 + 68, 0);
+
+		if (globals->all_save.current_save[0].last_char_id > -1 && globals->all_save.current_save[0].last_char_id < 7) file1_icon = bn::sprite_items::save_tiles.create_sprite(98, -34, globals->all_save.current_save[0].last_char_id);
+		else file1_icon.set_visible(false);
+
+		if (globals->all_save.current_save[1].last_char_id > -1 && globals->all_save.current_save[1].last_char_id < 7) file2_icon = bn::sprite_items::save_tiles.create_sprite(98, 0, globals->all_save.current_save[1].last_char_id);
+		else file2_icon.set_visible(false);
+
+		if (globals->all_save.current_save[2].last_char_id > -1 && globals->all_save.current_save[2].last_char_id < 7) file3_icon = bn::sprite_items::save_tiles.create_sprite(98, 34, globals->all_save.current_save[2].last_char_id);
+		else file3_icon.set_visible(false);
+
+		short int t = 0;
+		short int c = 0;
+
+		bn::music_items_info::span[8].first.play(0.8);
+
+		while (!bn::keypad::a_pressed())
 		{
-			c -= 1;
-			if (c < 0)
-				c = 2;
-			bn::sound_items::pop.play();
+			if (bn::keypad::l_held() && bn::keypad::r_held()) {
+				flash_reset();
+				globals->all_save.current_save[c].clear();
+				bn::core::reset();
+			}
+
+			// Scrolling background
+			t++;
+			t = t % 256;
+			velvet.set_position(t, t);
+
+			if (bn::keypad::up_pressed())
+			{
+				c -= 1;
+				if (c < 0)
+					c = 2;
+				bn::sound_items::pop.play();
+			}
+			else if (bn::keypad::down_pressed())
+			{
+				c += 1;
+				if (c > 2)
+					c = 0;
+				bn::sound_items::pop.play();
+			}
+
+			arrow.set_y(lerp(arrow.y(), -32 + (32 * c), 0.2));
+			bn::core::update();
 		}
-		else if (bn::keypad::down_pressed())
+
+		// do the save thingy
+		switch (c) {
+		case 0: {
+			file1_icon.set_visible(true);
+			file2_icon.set_visible(false);
+			file3_icon.set_visible(false);
+			break;
+		}
+		case 1: {
+			file1_icon.set_visible(false);
+			file2_icon.set_visible(true);
+			file3_icon.set_visible(false);
+			break;
+		}
+		case 2: {
+			file1_icon.set_visible(false);
+			file2_icon.set_visible(false);
+			file3_icon.set_visible(true);
+			break;
+		}
+		default: {}
+		}
+
+		velvet.set_visible(false);
+		ui.set_visible(false);
+		arrow.set_visible(false);
+		file1_spr.clear();
+		file2_spr.clear();
+		file3_spr.clear();
+
+		bn::sound_items::firehit.play();
+		bn::music::stop();
+		timer(64);
+
+		globals->current_save = &globals->all_save.current_save[c];
+
+		// remove panels
+		for (int tt = 0; tt < 7; tt++) {
+			globals->current_save->popups[tt] = false;
+		}
+	}
+
+	// if saving doesn't work
+	else {
+		auto a_button = bn::sprite_items::a_button.create_sprite(90, -48, 0);
+
+		short int t = 0;
+		short int c = 0;
+
+		bn::music_items_info::span[8].first.play(0.8);
+
+		bn::vector<bn::sprite_ptr, 6> icons;
+		auto t1 = bn::sprite_items::chapters.create_sprite(0,0,0);
+		icons.push_back(t1);
+		auto t2 = bn::sprite_items::chapters.create_sprite(150,0,1);
+		icons.push_back(t2);
+		auto t3 = bn::sprite_items::chapters.create_sprite(260,0,2);
+		icons.push_back(t3);
+		auto t4 = bn::sprite_items::chapters.create_sprite(370,0,3);
+		icons.push_back(t4);
+		auto t5 = bn::sprite_items::chapters.create_sprite(480,0,4);
+		icons.push_back(t5);
+		auto t6 = bn::sprite_items::chapters.create_sprite(590,0,5);
+		icons.push_back(t6);
+
+		while (!bn::keypad::a_pressed())
 		{
-			c += 1;
-			if (c > 2)
-				c = 0;
-			bn::sound_items::pop.play();
+			if (bn::keypad::l_held() && bn::keypad::r_held()) {
+				//flash_reset();
+				globals->all_save.current_save[c].clear();
+				bn::core::reset();
+			}
+
+			if (bn::keypad::left_pressed()) {
+				c--;
+				bn::sound_items::click.play();
+			}
+			if (bn::keypad::right_pressed()) {
+				c++;
+				bn::sound_items::click.play();
+			}
+
+			if (c > 5) c = 0;
+			if (c < 0) c = 5;
+
+			for (int t = 0; t < icons.size(); t++) {
+				bn::fixed_t new_x = lerp(icons.at(t).x(), (t - c) * 100, 0.2);
+				icons.at(t).set_x(new_x);
+				if (t != c) icons.at(t).set_scale(1,1);
+			}
+			icons.at(c).set_scale(1.5, 1.5);
+
+			switch (c) {
+				case 0: {
+					file1_spr.clear();
+					file1_gen.generate(-81, -72, "L'INTRODUCTION", file1_spr);
+					break;
+				}
+				case 1: {
+					file1_spr.clear();
+					file1_gen.generate(-81, -72, "CHAPITRE 1", file1_spr);
+					break;
+				}
+				case 2: {
+					file1_spr.clear();
+					file1_gen.generate(-81, -72, "CHAPITRE 2", file1_spr);
+					break;
+				}
+				case 3: {
+					file1_spr.clear();
+					file1_gen.generate(-81, -72, "CHAPITRE 3", file1_spr);
+					break;
+				}
+				case 4: {
+					file1_spr.clear();
+					file1_gen.generate(-81, -72, "CHAPITRE 4", file1_spr);
+					break;
+				}
+				case 5: {
+					file1_spr.clear();
+					file1_gen.generate(-81, -72, "EPILOGUE", file1_spr);
+					break;
+				}
+			}
+
+			// Scrolling background
+			t++;
+			t = t % 256;
+			velvet.set_position(t, t);
+
+			bn::core::update();
 		}
 
-		arrow.set_y(lerp(arrow.y(), -32 + (32 * c), 0.2));
-		bn::core::update();
-	}
+		velvet.set_visible(false);
+		file1_spr.clear();
 
-	// do the save thingy
-	switch (c) {
-	case 0: {
-		file1_icon.set_visible(true);
-		file2_icon.set_visible(false);
-		file3_icon.set_visible(false);
-		break;
-	}
-	case 1: {
-		file1_icon.set_visible(false);
-		file2_icon.set_visible(true);
-		file3_icon.set_visible(false);
-		break;
-	}
-	case 2: {
-		file1_icon.set_visible(false);
-		file2_icon.set_visible(false);
-		file3_icon.set_visible(true);
-		break;
-	}
-	default: {}
-	}
+		for (int t = 0; t < icons.size(); t++) {
+			if (t != c) icons.at(t).set_visible(false);
+		}
 
-	velvet.set_visible(false);
-	ui.set_visible(false);
-	arrow.set_visible(false);
-	file1_spr.clear();
-	file2_spr.clear();
-	file3_spr.clear();
+		bn::sound_items::firehit.play();
+		bn::music::stop();
+		timer(64);
 
-	bn::sound_items::firehit.play();
-	bn::music::stop();
-	timer(64);
+		globals->current_save->clear();
 
-	globals->current_save = &globals->all_save.current_save[c];
+		switch(c) {
+			case 1: {
+				globals->current_save->xp = 0;
+				globals->current_save->checkpoint = 1;
+				break;
+			}
+			case 2: {
+				globals->current_save->xp = 100;
+				globals->current_save->checkpoint = 7;
+				break;
+			}
+			case 3: {
+				globals->current_save->xp = 200;
+				globals->current_save->checkpoint = 9;
+				break;
+			}
+			case 4: {
+				globals->current_save->xp = 300;
+				globals->current_save->checkpoint = 12;
+				break;
+			}
+			case 5: {
+				globals->current_save->xp = 300;
+				globals->current_save->checkpoint = 14;
+				break;
+			}
+		}
 
-	// remove panels
-	for (int tt = 0; tt < 7; tt++) {
-		globals->current_save->popups[tt] = false;
+		BN_LOG("set it to ", globals->current_save->checkpoint);
+
+		// remove panels
+		for (int tt = 0; tt < 7; tt++) {
+			globals->current_save->popups[tt] = false;
+		}
 	}
 }
 
@@ -14819,7 +14814,7 @@ int checkpoint(int level)
 		exec_dialogue(13);
 		cutscenes(1);
 		exec_dialogue(14);
-		keyboard();
+		if (DEVICE_TYPE == 0) keyboard();
 		exec_dialogue(15);
 		break;
 	}
@@ -14983,6 +14978,8 @@ int main()
 
 	// 'new' allows me to store this in the heap instead of the stack
 	globals = new global_data();
+	globals->current_save = new save_struct();
+	BN_LOG(DEVICE_TYPE);
 
 	/*
 	dungeon_return dt;
@@ -14993,8 +14990,6 @@ int main()
 	*/
 
 	startup();
-	//bn::sram::read(globals->all_save);         // Read save data from cartridge
-	//flash_read(flash_address, (unsigned char*)&globals->all_save, sizeof(save_all_struct));
 	flash_read();
 	load_save();
 

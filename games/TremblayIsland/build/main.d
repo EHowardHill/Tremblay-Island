@@ -145,7 +145,6 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_folder01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_folder02.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_document.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_attendez.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_pc_highlight.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_bb_sprites.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_avocado.h \
@@ -247,6 +246,7 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x16_font.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_chapters.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple01.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple02.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple03.h \
@@ -381,7 +381,6 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0904.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0905.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0906.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0907.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0908.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0909.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0910.h \
@@ -719,7 +718,6 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_folder01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_folder02.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_pc_document.h:
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_attendez.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_pc_highlight.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_bb_sprites.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_avocado.h:
@@ -821,6 +819,7 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_sprite_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_common_variable_8x16_font.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_a_button.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_chapters.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple01.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple02.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_maple03.h:
@@ -955,7 +954,6 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0904.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0905.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0906.h:
-/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0907.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0908.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0909.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_s0910.h:
