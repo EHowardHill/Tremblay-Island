@@ -81,8 +81,8 @@ public:
         {
             // 11bit
             _data = (*src++ & 0x1F) << 6;
-            BN_ASSERT((*src >> 6) == 2, "Invalid UTF-8 character");
 
+            BN_ASSERT((*src >> 6) == 2, "Invalid UTF-8 character");
             _data |= (*src++ & 0x3F) << 0;
         }
         else if(0xE0 <= ch8 && ch8 < 0xF0)

@@ -572,7 +572,8 @@ main.o: \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_02.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_03.h \
  /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_aaron_eyes.h \
- /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_enoki_eyes.h
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_enoki_eyes.h \
+ /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_flags.h
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_core.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_span_fwd.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/butano/include/bn_common.h:
@@ -1146,3 +1147,4 @@ main.o: \
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_regular_bg_items_real_enoki_03.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_aaron_eyes.h:
 /mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_real_enoki_eyes.h:
+/mnt/c/Users/ethan/Documents/GitHub/vv2k/games/TremblayIsland/build/bn_sprite_items_flags.h:
