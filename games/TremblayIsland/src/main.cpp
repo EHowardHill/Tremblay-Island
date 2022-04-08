@@ -2098,9 +2098,9 @@ void dialogue_page_lite(line n[32])
 			bn::vector<bn::sprite_ptr, 33> text_sprite0;
 			bn::vector<bn::sprite_ptr, 33> text_sprite1;
 			bn::vector<bn::sprite_ptr, 33> text_sprite2;
-			char line0[34] = {0};
-			char line1[34] = {0};
-			char line2[34] = {0};
+			bn::string<33> line0;
+			bn::string<33> line1;
+			bn::string<33> line2;
 
 			// Set up arrow
 			auto arrow = bn::sprite_items::arrow.create_sprite(-108, 69);
@@ -2109,34 +2109,49 @@ void dialogue_page_lite(line n[32])
 				arrow.set_visible(false);
 			}
 
-			strncpy(line0, n[pos].text.c_str() + 0, 33);
-			strncpy(line1, n[pos].text.c_str() + 33, 33);
-			strncpy(line2, n[pos].text.c_str() + 66, 33);
-			text_line.generate(-108, 45, line0, text_sprite0);
-			text_line.generate(-108, 57, line1, text_sprite1);
+			for (int offset = 0; offset < 33; offset++)
+			{
+				if (n[pos].text.size() > offset)
+					line0.push_back(n[pos].text.at(offset));
+			}
+			for (int offset = 33; offset < 66; offset++)
+			{
+				if (n[pos].text.size() > offset)
+					line1.push_back(n[pos].text.at(offset));
+			}
+			for (int offset = 66; offset < 99; offset++)
+				if (n[pos].text.size() > offset)
+					line2.push_back(n[pos].text.at(offset));
+			BN_LOG(n[pos].text);
+			BN_LOG("0 ", line0);
+			BN_LOG("1 ", line1);
+			BN_LOG("2 ", line2);
+
+			text_line.generate(-108, 45, line0.c_str(), text_sprite0);
+			text_line.generate(-108, 57, line1.c_str(), text_sprite1);
 
 			if (n[pos].move_to == 0)
 			{
-				text_line.generate(-108, 69, line2, text_sprite2);
+				text_line.generate(-108, 69, line2.c_str(), text_sprite2);
 			}
 			else
 			{
-				text_line.generate(-92, 69, line2, text_sprite2);
+				text_line.generate(-92, 69, line2.c_str(), text_sprite2);
 			}
 
-			if (!enoki_spoken && strncmp(line0, "ENOKI", 5) == 0)
+			if (!enoki_spoken && strncmp(line0.c_str(), "ENOKI", 5) == 0)
 			{
 				bn::sound_items::enoki_hey.play();
 				enoki_spoken = true;
 			}
 
-			if (!maple_spoken && strncmp(line0, "MAPLE", 5) == 0)
+			if (!maple_spoken && strncmp(line0.c_str(), "MAPLE", 5) == 0)
 			{
 				bn::sound_items::maple_hey_01.play();
 				maple_spoken = true;
 			}
 
-			if (!aaron_spoken && strncmp(line0, "AARON", 5) == 0)
+			if (!aaron_spoken && strncmp(line0.c_str(), "AARON", 5) == 0)
 			{
 				if (pos < 2)
 				{
@@ -2149,31 +2164,31 @@ void dialogue_page_lite(line n[32])
 				aaron_spoken = true;
 			}
 
-			if (!scout_spoken && strncmp(line0, "SCOUT", 5) == 0)
+			if (!scout_spoken && strncmp(line0.c_str(), "SCOUT", 5) == 0)
 			{
 				bn::sound_items::scout_hey_01.play();
 				scout_spoken = true;
 			}
 
-			if (!vee_spoken && strncmp(line0, "OLIVIER", 7) == 0)
+			if (!vee_spoken && strncmp(line0.c_str(), "OLIVIER", 7) == 0)
 			{
 				bn::sound_items::vee_hey_01.play();
 				vee_spoken = true;
 			}
 
-			if (!el_spoken && strncmp(line0, "ELEANOR", 7) == 0)
+			if (!el_spoken && strncmp(line0.c_str(), "ELEANOR", 7) == 0)
 			{
 				bn::sound_items::eleanor_hey_01.play();
 				el_spoken = true;
 			}
 
-			if (!diana_spoken && strncmp(line0, "DIANA", 5) == 0)
+			if (!diana_spoken && strncmp(line0.c_str(), "DIANA", 5) == 0)
 			{
 				bn::sound_items::diana_hey_01.play();
 				diana_spoken = true;
 			}
 
-			if (!guy_spoken && strncmp(line0, "GUY", 3) == 0)
+			if (!guy_spoken && strncmp(line0.c_str(), "GUY", 3) == 0)
 			{
 				bn::sound_items::guy_hey_01.play();
 				guy_spoken = true;
@@ -2268,8 +2283,6 @@ int exec_dialogue(int x, int checkpoint = 0)
 {
 
 	constexpr int n = -1;
-
-	BN_LOG("language: ", globals->all_save.language);
 
 	if (globals->all_save.language == 0)
 	{
@@ -3558,38 +3571,38 @@ int exec_dialogue(int x, int checkpoint = 0)
 		{
 			bn::sound_items::maple_alright_03.play();
 			line lc[32] = {
-				{true, true, 0,  "BG: Ocean"},
-				{true, fals, 1,  "MAPLE                            Okey, {Donde puedo enchufar esta olla de coccion lenta?           {Hay enchufes por aqui?"},
-				{fals, fals, 1,  "MAPLE                            Creo que e llegado muy tarde y yahas comido algo."},
-				{fals, true, 9,  "ENOKI                            Tenemos una bodega afuera,       es el unico cuarto con           electricidad. Y si, ya comimos   pollo."},
-				{fals, true, 8,  "ENOKI                            }Te hemos extra[ado mucho!"},
-				{fals, fals, 5,  "MAPLE                            Bueno, pues al fin he llegado.   {Donde esta- }Oh! Hola, Aaron."},
+				{true, true, 0, "BG: Ocean"},
+				{true, fals, 1, "MAPLE                            Okey, {Donde puedo enchufar esta olla de coccion lenta?           {Hay enchufes por aqui?"},
+				{fals, fals, 1, "MAPLE                            Creo que e llegado muy tarde y yahas comido algo."},
+				{fals, true, 9, "ENOKI                            Tenemos una bodega afuera,       es el unico cuarto con           electricidad. Y si, ya comimos   pollo."},
+				{fals, true, 8, "ENOKI                            }Te hemos extra[ado mucho!"},
+				{fals, fals, 5, "MAPLE                            Bueno, pues al fin he llegado.   {Donde esta- }Oh! Hola, Aaron."},
 				{true, true, 10, "AARON                            }Bonsoir! O Bonjour mas bien,    ya tecnicamente es ma[ana. {No?  Me alegra que hayas venido.      }Feliz milenio!"},
-				{fals, fals, 3,  "MAPLE                            }Feliz milenio! {Saben que estan a la mitad de la nada verdad?"},
+				{fals, fals, 3, "MAPLE                            }Feliz milenio! {Saben que estan a la mitad de la nada verdad?"},
 				{true, true, 12, "DEL                              }Maple! }Veniste! }Feliz 2000!"},
-				{fals, fals, 5,  "MAPLE                            }Delphine Thibodeaux!            Dios mio, {Cuanto tiempo ha      pasado? {Un a[o? }Salut!"},
+				{fals, fals, 5, "MAPLE                            }Delphine Thibodeaux!            Dios mio, {Cuanto tiempo ha      pasado? {Un a[o? }Salut!"},
 				{fals, true, 13, "DEL                              }Ay, chica! Que alegria verte. Note rayes, que te hemos estado    esperando para abrir el vino     y sacar eclairs."},
 				{fals, true, 12, "DEL                              Aunque ya todos somos unos       adultos aburridos. Asi que no te aseguro que nos quedemos hasta   tarde contigo."},
-				{true, true, 7,  "ENOKI                            Oye Maple, {como te ha ido?      }{Acaso hemos hablado desde la   boda?! }Extra[o a mi mejor amiga!"},
-				{fals, fals, 2,  "MAPLE                            Supongo que tu marido te ha      mantenido ocupada."},
+				{true, true, 7, "ENOKI                            Oye Maple, {Como te ha ido?      }{Acaso hemos hablado desde la   boda?! }Extra[o a mi mejor amiga!"},
+				{fals, fals, 2, "MAPLE                            Supongo que tu marido te ha      mantenido ocupada."},
 				{true, true, 10, "AARON                            Bueno, como ves, vivimos en un   castillo ahora, y eso ha sido    toda una aventura."},
-				{true, true, 7,  "ENOKI                            Soy una princesa."},
-				{fals, fals, 2,  "MAPLE                            Un gran castillo no es todo para ser princesa."},
-				{fals, true, 8,  "ENOKI                            {Entonces una duquesa?"},
-				{fals, fals, 4,  "MAPLE                            Yo- ehm...                       Hmm...                           {Sabes que?                      Es muy tarde para esto."},
-				{fals, fals, 2,  "MAPLE                            Me ha ido bien en cualquier caso,tan solo me faltaria un semestre para poder ser maestra.        Y pues si no se."},
+				{true, true, 7, "ENOKI                            Soy una princesa."},
+				{fals, fals, 2, "MAPLE                            Un gran castillo no es todo para ser princesa."},
+				{fals, true, 8, "ENOKI                            {Entonces una duquesa?"},
+				{fals, fals, 4, "MAPLE                            Yo- ehm...                       Hmm...                           {Sabes que?                      Es muy tarde para esto."},
+				{fals, fals, 2, "MAPLE                            Me ha ido bien en cualquier caso,tan solo me faltaria un semestre para poder ser maestra.          Y pues si no se."},
 				{true, true, 10, "AARON                            Todavia tratas con eso?, {eh?    {Aunque me dijiste un millon de  veces que querias hacer cualquiermenos una maestra?"},
 				{fals, true, 11, "AARON                            {Que no hay carreras para las    personas que puedan lanzar fuego con las manos?"},
-				{fals, fals, 4,  "MAPLE                            No al menos uno que quiera."},
+				{fals, fals, 4, "MAPLE                            No al menos uno que quiera."},
 				{fals, true, 10, "AARON                            Bueno, a mi maestra magica de    fuego me suena muy bien."},
-				{true, true, 8,  "ENOKI                            *Aaawn*                          Dios mio, me muero de sue[o.     {Y si nos vamos a dormir y ma[anaseguimos con la platica?"},
-				{fals, true, 7,  "ENOKI                            Oye Maple, {que tal una pijamada?{como cuando eramos compa[eras decuarto en el colegio?"},
-				{fals, fals, 2,  "MAPLE                            Ehh... supongo que esta bien."},
-				{fals, true, n,  "ENOKI                            }Buenas noches, Del!             Ey Aaron, {te veo en la ma[ana?  {Bien tempranito?"},
-				{fals, true, 0,  "AARON                            Claro que si, Noke-noke.                                          *beso*"},
-				{fals, fals, 3,  "MAPLE                            No terminare de acostumbrarme a  esto."},
-				{true, true, 9,  "ENOKI                            Andale, agarra tu maleta y te    dire donde te quedaras.          }Allons-y!"},
-				{true, true, 0,  "COM: Endscene"}};
+				{true, true, 8, "ENOKI                            *Aaawn*                          Dios mio, me muero de sue[o.     {Y si nos vamos a dormir y ma[anaseguimos con la platica?"},
+				{fals, true, 7, "ENOKI                            Oye Maple, {que tal una pijamada?{como cuando eramos compa[eras decuarto en el colegio?"},
+				{fals, fals, 2, "MAPLE                            Ehh... supongo que esta bien."},
+				{fals, true, n, "ENOKI                            }Buenas noches, Del!             Ey Aaron, {te veo en la ma[ana?  {Bien tempranito?"},
+				{fals, true, 0, "AARON                            Claro que si, Noke-noke.                                          *beso*"},
+				{fals, fals, 3, "MAPLE                            No terminare de acostumbrarme a  esto."},
+				{true, true, 9, "ENOKI                            Andale, agarra tu maleta y te    dire donde te quedaras.          }Allons-y!"},
+				{true, true, 0, "COM: Endscene"}};
 			dialogue_page(lc);
 			return 0;
 			break;
@@ -3659,34 +3672,34 @@ int exec_dialogue(int x, int checkpoint = 0)
 			line lc[32] = {
 				{true, true, 0, "S01:13"},
 				{true, fals, 4, "..."},
-				{true, true, 0, "AARON                            }Bonjour! {Durmieron bien?"},
-				{true, fals, 0, "MAPLE                            Si, he dormido bien, creo."},
-				{true, true, 0, "ENOKI                            }Bonjour! Oye... Hemos encontradoalgo muy padre mientras dormias, pero promete que no te enojaras!"},
-				{fals, fals, 0, "MAPLE                            Sabes que no puedo hacer eso."},
-				{true, true, 0, "ENOKI                            {Recuerdas el libro que querias  que tomara? Pues bien, es un     Atlas del mundo, }y nos dimos    cuenta de algo  divertido!"},
-				{fals, true, 0, "ENOKI                            }Hemos visto esta isla del Lago  Superieur, llamada Tremblay      Island!"},
+				{true, true, 10, "AARON                            }Bonjour! {Durmieron bien?"},
+				{true, fals, 4, "MAPLE                            Si, he dormido bien, creo."},
+				{true, true, 9, "ENOKI                            }Bonjour! Oye... Hemos encontradoalgo muy padre mientras dormias, pero promete que no te enojaras!"},
+				{fals, fals, 4, "MAPLE                            Sabes que no puedo hacer eso."},
+				{true, true, 7, "ENOKI                            {Recuerdas el libro que querias  que tomara? Pues bien, es un     Atlas del mundo, }y nos dimos    cuenta de algo  divertido!"},
+				{fals, true, 9, "ENOKI                            }Hemos visto esta isla del Lago  Superieur, llamada Tremblay      Island!"},
 				{fals, fals, 0, "MAPLE                            Ah, sin chiste. Pensaba que      dirias un chiste o algo por el   estilo."},
 				{fals, true, 0, "ENOKI                            Bueno, nosotros, eh- hemos       pensado que seria divertido si,  pues, Del ha tenido la idea,     asi que..."},
-				{true, true, 0, "DEL                              La ultima vez que hablamos,      mi primo Rufus estaba obsesionadocon comenzar su peque[o pais."},
-				{true, true, 0, "AARON                            El trabajo no quedaria tan lejos,y si nos hacen falta provisiones,no quedaria tan lejos."},
-				{true, true, 0, "ENOKI                            Con el dinero que consigamos     vendiendo el castillo y tu magia,hemos pensado que-"},
-				{fals, fals, 0, "MAPLE                            Espera espera,  espera           UN MOMENTO."},
-				{fals, fals, 0, "MAPLE                            {Enserio me estas diciendo que   venderias el castillo para       moverte a una tal isla-"},
-				{fals, fals, 0, "MAPLE                            Solo porque tiene el mismo       apellido que nosotros?"},
-				{fals, true, 0, "ENOKI                            Y aparte, estamos pensando en    separarnos de Laurentides para   fundar nuestro propio pais."},
+				{true, true, 12, "DEL                              La ultima vez que hablamos,      mi primo Rufus estaba obsesionadocon comenzar su peque[o pais."},
+				{true, true, 11, "AARON                            El trabajo no quedaria tan lejos,y si nos hacen falta provisiones,no quedaria tan lejos."},
+				{true, true, 7, "ENOKI                            Con el dinero que consigamos     vendiendo el castillo y tu magia,hemos pensado que-"},
+				{fals, fals, 3, "MAPLE                            Espera espera,  espera           UN MOMENTO."},
+				{fals, fals, 3, "MAPLE                            {Enserio me estas diciendo que   venderias el castillo para       moverte a una tal isla-"},
+				{fals, fals, 3, "MAPLE                            Solo porque tiene el mismo       apellido que nosotros?"},
+				{fals, true, 9, "ENOKI                            Y aparte, estamos pensando en    separarnos de Laurentides para   fundar nuestro propio pais."},
 				{fals, fals, 0, "MAPLE                            ...Yo..."},
 				{fals, fals, 0, "MAPLE                            ..."},
-				{fals, fals, 0, "MAPLE                            ... Creo que necesito tiempo paraprocesar todo esto."},
-				{true, true, 0, "AARON                            Puede que parezca una locura,    pero nos hemos informado de los  detalles y al parecer es posible que podamos lograrlo."},
-				{true, true, 0, "ENOKI                            Se que platicamos anoche, pero..."},
-				{fals, fals, 0, "MAPLE                            {Y despues que?                  {que vas hacer cuando te aburras en tu peque[a isla?"},
+				{fals, fals, 4, "MAPLE                            ... Creo que necesito tiempo paraprocesar todo esto."},
+				{true, true, 10, "AARON                            Puede que parezca una locura,    pero nos hemos informado de los  detalles y al parecer es posible que podamos lograrlo."},
+				{true, true, 9, "ENOKI                            Se que platicamos anoche, pero..."},
+				{fals, fals, 3, "MAPLE                            {Y despues que?                  {que vas hacer cuando te aburras en tu peque[a isla?"},
 				{fals, fals, 0, "MAPLE                            {Serias el Papa? {Quiza la Reina de Francia? {o que tal tu propio planeta?"},
 				{fals, fals, 0, "MAPLE                            Y probablemente tendras la suertepara conseguirlo. Pero, {sabes   que?"},
 				{fals, fals, 0, "MAPLE                            Yo estare con los pies en la     tierra con un trabajo *de verdad*y evitare morirme de hambre      aunque sea arrastrandome."},
 				{fals, fals, 0, "MAPLE                            O peor aun, en la carcel federal por haber violado algun tipo de  ley rara."},
-				{fals, fals, 0, "MAPLE                            Mira.... Me he divertido, pero   necesito ir a casa.  Estoy harta de todo esto."},
+				{fals, fals, 4, "MAPLE                            Mira.... Me he divertido, pero   necesito ir a casa.  Estoy harta de todo esto."},
 				{fals, fals, 0, "MAPLE                            Aaron, Enoki, Delphine, me dio   gusto haberlos visto de nuevo,   pero necesito tomarme un tiempo."},
-				{true, true, 0, "AARON                            {Encerio? Cambiemos el tema, va? El desayuno ya esta listo,       {vienes?"},
+				{true, true, 10, "AARON                            {Encerio? Cambiemos el tema, va? El desayuno ya esta listo,       {vienes?"},
 				{fals, fals, 0, "MAPLE                            ...Esta bien, me quedare un poco mas, pero ya no tardaria en irme."},
 				{true, true, 0, "COM: Endscene"}};
 			dialogue_page(lc);
@@ -12589,15 +12602,15 @@ dungeon_return dungeon(dungeon_return &dt)
 					case 2:
 					{
 						line lc[10] = {
-							{true, true, 00, "MAPLE                            Enoki, there's no window."},
-							{true, true, 00, "ENOKI                            Uh-huh?"},
-							{true, true, 00, "MAPLE                            What happens if someone tries-"},
-							{true, true, 00, "MAPLE                            to break in?"},
-							{true, true, 00, "ENOKI                            Aaron punches 'em."},
-							{true, true, 00, "ENOKI                            In the face."},
-							{true, true, 00, "MAPLE                            He's not here, though."},
-							{true, true, 00, "ENOKI                            Then I'll punch 'em."},
-							{true, true, 00, "MAPLE                            I.... Hmm. Alright, then."},
+							{fals, true, 0, "MAPLE                            Enoki, no hay ventana."},
+							{fals, true, 0, "ENOKI                            {ah huh?"},
+							{fals, true, 0, "MAPLE                            {Y que pasaria si alguien"},
+							{fals, true, 0, "MAPLE                            intentara colarse?"},
+							{fals, true, 0, "ENOKI                            Aaron le daria una paliza."},
+							{fals, true, 0, "ENOKI                            En la pura cara."},
+							{fals, true, 0, "MAPLE                            Pero el no esta aqui ahorita."},
+							{fals, true, 0, "ENOKI                            Entonces sere yo quien le de la paliza."},
+							{fals, true, 0, "MAPLE                            Eh.... Hmm. Esta bien, supongo."},
 							{true, true, 00, "COM: Endscene"}};
 						dialogue_page_lite(lc);
 						break;
@@ -13690,29 +13703,29 @@ dungeon_return dungeon(dungeon_return &dt)
 							else if (me == 1)
 							{
 								line lc[32] = {
-									{true, true, 00, "SCOUT                            Hey, Enoki?"},
-									{true, true, 00, "ENOKI                            Yuh-huh?"},
-									{true, true, 00, "SCOUT                            Can we talk about Maple?"},
-									{true, true, 00, "ENOKI                            Oooh, what about her?"},
-									{true, true, 00, "ENOKI                            You LIKE her, don't you?"},
-									{true, true, 00, "SCOUT                            What's not to like?"},
-									{true, true, 00, "ENOKI                            We all already know, hehe."},
-									{true, true, 00, "SCOUT                            Aw crap, it's obvious."},
-									{true, true, 00, "ENOKI                            She's hard to get."},
-									{true, true, 00, "ENOKI                            I tried to set her up once."},
-									{true, true, 00, "SCOUT                            You did?"},
-									{true, true, 00, "ENOKI                            They even dated for a bit."},
-									{true, true, 00, "ENOKI                            He just got on her nerves."},
-									{true, true, 00, "ENOKI                            You gotta be perfect for her."},
-									{true, true, 00, "SCOUT                            And I'm not."},
-									{true, true, 00, "ENOKI                            I don't know what perfect is."},
-									{true, true, 00, "SCOUT                            Well, I can dream I guess."},
-									{true, true, 00, "ENOKI                            But hey, don't change yourself."},
-									{true, true, 00, "ENOKI                            Just be the best 'you'."},
-									{true, true, 00, "SCOUT                            I guess you're right."},
-									{true, true, 00, "ENOKI                            The right girl'll come in time."},
-									{true, true, 00, "SCOUT                            Right. Merci, Enoki."},
-									{true, true, 00, "ENOKI                            De rien!"},
+									{fals, true, 0, "SCOUT                            Oye, {Enoki?"},
+									{fals, true, 0, "ENOKI                            {Si?"},
+									{fals, true, 0, "SCOUT                            {Podemos hablar de Maple?"},
+									{fals, true, 0, "ENOKI                            Oooh, {que ocurre con ella?"},
+									{fals, true, 0, "ENOKI                            TE GUSTA Maple, {no es asi?"},
+									{fals, true, 0, "SCOUT                            {Que dices de gustar?"},
+									{fals, true, 0, "ENOKI                            Ya lo sabemos todos, jeje."},
+									{fals, true, 0, "SCOUT                            Neta, {tan obvio es?."},
+									{fals, true, 0, "ENOKI                            Pero ella es complicada."},
+									{fals, true, 0, "ENOKI                            Una vez le presente a un chico."},
+									{fals, true, 0, "SCOUT                            {Le presentaste a un chico?"},
+									{fals, true, 0, "ENOKI                            Y salieron durante un tiempo."},
+									{fals, true, 0, "ENOKI                            Aunque se harto y la dejo."},
+									{fals, true, 0, "ENOKI                            Debes ser perfecto para ella."},
+									{fals, true, 0, "SCOUT                            Y yo no lo soy."},
+									{fals, true, 0, "ENOKI                            No se quien podria serlo."},
+									{fals, true, 0, "SCOUT                            Bueno, un hombre puede so[ar."},
+									{fals, true, 0, "ENOKI                            Pero no cambies."},
+									{fals, true, 0, "ENOKI                            Solo se la mejor version de 'tu mismo'."},
+									{fals, true, 0, "SCOUT                            Supongo que tienes razon."},
+									{fals, true, 0, "ENOKI                            Ya la chica correcta llegara."},
+									{fals, true, 0, "SCOUT                            Esta bien. Merci, Enoki."},
+									{fals, true, 0, "ENOKI                            }De rien!"},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -13720,33 +13733,32 @@ dungeon_return dungeon(dungeon_return &dt)
 							else if (me == 2)
 							{
 								line lc[32] = {
-									{true, true, 00, "SCOUT                            Hey, bro, so, how'd you, er.."},
-									{true, true, 00, "SCOUT                            How'd you first ask Enoki out?"},
-									{true, true, 00, "AARON                            I just invited her to coffee."},
-									{true, true, 00, "SCOUT                            Coffee, coffee, right.."},
-									{true, true, 00, "SCOUT                            We don't uh, hmm.. No coffee.."},
-									{true, true, 00, "AARON                            You want to ask Maple out?"},
-									{true, true, 00, "SCOUT                            Well, I.. Yeah, I do."},
-									{true, true, 00, "AARON                            I'd tell you to give up, but at"},
-									{true, true, 00, "AARON                            the same time, you never know."},
-									{true, true, 00, "AARON                            No one's good enough for her."},
-									{true, true, 00, "SCOUT                            I figured it wasn't worth it."},
-									{true, true, 00, "AARON                            Absolutely no pleasing her."},
-									{true, true, 00, "AARON                            Trust me, I know."},
-									{true, true, 00, "SCOUT                            What do you mean?"},
-									{true, true, 00, "AARON                            Her type is those losers who"},
-									{true, true, 00, "AARON                            they're way cooler than they"},
-									{true, true, 00, "AARON                            are. Now, I'll give her some"},
-									{true, true, 00, "AARON                            credit, though. She puts up"},
-									{true, true, 00, "AARON                            with a lot of the other kind"},
-									{true, true, 00, "AARON                            of loser, too. Just..."},
-									{true, true, 00, "AARON                            Work on yourself. Maybe try"},
-									{true, true, 00, "AARON                            to be a bit more confident and"},
-									{true, true, 00, "AARON                            socially-aware, right?"},
-									{true, true, 00, "SCOUT                            Right. That's a good start."},
-									{true, true, 00, "AARON                            Good luck, man."},
-									{true, true, 00, "SCOUT                            Merci."},
-									{true, true, 00, " "},
+									{fals, true, 0, "SCOUT                            Oye y.. {Como le preguntaste"},
+									{fals, true, 0, "SCOUT                            a Enoki si queria salir?"},
+									{fals, true, 0, "AARON                            Solo le invite a tomar cafe."},
+									{fals, true, 0, "SCOUT                            Cafe, cafe... okay."},
+									{fals, true, 0, "SCOUT                            No tenemos, hmm... Cafe..."},
+									{fals, true, 0, "AARON                            {Quieres invitar a Maple a salir?"},
+									{fals, true, 0, "SCOUT                            Bueno, yo... Si, me gustaria."},
+									{fals, true, 0, "AARON                            Te diria que no lo intentes, pero aya tu."},
+									{fals, true, 0, "AARON                            Ningun chico es"},
+									{fals, true, 0, "AARON                            bueno para ella."},
+									{fals, true, 0, "SCOUT                            Quiza sea inutil intentarlo."},
+									{fals, true, 0, "AARON                            Es imposible complacerla."},
+									{fals, true, 0, "AARON                            Creeme, la conozco bien."},
+									{fals, true, 0, "SCOUT                            {A que te refieres?"},
+									{fals, true, 0, "AARON                            Su tipo son los que se creen"},
+									{fals, true, 0, "AARON                            muy aca, como mejores de lo"},
+									{fals, true, 0, "AARON                            que son. Aunque a decir"},
+									{fals, true, 0, "AARON                            verdad. Tambien le he visto"},
+									{fals, true, 0, "AARON                            salir con otro tipo de"},
+									{fals, true, 0, "AARON                            bobos. {sabes? Quiza solo tengas"},
+									{fals, true, 0, "AARON                            que esforzarte un poco en"},
+									{fals, true, 0, "AARON                            tener algo mas de confianza"},
+									{fals, true, 0, "AARON                            en ti mismo."},
+									{fals, true, 0, "SCOUT                            Bueno, eso un buen comienzo."},
+									{fals, true, 0, "AARON                            Buena suerte con ella."},
+									{fals, true, 0, "SCOUT                            Merci."},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -13754,9 +13766,9 @@ dungeon_return dungeon(dungeon_return &dt)
 							else if (me == 3)
 							{
 								line lc[32] = {
-									{true, true, 00, "(Maybe if I can just get Maple toread a few copies,)"},
-									{true, true, 00, "(We'll finally have something in common with her.)"},
-									{true, true, 00, "(In my dreams.)"},
+									{fals, true, 0, "(A lo mejor puedo convencer a    Maple de leer unos comics.)"},
+									{fals, true, 0, "(Entonces asi podriamos tener    algo en comun.)"},
+									{fals, true, 0, "(...Pero eso no pasara ni en mil a[os.)"},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -13764,18 +13776,18 @@ dungeon_return dungeon(dungeon_return &dt)
 							else if (me == 7)
 							{
 								line lc[32] = {
-									{true, true, 00, "GUY                              You like Time Raiders?"},
-									{true, true, 00, "SCOUT                            Yeah, a bit."},
-									{true, true, 00, "GUY                              How often you get new ones?"},
-									{true, true, 00, "SCOUT                            Diana ships in new ones weekly."},
-									{true, true, 00, "GUY                              Ah okay, I didn't wanna move"},
-									{true, true, 00, "GUY                              here and have to give it up."},
-									{true, true, 00, "SCOUT                            There is a bit of a waiting"},
-									{true, true, 00, "SCOUT                            list, though. You gotta go"},
-									{true, true, 00, "SCOUT                            after Enoki, she likes em."},
-									{true, true, 00, "GUY                              Nah, I'll just take em first."},
-									{true, true, 00, "SCOUT                            Look, you take that up with her."},
-									{true, true, 00, "GUY                              Will do."},
+									{fals, true, 0, "GUY                              {Te gustan los Time Raiders?"},
+									{fals, true, 0, "SCOUT                            Si, un poco."},
+									{fals, true, 0, "GUY                              {Cada cuando consigues los nuevos?"},
+									{fals, true, 0, "SCOUT                            Diana los manda a traer cada semana."},
+									{fals, true, 0, "GUY                              Que bueno, pense que ya no los podria"},
+									{fals, true, 0, "GUY                              leer despues que me mude aqui."},
+									{fals, true, 0, "SCOUT                            Aunque si que hay una lista larga de espera."},
+									{fals, true, 0, "SCOUT                            Tendras que esperar a que Enoki"},
+									{fals, true, 0, "SCOUT                            los termine, a ella le gustan tambien."},
+									{fals, true, 0, "GUY                              Nah, yo los voy a agarrar primero."},
+									{fals, true, 0, "SCOUT                            Eyy, eso tomalo con ella."},
+									{fals, true, 0, "GUY                              Eso hare."},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -13783,8 +13795,8 @@ dungeon_return dungeon(dungeon_return &dt)
 							else
 							{
 								line lc[32] = {
-									{true, true, 00, "(Last month's comic books remain lying on the floor.)"},
-									{true, true, 00, "(Slowly collecting dust.)"},
+									{fals, true, 0, "(Los comics del mes pasado       siguen tirados en el suelo.)"},
+									{fals, true, 0, "(Lentamente acumulando polvo.)"},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -13922,27 +13934,8 @@ dungeon_return dungeon(dungeon_return &dt)
 							else if (me == 1)
 							{
 								line lc[32] = {
-									{true, true, 0, "SCOUT                            Oh, hey Enoki! How's it going?"},
-									{true, true, 0, "ENOKI                            Really good!! It's perfect"},
-									{true, true, 0, "ENOKI                            outside today. Whatcha' workin'"},
-									{true, true, 0, "ENOKI                            on?"},
-									{true, true, 0, "SCOUT                            Right now? I've got this idea for"},
-									{true, true, 0, "SCOUT                            this robot that's half-bat,"},
-									{true, true, 0, "SCOUT                            half-fly swatter."},
-									{true, true, 0, "SCOUT                            Bats like insects, right? So this"},
-									{true, true, 0, "SCOUT                            is going to both eat and squash"},
-									{true, true, 0, "SCOUT                            insects."},
-									{true, true, 0, "ENOKI                            Are you calling it Smackula?"},
-									{true, true, 0, "SCOUT                            I.. most certainly can."},
-									{true, true, 0, "ENOKI                            By royal degree, I declare it"},
-									{true, true, 0, "ENOKI                            hereby be referred to as the"},
-									{true, true, 0, "ENOKI                            'Smackula'."},
-									{true, true, 0, "ENOKI                            Or maybe the 'Smackchula', that"},
-									{true, true, 0, "ENOKI                            way something finally rhymes"},
-									{true, true, 0, "ENOKI                            with Spatula."},
-									{true, true, 0, "SCOUT                            We're solving the world's true"},
-									{true, true, 0, "SCOUT                            issues here."},
-									{true, true, 0, "ENOKI                            Mm-hmm!"},
+									{true, true, 0, "SCOUT                            }Buenas, Enoki!"},
+									{true, true, 0, "ENOKI                            }Hola, Scout!"},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -13950,33 +13943,8 @@ dungeon_return dungeon(dungeon_return &dt)
 							else if (me == 2)
 							{
 								line lc[32] = {
-									{true, true, 0, "SCOUT                            Oh, hey Aaron! How've you been?"},
-									{true, true, 0, "AARON                            Good, I'm just really tired. I"},
-									{true, true, 0, "AARON                            think I underestimated how much"},
-									{true, true, 0, "AARON                            wood I'd be chopping."},
-									{true, true, 0, "AARON                            I'm making boards, too. I plan on"},
-									{true, true, 0, "AARON                            having some houses up and about a"},
-									{true, true, 0, "AARON                            quarter of the woods levelled."},
-									{true, true, 0, "SCOUT                            How many people are coming here,"},
-									{true, true, 0, "SCOUT                            do you think?"},
-									{true, true, 0, "AARON                            I don't know.. maybe eight? Nine?"},
-									{true, true, 0, "AARON                            Do you know anyone who' want to"},
-									{true, true, 0, "AARON                            live here, too?"},
-									{true, true, 0, "SCOUT                            No, not really."},
-									{true, true, 0, "AARON                            You still talking to that girl?"},
-									{true, true, 0, "SCOUT                            Nah, I lied about her."},
-									{true, true, 0, "SCOUT                            I'll be real with you, I don't"},
-									{true, true, 0, "SCOUT                            really have friends outside of"},
-									{true, true, 0, "SCOUT                            y'all."},
-									{true, true, 0, "SCOUT                            But it's cool. I've got cable."},
-									{true, true, 0, "AARON                            I'm gonna build those houses, and"},
-									{true, true, 0, "AARON                            we'll get some more people here."},
-									{true, true, 0, "SCOUT                            So, What are you gonna do when"},
-									{true, true, 0, "SCOUT                            those people come?"},
-									{true, true, 0, "AARON                            I... don't know to be honest."},
-									{true, true, 0, "AARON                            Probably chop more wood."},
-									{true, true, 0, "SCOUT                            Take it easy, alright?"},
-									{true, true, 0, "AARON                            Got it. You too."},
+									{true, true, 0, "SCOUT                            }Buenas, Aaron!"},
+									{true, true, 0, "AARON                            }Hola, Scout!"},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -14345,7 +14313,7 @@ dungeon_return dungeon(dungeon_return &dt)
 					case 40:
 					{
 						line lc[5] = {
-							{fals, true, 0, "Observas la obra de arte.                                         Es bueno.        No me importa.", 2},
+							{fals, true, 0, "Observas la obra de arte.                                         Es bueno.       No me importa. ", 2},
 							{fals, true, 0, "Y por lo tanto...."},
 							{fals, true, 0, "La obra de arte te observa a ti."},
 							{fals, true, 0, "El arte es extra[o."},
@@ -15805,37 +15773,37 @@ dungeon_return dungeon(dungeon_return &dt)
 					}
 
 					line lc[32] = {
-						{true, true, 00, "MAPLE                            ...."},
-						{true, true, 00, "ENOKI                            Well, there's no passage."},
-						{true, true, 00, "MAPLE                            You don't say."},
-						{true, true, 00, "ENOKI                            That's weird."},
-						{true, true, 00, "MAPLE                            Enoki... Look here."},
-						{true, true, 00, "MAPLE                            I guess it doesn't make any sense"},
-						{true, true, 00, "MAPLE                            to be angry, so I won't be, but.."},
-						{true, true, 00, "MAPLE                            You need to stop being like this."},
-						{true, true, 00, "MAPLE                            You and Aaron just spent all this"},
-						{true, true, 00, "MAPLE                            money on a barely furnished"},
-						{true, true, 00, "MAPLE                            castle without basic faculties"},
-						{true, true, 00, "MAPLE                            for what? So you could play like"},
-						{true, true, 00, "MAPLE                            you're a princess? While I'm over"},
-						{true, true, 00, "MAPLE                            in Carolina, sacrificing the best"},
-						{true, true, 00, "MAPLE                            parts of my life for an apartment"},
-						{true, true, 00, "MAPLE                            with the bare essentials?"},
-						{true, true, 00, "MAPLE                            Enoki... Please."},
-						{true, true, 00, "MAPLE                            I don't want to be the bad guy."},
-						{true, true, 00, "MAPLE                            I know you didn't really have a"},
-						{true, true, 00, "MAPLE                            childhood or parents, I get it."},
-						{true, true, 00, "MAPLE                            That's me too."},
-						{true, true, 00, "MAPLE                            But you can't keep going on like"},
-						{true, true, 00, "MAPLE                            this. Do you understand?"},
-						{true, true, 00, "ENOKI                            I do understand."}, // j'ai compris?
-						{true, true, 00, "MAPLE                            It's 5:00 in the morning, I'm"},
-						{true, true, 00, "MAPLE                            going back to bed. I'll see y'all"},
-						{true, true, 00, "MAPLE                            in the morning, oui?"},
-						{true, true, 00, "ENOKI                            Oui.."},
-						{true, true, 00, "MAPLE                            Hey, don't beat yourself up about"},
-						{true, true, 00, "MAPLE                            it. S'il te plait.. Bonne nuit."},
-						{true, true, 00, "ENOKI                            Bonne nuit.."},
+						{fals, true, 0, "MAPLE                            ...."},
+						{fals, true, 0, "ENOKI                            Bueno, pues no hay pasadizo."},
+						{fals, true, 0, "MAPLE                            No me digas.."},
+						{fals, true, 0, "ENOKI                            Que extra[o."},
+						{fals, true, 0, "MAPLE                            A ver, Enoki..."},
+						{fals, true, 0, "MAPLE                            Supongo que no tiene ningun"},
+						{fals, true, 0, "MAPLE                            sentido enfadarse contigo, pero"},
+						{fals, true, 0, "MAPLE                            deberias dejar de actuar asi."},
+						{fals, true, 0, "MAPLE                            Tu y Aaron gastaron un"},
+						{fals, true, 0, "MAPLE                            dineral en un castillo sin"},
+						{fals, true, 0, "MAPLE                            amueblar ni necesidades basicas."},
+						{fals, true, 0, "MAPLE                            {Para que? {Para que puedas jugar"},
+						{fals, true, 0, "MAPLE                            a hacerte la princesa? Mientras"},
+						{fals, true, 0, "MAPLE                            haces eso, yo sacrifico toda"},
+						{fals, true, 0, "MAPLE                            mi vida personal manteniendo el"},
+						{fals, true, 0, "MAPLE                            apartamento de Carolina con solo"},
+						{fals, true, 0, "MAPLE                            lo esencial. Enoki... Por favor."},
+						{fals, true, 0, "MAPLE                            No quiero parecer la mala aqui."},
+						{fals, true, 0, "MAPLE                            Entiendo que no has tenido"},
+						{fals, true, 0, "MAPLE                            una buena infancia"},
+						{fals, true, 0, "MAPLE                            ni padres...Porque esa soy yo tambien."},
+						{fals, true, 0, "MAPLE                            Pero no puedes seguir portandote"},
+						{fals, true, 0, "MAPLE                            de esta forma. {Lo entiendes?"},
+						{fals, true, 0, "ENOKI                            Lo entiendo."},
+						{fals, true, 0, "MAPLE                            Son las 5:00 de la ma[ana, voy"},
+						{fals, true, 0, "MAPLE                            a volver a la cama. Te vere por"},
+						{fals, true, 0, "MAPLE                            la ma[ana, {oui?"},
+						{fals, true, 0, "ENOKI                            Oui..."},
+						{fals, true, 0, "MAPLE                            No te apures pensando en"},
+						{fals, true, 0, "MAPLE                            esto. S'il te plait, Bonne nuit."},
+						{fals, true, 0, "ENOKI                            Bonne nuit..."},
 						{true, true, 00, "COM: Endscene"}};
 					dialogue_page_lite(lc);
 
@@ -15941,18 +15909,18 @@ dungeon_return rufus_dungeon(dungeon_return &dt)
 		line lc[32] = {
 			{true, true, 0, "S07:01"},
 			{true, true, 0, "BG: fadeout"},
-			{true, true, 00, "MAPLE                            So come clean with me, oui?      Did you make this place?"},
-			{true, true, 00, "SCOUT                            Heck no! I kind of wish I did,   though."},
+			{fals, true, 0, "MAPLE                            Dime la verdad, {oui?            {Tu hiciste todo este lugar?"},
+			{fals, true, 0, "SCOUT                            }Imposible! Aunque me habria     gustado conseguirlo por mi mismo."},
 			{true, true, 00, "S07:02"},
 			{true, true, 00, "..."},
 			{true, true, 00, "S07:03"},
-			{true, true, 00, "SCOUT                            MAPLE LOOK OUT!"},
+			{fals, true, 0, "SCOUT                            }MAPLE, CUIDADO!"},
 			{true, true, 00, "S07:04"},
-			{true, true, 00, "MAPLE                            ...Scout, are you alright?"},
-			{true, true, 00, "RUFUS                            Ow. At least it helped pop my    back."},
+			{fals, true, 0, "MAPLE                            ... Scout, {te encuentras bien?"},
+			{fals, true, 0, "RUFUS                            Ow. Aunque me golpee un poco la  espalda. Creo que estare bien."},
 			{true, true, 00, "S07:05"},
-			{true, true, 00, "MAPLE                            What's with all the gasoline in  this place, huh?"},
-			{true, true, 00, "SCOUT                            Maybe be a little extra careful  with that fire power of yours in this next part, huh?"},
+			{fals, true, 0, "MAPLE                            {Que hace toda esta gasolina aqui?"},
+			{fals, true, 0, "SCOUT                            Por nuestro bien, mas te vale    tener cuidado con tus poderes."},
 			{true, true, 0, "COM: Endscene"}};
 		dialogue_page(lc);
 
@@ -16641,120 +16609,243 @@ dungeon_return rufus_dungeon(dungeon_return &dt)
 				// Start action
 				current_room.a_notif.set_visible(false);
 				bn::core::update();
-				switch (possible_action)
+
+				if (globals->all_save.language == 0)
 				{
-				case 2:
-				{
-					line lc[10] = {
-						{true, true, 00, "MAPLE                            What the.."},
-						{true, true, 00, "MAPLE                            What the heck is this?"},
-						{true, true, 00, "SCOUT                            Maybe my bunker tool needs to be"},
-						{true, true, 00, "SCOUT                            recalibrated."},
-						{true, true, 00, "MAPLE                            Well, fix it. I don't want to die"},
-						{true, true, 00, "MAPLE                            down here."},
-						{true, true, 00, "COM: Endscene"}};
-					dialogue_page_lite(lc);
-					break;
-				};
-				case 3:
-				{
-					line lc[32] = {
-						{true, true, 00, "ELEANOR                          Vee, do we need to go any"},
-						{true, true, 00, "ELEANOR                          further? I'm scared."},
-						{true, true, 00, "OLIVIER                          I'll stay behind with my wife."},
-						{true, true, 00, "OLIVIER                          We can protect ourselves. I'm   "},
-						{true, true, 00, "OLIVIER                          sure we're far enough from"},
-						{true, true, 00, "OLIVIER                          whatever was going on."},
-						{true, true, 00, "AARON                            Alright.. If you say so. Fais"},
-						{true, true, 00, "AARON                            attention, oui?"},
-						{true, true, 00, "OLIVIER                          Oui."},
-						{true, true, 00, "AARON                            Enoki, are you going to stay"},
-						{true, true, 00, "AARON                            with them?"},
-						{true, true, 00, "ENOKI                            Bad things happen to me"},
-						{true, true, 00, "ENOKI                            whenever I'm too far away from  "},
-						{true, true, 00, "ENOKI                            a Tremblay, so I'll say no."},
-						{true, true, 00, "AARON                            Very well, then. So, it's"},
-						{true, true, 00, "AARON                            you, Maple, and Scout.. oui?  "},
-						{true, true, 00, "SCOUT                            Oui."},
-						{true, true, 00, "SCOUT                            But maybe it should just be me."},
-						{true, true, 00, "SCOUT                            I'm the 'scout', right?"},
-						{true, true, 00, "MAPLE                            No, you're not going into there"},
-						{true, true, 00, "MAPLE                            by yourself. I'm coming with."},
-						{true, true, 00, "SCOUT                            Maybe Aaron and Enoki stay?"},
-						{true, true, 00, "AARON                            ...Fine. You two go."},
-						{true, true, 00, "MAPLE                            Allons-y. Into the tacky"},
-						{true, true, 00, "MAPLE                            hallway."},
-						{true, true, 00, "COM: Endscene"}};
-					dialogue_page_lite(lc);
-					break;
-				};
-				case 4:
-				{
-					dt.spawn_x = 16;
-					dt.spawn_y = 19;
-					dt.world_index = 1;
-					return dt;
-				};
-				case 5:
-				{
-					line lc[10] = {
-						{true, true, 00, "OLIVIER                          Is that gasoline?"},
-						{true, true, 00, "SCOUT                            It, uh.. seems like.."},
-						{true, true, 00, "AARON                            Seems like what?"},
-						{true, true, 00, "SCOUT                            It, er- someone might have"},
-						{true, true, 00, "SCOUT                            already been here."},
-						{true, true, 00, "MAPLE                            Oh I don't like that."},
-						{true, true, 00, "COM: Endscene"}};
-					dialogue_page_lite(lc);
-					break;
-				};
-				case 6:
-				{
-					if (current_room.chari.at(current_room.follow_id).identity != 3)
+					switch (possible_action)
+					{
+					case 2:
 					{
 						line lc[10] = {
-							{true, true, 00, "SCOUT                            Hey, y'all don't worry,"},
-							{true, true, 00, "SCOUT                            I can take care of this."},
+							{true, true, 00, "MAPLE                            What the.."},
+							{true, true, 00, "MAPLE                            What the heck is this?"},
+							{true, true, 00, "SCOUT                            Maybe my bunker tool needs to be"},
+							{true, true, 00, "SCOUT                            recalibrated."},
+							{true, true, 00, "MAPLE                            Well, fix it. I don't want to die"},
+							{true, true, 00, "MAPLE                            down here."},
 							{true, true, 00, "COM: Endscene"}};
 						dialogue_page_lite(lc);
+						break;
+					};
+					case 3:
+					{
+						line lc[32] = {
+							{true, true, 00, "ELEANOR                          Vee, do we need to go any"},
+							{true, true, 00, "ELEANOR                          further? I'm scared."},
+							{true, true, 00, "OLIVIER                          I'll stay behind with my wife."},
+							{true, true, 00, "OLIVIER                          We can protect ourselves. I'm   "},
+							{true, true, 00, "OLIVIER                          sure we're far enough from"},
+							{true, true, 00, "OLIVIER                          whatever was going on."},
+							{true, true, 00, "AARON                            Alright.. If you say so. Fais"},
+							{true, true, 00, "AARON                            attention, oui?"},
+							{true, true, 00, "OLIVIER                          Oui."},
+							{true, true, 00, "AARON                            Enoki, are you going to stay"},
+							{true, true, 00, "AARON                            with them?"},
+							{true, true, 00, "ENOKI                            Bad things happen to me"},
+							{true, true, 00, "ENOKI                            whenever I'm too far away from  "},
+							{true, true, 00, "ENOKI                            a Tremblay, so I'll say no."},
+							{true, true, 00, "AARON                            Very well, then. So, it's"},
+							{true, true, 00, "AARON                            you, Maple, and Scout.. oui?  "},
+							{true, true, 00, "SCOUT                            Oui."},
+							{true, true, 00, "SCOUT                            But maybe it should just be me."},
+							{true, true, 00, "SCOUT                            I'm the 'scout', right?"},
+							{true, true, 00, "MAPLE                            No, you're not going into there"},
+							{true, true, 00, "MAPLE                            by yourself. I'm coming with."},
+							{true, true, 00, "SCOUT                            Maybe Aaron and Enoki stay?"},
+							{true, true, 00, "AARON                            ...Fine. You two go."},
+							{true, true, 00, "MAPLE                            Allons-y. Into the tacky"},
+							{true, true, 00, "MAPLE                            hallway."},
+							{true, true, 00, "COM: Endscene"}};
+						dialogue_page_lite(lc);
+						break;
+					};
+					case 4:
+					{
+						dt.spawn_x = 16;
+						dt.spawn_y = 19;
+						dt.world_index = 1;
+						return dt;
+					};
+					case 5:
+					{
+						line lc[10] = {
+							{true, true, 00, "OLIVIER                          Is that gasoline?"},
+							{true, true, 00, "SCOUT                            It, uh.. seems like.."},
+							{true, true, 00, "AARON                            Seems like what?"},
+							{true, true, 00, "SCOUT                            It, er- someone might have"},
+							{true, true, 00, "SCOUT                            already been here."},
+							{true, true, 00, "MAPLE                            Oh I don't like that."},
+							{true, true, 00, "COM: Endscene"}};
+						dialogue_page_lite(lc);
+						break;
+					};
+					case 6:
+					{
+						if (current_room.chari.at(current_room.follow_id).identity != 3)
+						{
+							line lc[10] = {
+								{true, true, 00, "SCOUT                            Hey, y'all don't worry,"},
+								{true, true, 00, "SCOUT                            I can take care of this."},
+								{true, true, 00, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+						}
+						break;
+					};
+					case 7:
+					{
+						dt.spawn_x = 14;
+						dt.spawn_y = 17;
+						dt.world_index = 2;
+						return dt;
+						break;
+					};
+					case 8:
+					{
+						dt.spawn_x = 3;
+						dt.spawn_y = 62;
+						dt.world_index = 3;
+						return dt;
+						break;
+					};
+					case 9:
+					{
+						line lc[10] = {
+							{true, true, 00, "You wonder what fire might be    able to do to this button."},
+							{true, true, 00, "COM: Endscene"}};
+						dialogue_page_lite(lc);
+						break;
+					};
+					case 10:
+					{
+						dt.spawn_x = 0;
+						dt.spawn_y = 0;
+						dt.world_index = 99;
+						return dt;
+						break;
+					};
+					default:
+					{
+					};
 					}
-					break;
-				};
-				case 7:
+				}
+				else if (globals->all_save.language == 2)
 				{
-					dt.spawn_x = 14;
-					dt.spawn_y = 17;
-					dt.world_index = 2;
-					return dt;
-					break;
-				};
-				case 8:
-				{
-					dt.spawn_x = 3;
-					dt.spawn_y = 62;
-					dt.world_index = 3;
-					return dt;
-					break;
-				};
-				case 9:
-				{
-					line lc[10] = {
-						{true, true, 00, "You wonder what fire might be    able to do to this button."},
-						{true, true, 00, "COM: Endscene"}};
-					dialogue_page_lite(lc);
-					break;
-				};
-				case 10:
-				{
-					dt.spawn_x = 0;
-					dt.spawn_y = 0;
-					dt.world_index = 99;
-					return dt;
-					break;
-				};
-				default:
-				{
-				};
+
+					switch (possible_action)
+					{
+					case 2:
+					{
+						line lc[10] = {
+							{true, true, 00, "MAPLE                            What the.."},
+							{true, true, 00, "MAPLE                            What the heck is this?"},
+							{true, true, 00, "SCOUT                            Maybe my bunker tool needs to be"},
+							{true, true, 00, "SCOUT                            recalibrated."},
+							{true, true, 00, "MAPLE                            Well, fix it. I don't want to die"},
+							{true, true, 00, "MAPLE                            down here."},
+							{true, true, 00, "COM: Endscene"}};
+						dialogue_page_lite(lc);
+						break;
+					};
+					case 3:
+					{
+						line lc[32] = {
+							{true, true, 00, "ELEANOR                          Vee, do we need to go any"},
+							{true, true, 00, "ELEANOR                          further? I'm scared."},
+							{true, true, 00, "OLIVIER                          I'll stay behind with my wife."},
+							{true, true, 00, "OLIVIER                          We can protect ourselves. I'm   "},
+							{true, true, 00, "OLIVIER                          sure we're far enough from"},
+							{true, true, 00, "OLIVIER                          whatever was going on."},
+							{true, true, 00, "AARON                            Alright.. If you say so. Fais"},
+							{true, true, 00, "AARON                            attention, oui?"},
+							{true, true, 00, "OLIVIER                          Oui."},
+							{true, true, 00, "AARON                            Enoki, are you going to stay"},
+							{true, true, 00, "AARON                            with them?"},
+							{true, true, 00, "ENOKI                            Bad things happen to me"},
+							{true, true, 00, "ENOKI                            whenever I'm too far away from  "},
+							{true, true, 00, "ENOKI                            a Tremblay, so I'll say no."},
+							{true, true, 00, "AARON                            Very well, then. So, it's"},
+							{true, true, 00, "AARON                            you, Maple, and Scout.. oui?  "},
+							{true, true, 00, "SCOUT                            Oui."},
+							{true, true, 00, "SCOUT                            But maybe it should just be me."},
+							{true, true, 00, "SCOUT                            I'm the 'scout', right?"},
+							{true, true, 00, "MAPLE                            No, you're not going into there"},
+							{true, true, 00, "MAPLE                            by yourself. I'm coming with."},
+							{true, true, 00, "SCOUT                            Maybe Aaron and Enoki stay?"},
+							{true, true, 00, "AARON                            ...Fine. You two go."},
+							{true, true, 00, "MAPLE                            Allons-y. Into the tacky"},
+							{true, true, 00, "MAPLE                            hallway."},
+							{true, true, 00, "COM: Endscene"}};
+						dialogue_page_lite(lc);
+						break;
+					};
+					case 4:
+					{
+						dt.spawn_x = 16;
+						dt.spawn_y = 19;
+						dt.world_index = 1;
+						return dt;
+					};
+					case 5:
+					{
+						line lc[10] = {
+							{true, true, 00, "OLIVIER                          Is that gasoline?"},
+							{true, true, 00, "SCOUT                            It, uh.. seems like.."},
+							{true, true, 00, "AARON                            Seems like what?"},
+							{true, true, 00, "SCOUT                            It, er- someone might have"},
+							{true, true, 00, "SCOUT                            already been here."},
+							{true, true, 00, "MAPLE                            Oh I don't like that."},
+							{true, true, 00, "COM: Endscene"}};
+						dialogue_page_lite(lc);
+						break;
+					};
+					case 6:
+					{
+						if (current_room.chari.at(current_room.follow_id).identity != 3)
+						{
+							line lc[10] = {
+								{true, true, 00, "SCOUT                            Hey, y'all don't worry,"},
+								{true, true, 00, "SCOUT                            I can take care of this."},
+								{true, true, 00, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+						}
+						break;
+					};
+					case 7:
+					{
+						dt.spawn_x = 14;
+						dt.spawn_y = 17;
+						dt.world_index = 2;
+						return dt;
+						break;
+					};
+					case 8:
+					{
+						dt.spawn_x = 3;
+						dt.spawn_y = 62;
+						dt.world_index = 3;
+						return dt;
+						break;
+					};
+					case 9:
+					{
+						line lc[10] = {
+							{true, true, 00, "Te preguntas si el fuego podria  ser util."},
+							{true, true, 00, "COM: Endscene"}};
+						dialogue_page_lite(lc);
+						break;
+					};
+					case 10:
+					{
+						dt.spawn_x = 0;
+						dt.spawn_y = 0;
+						dt.world_index = 99;
+						return dt;
+						break;
+					};
+					default:
+					{
+					};
+					}
 				}
 			}
 		}
@@ -16942,9 +17033,14 @@ void keyboard()
 	bn::core::update();
 
 	bn::string<16> string;
+	bn::string<33> file2_str;
 	bn::ostringstream ss(string);
 	bn::sprite_text_generator file1_gen(common::variable_8x16_sprite_font);
+	bn::sprite_text_generator file2_gen(common::variable_8x16_sprite_font);
+
 	bn::vector<bn::sprite_ptr, 16> file1_spr;
+	bn::vector<bn::sprite_ptr, 33> file2_spr;
+
 	auto velvet = bn::regular_bg_items::velvet.create_bg(0, 0);
 	auto ui = bn::regular_bg_items::keyboard_bg.create_bg(0, 0);
 	auto sel = bn::sprite_items::selection.create_sprite(-100, -18);
@@ -16953,6 +17049,26 @@ void keyboard()
 	auto lower = true;
 	ui.set_y(64);
 
+	switch (globals->all_save.language)
+	{
+	case 0:
+	{
+		file2_str = "SELECT (Caps), START (Finish)";
+		break;
+	}
+	case 1:
+	{
+		file2_str = "SELECT Majuscules, START Termine";
+		break;
+	}
+	case 2:
+	{
+		file2_str = "SELECT (Mayus), START (Finalizar)";
+		break;
+	}
+	}
+
+	file2_gen.generate(-104, height * -1, file2_str, file2_spr);
 	while (!bn::keypad::start_pressed())
 	{
 
@@ -17001,11 +17117,13 @@ void keyboard()
 			{
 				bn::sound_items::pop.play();
 				file1_spr.clear();
+				file2_spr.clear();
 				unsigned short int plus = 0;
 				if (!lower)
 					plus = 36;
 				ss << (basis[x_state + plus + (y_state * 12)]);
 				file1_gen.generate(-104, height, ss.str().c_str(), file1_spr);
+				file2_gen.generate(-104, height * -1, file2_str, file2_spr);
 			}
 			else
 			{
@@ -17019,7 +17137,9 @@ void keyboard()
 			{
 				string.pop_back();
 				file1_spr.clear();
+				file2_spr.clear();
 				file1_gen.generate(-104, height, string.c_str(), file1_spr);
+				file2_gen.generate(-104, height * -1, file2_str, file2_spr);
 				bn::sound_items::cnaut.play();
 			}
 			else
@@ -17032,6 +17152,7 @@ void keyboard()
 		{
 			bn::sound_items::fireblast.play();
 			file1_spr.clear();
+			file2_spr.clear();
 			lower = !lower;
 			height = height * -1;
 			if (!lower)
@@ -17055,6 +17176,7 @@ void keyboard()
 				}
 			}
 			file1_gen.generate(-104, height, string.c_str(), file1_spr);
+			file2_gen.generate(-104, height * -1, file2_str, file2_spr);
 			bn::sound_items::firehit.play();
 		}
 
@@ -17705,8 +17827,6 @@ void load_save()
 			break;
 		}
 		}
-
-		BN_LOG("set it to ", globals->current_save->checkpoint);
 
 		// remove panels
 		for (int tt = 0; tt < 7; tt++)
@@ -20159,46 +20279,100 @@ dungeon_return kitchen()
 					}
 					if (abs(food[t].entity.x() - hand.x()) + abs(food[t].entity.y() - hand.y()) < 16)
 					{
-						switch (t - 1)
+						switch (globals->all_save.language)
 						{
 						case 0:
-							buf1 = "Vegetables";
-							break;
-						case 1:
-							buf1 = "Meat";
-							break;
-						case 2:
-							buf1 = "Roux";
-							break;
-						case 3:
-							switch (food[t].type)
+						{
+							switch (t - 1)
 							{
+							case 0:
+								buf1 = "Vegetables";
+								break;
 							case 1:
-								buf1 = "Rice Bowl";
+								buf1 = "Meat";
 								break;
-							case 8:
-								buf1 = "Jambalaya";
+							case 2:
+								buf1 = "Roux";
 								break;
-							case 9:
-								buf1 = "Gumbo";
+							case 3:
+								switch (food[t].type)
+								{
+								case 1:
+									buf1 = "Rice Bowl";
+									break;
+								case 8:
+									buf1 = "Jambalaya";
+									break;
+								case 9:
+									buf1 = "Gumbo";
+									break;
+								case 10:
+									buf1 = "Gumbo + Rice";
+									break;
+								case 11:
+									buf1 = "Ettoufee";
+									break;
+								default:
+									buf1 = "Empty Bowl";
+									break;
+								}
 								break;
-							case 10:
-								buf1 = "Gumbo + Rice";
-								break;
-							case 11:
-								buf1 = "Ettoufee";
+							case 4:
+								buf1 = "Spices";
 								break;
 							default:
-								buf1 = "Empty Bowl";
-								break;
+							{
+							};
 							}
-							break;
-						case 4:
-							buf1 = "Spices";
-							break;
-						default:
+						}
+						case 1:
 						{
-						};
+							break;
+						}
+						case 2:
+						{
+							switch (t - 1)
+							{
+							case 0:
+								buf1 = "Vegetal";
+								break;
+							case 1:
+								buf1 = "Carne";
+								break;
+							case 2:
+								buf1 = "Roux";
+								break;
+							case 3:
+								switch (food[t].type)
+								{
+								case 1:
+									buf1 = "Arroz";
+									break;
+								case 8:
+									buf1 = "Jambalaya";
+									break;
+								case 9:
+									buf1 = "Gumbo";
+									break;
+								case 10:
+									buf1 = "Gumbo + Rice";
+									break;
+								case 11:
+									buf1 = "Ettoufee";
+									break;
+								default:
+									buf1 = "Tazon Vacio";
+									break;
+								}
+								break;
+							case 4:
+								buf1 = "Especias";
+								break;
+							default:
+							{
+							};
+							}
+						}
 						}
 					}
 				}
@@ -20378,43 +20552,94 @@ dungeon_return kitchen()
 
 				if (bn::keypad::r_pressed())
 				{
-					switch (je_veus_de)
+					switch (globals->all_save.language)
 					{
-					case 8:
+					case 0:
 					{
-						line lc[32] = {
-							{fals, fals, 0, "JUMBALAYA                        Rice, Veg, Meat"},
-							{fals, fals, 0, "COM: Endscene"}};
-						dialogue_page_lite(lc);
+						switch (je_veus_de)
+						{
+						case 8:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "JUMBALAYA                        Rice, Veg, Meat"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						case 9:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "GUMBO                            Rice, Veg, Meat, Roux"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						case 10:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "GUMBO, EXTRA RICE                Rice, Veg, Meat, Roux, Rice"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						case 11:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "ETTOUFEE                         Rice, Veg, Meat, Roux, Roux"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						default:
+						{
+						};
 						break;
-					};
-					case 9:
-					{
-						line lc[32] = {
-							{fals, fals, 0, "GUMBO                            Rice, Veg, Meat, Roux"},
-							{fals, fals, 0, "COM: Endscene"}};
-						dialogue_page_lite(lc);
+						}
 						break;
-					};
-					case 10:
+					}
+					case 2:
 					{
-						line lc[32] = {
-							{fals, fals, 0, "GUMBO, EXTRA RICE                Rice, Veg, Meat, Roux, Rice"},
-							{fals, fals, 0, "COM: Endscene"}};
-						dialogue_page_lite(lc);
+						switch (je_veus_de)
+						{
+						case 8:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "JUMBALAYA                        Arroz, Veg, Carne"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						case 9:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "GUMBO                            Arroz, Veg, Carne, Roux"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						case 10:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "GUMBO, ARROZ ADICIONAL           Arroz, Veg, Carne, Roux, Arroz"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						case 11:
+						{
+							line lc[32] = {
+								{fals, fals, 0, "ETTOUFEE                         Arroz, Veg, Carne, Roux, Roux"},
+								{fals, fals, 0, "COM: Endscene"}};
+							dialogue_page_lite(lc);
+							break;
+						};
+						default:
+						{
+						};
 						break;
-					};
-					case 11:
-					{
-						line lc[32] = {
-							{fals, fals, 0, "ETTOUFEE                         Rice, Veg, Meat, Roux, Roux"},
-							{fals, fals, 0, "COM: Endscene"}};
-						dialogue_page_lite(lc);
+						}
 						break;
-					};
-					default:
-					{
-					};
+					}
 					}
 				}
 
@@ -21665,7 +21890,6 @@ int main()
 	// 'new' allows me to store this in the heap instead of the stack
 	globals = new global_data();
 	globals->current_save = new save_struct();
-	BN_LOG(DEVICE_TYPE);
 
 	/*
 	dungeon_return dt;
