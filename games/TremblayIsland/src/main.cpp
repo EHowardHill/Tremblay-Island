@@ -4050,7 +4050,7 @@ int exec_dialogue(int x, int checkpoint = 0)
 					{fals, fals, 0, "                                 Estoy acabado. Completamente.    Tambien podria darse por vencido."},
 					{fals, fals, 0, "                                 Tal vez deberia aprender a       cocinar algo por una vez."},
 					{fals, fals, 0, "                                 Definitivamente necesito ponerme en forma, de verdad."},
-					{fals, fals, 0, "                                 Supongo que no seria bueno       mencionárselo a Guy."},
+					{fals, fals, 0, "                                 Supongo que no seria bueno       mencionarselo a Guy."},
 					{fals, fals, 0, "                                 Tal vez solo trabaje en mi mismo y lo deje pasar a menos que      alguien lo mencione."},
 					{fals, fals, 0, "                                 ...Si."},
 					{fals, fals, 0, "                                 Necesito dejar de escribir estos registros sobre mi falta de vida amorosa."},
@@ -6717,65 +6717,136 @@ void popup(int scene)
 
 		char text[192] = {0};
 
-		switch (scene)
-		{
-		case 0:
-		{
-			char txt1[192] = "You'll find things around the    island to build your Trembloon   count. If you get 100, you get   to progress to the next chapter! Bonne chance!";
-			strncpy(text, txt1, 192);
-			break;
-		}
-		case 1:
-		{
-			char txt1[192] = "Try to catch all the rabbits and toss them out of the garden as   soon as possible. Pick them up & throw them with the A button.    Bonne chance!";
-			strncpy(text, txt1, 192);
-			my_chari = 1;
-			break;
-		}
-		case 2:
-		{
-			char txt1[192] = "Try to find the gem and avoid thebats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!";
-			strncpy(text, txt1, 192);
-			my_chari = 0;
-			break;
-		}
-		case 3:
-		{
-			char txt1[192] = "Use the A button to chop the     wooden pegs. Make sure you don't swing out of line or miss any, oryou'll lose points!              Bonne chance!";
-			strncpy(text, txt1, 192);
-			my_chari = 2;
-			break;
-		}
-		case 4:
-		{
-			char txt1[192] = "There are new villagers to the   northwest! There are new ways to earn Trembloons, but you'll have to figure out how yourself.      Bonne chance!";
-			strncpy(text, txt1, 192);
-			break;
-		}
-		case 5:
-		{
-			char txt1[192] = "Try to get the highest sequence  of button combinations in a row, and you can magically summon an  item! L and R are the triggers.  Bonne chance!";
-			strncpy(text, txt1, 192);
-			my_chari = 5;
-			break;
-		}
-		case 6:
-		{
-			char txt1[192] = "Pilot the boat to avoid the      rocks! Use up to accelerate, leftand right to steer, and down to  stop the boat.                   Bonne chance!";
-			strncpy(text, txt1, 192);
-			my_chari = 6;
-			break;
-		}
-		case 7:
-		{
-			char txt1[192] = "You can find the customer's orderin the upper right corner.       Remember to press R if you need  to peek at the cookbook.         Bonne chance!";
-			strncpy(text, txt1, 192);
-			my_chari = 7;
-			break;
-		}
-		default:
-		{
-		}
+		switch (globals->all_save.language) {
+			case 0: {
+				switch (scene)
+				{
+				case 0:
+				{
+					char txt1[192] = "You'll find things around the    island to build your Trembloon   count. If you get 100, you get   to progress to the next chapter! Bonne chance!";
+					strncpy(text, txt1, 192);
+					break;
+				}
+				case 1:
+				{
+					char txt1[192] = "Try to catch all the rabbits and toss them out of the garden as   soon as possible. Pick them up & throw them with the A button.    Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 1;
+					break;
+				}
+				case 2:
+				{
+					char txt1[192] = "Try to find the gem and avoid thebats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 0;
+					break;
+				}
+				case 3:
+				{
+					char txt1[192] = "Use the A button to chop the     wooden pegs. Make sure you don't swing out of line or miss any, oryou'll lose points!              Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 2;
+					break;
+				}
+				case 4:
+				{
+					char txt1[192] = "There are new villagers to the   northwest! There are new ways to earn Trembloons, but you'll have to figure out how yourself.      Bonne chance!";
+					strncpy(text, txt1, 192);
+					break;
+				}
+				case 5:
+				{
+					char txt1[192] = "Try to get the highest sequence  of button combinations in a row, and you can magically summon an  item! L and R are the triggers.  Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 5;
+					break;
+				}
+				case 6:
+				{
+					char txt1[192] = "Pilot the boat to avoid the      rocks! Use up to accelerate, leftand right to steer, and down to  stop the boat.                   Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 6;
+					break;
+				}
+				case 7:
+				{
+					char txt1[192] = "You can find the customer's orderin the upper right corner.       Remember to press R if you need  to peek at the cookbook.         Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 7;
+					break;
+				}
+				default:
+				{
+				}
+				}
+				break;
+			}
+			case 1: {
+				break;
+			}
+			case 2: {
+				switch (scene)
+				{
+				case 0:
+				{
+					char txt1[192] = "Alrededor de la isla encontraras cosas que aumentaran tu cifra de Trembloons. }Podras  avanzar al  siguiente capitulo si consigues  100! }Bonne chance!";
+					strncpy(text, txt1, 192);
+					break;
+				}
+				case 1:
+				{
+					char txt1[192] = "Intenta cazar a todos los conejosy lanzalos fuera del jardin tan  pronto como sea posible.         Agarralos y lanzalos pulsando el boton A. }Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 1;
+					break;
+				}
+				case 2:
+				{
+					char txt1[192] = "Encuentra la gema y evita a los  murcielagos. Si te tocan, la gemaaparecera en otro lugar. Lanza   fuego a los murcielagos para     conseguir puntos extra. }Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 0;
+					break;
+				}
+				case 3:
+				{
+					char txt1[192] = "Pulsa el boton A para cortar la  madera. Asegurate de no fallar o salirte de la linea, }o perderas tus puntos!     }Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 2;
+					break;
+				}
+				case 4:
+				{
+					char txt1[192] = "}Hay nuevos aldeanos al noroeste!Y por lo tanto tambien nuevas    formas de ganar Trembloons, pero eso tendras que descubrirlo tu. }Bonne chance!";
+					strncpy(text, txt1, 192);
+					break;
+				}
+				case 5:
+				{
+					char txt1[192] = "Intenta conseguir la mayor       secuencia de botones posible,    }tambien puedes invocar un       objeto magicamente! L y R son losgatillos. }Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 5;
+					break;
+				}
+				case 6:
+				{
+					char txt1[192] = "}Pilota el barco para evitar las rocas! Pulsa arriba para         acelerar, izquierda y derecha    para dirigirlo, y abajo para     parar el barco. }Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 6;
+					break;
+				}
+				case 7:
+				{
+					char txt1[192] = "Puedes ver el pedido del cliente en la esquina superior derecha.  Recuerda pulsar R si necesitas   consultar el libro de cocina.    }Bonne chance!";
+					strncpy(text, txt1, 192);
+					my_chari = 7;
+					break;
+				}
+				default:
+				{
+				}
+				}
+				break;
+			}
 		}
 
 		// Profile picture
@@ -13902,31 +13973,31 @@ dungeon_return dungeon(dungeon_return &dt)
 							if (me == 0)
 							{
 								line lc[32] = {
-									{true, true, 0, "MAPLE                            Oh! Bonjour, who are you?"},
-									{true, true, 0, "SCOUT                            You must be Maple Tremblay?"},
-									{true, true, 0, "SCOUT                            I'm Scout Williams."},
-									{true, true, 0, "MAPLE                            Do you, uh, have this whole"},
-									{true, true, 0, "MAPLE                            underground thing to yourself?"},
-									{true, true, 0, "SCOUT                            Yeah, I, er- It's sort of top"},
-									{true, true, 0, "SCOUT                            secret, but you're not the kind"},
-									{true, true, 0, "SCOUT                            to share secrets, are you?"},
-									{true, true, 0, "MAPLE                            I-"},
-									{true, true, 0, "SCOUT                            So this company hired me to study"},
-									{true, true, 0, "SCOUT                            soil and stuff on this island,"},
-									{true, true, 0, "SCOUT                            and then they.. forgot about me."},
-									{true, true, 0, "SCOUT                            They still send a paycheck though"},
-									{true, true, 0, "SCOUT                            so I don't see a reason to leave."},
-									{true, true, 0, "MAPLE                            Paid to do absolutely nothing?"},
-									{true, true, 0, "SCOUT                            It gets so lonely up here though."},
-									{true, true, 0, "SCOUT                            I'm glad your family showed up."},
-									{true, true, 0, "SCOUT                            They were talkin' all this about"},
-									{true, true, 0, "SCOUT                            a 'new country' or whatever, but"},
-									{true, true, 0, "SCOUT                            they said I could be a Lord or a"},
-									{true, true, 0, "SCOUT                            Duke or something."},
-									{true, true, 0, "SCOUT                            I said as long as I got to be"},
-									{true, true, 0, "SCOUT                            court magician, I wouldn't ask"},
-									{true, true, 0, "SCOUT                            for anything else."},
-									{true, true, 0, "MAPLE                            Yeah, you seem like the type."},
+									{true, true, 0, "MAPLE                            }Oh! Bonjour, {quien eres?"},
+                                    {true, true, 0, "SCOUT                            {Es usted Maple Tremblay?"},
+                                    {true, true, 0, "SCOUT                            Me llamo Scout Williams."},
+                                    {true, true, 0, "MAPLE                            Tu, ehm, {Estas viviendo en"},
+                                    {true, true, 0, "MAPLE                            ese agujero bajo tierra?"},
+                                    {true, true, 0, "SCOUT                            Si, yo... e- es un secreto."},
+                                    {true, true, 0, "SCOUT                            No seras del tipo de personas"},
+                                    {true, true, 0, "SCOUT                            que comparten secretos, {no?"},
+                                    {true, true, 0, "MAPLE                            Yo-"},
+                                    {true, true, 0, "SCOUT                            Una empresa me contrato para"},
+                                    {true, true, 0, "SCOUT                            investigar el suelo de la isla,"},
+                                    {true, true, 0, "SCOUT                            pero entonces... se olvidaron de mi."},
+                                    {true, true, 0, "SCOUT                            Aunque todavia recibo mi paga."},
+                                    {true, true, 0, "SCOUT                            Asi que no veo razon para irme."},
+                                    {true, true, 0, "MAPLE                            {Te pagan por no hacer nada?"},
+                                    {true, true, 0, "SCOUT                            Me siento un poco solo aqui."},
+                                    {true, true, 0, "SCOUT                            Me alegra que hayas venido con"},
+                                    {true, true, 0, "SCOUT                            tu familia, hablaban acerca de un"},
+                                    {true, true, 0, "SCOUT                            'nuevo pais' o algo por el       estilo, pero"},
+                                    {true, true, 0, "SCOUT                            dijeron que podia convertirme en "},
+                                    {true, true, 0, "SCOUT                            Se[or, duque, o algo asi."},
+                                    {true, true, 0, "SCOUT                            Yo les conteste que si me dejan  ser"},
+                                    {true, true, 0, "SCOUT                            el mago de la corte, me sirve"},
+                                    {true, true, 0, "SCOUT                            mas que ninguna otra cosa."},
+                                    {true, true, 0, "MAPLE                            Si, definitivamente te pegaria   eso."},
 									{true, true, 00, "COM: Endscene"}};
 								dialogue_page_lite(lc);
 								break;
@@ -17493,7 +17564,7 @@ void load_save()
 		case 2:
 		{
 			file4_gen.generate(-98, -64, "Pulsa A para continuar", file4_spr);
-			file5_gen.generate(-112, 64, "Manten L&R para Eliminar Datos", file5_spr);
+			file5_gen.generate(-112, 64, "Manten L y R para Eliminar Datos", file5_spr);
 			break;
 		}
 		}
