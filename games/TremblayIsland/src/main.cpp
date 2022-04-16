@@ -856,7 +856,9 @@ int select_minigame()
 
 	if (bn::music::playing())
 		bn::music::stop();
-	bn::music_items::velvet.play(0.8);
+
+	// velvet
+	bn::music_items::multisong.play(0.8);
 
 	bn::vector<bn::sprite_ptr, 7> chari;
 	bn::sprite_ptr c1 = bn::sprite_items::save_tiles.create_sprite(-64, 0, 0);
@@ -1012,11 +1014,15 @@ void dialogue_page(line n[32])
 		}
 		else if (strcmp(n[pos].text.c_str(), "BG: Overworld 01") == 0)
 		{
-			bn::music_items::z03_overworld.play(bn::fixed(music_volume) / 100);
+			// z03_overworld
+			bn::music_items::multisong.play(bn::fixed(music_volume) / 100);
+			bn::music::set_position(14);
 		}
 		else if (strcmp(n[pos].text.c_str(), "BG: frog") == 0)
 		{
-			bn::music_items::z07_frog.play(bn::fixed(music_volume) / 100);
+			// z07_frog
+			bn::music_items::multisong.play(bn::fixed(music_volume) / 100);
+			bn::music::set_position(10);
 		}
 		else if (strcmp(n[pos].text.c_str(), "BG: news") == 0)
 		{
@@ -5466,7 +5472,8 @@ void popup(int scene)
 		dg_bg2.set_scale(2, 0.01);
 		dg_bg1.set_blending_enabled(true);
 		dg_bg2.set_blending_enabled(true);
-		bn::music_items::twinkle.play(bn::fixed(50) / 100);
+		bn::music_items::multisong.play(0.5);
+		bn::music::set_position(34); // twinkle
 
 		char text[192] = {0};
 
@@ -5897,7 +5904,8 @@ public:
 		}
 		else if (music_counter == 224)
 		{
-			bn::music_items::z08_award.play(bn::fixed(50) / 100);
+			bn::music_items::multisong.play(0.5);
+			bn::music::set_position(36); // z08_award
 			music_counter++;
 		}
 
@@ -6912,7 +6920,9 @@ dungeon_return dungeon(dungeon_return &dt)
 		}
 		else if (globals->current_save->checkpoint < 12)
 		{
-			bn::music_items::z03_overworld.play(0.8);
+			// z03_overworld
+			bn::music_items::multisong.play(0.8);
+			bn::music::set_position(14);
 		}
 		else if (globals->current_save->checkpoint < 14)
 		{
@@ -7856,7 +7866,9 @@ dungeon_return dungeon(dungeon_return &dt)
 	{
 		if (globals->current_save->checkpoint < 12)
 		{
-			bn::music_items::z17_ptit.play(0.8);
+			// z17_ptit
+			bn::music_items::multisong.play(0.8);
+			bn::music::set_position(4);
 		}
 		current_room.chari.at(0).entity.set_position(3 * 32, 5 * 32);
 
@@ -8038,7 +8050,9 @@ dungeon_return dungeon(dungeon_return &dt)
 	// the creepy garden
 	case 11:
 	{
-		bn::music_items::z04_underground.play(0.8);
+		// z04_underground
+		bn::music_items::multisong.play(0.8);
+		bn::music::set_position(30);
 		current_room.chari.at(0).entity.set_position(15 * 32, 18 * 32);
 
 		current_room.configure(20, 20, 15, 18);
@@ -16413,7 +16427,7 @@ void load_save()
 		short int t = 0;
 		short int c = 0;
 
-		bn::music_items::velvet.play(0.8);
+		bn::music_items::multisong.play(0.8); // velvet
 
 		while (!bn::keypad::a_pressed())
 		{
@@ -16505,7 +16519,7 @@ void load_save()
 		short int t = 0;
 		short int c = 0;
 
-		bn::music_items::velvet.play(0.8);
+		bn::music_items::multisong.play(0.8); // velvet
 
 		bn::vector<bn::sprite_ptr, 6> icons;
 		auto t1 = bn::sprite_items::chapters.create_sprite(0, 0, 0);
@@ -20538,7 +20552,7 @@ int checkpoint(int level)
 		// Welcome message
 	case 2:
 	{
-		bn::music_items::velvet.play(0.8);
+		bn::music_items::multisong.play(0.8); // velvet
 		exec_dialogue(18);
 		popup(0);
 		break;
@@ -20565,7 +20579,7 @@ int checkpoint(int level)
 	}
 	case 6:
 	{
-		bn::music_items::velvet.play(0.8);
+		bn::music_items::multisong.play(0.8); // velvet
 		exec_dialogue(17);
 		exec_dialogue(19);
 		exec_dialogue(20);
