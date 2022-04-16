@@ -620,19 +620,6 @@ De cette fa'on, nous-autres      n'aurions pas a laisser tout     l'endroit en d
 Bien sur, tout doit bien se      passer. Mais, s'il se fait       prendre...
 'eh, it'll be fine.
 
-1 de Mayo, 2000 -                Registro de Exploracion No. 68
-Han venido dos nuevos aldeanos,  uno de ellos es un poco turbio   pero Enoki confia en el.
-Aparentemente el otro chico      nuevoes un gran chef, su         supuesto     apellido es Pizza.
-Debo descubrir su nombre real,   la curiosidad me esta matando.
-Rufus ha sido insufrible y ha    decidido interrumpir Scout TV.
-No se si tiene algun tipo de     problema o si le ocurre conmigo.
-Francamente hablando, estoy un   poco preocupado. Quiza deba      mantenerlo bajo vigilancia.
-Osea, vigilarlo aun mas que      antes.
-Parece ser que alguna compa[ia   quiere almacenar un monton de    gasolina en la isla.
-Me di cuenta cuando ellos        la trajeron accidentalmente.
-{Que planean hacer con toda esa  gasolina?         Quiza nunca lo        sepamos.
-Esperemos que todos esten bien   este mes. Me estoy divirtiendo   mucho con ellos.
-Scout out. Jeje, 'scout out'.
 1 mai 2000 - Carnet              d'exploration no. 6.
 Deux nouveaux villageois sont    arrives, un d'eux est un peu     louche mais Enoki lui fait       confiance.
 Apparemment, l'autre nouveau     gars est un grand chef, son nom  de famille suppose est Pizza.
@@ -1031,42 +1018,20 @@ qui laisse trainer ses vetements par terre.)
 (Well... ma voiture me manque.)
 (Peut-etre parler a Scout de la  mise en place d'une piste de     course.)
 
-OTHER.
-(Si, definitivamente no deberia  estar aqui.)
 LES AUTRE.
 (Oui, 'a ne devrait certainement pas etre ici.)
 
-MAPL.
-(Al menos cuando vivian en el    castillo, su cama estaba e.
-el centro de la habitacion.      {Que se supone que es esto?.
-({Quien ha podido empujar la     esquina? Probablemente Aaron..
-(Te juro que esa chica va a      sacarle las canas 10 a[os antes..
 MAPL.
 (Au moins quand ils vivaient     dans le chateau, leur lit etait  au centre de la piece. Qu'est-ce que c'est cense etre?.
 (Qui aurait pu pousser le coin?  Probablement Aaron..
 (Je jure que cette fille va lui  enlever les cheveux gris 10 ans  plus tot..
 
 ENOK.
-(Me alegra no tener que dormir   en medio de la habitacion..
-(Caer rodando de la cama en ese  suelo de piedra dolia un monton..
-(Ahora podre rodar tranquila     hacia el muro o hacia Aaron..
-(Me alegra mucho que a el no le  importe eso demasiado..
-ENOK.
 (Je suis content de ne pas avoir a dormir au milieu de la piece..
 (Rouler du lit sur ce sol en     pierre faisait tres mal..
 (Maintenant, je peux rouler en   toute securite vers le mur ou    vers Aaron..
 (Je suis tellement content que   cela ne le derange pas trop..
 
-AARO.
-(Maple no estara feliz cuando    vea la habitacion..
-(Recuerdo cuando ella solia ser  mas tranquila....
-(Ahora mismo es un poco          frustrante tenerle cerca..
-(Quiza ella no tendria que haber venido. Cada vez que trato d.
-ayudarle, lo unico que hace es   quejarse y pagarla conmigo..
-(Puede que se aburra de vivir    aqui y vuelva a su casa..
-(O quiza tenga razon y solo      estoyviviendo la fantasia de     Enoki..
-(Pero Enoki ha sido la unica     felicidad que he tenido en a[os..
-(Tal vez algo cambie... Espero   que ambos cambiemos a mejor..
 AARO.
 (Maple ne sera pas contente      quand elle verra la piece..
 (Je me souviens quand elle etait plus calme....
@@ -1077,38 +1042,18 @@ AARO.
 (Mais Enoki a ete le seul        bonheur que j'ai eu depuis des   annees..
 (Peut-etre que quelque chose va  changer... J'espere que          nous-autres changerons tous les  deux pour le mieux..
 
-OTHER.
-(Probablemente no deba estar por aqui si no me han invitado....
 AUTRES (Je ne devrais            probablement pas etre ici si je  n'ai pas ete invite....
 
-MAPL.
-(Es posible que no quiera        admitirlo, pero....
-(Es genial estar junto a ellos.  A veces olvido lo mucho que-.
-(extra[o estar acompa[ada..
 MAPL.
 (Je ne voudrais peut-etre pas    l'admettre, mais....
 (C'est super d'etre avec eux.    Parfois, j'oublie a quel point   'a me manque d'etre avec eux..
 
-ENOK.
-(A veces desearia ir atras en el tiempo para hablar conmigo misma.
-(NO ME CREERIA si le contase     todolo que paso durante este     a[o..
-(Y... no creo que mis padres     sepan que estoy aqui..
-(Me pregunto donde creeran que   estoy ahora mismo..
 ENOK.
 (Parfois j'aimerais pouvoir      remonter le temps pour me parler.
 (Tu ne me CROIREZ PAS si je te   racontais tout ce qui s'est      passe cette annee..
 (Et... je ne pense pas que mes   parents sachent que je suis ici..
 (Je me demande ou ils pensent    que je suis en ce moment..
 
-AARO.
-(De veras hace falta conseguir   un lugar para Maple..
-(No pense que lo daria todo      para cumplir con su parte....
-(Con toda esa espeleologia hemos conseguido cubrir los gastos..
-(Me sorprende que no pidiese un  nuevo lugar en el que quedarse..
-(Es posible que no quiera        quedarse sola..
-(Y no me apetece mucho tener que hacer otra casa..
-(Hablare con ese tal Olivier y   veremos que se puede hacer..
-(Parece un hombre de confianza..
 AARO.
 (Je avez vraiment besoin de      trouver une place pour Maple..
 (Je ne pensais pas qu'il         donnerait tout pour remplir sa   part....
@@ -1119,15 +1064,10 @@ AARO.
 (Je vais parler a cet Olivier et voir ce qui peut etre fait..
 (Il semble etre un homme         confiant..
 
-OTHER.
-(Si, eso es una habitacion..
 LES AUTRE.
 (Oui, c'est une chambre..
 
-OLIVIE.
-(Me gusta el sol que hace aqui..
-(Podria poner algunas plantas..
-Olivie.
+OLIVIER
 (J'aime le soleil ici..
 (Je pourrais mettre des plantes..
 
@@ -1146,12 +1086,6 @@ DIAN.
 (Ils me font me sentir propre..
 
 MAPL.
-(Agradezco al de arriba que ese  chico nuevo sea cocinero..
-(Comer siempre lo mismo no seria tan pesado si otro cocinara..
-(Con suerte, puede que hasta     tenga sentido del humor..
-(Ugh, no se que diantres me      pasa.{Tengo ganas de conocerle?.
-(Estare perdiendo el tarro si me estoy volviendo sociable....
-MAPL.
 (Je remercie celui ci qui dit    que ce nouveau gars est un       cuisinier..
 (Manger la meme chose encore et  encore ne serait pas si lourd si quelqu'un d'autre faisait la     cuisine..
 (Esperons qu'il ait le sens de   l'humour..
@@ -1159,25 +1093,11 @@ MAPL.
 (Je vais perdre le pot si je     deviens sociable....
 
 ENOK.
-(Esta habitacion no ha cambiado  en absoluto..
-({Y si moviese la cama hacia el  otro lado?.
-(Hmm, seria mas dificil ocultar  la ropa a los invitados..
-(Deberia recoger esos... eh...   ...mejor lo hago luego..
-ENOK.
 (Cette piece n'a pas change du   tout..
 (Et si je depla'ais le lit de    l'autre cote?.
 (Hmm, il serait plus difficile   de cacher des vetements aux      invites..
 (Je devrais recuperer ces...     euh... ... mieux vaut le faire   plus tard..
 
-AARO.
-(Ahi va la ultima oportunidad    de que Maple se fuese de aqui..
-(Mientras Enoki este contenta    conque Maple se quede en la      casa..
-(Este dejara de ser mi hogar. No se que mosca le habra picado..
-(Usa su orgullo para ocultar a   lasanguijuela que realmente es..
-(Y Enoki empieza a darse cuenta  de lo molesto que estoy..
-(Mierda... Estoy empezando a     sonar como Maple..
-({Acaso son todos los hermanos   de esta manera?.
-(Ojala poder pedir consejo a     alguien, pero ni amigos tengo..
 AARO.
 (Voila la derniere chance de     Maple de sortir d'ici..
 (Tant que Enoki est content,     Maple reste dans la maison..
@@ -1189,34 +1109,15 @@ AARO.
 (J'aimerais pouvoir demander     conseil a quelqu'un, mais je     n'ai pas d'amis..
 
 OLIVIE.
-(Se acerca el cumplea[os de      AaronUna planta seria un buen    regalo..
-OLIVIE.
 (L'anniversaire d'Aaron          approche. Une plante serait un   beau cadeau..
 
-
-DIAN.
-(Me gusta el sol que hace aqui..
-(Podria poner algunas plantas..
 DIAN.
 (J'aime le soleil ici..
 (Je pourrais mettre des plantes..
 
-OTHER.
-(No deberia estar fisgoneando    por aqui..
 LES AUTRE.
 (Je ne devrais pas fouiller ici..
 
-MAPLE                            Oye, {Que es ese libro.
-AARON                            Oh, es mio.
-AARON                            Ya sabes que no me va mucho la   ficcion.
-AARON                            Pero Enoki es un poco cabezota   a veces.
-ENOKI                            {Has escuchado acerca de         Yellow.
-ENOKI                            Es muy divertido, Aaron le esta  dando una oportunidad.
-MAPLE                            ...{Es un libro de dibujos.
-MAPLE                            {Aun lees libros ilustrados.
-ENOKI                            }Este tiene cigarrillos dentro.
-ENOKI                            Eso significa que espara ni[os   yadultos.
-MAPLE                            Huh, {de verdad hacen            libros asi.
 MAPLE                            He, c'est quoi ce livre.
 AARON                            Oh, c'est a moi.
 AARON                            Tu sais que je n'aime pas        beaucoup la fiction.
@@ -1750,22 +1651,11 @@ MAPLE                            Venant de toi, je le croirais.
 ENOKI                            Tu peux l'essayer et le          decouvrir.
 MAPLE                            Ce n'est pas que j'ai si soif.
 
-(Nos queda poco zumo de naranja..
-(Probablemente tenga que ir al   pueblo a vender productos..
-(Vender una fruta para comprar   otra, heh..
-(Si al menos el zumo de tomate   tuviera mejor sabor....
 (Il nous-autres reste peu de jus d'orange..
 (Vous devez probablement aller   en ville pour vendre des         produits..
 (Vendre un fruit pour en acheter un autre, hein..
 (Si seulement le jus de tomate   avait meilleur gout....
 
-ENOKI                            }EEEE! }Ahora todos mis amigo.
-ENOKI                            se conocen entre ellos.
-ENOKI                            }Ahora si que somos un grupo.
-MAPLE                            Wow, aun no he decidido si.
-MAPLE                            Si me quedo aqui, calmate.
-SCOUT                            {Va a venir alguien mas.
-AARON                            Tendremos que esperar y ver.
 ENOKI                            EEEE! Maintenant tous mes amis   se connaissent.
 ENOKI                            Maintenant nous-autres sommes    vraiment un groupe.
 MAPLE                            Wow, je n'ai pas encore decide   si.
@@ -1773,14 +1663,6 @@ MAPLE                            Si je reste ici, calme-toi.
 SCOUT                            Est-ce que quelqu'un d'autre     vient.
 AARON                            Nous devons juste attendre et    voir.
 
-MAPLE                            Creo que ya los lei todos.
-AARON                            Hace tiempo que no vamos         al pueblo.
-MAPLE                            Me pregunto que estara pasando   fuera de aqui.
-ENOKI                            Si algo malo hubiese ocurrido lo sabriamos.
-ENOKI                            Scout habria dicho algo.
-ENOKI                            Siempre esta metido en internet.
-MAPLE                            Podria pedirle que me compre     libros por internet.
-AARON                            Esa seria una buena idea.
 MAPLE                            Je pense que je les ai tous lus.
 AARON                            'a fait un moment que            nous-autres ne sommes pas alles  en ville.
 MAPLE                            Je me demande ce qui se passe    la-bas.
@@ -1790,22 +1672,9 @@ ENOKI                            est toujours sur Internet.
 MAPLE                            Je pourrais te demander de       m'acheter des livres en ligne.
 AARON                            Ce serait une bonne idee.
 
-Ves un monton de libros que      nunca antes habias visto.
-Aunque ninguno de ellos parece   particularmente interesante...   Por ahora.
 Vous voyez un tas de livres que  vous n'avez jamais vus           auparavant.
 Bien qu'aucun d'entre eux ne     semble particulierement          interessant... Pour l'instant.
 
-MAPLE                            Creo que necesitamos un VHS.
-AARON                            {Vas a comprar uno.
-MAPLE                            Si. Y un monton de cintas.
-ENOKI                            Oooh, {Puedes conseguir la       ultima.
-ENOKI                            peli de Time Raider? }Escuche    que hicieron una nueva.
-MAPLE                            Solo por fastidiarte, comprar.
-MAPLE                            todas las que vea EXCEPTO esa.
-ENOKI                            Aw... Estaba pensando que quiza.
-ENOKI                            si a todos nos agrada la idea.
-ENOKI                            ... {Tener una noche de pelis.
-MAPLE                            Esta bien, PUEDE que hagamos eso.
 MAPLE                            Je pense qu'il nous-autres faut  une VHS.
 AARON                            Allez-tu en acheter un.
 MAPLE                            Oui, et beaucoup de groupes.
@@ -1815,43 +1684,23 @@ ENOKI                            Aw... Je pensais peut-etre que   nous-autres ai
 ENOKI                            ... Une soiree cinema.
 MAPLE                            D'accord, on PEUT le faire.
 
-Sonries, pensando que no saben   cocinar demasiado bien.
-Definitivamente se convertiran   en clientes habituales.
 Tu souris en pensant qu'ils ne   savent pas tres bien cuisiner.
 Ils deviendront certainement des clients reguliers.
 
-AARON                            Necesito ver como van los demas.
 AARON                            J'ai besoin de voir comment vont les autres.
 
-ENOKI'S GARDEN                   Si tocas algo, acabare contigo.
 LE JARDIN D'ENOKI                Si tu touches quoi que ce soit,  je te tue.
 
-WOOD CHOPPING SPOT               Donde se corta la le[a.
 POINT DE COUPE DU BOIS           L'endroit ou le bois est coupe.
 
-Hmmm... Esta parece una tarea    indicada para Enoki.
 Hmmm... Cela semble etre une     tache appropriee pour Enoki.
 
-Hmmm... Esta parece una tarea    indicada para Aaron.
 Hmmm... Cela semble etre une     mission appropriee pour Aaron.
-
-CUEVA DE MURCIELAGOS PELIGROSOS  Advertencia: hay murcielagos.
-
-Creo que Maple es la unica que   puede entrar con seguridad.
 
 GROTTE DES CHAUVES-SOURIS        DANGEREUSES Attention : il y a   des chauves-souris.
 
 Je pense que Maple est le seul a pouvoir entrer en toute securite.
 
-MAPLE                            {Plantas, eh.
-MAPLE                            {No hay.. ya un jardin.
-SCOUT                            Veras, yo, ehm.
-SCOUT                            Realmente no es por las planta.
-SCOUT                            Soy un investigador de tierra.
-MAPLE                            {Investigador de tierra.
-SCOUT                            Hay un investigador para cada...
-SCOUT                            Bueno, para todo, realmente.
-MAPLE                            Ya, claro.
 MAPLE                            Des plantes, hein.
 MAPLE                            N'y a-t-il pas un jardin.
 SCOUT                            Tu vois, je, euh.
@@ -1862,14 +1711,6 @@ SCOUT                            Il y a un investigateur pour     chaque...
 SCOUT                            Eh bien, pour tout, vraiment.
 MAPLE                            Oui, bien sur.
 
-ENOKI                            CREO que esa es la planta.
-ENOKI                            Esta es mi favorita.
-SCOUT                            {Quieres que la corte.
-ENOKI                            {Que es eso.
-SCOUT                            La verdad es que no lo se...
-SCOUT                            Estudio la tierra, no plantas.
-ENOKI                            }Podria ser un fruto misterioso.
-SCOUT                            Pues... Podria ser.
 ENOKI                            JE PENSE que c'est la plante.
 ENOKI                            C'est mon prefere.
 SCOUT                            Voulez-vous que je coupe.
@@ -1879,16 +1720,6 @@ SCOUT                            J'etudie la terre, pas les       plantes.
 ENOKI                            Ce pourrait etre un fruit        mysterieux.
 SCOUT                            Et bien... C'est possible.
 
-AARON                            {Has hecho progresos.
-SCOUT                            }Y tanto que si.
-SCOUT                            He conseguido algo nuevo.
-AARON                            {Como se llama.
-SCOUT                            Lo bautice como 'Scout-Out'.
-SCOUT                            Puede quitar las malas hierbas.
-AARON                            }Tio, eso es una pasada.
-SCOUT                            El unico problema es que...
-SCOUT                            Se cargara el resto de plantas.
-AARON                            Que bajon, tan util no es...
 AARON                            Avez-vous fait des progres.
 SCOUT                            Et donc oui.
 SCOUT                            J'ai quelque chose de nouveau.
@@ -1900,25 +1731,12 @@ SCOUT                            Le seul probleme est que...
 SCOUT                            Toutes les autres plantes seront facturees.
 AARON                            Quel deprimant, si utile n'est   pas...
 
-(}Oh tio, oh tio, oh tio...!.
-(Necesito conseguir esa formula  lo mas rapido posible..
-(Prometer tierra magica a los    inversores no fue buena idea..
-(Si me escondo aqui abajo puede  que no lleguen a encontrarme..
-(Aunque primero deberia quitar   mi nombre de la escotilla....
 (Oh mec, oh mec, oh mec...!.
 (Je dois obtenir cette formule   aussi vite que possible..
 (Promettre des terres magiques   aux investisseurs n'etait pas    une bonne idee..
 (Si je me cache ici, ils         pourraient ne pas me trouver..
 (Bien que je devrais d'abord     retirer mon nom de la trappe ....
 
-MAPLE                            {Sigue ocurriendo lo mismo.
-SCOUT                            La verdad es que si.
-MAPLE                            {Aun no han hablado contigo.
-MAPLE                            sobre los resultados.
-SCOUT                            Aun no, pero sigo recibiend.
-SCOUT                            mi sueldo cada semana.
-MAPLE                            Hey, eso es bueno.
-SCOUT                            Pues si.
 MAPLE                            Est-ce que la meme chose se      produit encore.
 SCOUT                            La verite est que oui.
 MAPLE                            Ne t'ont-ils pas encore parl.
@@ -1928,11 +1746,6 @@ SCOUT                            mon salaire chaque semaine.
 MAPLE                            He, c'est bien.
 SCOUT                            Oui.
 
-(Maple ha estado mirando las     plantas de vez en cuando....
-(Al menos me dijo lo que opina   de ellas con sinceridad..
-(Necesito urgentemente que mi    jefe responda a mis mensajes..
-(Recibo un buen sueldo y no      deberia jugarmela demasiado..
-(Tan solo he de asegurarme de    seguir los pasos correctos..
 (Maple regarde les plantes de    temps en temps....
 (Au moins, il m'a dit ce qu'il   pensait honnetement d'eux..
 (J'ai besoin de toute urgence    que mon patron reponde a mes     messages..

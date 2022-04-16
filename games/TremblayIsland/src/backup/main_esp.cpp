@@ -3556,11 +3556,11 @@ int exec_dialogue(int x, int checkpoint = 0)
 				{fals, true, 0, "S01:07"},
 				{fals, true, 0, "                                 *knock*                          *knock*                          *knock*"},
 				{fals, true, 0, "S01:08"},
-				{fals, true, 0, "                                 Me pregunto si podran llegar a   escucharme... Este lugar         se ve enorme."},
-				{fals, true, 0, "                                 '}...hay voyy!'"},
+				{fals, true, 0, "                                 Me pregunto si podran llegar a   escucharme... Este lugar         parece enorme."},
+				{fals, true, 0, "                                 '}...Hay voyy!'"},
 				{fals, true, 0, "S01:09"},
 				{fals, true, 0, "BG: 0"},
-				{fals, true, 0, "                                 Hola, Maple!                     Adelante, allez!"},
+				{fals, true, 0, "                                 Hola, Maple!                     Entra, allez!"},
 				{fals, true, 0, "COM: Endscene"}};
 			dialogue_page(lc);
 			return 0;

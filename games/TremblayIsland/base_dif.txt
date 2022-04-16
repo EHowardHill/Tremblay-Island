@@ -1,6 +1,3 @@
-import re
-
-lines = """
 4:15 AM                          January 1st, 2000                Providence of Nord Louisiane,    La République Laurentides
                                  AHHHHG.                          I've been driving for hours.     My right foot's asleep, and the  left one isn't too far behind.
                                  Look at that gumbo.              It has to be cold by now.        I can't believe they wanted me   to bring the food.
@@ -3527,24 +3524,24 @@ GRAND-MÈRE CORINNE               Un bel avenir attend les gens patient.
 GRAND-MÈRE CORINNE               Ce fut un plaisir de te rencontrer. Prends soin de toi!
 
 INSTRUCTIONS:
-You'll find things around the    island to build your Trembloon   count. If you get 100, you get   to progress to the next chapter! Bonne chance!
-Try to catch all the rabbits and toss them out of the garden as   soon as possible. Pick them up & throw them with the A button.    Bonne chance!
-Try to find the gem and avoid thebats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!
-Use the A button to chop the     wooden pegs. Make sure you don't swing out of line or miss any, oryou'll lose points!              Bonne chance!
-There are new villagers to the   northwest! There are new ways to earn Trembloons, but you'll have to figure out how yourself.      Bonne chance!
-Try to get the highest sequence  of button combinations in a row, and you can magically summon an  item! L and R are the triggers.  Bonne chance!
-Pilot the boat to avoid the      rocks! Use up to accelerate, leftand right to steer, and down to  stop the boat.                   Bonne chance!
-You can find the customer's orderin the upper right corner.       Remember to press R if you need  to peek at the cookbook.         Bonne chance!
+● You'll find things around the    island to build your Trembloon   count. If you get 100, you get   to progress to the next chapter! Bonne chance!
+● Try to catch all the rabbits and toss them out of the garden as   soon as possible. Pick them up & throw them with the A button.    Bonne chance!
+● Try to find the gem and avoid thebats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!
+● Use the A button to chop the     wooden pegs. Make sure you don't swing out of line or miss any, oryou'll lose points!              Bonne chance!
+● There are new villagers to the   northwest! There are new ways to earn Trembloons, but you'll have to figure out how yourself.      Bonne chance!
+● Try to get the highest sequence  of button combinations in a row, and you can magically summon an  item! L and R are the triggers.  Bonne chance!
+● Pilot the boat to avoid the      rocks! Use up to accelerate, leftand right to steer, and down to  stop the boat.                   Bonne chance!
+● You can find the customer's orderin the upper right corner.       Remember to press R if you need  to peek at the cookbook.         Bonne chance!
 
 DES INSTRUCTIONS:
-Vous trouverez des choses autour de l'île pour construire votre Trembloon. Si vous en obtenez 100, vous pouvez passer au chapitre suivant! Bonne chance!
-Essayez d'attraper tous les lapins et de les jeter hors du jardin dès que possible. Ramassez-les et jetez-les avec le bouton A. Bonne chance!
-Essayez de trouver la gemme et évitez les chauves-souris. Si vous êtes touché, la gemme se déplace vers un nouvel endroit. Tirez sur les chauves-souris pour gagner des points bonus. Bonne chance!
-Utilisez le bouton A pour couper le bois. Assurez-vous de ne pas sortir de la ligne ou d'en manquer, sinon vous perdrez des points! Bonne chance!
-Il y a de nouveaux villageois au nord-ouest! Il existe de nouvelles façons de gagner des Trembloons, mais vous devrez découvrir comment vous-même. Bonne chance!
-Essayez d'obtenir la plus grande séquence de combinaisons de boutons d'affilée et vous pourrez invoquer un objet comme par magie! L et R sont les boutons. Bonne chance!
-Pilotez le bateau pour éviter les rochers! Utilisez haut pour accélérer, gauche et droite pour diriger et bas pour arrêter le bateau. Bonne chance!
-Vous pouvez trouver la commande du client dans le coin supérieur droit. N'oubliez pas d'appuyer sur R si vous avez besoin de jeter un coup d'œil au livre de cuisine. Bonne chance!
+● Vous trouverez des choses autour de l'île pour construire votre Trembloon. Si vous en obtenez 100, vous pouvez passer au chapitre suivant! Bonne chance!
+● Essayez d'attraper tous les lapins et de les jeter hors du jardin dès que possible. Ramassez-les et jetez-les avec le bouton A. Bonne chance!
+● Essayez de trouver la gemme et évitez les chauves-souris. Si vous êtes touché, la gemme se déplace vers un nouvel endroit. Tirez sur les chauves-souris pour gagner des points bonus. Bonne chance!
+● Utilisez le bouton A pour couper le bois. Assurez-vous de ne pas sortir de la ligne ou d'en manquer, sinon vous perdrez des points! Bonne chance!
+● Il y a de nouveaux villageois au nord-ouest! Il existe de nouvelles façons de gagner des Trembloons, mais vous devrez découvrir comment vous-même. Bonne chance!
+● Essayez d'obtenir la plus grande séquence de combinaisons de boutons d'affilée et vous pourrez invoquer un objet comme par magie! L et R sont les boutons. Bonne chance!
+● Pilotez le bateau pour éviter les rochers! Utilisez haut pour accélérer, gauche et droite pour diriger et bas pour arrêter le bateau. Bonne chance!
+● Vous pouvez trouver la commande du client dans le coin supérieur droit. N'oubliez pas d'appuyer sur R si vous avez besoin de jeter un coup d'œil au livre de cuisine. Bonne chance!
 
 LE BIZAAR D'CESAR                'NOUS AVONS SEULEMENT DEUX ARTICLES, DEAL WITH IT'
 
@@ -4299,61 +4296,3 @@ Créditos:
                         - LA FIN -
                         - - - -
 
-
-"""
-
-def f_remove_accents(old):
-    """
-    Removes common accent characters, lower form.
-    Uses: regex.
-    """
-    new = old
-    new = re.sub(r'[àáâãäå]', 'a', new)
-    new = re.sub(r'[èéêë]', 'e', new)
-    new = re.sub(r'[ìíîï]', 'i', new)
-    new = re.sub(r'[òóôõö]', 'o', new)
-    new = re.sub(r'[ùúûü]', 'u', new)
-    new = re.sub(r'[ÀÁÂÃÄÅ]', 'a', new)
-    new = re.sub(r'[ÈÉÊË]', 'e', new)
-    new = re.sub(r'[ÌÍÎÏ]', 'i', new)
-    new = re.sub(r'[ÒÓÔÕÖ]', 'o', new)
-    new = re.sub(r'[ÙÚÛÜ]', 'u', new)
-    new = new.replace('¿', '{') # question mark
-    new = new.replace('¡', '}')
-    new = new.replace('ñ', '[')
-    new = new.replace('ç', ']')
-    new = new.replace('…', '...')
-    return new
-
-with open('diff-out.txt', 'w') as f:
-    out_lines = []
-    for line in lines.split("\n"):
-
-        o_line = line
-        print(line)
-        line = f_remove_accents(line)
-        meat = ""
-        t_pos = 33
-
-        if (len(line) > 33):
-            meat = line[33:]
-            if sum([1 for t in line[:33] if t == ' ']) > 16:
-                t_pos = 66
-
-        print(meat)
-        l_copy = meat.split(' ')
-        print([l_copy])
-        l_copy.reverse()
-        fin = line[:min([33, len(line)])]
-
-        while (len(l_copy) > 0):
-            d = l_copy.pop()
-            if len(fin) + len(d) > t_pos:
-                fin += ''.join([' ' for t in range(t_pos - len(fin))])
-                t_pos += 33
-            fin += d + (" " if len(fin) + len(d) != t_pos else "")
-        
-        out_lines.append(fin + '\n')
-        print("\n")
-
-    f.writelines(out_lines)

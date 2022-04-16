@@ -1,6 +1,3 @@
-import re
-
-lines = """
 4:15 AM                          January 1st, 2000                Providence of Nord Louisiane,    La République Laurentides
                                  AHHHHG.                          I've been driving for hours.     My right foot's asleep, and the  left one isn't too far behind.
                                  Look at that gumbo.              It has to be cold by now.        I can't believe they wanted me   to bring the food.
@@ -14,9 +11,18 @@ lines = """
                                  I wonder if they can even        hear me in there... This place   looks huge.
                                  '.....coming!'
 
+4:15 AM                          1 de Enero, 2000                 Providence de Nord Louisiane,    La République Laurentides
+                                 AHHHHG.                          É manejado por várias horas.        Mi pie derecho está entumecido y  el otro ya no tarda.
+                                 Mira ese gumbo...                  Ya debe de estar frío       No puedo creer que quisieran     que les llevara la comida.
+                                 A decir verdad...                Si no veo ese castillo en        quince minutos, tal vez me dé    la vuelta.
+                                 Aunque el viaje fue agradable,   supongo.
+                                 Está bien, me rindo. No hay      manera de-
                                  .....Oh.
+                                 No sabría decir si me siento     aliviada o decepcionada.
 
                                  *knock*                          *knock*                          *knock*
+                                 Me pregunto si podrán escucharme... Este lugar         se ve enorme.
+                                 '¡...hay voyy!'
 
 04h15                            1er Janvier 2000 Province Nord de Louisiane, République des Laurentides
                                  AHHHHH. J'ai conduit pendant des heures. Mon pied droit à des fourmis et l'autre va le rejoindre.
@@ -138,6 +144,59 @@ ENOKI                            Explorons le château!!
 MAPLE                            Attends, tu as achetée ce château et tu ne l'as pas toute visitée?
 ENOKI                            Duh, je prends mon temps avec ça - c'est un château! Allons-y!
 
+ENOKI                            ¡Hola, Maple!                     ¡Adelante, allez!
+MAPLE                            Okey, ¿Dónde puedo enchufar esta olla de cocción lenta?      ¿Hay enchufes por aquí?
+MAPLE                            Creo que e llegado muy tarde y ya has comido algo
+ENOKI                            Tenemos una bodega afuera,      es el único cuarto con   electricidad. Y sí, ya comimos pollo
+ENOKI                            ¡Te hemos extrañado mucho!
+MAPLE                            Bueno, ya llegue por fin.   ¿Dónde está- ¡Oh! Hola, Aaron.
+AARON                            ¡Bonsoir! O Bonjour más bien,    ya técnicamente es mañana.   ¿No? Me alegra que hayas venido. ¡Feliz milenio!
+MAPLE                            ¡Feliz milenio! ¿Saben que están a la mitad de la nada verdad?
+DEL                              ¡Maple! ¡Veniste! ¡Feliz 2000!
+MAPLE                            ¡Delphine Thibodeaux!            Dios mío, ¿Cuánto tiempo ha      pasado? ¿Un año? ¡Salut!
+DEL                              ¡Ay, chica! Qué alegría verte. No te rayes, que te hemos estado esperando para abrir el vino     y sacar éclairs.
+DEL                              Aunque ya todos somos unos adultos aburridos. Así que no te aseguro que nos quedemos hasta tarde contigo.
+ENOKI                            Oye Maple, ¿cómo te ha ido? ¡¿Acaso hemos hablado desde la boda?!    ¡Extraño a mi mejor amiga!
+MAPLE                            Supongo que tu marido te ha mantenido ocupada.
+AARON                            Bueno, como ves, vivimos en un   castillo ahora, y eso ha sido    toda una aventura.
+ENOKI                            Soy una princesa.
+MAPLE                            Un gran castillo no es todo para ser princesa.
+ENOKI                            ¿Entonces una duquesa?
+MAPLE                            Yo- ehm...                       Hmm...                           ¿Sabes qué?                      Es muy tarde para esto.
+MAPLE                            Me ha ido bien en cualquier caso,tan sólo me faltaría un semestre para poder ser maestra.        Y pues si no se.
+AARON                            Todavía tratas con eso?, ¿eh? ¿Aunque me dijiste un millón de veces que querías hacer cualquier menos una maestra?
+AARON                            ¿Que no hay carreras para las personas que puedan lanzar fuego con las manos?
+MAPLE                            No al menos uno que quiera.
+AARON                            Bueno, a mi maestra mágica de fuego me suena muy bien.
+ENOKI                            *Aaawn*                          Dios mío, me muero de sueño.      ¿Y si nos vamos a dormir y mañana seguimos con la plática?
+ENOKI                            Oye Maple, ¿que tal una pijamada? ¿como cuando eramos compañeras de cuarto en el colegio?
+MAPLE                            Ehh... supongo que esta bien.
+ENOKI                            ¡Buenas noches, Del!             Ey Aaron, ¿te veo en la mañana? ¿Bien tempranito?
+AARON                            Claro que sí, Noke-noke.                                          *beso*
+MAPLE                            No terminaré de acostumbrarme a esto.
+ENOKI                            Andale, agarra tu maleta y te diré dónde te quedarás.  ¡Allons-y!
+MAPLE                            Uyyy... Como que hace mucho frío aquí, ¿no?
+ENOKI                            Ay mensa, ¿A quién se le ocurre ponerse una blusa sin manga y shores en medio de Diciembre? ¿Puedes hacer una fogata?.
+MAPLE                            ¿Y por cuánto se quedaran aquí? No se quedarán 50km de la civilización y sin electricidad por siempre.
+ENOKI                            Nos encanta aquí, creo que estaremos aquí por mucho tiempo.
+MAPLE                            ¿Y que dice Aaron de todo esto?  El Aaron con el recuerdo crecer habría sido un poco más...       responsable.
+ENOKI                            Ojala y no sea grosera pero...  ¿Que ustedes no están acostumbrados a crecer en lugares como en       un carro?
+MAPLE                            Enoki, ya sabemos que eres rica, no tienes que presumir.
+ENOKI                            Pero en verdad tú creciste en un carro, ¿no? Comparado con  eso, es increíble vivir en un castillo, ¿no?
+MAPLE                            Es sólo que... Es una locura. No me estoy burlando de ti ni nada por el estilo, pero realmente creo que  esto es una mala idea.
+ENOKI                            Eso viene de la chica que se le dieron pena sus calificaciones del primer año y decidió dejar la universidad...
+MAPLE                            Anda ya, y esa fue idea tuya.
+ENOKI                            ¡Oye! Pero sí, fue en el 97… puedo decir que fue unos de mis mejores años.
+ENOKI                            ¿Has pensado dónde te gustaría vivir cuando termines tus estudios?
+MAPLE                            Ya pensaré en algo.
+ENOKI                            Aaron y yo estuvimos hablando, al parecer hay una escuela cerca de aquí, quizá  podrías... Bueno, ya sabes.
+MAPLE                            Ni pensarlo!. Me aseguraré de conseguir un apartamento digno de un adulto hecho y derecho.
+MAPLE                            Cuando te aburras de este sitio, quizás te deje moverte conmigo.
+ENOKI                            Maple, las cosas que dices bromeando nunca dejarán de sorprenderme.
+ENOKI                            Oye- Creo que ando depre y es un poco loco. ¿Y si  nos vamos de aventuras como en    los viejos tiempos?
+ENOKI                            ¡¡Vamos a explorar el castillo!!
+MAPLE                            Espera, ¿tratas de decirme que compraste el castillo sin explorarlo primero?
+ENOKI                            Bueno, digamos que estoy tomándome mi tiempo...    ¡Es un gran castillo después de todo, Allons-y!
 
 ENOKI                            I wanna explore the big          bookshelf room first!
 MAPLE                            Sure, whatever.
@@ -209,13 +268,75 @@ MAPLE                            Spectacular.
 MAPLE                            Well, I suppose....              I mean, I don't exactly have the money to pay rent this month cos of all the pizza...
 PIZZA GUY                        So... we gonna tip for today's   counseling session?
 
+ENOKI                            ¡Me encantaría explorar el cuarto con la gran biblioteca primero!
+MAPLE                            Bueno, ya que.
+ENOKI                            Entenderás porque en cuanto lo veas!
+ENOKI                            Si quieres que vaya delante,   sólo presiona 'B'.
+MAPLE                            ... ¿Cómo?
+ENOKI                            ¿Qué?
 ...
+AARON                            ¡Bonjour! ¿durmieron bien?
+MAPLE                            Sí, he dormido bien, creo.
+ENOKI                            ¡Bonjour! Oye... Hemos encontrado algo muy padre mientras dormías, pero promete que no te enojaras!
+MAPLE                            Sabes que no puedo hacer eso.
+ENOKI                            ¿Recuerdas el libro que querías que tomara? bueno, es un Atlas del mundo, ¡y encontramos algo muy padre!
+ENOKI                            ¡Hemos visto esta isla del Lago Supérieur, llamada Tremblay  Island!
+MAPLE                            Ah, sin chiste. Pensaba que dirías un chiste o algo por el estilo.
+ENOKI                            Bueno, nosotros, eh- hemos       pensado que sería divertido si, pues, Del ha tenido la idea,     así que...
+DEL                              La última vez que hablamos,      mi primo Rufus estaba obsesionado con comenzar su pequeño país.
+AARON                            El trabajo no quedaría tan lejos, y si nos hacen falta provisiones, no quedaría tan lejos.
+ENOKI                            Con el dinero que consigamos     vendiendo el castillo y tu magia, hemos pensado que-
+MAPLE                            Espera espera,  espera UN MOMENTO.
+MAPLE                            ¿enserio me estas diciendo que venderias el castillo para moverte a una tal isla-
+MAPLE                            solo porque tiene el mismo apellido que nosotros?
+ENOKI                            Y aparte, estamos pensando en    separarnos de Laurentides para    fundar nuestro propio país.
+MAPLE                            ...Yo...
 MAPLE                            ...
+MAPLE                            ... Creo que necesito tiempo para procesar todo esto.
+AARON                            Puede que parezca una locura,    pero nos hemos informado de los detalles y al parecer es posible que podamos lograrlo.
+ENOKI                            Sé que platicamos anoche, pero...
+MAPLE                            ¿Y después que?                ¿qué vas hacer cuando te aburras en tu pequeña isla?
+MAPLE                            ¿serias el Papa? ¿Quizá   la Reina de Francia? ¿o qué tal tu propio planeta?
+MAPLE                            Y probablemente tendrás la suerte para conseguirlo. Pero, ¿sabes qué?
+MAPLE                            Yo estaré con los pies en la     tierra con un trabajo *de verdad* y evitaré morirme de hambre aunque sea arrastrándome.
+MAPLE                            O peor aún, en la cárcel federal por haber violado algún tipo de ley rara.
+MAPLE                            Mira.... Me he divertido, pero necesito ir a casa.  Estoy harta de todo esto.
+MAPLE                            Aaron, Enoki, Delphine, me dio gusto haberlos visto de nuevo,    pero necesito tomarme un tiempo.
+AARON                            ¿Encerio? Cambiemos el tema, va?. El desayuno ya está listo, ¿vienes?.
+MAPLE                            ...Está bien, me quedaré un poco más, pero ya no tardaría en irme.
 
                                  Hmm, hmm hmm hmm....
+                                 ¿Dios mio cuando va a llegar la pizza? ¿No se supone que tenía que llegar hace 20 minutos?
+                                 Hoy he checado el correo? Debería de ir a verlo.
+                                 ehh, ¿qué es esto? ¿De la casa   Tremblay? Hace mucho que no he escuchado de Aaron y Enoki.
+                                 Espero escuchar lo mucho que quisieran venir a vivir ahora conmigo.
 
+                                            ¡Hola, Maple!
+                                 Espera, lo puse al revés.
 
+                                            '¡Hola, Maple!'
+                                       'Pensamos en enviarte            una carta para                   tenerte informada'
+                                       'Hemos vendido el                castillo y hemos                 comprado una casa móvil.'
+                                       'Aunque eso no es todo-          ¡Ya la hemos instalado           en nuestra nueva isla!'
+                                 Ya me...                             tienen bien.    Los voy a matar.
+                                       'Así que hemos decidido          que la vamos a llamar-..'
 
+MAPLE                            Que baje Dios y me pare,         Ya me tienen hasta la CORONILLA,              ¡me la VAN a PAGAR!
+MAPLE                            ¡Ya me hicieron enojar! Se van a MORIR SOLOS. Ellos mismos se la buscaron.
+MAPLE                            Cuando se cansen de tal isla de fantasía, volverán aquí, ¿y que crees que les dire?
+PIZZA GUY                        ¿Qué les vas a decir?
+MAPLE                            ¡Les dire NO!
+PIZZA GUY                        No sé, eso de vivir en una isla solos suena muy bien.
+MAPLE                            Seria lo mejor en el mundo, pero lo van a estropear.¡Son las personas más torpes en el planeta!
+PIZZA GUY                        Si yo fuera tú, me iría a la isla para enseñarles cómo se hacen las cosas.
+MAPLE                            ¿Supongo que lo tendría que hacer, eda? ¡Se van a morir, o podría ser que se congelen!
+MAPLE                            Pero no puedo. Tengo que ser adulta aquí y quedarme en la realidad.
+PIZZA GUY                        Claro, ¿es más importante comprar pizza y llorar hasta quedarte dormida, como todas las noches?
+MAPLE                            ¿Es obvio?
+PIZZA GUY                        Pues, nos turnamos para llevarle de comer a la pobrecita niña come pizzas.
+MAPLE                            Me lleva.
+MAPLE                            Bueno supongo...La verdad no tengo dinero para pagar este mes de renta por tanta pizza.
+PIZZA GUY                        Entonces... ¿Y mi propina por la terapia?
 
 ENOKI                            Je veux visiter la bibliothèque en premier!
 MAPLE                            Bien sûr, en avant.
@@ -298,6 +419,16 @@ OLD SAILOR                       Keep yer wits about 'ye, ye neverknow who might
 MAPLE                            Will you take a 20?
 OLD SAILOR                       Aye, I can cut a 20.
 
+6:40 PM                          20 de Marzo, 2000                En medio del Lake Supérieur,     La République Laurentides(?)
+                                 Así que... Esa es la isla...     Es muy linda.
+                                 Pero como para vender todas mis cosas, a mi se me hace que no.
+                                 J'suppose que vivir en una isla sin tener deudas sería muy padre.
+MAPLE                            ¿Cuánto costaba el viaje en el   ferry? ¿10 dólares?
+OLD SAILOR                       Alas, una advertencia te tengo que decir antes que partas.
+MAPLE                            Dios mio, y ahora qué?
+OLD SAILOR                       'Tate atenta por ahí que nunca se sabe quién podría darte una puñalada.
+MAPLE                            ¿...tienes cambio de 20?
+OLD SAILOR                       Anda si.
 
 18h40                            20 mars 2000 Au milieu du Lac Supérieur, La République Laurentides(?)
                                  Alors... C'est l'île... Elle a du charme.
@@ -399,16 +530,94 @@ MAPLE                            Ugh, get a room already, you two.
 AARON                            Maple, this is our house.
 MAPLE                            Whatever.
 
+ENOKI                            ¡Maple, veniste!
+MAPLE                            Pues sí, supongo era la mejor opción.
+AARON                            ¿Cómo te fue? ¿Fue muy largo el camino?
+MAPLE                            Tome el tren. ¿Fueron como dos a tres días? Me fue bien. Lei mucho. Me duelen las piernas.
+AARON                            ¡Si nos hubieras avisado más temprano, te hubieramos comprado un boleto de avión!
+MAPLE                            Pues ya que. Ya llegue.       ¿Entonces se mueven de un castillo a una casa rodante? Bárbaros.
+ENOKI                            Oye, ¿nos movemos de un castillo a una casa normal y ahora quieres que nos regresemos?
+MAPLE                            No, sólo que… ya ni sé lo que estoy diciendo.
+AARON                            Bueno, por ahora nada más tenemos un sofá pero esta bien cómodo. Esta es tu casa, descansa.
+AARON                            Hemos estado trabajando mucho hoy. Corté un montón de leña para el invierno y Enoki-
+ENOKI                            Pensé, que, pues, la isla se veria mas viva si traigo unos conejitos. ¿Sabes?
+ENOKI                            Pero pues resulta que comenzaron a  multiplicarse demasiado y ahora  los tengo que mantener alejados  del jardín.
+AARON                            ¿Qué te parece si vamos a visitar las cuevas que están un poco más al  norte de aquí?
+AARON                            He oído que podrían tener piedras preciosas, y podríamos conseguir algo de dinero por ellas.
+MAPLE                            Eso no suena demasiado difícil.
+MAPLE                            Hey... y gracias por la habitación.
+AARON                            No hay de qué.
+ENOKI                            Oh, y si aún no has conocido a   Scout, ¡es un tipo genial! El estará metido en el bunker aya afuera.
 
+ENOKI                            Bueno... ¡Primer día terminado!  Creo que ha sido un día muy      divertido.
+MAPLE                            ¿Sabes qué? Estoy de acuerdo.    Este ha sido el día más          interesante que he tenido en     mucho tiempo.
+AARON                            ¿Estás lista para cambiar de opinión, a que la isla fue mala idea?
+MAPLE                            Apenas llegue hoy, le daré algo de tiempo antes de darle una última opinion.
+AARON                            Bueno me da gusto tenerte. La verdad lamento que solo tengamos ese mueble, pero estoy trabajando en casa nueva.
+MAPLE                            Oh, no te preocupes, dormía en un mueble en mi apartamento anterior. Ya estoy acostumbrada.
+ENOKI                            Aw, ¿dormías en el mueble?
+MAPLE                            Era un mueble maravilloso.
+AARON                            Bueno, vamonos a dormir ya. Estoy cansado de tanta leña que corte.
+AARON                            ¿Nos vemos mañana?
+ENOKI                            ¡Seguro que encontramos más      cosas que podamos hacer!
+MAPLE                            Muchas gracias por todo. Trataré de aportar mi granito de arena sin ser grosera de esta isla. ¡Buenas noches!
+ENOKI                            ¡Bonne nuit!
 
+                                 Ugh... Mi cabeza...              ¿Por qué no puedo dormir?
+                                 ¿No se supone que me quedaría bien dormido después del viaje y un largo día de trabajo duro?
+                                 ¿Y de dónde viene esa luz de     fuera? Puede que sea Scout...
+                                 Quizá debería salir a echar      un vistazo y ver lo que es.
+                                 ¿Pero qué-?                      ¿Es eso un Mons d'Plonj? ¿Está   escribiendo algo?
+                                 Debería ir a mirar antes de que  algo malo pueda suceder.
                                  Hmmm, hmmm... hmmm....
+MAPLE                            ¡HEY! ¡IDENTIFÍCATE O QUEMARE TU CARA!
+RUFUS                            ¡¿AHHHH?!
+                                 ¡AH, UH.. UH, RUFUS!             ¡RUFUS THIBODEAUX!
+                                 ¡NO LA CARA, LA NECESITO!
 
+MAPLE                            Ah, ¿así que eres el tal Rufus?   Primo de Del, ¿cierto?        Encantada, soy Maple.
+RUFUS                            Oh, ¿acaso eres una elfa de      fuego? Ojalá y lo hubiera sabido antes de intentar encender este  fuego.
+MAPLE                            ¿Qué estás haciendo aquí?
+RUFUS                            Estoy solo mirando.   Tengo el ojo puesto en           las islas Bill & Jim de al lado.
+RUFUS                            Me agrada la idea de tener un    lugar que sea únicamente para mí mismo, sin tener que tratar con  nadie.
+RUFUS                            Aunque también me preocupa lo    temerario que es todo esto de    tener una 'isla privada'
+RUFUS                            Además todos los que viven cerca de Québec hablan con ese acento  tan molesto...
+MAPLE                            Eso es algo también me           preocupaba. Enoki es una buena   chica, pero a veces ese acento   consigue sacarme de quicio.
+MAPLE                            Empiezo a sentir cómo el acento  de Québec se apodera de la voz   de Aaron también. Es una molestia.
+MAPLE                            Por cierto, ¿qué escribes?
+RUFUS                            ...                              Vas a pensar que es una tontería pero es un dibujo.
+MAPLE                            Mira, después de haber vendido   todas mis pertenencias para venir a esta isla, te aseguro que tu    dibujo no es una tontería.
+RUFUS                            ... Okay, es una rana. Vi esta   imagen cuando era niño, y me  hace sentir nostálgico por algún motivo.
+RUFUS                            Aunque no puedo recordar cómo era realmente, pero sigo intentando. No sé por qué, pero siento que debo hacerlo.
+MAPLE                            Sí, ahora que lo explicas, sí suena algo tonto¡ Pero se a lo que te refieres!
+MAPLE                            Por cierto... ¿Tienes en donde dormir? No puedo ofrecer mucho, pero hace frío aquí afuera y tenemos ducha adentro.
+RUFUS                            Gracias, pero me voy en la mañana. Y la verdad no quisiera hablar con alguien más,  aunque tú me caíste bien.
+MAPLE                            Igual, fue genial en poder hablar con alguien que tenga tanto sentido.
 
+MAPLE                            Cuídate mucho, ¿si?       Ravi de vous rencontrer,Rufus.
+RUFUS                            ¡Tú también! Ravi de vous        rencontrer,Maple.
 
+                                 ¡Hola a todos, llegó el momento!                                  ¡Soy Scout y ya llegue!
 
+                                 Es emocionante tener por fin una audiencia de verdad, señores y señoras. Ehm... Caballero.
+                                 Hoy es 1 de Abril, ¡Y ya saben   lo que eso significa!
+                                 Maple se ha mudado a la isla y   la hemos tenido aquí por un día  entero. ¡Cómo pasa el tiempo!
+                                 Es una, ehm, broma...   Porque ya es 1 de Abril, y tiene con nosotros todo un mes entero.
+                                 M-mejor cambiemos de tema...      ¡Bueno! ¡Al fin pude recuperar la contraseña de mi computadora...!
+                                 Oh, si, si, otro dato.   ¡Tres nuevas personas se mudarán a la isla!
+                                 Aunque no estoy seguro de que    podamos encontrar nuevos isleños potenciales en Craigslist.
+                                 Sus nombres son Diana, Eleanor,  y Olivier. Y ellos estarán en la cabana del noreste.
+                                 Olivier tiene un invernadero en  el norte, y Diana es una gran aprendiz de navegación. Se ocupará   de conducir el barco.
+                                 ¡Así que a que darles una gran bienvenida!
 
+                                 Muy bien, ya está...             Supongo que los veré a todos más  tarde. ¡Muchas gracias por       estar ahí!
 
+ENOKI                            Mmmmmm....                       Hice palomitas, la verdad no me quiero levantar para ir al microondas.
 SF: Hey Maple
+ENOKI                            ¿Puedes ir a por ellas, Maple?   ¿S'il te plait?
+MAPLE                            Ugh, consigance un cuarto si?.
+AARON                            Maple, esta es nuestra casa.
+MAPLE                            Lo que tú digas.
 
 ENOKI                            Maple, tu es venue!
 MAPLE                            Well oui, jsuppose c'était ma meilleure option.
@@ -630,6 +839,19 @@ SCOUT'S COMPUTER LOGS:
                                  Maybe I should do something aboutit.
                                  Eh, later.
 
+                                 1 de Abril, 2000 -               Registro de Exploración No. 48
+                                 La transmisión de Scout TV tuvo  algunos espectadores esta vez.   Espero que les haya gustado.
+                                 La próxima vez puede que tenga   los suficientes como para hacer  el primer Expo Scout.
+                                 Las cosas avanzan muy lentamente pero tengo financiación, así que
+                                 estoy feliz de poder trabajar en esto por diversión.
+                                 El 'Bolsillo Mágico' no estará listo hasta cierto tiempo, aunque el
+                                 prototipo parece prometedor.
+                                 Tal vez podría ser útil para aquella solicitud que me hizo Aaron
+                                 acerca de hacer carreras de      autos en la isla.
+                                 Podría meter  toda una pista de   carreras en la dimensión del bolsillo mágico.
+                                 Así no tendríamos por qué dejar  todo el lugar hecho un desastre.
+                                 Claro que todo ha de salir bien. Pero si se queda atorado...
+                                 No, todo tiene que ir perfecto.
 
 1er avril 2000 - Carnet d'exploration, no 48
                                  Scout TV a eu quelques téléspectateurs cette fois. J'espère qu'ils ont aimé.
@@ -645,6 +867,19 @@ SCOUT'S COMPUTER LOGS:
                                  Bien sûr, tout doit être parfait Je veux pas qu'il reste prit...
                                  …eh, it'll be fine.
 
+                                 1 de Mayo, 2000 -                Registro de Exploración No. 68
+                                 Dos nuevos aldeanos llegaron, uno se ve medio raro pero Enoki confía en el.
+                                 Al parecer el otro chico nuevo es un gran chef, su supuesto apellido es Pizza.
+                                 Debo descubrir su nombre real,   la curiosidad me está matando.
+                                 Rufus ha sido fastidioso y ha    decidido interrumpir Scout TV.
+                                 No sé si tiene algún tipo de problema o molestia conmigo.
+                                 Francamente, estoy un   poco preocupado por él. Quizá debería mantener un ojo.
+                                 Osea, vigilarlo aún más que      antes.
+                                 Al parece ser que alguna compañía   quiere almacenar un montón de    gasolina en la isla.
+                                 Me di cuenta cuando ellos        la trajeron accidentalmente.
+                                 ¿Qué planean hacer con toda esa  gasolina?  Quizá nunca lo sepamos.
+                                 Esperemos que todos estén bien   este mes. Me estoy divirtiendo   mucho con ellos.
+                                 Scout out. Jeje, 'scout out'.
 
 1 mai 2000 - Carnet d'exploration no 68
                                  Deux nouveaux villageois sont arrivés, l'un est un peu louche mais Enoki lui fait confiance.
@@ -660,6 +895,24 @@ SCOUT'S COMPUTER LOGS:
                                  J'espèere que le monde va bien ce mois-ci. Je m'amuse beaucoup avec eux.
                                  Scout out. Hehe, 'scout out'.
 
+                                 29 de Marzo, 2000 -              Reg. de Exploración N45 (Borrado)
+                                 Este tiene que ser el mejor día desde que llegué a la isla Bill y Jim.
+                                 Definitivamente no extraño aquellas otras islas.
+                                 Ese tal Rufus ha sido bien latoso. Siempre balbuceando sobre conspiraciones.
+                                 Espero que se la este pasando bien allá solo en la isla.
+                                 Pero dios mío, esa Maple... ay ya yay. Creo que hoy fue la primera vez que sonrió conmigo, desde que ella llegó a la isla.
+                                 Probablemente no es nada pero no he podido dormir desde ese momento.
+                                 Siempre dice cosas para burlarse de mí, pero creo que se hace la dificil.
+                                 He visto cómo trata a Aaron y    Enoki, ella es así con todos.
+                                 Mmm... Quizá algún día pueda encontrar la manera de acercarme a ella. Ojala.
+                                 Haré algo que pueda impresionarla.
+                                 Actúa como una desinteresada, pero parece que gustan los libros y comer.
+                                 Quizá no me guste lo mismo que   a ella, pero también me agradan  los libros y la comida.
+                                 Pero sería un problema si le gustan los fortachones, soy más bien como Grimace de McDonald's.
+                                 Bueno ya está, podría inventarme algo para ponerme en forma.
+                                 Después de todo ella ME SONRIÓ.  Puede que sea porque me tropecé
+                                 con algo, pero lo más seguro es que piensa que soy mono.
+                                 Tengo que borrar este registro cuando termine de escribirlo.
 
 29 mars 2000 - Carnet d'exploration no45 (supprimé)
                                  Depuis mon depars des îles Bill & Jim, c'est l'une de mes meilleurs journées.
@@ -683,12 +936,15 @@ SCOUT'S COMPUTER LOGS:
                                  Après tout, elle m'a souri. Même si c'est parce que j'ai tombé
                                  sur quelque chose…
                                  Je vais supprimer cet enregistrement. Je sais même pas pourquoi je l'ai écrit.
+Dialogue before the boat minigame
 
 CAP'N NICHOLAS                   Ahoy there, lass! Are ye ready   fer yer a voyage?
 DIANA                            Aye aye, Captain!
 CAP'N NICHOLAS                   Just remember what I told ye' -  watch out fer the rocks, and     watch yer speed!
 DIANA                            Aye aye, sir!
+CAP'N NICHOLAS                   ¡Anda, señorita! ¿Está' lista  pa'l viaje?
 DIANA                            ¡Sí, capitán!
+CAP'N NICHOLAS                   Recuerda lo que te he dicho -      ¡Cuidaíto con la' piedra' y      atenta a la velosida'!
 DIANA                            ¡Sí, capitán!
 CAP'N NICHOLAS                   Hé, fille! Prêt pour le voyage?
 DIANA                            Oui, capitaine!
@@ -970,6 +1226,15 @@ ENOKI                            It's got cigarettes in it though!
 ENOKI                            That means its for kids AND      adults.
 MAPLE                            Huh, they make books like that?
 
+MAPLE                            Enoki, no hay ventana.
+ENOKI                            ¿ah huh?
+MAPLE                            ¿Y qué pasaría si alguien
+MAPLE                            intentara colarse?
+ENOKI                            Aaron le daría una paliza.
+ENOKI                            En la pura cara.
+MAPLE                            Pero él no está aquí ahorita.
+ENOKI                            Entonces seré yo quién le dé la paliza.
+MAPLE                            Eh.... Hmm. Esta bien, supongo.
 
 MAPLE                            Enoki, y'a pas de fenêtre.
 ENOKI                            Euh?
@@ -981,14 +1246,34 @@ MAPLE                            Mais il n'est pas avec nous.
 ENOKI                            Alors je vais le frapper.
 MAPLE                            Euh... Hum. C'est bien, je suppose.
 
+Ves una vasija.
+Sientes que deberías destruirla.
+Pero no puedes hacer eso.
+Te invade una extraña frustración.
 
 Vous voyez un vase.
 Tu sens que tu devrais le briser.
 Mais tu n'y arrives pas.
 Une étrange déception t'envahit.
 
+MAPLE                            Mejor vámonos. No me gustaría
+MAPLE                            despertarlo.
+ENOKI                            Nah, no pasa nada.
+ENOKI                            Noy hay manera que se levante.
+ENOKI                            Le gustan las luces encendidas también.
+MAPLE                            Pensé que no tenías
+MAPLE                            electricidad...
+ENOKI                            Si tenemos, nada más ese enchufe.
+ENOKI                            Es un enchufe muy importante.
+MAPLE                            ¿De verdad te gusta este lugar?
+ENOKI                            ¿Acaso vienes sólo para
+ENOKI                            insultar mi casa?
+MAPLE                            No, QUÉ VA, en absoluto...
+ENOKI                            Uh huh, ya decía yo.
 MAPLE                            Je m'excuse.
 ENOKI                            Merci.
+MAPLE                            Pero cuando te muevas conmigo.
+MAPLE                            No me digas que no te lo advertí
 
 MAPLE                            Nous ferions mieux d'y aller.
 ENOKI                            C'est bon. Il dort avec la lumière allumée.
@@ -1003,11 +1288,27 @@ ENOKI                            Merci.
 MAPLE                            Mais quand vous allez venir vivre chez moi,
 MAPLE                            Dit pas que je t'avais pas prévenue.
 
+ENOKI                            ¿Sabes? Cuando Del era mi
+ENOKI                            niñera, mis padres le ofrecieron
+ENOKI                            tres habitaciones diferentes en
+ENOKI                            las que podía quedarse. Pero aún así
+ENOKI                            Del siempre dormía en la tina del baño.
+MAPLE                            Pues no suena tan mal.
+ENOKI                            Y yo lo intenté pero a mi piel
+ENOKI                            no le gustó mucho.
 
 ENOKI                            Savais-tu, quand Del était ma gardienne, mes parents lui ont offert trois chambres pour dormir. Mais Del dormait toujours dans le bain
 MAPLE                            Well, ça ne sonne pas si mal.
 ENOKI                            Ouais, j'ai essayé, mais ma peau n'a pas trop aimé.
 
+MAPLE                            Enoki, esta puerta tiene esta cerrada.
+ENOKI                            Oh esa, creo que eso es la
+ENOKI                            cocina. Pero no sabemos dónde
+ENOKI                            podría estar la llave.
+MAPLE                            ¿Y entonces cómo comen?
+ENOKI                            ¡Cocinamos todo en
+ENOKI                            una gran fogata!
+MAPLE                            ¡Ya ni la amuelan!
 
 MAPLE                            Enoki, c'est verrouillé.
 ENOKI                            Oh. Oui, je pense que c'est la cuisine. Mais on ne sait pas où est la clef.
@@ -1015,6 +1316,25 @@ MAPLE                            Comment vous faites à manger d'abord'?
 ENOKI                            Nous cuisinons presque tout sur le feu de bois!
 MAPLE                            Vous deux, je jure!
 
+ENOKI                            ¿Que no se ve mono cuando
+ENOKI                            está dormido? <3
+MAPLE                            ¿Que no tienen apenas unos meses
+MAPLE                            desde que se casáron?
+MAPLE                            ¿No deberían estar ya en esa
+MAPLE                            fase en la que ninguno se dirige
+MAPLE                            la palabra cuando comén juntos
+MAPLE                            y haber ganado unos 5 kilos de peso?
+ENOKI                            Huh, Yo creo que he perdido peso.
+MAPLE                            Creo que no lo entiendo.
+ENOKI                            Sólo porque siempre te
+ENOKI                            peleás con tus ex-novios no
+ENOKI                            significa que todas las parejas
+ENOKI                            tengan que ser así, tu connais.
+ENOKI                            A ver, es que siempre tienes ese
+ENOKI                            hábito de-
+MAPLE                            Anda, termina esa frase y te voy a-
+MAPLE                            Te voy a quemar las cejas.
+ENOKI                            ...hacer eso.
 
 ENOKI                            N'est-il pas trop mignon quand il dort? <3
 MAPLE                            Cela fait pas plusieurs mois que vous êtes mariés?
@@ -1028,6 +1348,36 @@ MAPLE                            Je vais te brûler les cils.
 ENOKI                            ...Mon point est fait.
 
 ENOKI                            Nous sommes ici!
+ENOKI                            Y aqui esta el cuarto de las repisas
+MAPLE                            Veo que no bromeabas con
+MAPLE                            eso de la biblioteca, y tampoco
+MAPLE                            con lo de las repisas...
+ENOKI                            Bon, ni yo ni Aaron hemos podido
+ENOKI                            moverla. ¿Puedes hacerme el
+ENOKI                            favor de usar tu magia de elfo?
+MAPLE                            A ver si lo capto...
+MAPLE                            ¿Quieres que *queme* una
+MAPLE                            esas repisas bien conservadas?
+ENOKI                            Quisiera saber si hay algún
+ENOKI                            pasadizo secreto detrás de ella
+ENOKI                            o algo por el estilo, ¿sabes?
+MAPLE                            Me niego. Esto es ridículo.
+MAPLE                            Además esos libros se ven bien.
+ENOKI                            Anda, ya los revisé, la mayoría ya
+ENOKI                            se están pudriendo.. Estarian mejor
+ENOKI                            que se quemen.
+MAPLE                            ¿Estás segura de ello?
+ENOKI                            Completamente.
+MAPLE                            Ok, hagamos un trato entonces.
+MAPLE                            Quemaré esto, pero debes escoger
+MAPLE                            al menos un libro. //j'ai compris?
+MAPLE                            ¿J'ai compris? ¿Oui?
+ENOKI                            ¡Oui!
+ENOKI                            ... Vale, ya tengo un libro.
+ENOKI                            Recuerda, ¡usa el gatillo 'R'
+ENOKI                            para lanzar una bola de fuego!
+MAPLE                            ¿...De qué estás hablando?
+ENOKI                            ¿Huh? Oh, no es nada.
 
 ENOKI                            Nous sommes ici!
 ENOKI                            Voici la bibliothèque!
@@ -1051,7 +1401,36 @@ MAPLE                            ...De quoi?
 ENOKI                            Hein? Oh, it's nothing.
 
 MAPLE                            ....
+ENOKI                            Bueno, pues no hay pasadizo.
+MAPLE                            No me digas..
+ENOKI                            Qué extraño.
+MAPLE                            A ver, Enoki...
+MAPLE                            Supongo que no tiene ningún
+MAPLE                            sentido enfadarse contigo, pero
+MAPLE                            deberías dejar de actuar así.
+MAPLE                            Tú y Aaron gastaron un
+MAPLE                            dineral en un castillo sin
+MAPLE                            amueblar ni necesidades básicas.
+MAPLE                            ¿Para qué? ¿Para que puedas jugar
+MAPLE                            a hacerte la princesa? Mientras
+MAPLE                            haces eso, yo sacrifico toda
+MAPLE                            mi vida personal manteniendo el
+MAPLE                            apartamento de Carolina con sólo
+MAPLE                            lo esencial. Enoki... Por favor.
+MAPLE                            No quiero parecer la mala aquí.
+MAPLE                            Entiendo que no has tenido
+MAPLE                            una buena infancia
+MAPLE                            ni padres...Porque esa soy yo también.
+MAPLE                            Pero no puedes seguir portándote
+MAPLE                            de esta forma. ¿Lo entiendes?
+ENOKI                            Lo entiendo.
+MAPLE                            Son las 5:00 de la mañana, voy
+MAPLE                            a volver a la cama. Te veré por
+MAPLE                            la mañana, ¿oui?
 ENOKI                            Oui...
+MAPLE                            No te apures pensando en
+MAPLE                            esto. S'il te plait, Bonne nuit.
+ENOKI                            Bonne nuit…
 
 MAPLE                            ....
 ENOKI                            Eh bien, il n'y a pas de passage.
@@ -1072,6 +1451,12 @@ MAPLE                            Ne pense pas trop à ce que j'ai dit. S'il te p
 ENOKI                            Bonne nuit...
 
 MAPLE
+    (Todas y cada una de estas       prendas son de Enoki, ¿no?)
+    (Claro que Aaron recogería       todas las suyas.)
+    (Son tan distintos... No     entiendo cómo lo hacen para
+    no pelearse todo el tiempo.      No consigo comprenderlo.)
+    (Si tuviera novio, le            obligaría a recoger toda su
+    ropa inmediatamente.)
 
 MAPLE
      (Chacun de ces vêtements sont vraiment à Enoki?)
@@ -1080,6 +1465,12 @@ MAPLE
      (Si j'avais un mari, je le forcerais à ramasser tous ses vêtements immédiatement.)
 
 ENOKI
+    (Si hubiera sabido que Maple iba a venir tan pronto, habría
+    comenzado a limpiar un poco      antes....)
+    (Tal vez no se dé cuenta si me   pongo a recoger ahora)
+    (Aunque puede que ya lo aiga visto y ya me está juzgando)
+    (...Este esta chido, quizá lo   deje en el suelo y me lo ponga
+    mañana.)
 
 ENOKI
      (Si j'avais su que Maple arrivait si tôt, j'aurais nettoyer plus vite...)
@@ -1088,6 +1479,15 @@ ENOKI
      (... Celui-ci est mignon, peut-être que je le porterai demain.)
 
 AARON
+    (Enoki no era tan desordenada cuando vivíamos en el castillo.)
+    (Puede que se empiece a sentir mas relajada porque
+    piensa que nos hemos movido de forma definitiva.)
+    (Aunque no la quiera regar, pero, Aaron Tremblay,
+    lo e logrado. E conseguido un hogar propio y una esposa
+    que deja tu ropa tirada en el piso.)
+    (No podría pensar en querer algo más en estos momentos.)
+    (Bueno.....                      Extraño mi carro.)
+    (Tal vez le diga a Scout para poner una pista de carreras.)
 
 AARON
      (Enoki n'était pas aussi malprorpe quand on vivais dans le château.)
@@ -1100,11 +1500,16 @@ AARON
      (Je devrais parler à Scout pour la mise en place d'une piste de course.)
 
 OTHERS
+    (Definitivamente no deveria estar aqui.)
 
 LES AUTRES
     (Je devrais pas être ici.)
 
 MAPLE
+(Por lo menos cuando vivian castillo, su cama estaba en
+medio del cuarto. ¿Y que se supone que es esto?)
+(¿Quién se ha quedado en la esquina? Probablemente Aaron.)
+(Ya ni la amuelan, esa chica le va a dar canas verdes 10 años antes.)
 
 MAPLE
 (Au moins, quand ils vivaient dans le château, leur lit était au centre de la pièce. Pourquoi c'est comme ça?)
@@ -1112,6 +1517,10 @@ MAPLE
 (Je jure cette fille va lui donner des cheveux gris 10 ans plus tôt.)
 
 ENOKI
+(Me alegra que no tenga que dormir en medio del cuarto.)
+(Me dolía un montón cuando me caía en el piso de piedra.)
+(Ahora podré moverme tranquila hacia la pared o a Aaron.)
+(Me alegra mucho que a él no le importe.)
 
 ENOKI
 (Je suis contente de ne pas avoir à dormir au milieu de la pièce.)
@@ -1120,6 +1529,15 @@ ENOKI
 (Je suis tellement heureuse que ça ne le dérange pas trop.)
 
 AARON
+(Maple no le agradará nada cuando vea el cuarto.)
+(Recuerdo cuando era buena onda...)
+(Es muy estresante tenerla cerca estos días.)
+(Mejor ni hubiera venido. Cada vez que trato de
+ayudarla, lo único que hace es quejarse.)
+(Ojala se aburra de vivir aquí y se regrese a su casa.)
+(O quizás tenga razón y solo estoy viviendo en la fantasía de Enoki.)
+(Pero Enoki ha sido la única felicidad que he tenido en años.)
+(Tal vez cambiemos de parecer… ojala y algo cambie.)
 
 AARON
 (Maple ne sera pas contente quand elle verra cette pièce.)
@@ -1132,16 +1550,24 @@ AARON
 (Ont vas peut-être changer, ou que quelque chose va changer...)
 
 OTHERS
+(No deveria estar aqui sin ser invitado...)
 
 AUTRES (Je ne devrais pas entrée sans être invité...)
 
 MAPLE
+(La verdad no quisiera admitirlo, pero...)
+(Me gusta mucho estar con ellos. He olvidado lo genial)
+(que es estar con alguien.)
 
 MAPLE
 (Je vais surement jamais l'admettre, mais...)
 (C'est super d'être avec eux. Parfois, j'oublie à quel point ça me manque de vivre avec quelqu'un.)
 
 ENOKI
+(Sabes, quisiera viajar al pasado para poder hablar conmigo misma.)
+(Y la verdad, no me creería todo lo que ha pasado este año.)
+(Y... no creo que mis padres sepan que estoy aquí.)
+(Me pregunto dónde creen que estoy ahorita.)
 
 ENOKI
 (Parfois j'aimerais pouvoir remonter le temps pour me parler)
@@ -1150,6 +1576,14 @@ ENOKI
 (Je me demande où ils pensent que je suis en ce moment.)
 
 AARON
+(Ya necesito conseguirle a Maple su propio lugar.)
+(No pensé que ella daría todo para cumplir con su parte...)
+(Con toda esa espeleología hemos podido cubrir los gastos.)
+(Me sorprende que ella no haya preguntado por un lugar propio.)
+(O a lo mejor no le gusta estar sola.)
+(Y la verdad no me agrada tener que hacer otra casa.)
+(Platicare con Oliver, a ver que se puede hacer.)
+(Es todo un experto en el tema.)
 
 AARON
 (J'ai besoin de trouver une place pour Maple.)
@@ -1162,29 +1596,41 @@ AARON
 (Il semble être bon avec ses mains.)
 
 OTHERS
+(Sí, eso es un cuarto.)
 
 LES AUTRES
 (Oui, c'est une chambre.)
 
 OLIVIER
+(Me agrada la luz natural de aquí.)
+(Podría traer algunas plantas.)
 
 Olivier
 (J'aime le soleil ici.)
 (Je pourrais mettre des plantes.)
 
 ELEANOR
+(Esto me recuerda mucho a la casa de los papas de Vee.)
+(Espero que sean personas confiables.)
 
 ELEANOR
 (..ça me rappelle beaucoup la maison des parents de Vee.)
 (J'espère que ce sont des gens de confiance.)
 
 DIANA
+(Ok, me agradan estas personas.)
+(Me hacen sentir cómoda.)
 
 DIANA
 (Ok, j'aime ces gens.)
 (Ils me font me sentir propre.)
 
 MAPLE
+(Gracias a dios ese chico nuevo… ehh, bueno ese muchacho es cocinero.)
+(Comer siempre Gumbo no sería tan malo si alguien más lo cocinara.)
+(Ojala y también sea buena onda.)
+(Ugh, no se que me pasa, pero tengo ganas de conocer a nuevas personas)
+(Me estaré volviendo loca, Yo? ¿Ganas de conocer?...)
 
 MAPLE
 (Merci mon Dieu, le nouvel arrivant est cuisinier.)
@@ -1194,6 +1640,10 @@ MAPLE
 (Je vais perdre la carte si je deviens sociable...)
 
 ENOKI
+(Este cuarto no ha cambiado para nada.)
+(¿Y si muevo la cama para el otro lado?)
+(No.. Mejor no, seria mas dificil esconder la ropa.)
+(Debería recoger esos... eh...   ...mejor lo hago mas alrato.)
 
 ENOKI
 (Cette pièce n'a pas changé du tout.)
@@ -1202,6 +1652,14 @@ ENOKI
 (Je devrais récupérer tous... euh... ... mieux vaut le faire plus tard.)
 
 AARON
+(Bueno, pues ahí se fue la última oportunidad de que Maple se fuera a la cabana.)
+(Mientras Enoki esté contenta con que Maple esté aquí.)
+(La casa dejará de ser mi hogar. No sé qué mosca le habrá picado.)
+(Que paso con que le gusta ser independiente? Es como mugre en las uñas.)
+(Y Enoki parece que se está dando cuenta que estoy molesto por algo.)
+(Neta… ya estoy hablando igual que Maple.)
+(¿Acaso todos los hermanos son de esta manera?)
+(Con ganas de preguntarle a alguien, pero ni amigos tengo.)
 
 AARON
 (C'est la dernière chance à Maple de prendre la cabine.)
@@ -1214,21 +1672,36 @@ AARON
 (J'aimerais pouvoir le demander à quelqu'un, mais je n'ai pas d'amis.)
 
 OLIVIER
+(Ya mero es el cumpleaños de Aaron… Una planta sería un buen regalo.)
 
 OLIVIER
 (L'anniversaire d'Aaron approche. Une plante serait un beau cadeau.)
 
 DIANA
+(Me encanta la luz del sol aqui.)
+(Podría poner algunas plantas.)
 
 DIANA
 (J'aime le soleil ici.)
 (Je pourrais mettre des plantes.)
 
 OTHERS
+(Probablemente no deveria estar espiando.)
 
 LES AUTRES
 (Je ne devrais pas fouiller ici.)
 
+MAPLE                            Oye, ¿Qué es ese libro?
+AARON                            Oh, es mío.
+AARON                            Ya sabes que no me va mucho la  ficción,
+AARON                            Pero Enoki es un poco terca, bueno a veces.
+ENOKI                            ¿Has escuchado algo de Yellow?
+ENOKI                            Es bien padre, Aaron ya le interesa por mi.
+MAPLE                            ...¿Tiene dibujos?
+MAPLE                            ¿Aún lees libros ilustrados?
+ENOKI                            ¡Este tiene cigarros!
+ENOKI                            Eso significa que es para niños y adultos.
+MAPLE                            Neta, ¿de verdad hacen libros así?
 
 MAPLE                            Hé, c'est quoi ce livre?
 AARON                            Oh, c'est à moi.
@@ -1734,8 +2207,20 @@ Art is weird.
 
 MAPLE                            Probably should go to Scout's.
 
+ENOKI                            O, que onda Maple, ¿quieres jugo?
+MAPLE                            ¿De que tipo?
+ENOKI                            Es un secreto.
+MAPLE                            No voy tomar cosas extrañas.
 ENOKI                            ....
+ENOKI                            Anda, es jugo de naranja / VENENO
+MAPLE                            ¿Y no crees que me hubiera dado
+MAPLE                            cuenta?
+ENOKI                            ¿A lo mejor?
+MAPLE                            Paso. Merci.
 //
+MAPLE                            Viniendo de ti, me lo creería.
+ENOKI                            Podrías probarlo y luego averiguar ¿no?.
+MAPLE                            Gracias, pero no tengo ganas.
 
 ENOKI                            Oh, hey Maple, veux tu du jus?
 MAPLE                            Quel  jus?
@@ -1751,12 +2236,23 @@ MAPLE                            Venant de toi, c'est possible.
 ENOKI                            Tu peux l'essayer pour le découvrir.
 MAPLE                            J'ai pas si soif.
 
+(Nos queda poco jugo de naranja.)
+(Lo más seguro es que tenga que ir al  pueblo a vender frutas.)
+(Vender una fruta para comprar otra, heh.)
+(Si por lo menos el jugo de pepino estuviera un poco rico...)
 
 (Il nous reste pas beaucoup de jus d'orange.)
 (Je vais devoir aller en ville pour vendre nos produits.)
 (Vendre un fruit pour en acheter un autre, comique.)
 (Si seulement le jus de concombre avait meilleur goût...)
 
+ENOKI                            ¡EEEE! ¡Ahora todos mis amigos
+ENOKI                            se conocen entre ellos!
+ENOKI                            ¡Ahora sí que somos un grupo!
+MAPLE                            Woa, aún no me decido si-
+MAPLE                            Si me quedo aquí, cálmate.
+SCOUT                            ¿Va a venir alguien más?
+AARON                            Tendremos que esperar y ver.
 
 ENOKI                            EEEE! Tous mes amis se connaissent maintenant!
 ENOKI                            Nous sommes un vrai un groupe enfin!
@@ -1765,6 +2261,14 @@ MAPLE                            Si je reste ici, calme-toi.
 SCOUT                            On doit tu attendre quelqu'un d'autre?
 AARON                            Nous devrons attendre et voir quelqu'un arrive.
 
+MAPLE                            Creo que ya los leí todos.
+AARON                            Hace rato que no vamos al pueblo.
+MAPLE                            Me pregunto qué estará pasando   fuera de aquí.
+ENOKI                            Si algo hubiera pasado ya lo sabríamos.
+ENOKI                            Scout habría dicho algo.
+ENOKI                            Siempre está metido en internet.
+MAPLE                            Podría pedirle que me compre unos libros.
+AARON                            Eso estaria super.
 
 MAPLE                            Bon je les ai tous lus.
 AARON                            ..ça fait un moment que nous sommes pas allés en ville.
@@ -1775,10 +2279,23 @@ ENOKI                            Comme il est toujours sur Internet.
 MAPLE                            Je pourrais lui demander de m'acheter des livres en ligne.
 AARON                            Ce serait une bonne idée.
 
+Ves un montón de libros que      nunca antes habías visto.
+Aunque ninguno de ellos parece   particularmente interesante...   Por ahora.
 
 Vous voyez un tas de livres que vous n'avez jamais vus auparavant.
 Mais aucun ne semble intéressant... Pour l'instant.
 **********
+MAPLE                            Creo que necesitamos un videocasetera.
+AARON                            ¿Compraras una?
+MAPLE                            Claro. Y un montón de videocasets.
+ENOKI                            Oooh, ¿Crees que me puedas conseguir la última
+ENOKI                            película de Time Raider? ¡Escuché que hay una nueva!
+MAPLE                            Sólo por fastidiarte, compraré
+MAPLE                            todas las que vea EXCEPTO esa.
+ENOKI                            Aw... Estaba pensando que quizá,
+ENOKI                            si a todos nos agrada la idea.
+ENOKI                            ... ¿Tener una noche de peliculas?
+MAPLE                            Okay, Okay alo mejor si.
 
 MAPLE                            On devrais acheter un lecteur VHS.
 AARON                            Vas-tu en acheter un?
@@ -1789,31 +2306,49 @@ ENOKI                            Aw... Je pensais que nous pourrions faire.
 ENOKI                            ... Une soirée cinéma?
 MAPLE                            Ok,  PEUT-ÊTRE.
 
+Sonríes, pensando que no saben   cocinar bien.
+Definitivamente se convertirán   en clientes habituales.
 
 Tu souris en pensant a leur cuisine inférieure.
 Ils deviendront certainement des clients réguliers.
 
+AARON                            Necesito ver cómo van los demás.
 
 AARON                            J'ai besoin de voir comment vont les autres.
 
+ENOKI'S GARDEN                   Si tocas algo, acabaré contigo.
 
 LE JARDIN D'ENOKI                Tu touches, tu meur.
 
+WOOD CHOPPING SPOT               Donde se corta la leña.
 
 POINT DE COUPE DU BOIS           Où on coupe le bois.
 
+Hmmm... Esta parece una tarea adecuada para Enoki.
 
 Hmmm... ..ça semble être une tâche pour Enoki.
 
+Hmmm... Esta parece una tarea adecuada para Aaron.
 
 Hmmm... Cà semble être une mission pour Aaron.
 
+CUEVA DE MURCIÉLAGOS PELIGROSOS  Advertencia: hay murciélagos.
 
+Creo que Maple es la única que   puede entrar con seguridad.
 
 GROTTE DES CHAUVES-SOURIS agressive Attention : Contient des chauves-souris.
 
 Je pense que Maple est la seule à pouvoir entrer en toute sécurité.
 
+MAPLE                            ¿Plantas, eh?
+MAPLE                            ¿Que no hay un jardín arriva?
+SCOUT                            Verás, yo, ehm-
+SCOUT                            Realmente no es por las plantas
+SCOUT                            Yo estudio la tierra.
+MAPLE                            ¿estudias la tierra?
+SCOUT                            Hay un estudio para cada...
+SCOUT                            Pues para cada cosa.
+MAPLE                            Obvio.
 
 MAPLE                            Des plantes, hein?
 MAPLE                            Y a-t-il un jardin aussi?
@@ -1825,6 +2360,14 @@ SCOUT                            Il y a un scientifique pour beauc...
 SCOUT                            Eh bien, pour tout, vraiment.
 MAPLE                            Je vois ça.
 
+ENOKI                            CREO que esa es la planta.
+ENOKI                            Esa es mi favorita.
+SCOUT                            ¿Quieres que la corte?
+ENOKI                            ¿Qué tipo será?
+SCOUT                            La verdad es que no lo sé...
+SCOUT                            Estudio la tierra, no plantas.
+ENOKI                            ¡Podría ser un fruto misterioso!
+SCOUT                            Puede que si.
 
 ENOKI                            JE PENSE que c'est la bonne plante.
 ENOKI                            C'est ma favorite.
@@ -1835,6 +2378,16 @@ SCOUT                            J'étudie le sol, pas les plantes.
 ENOKI                            ..ça pourrait être un fruit mystérieux!
 SCOUT                            Et bien... C'est possible.
 
+AARON                            ¿Has hecho progresos?
+SCOUT                            ¡Claro que si!
+SCOUT                            He conseguido algo nuevo.
+AARON                            ¿Cómo se llama?
+SCOUT                            Lo bauticé como 'Scout-Out'.
+SCOUT                            Puede quitar las malezas.
+AARON                            ¡Eso es increíble!
+SCOUT                            El único problema es que...
+SCOUT                            Tambien lastima las demás plantas.
+AARON                            Está cañón…
 
 AARON                            Tu as fait des progrès?
 SCOUT                            Et oui!
@@ -1847,6 +2400,11 @@ SCOUT                            Le seul tracas c'est que...
 SCOUT                            ..ça détruit tous les plantes.
 AARON                            Ah, triste...
 
+(¡Dios mio, dios mio, dios mio...!)
+(Necesito figurar esa fórmula lo más rápido posible.)
+(Tal vez no fue buena idea prometer tierra mágica a los inversores.)
+(Tal vez si me escondo aquí abajo no puedan encontrarme.)
+(Aunque primero debería quitar   mi nombre de la ventanilla...)
 
 (Oh non, oh non, oh non...!)
 (Je dois comprendre la formule aussi vite que possible.)
@@ -1854,6 +2412,14 @@ AARON                            Ah, triste...
 (Si je me cache ici, ils ne me trouveront pas.)
 (Mais je devrais enlever mon nom de la trappe ...)
 
+MAPLE                            ¿Lo mismo de siempre?
+SCOUT                            La verdad sí.
+MAPLE                            ¿Aún no han hablado contigo
+MAPLE                            sobre los resultados?
+SCOUT                            Aún no, pero sigo recibiendo
+SCOUT                            mi sueldo cada semana.
+MAPLE                            Hey, eso es bueno.
+SCOUT                            Pues sí.
 
 MAPLE                            Toujours la même routine?
 SCOUT                            Oui, oui.
@@ -1864,6 +2430,11 @@ SCOUT                            un salaire chaque semaine.
 MAPLE                            Hé, c'est parfait.
 SCOUT                            Oh que oui.
 
+(Maple ha estado mirando las     plantas de vez en cuando...)
+(Al menos me dijo lo que opina   de ellas con sinceridad.)
+(Necesito urgentemente que mi    jefe responda a mis mensajes.)
+(Recibo un buen sueldo y no      debería jugármela demasiado.)
+(Tan sólo he de asegurarme de    seguir los pasos correctos.)
 
 (Maple regarde les plantes de temps en temps...)
 (Au moins, elle a une opinion sur ça.)
@@ -1877,9 +2448,25 @@ SCOUT                            Oh que oui.
 (Beaucoup de plantes et de terres dans des bocaux.)
 (Tu ne comprends pas vraiment, mais cela semble inoffensif.)
 
+SCOUT                            Hey, uh... ¿Maple?
+SCOUT                            ¿Puedo hacerte una pregunta?
+MAPLE                            Claro, ¿qué pasó?
+SCOUT                            A... ti... ¿T-te gusta el tenis?
+MAPLE                            Amo el tenis  // Eww tennis.
+MAPLE                            ¿A qué viene esa pregunta?
+SCOUT                            Oh, nada, nada... Sólo me...
+MAPLE                            ¿Quieres jugar conmigo al tenis?
+SCOUT                            Siempre quise jugar tenis,
+SCOUT                            pero realmente no tengo con
+SCOUT                            quién jugar, ¿sabes?
+MAPLE                            Bueno, pues tu te encargas del campo
+MAPLE                            y yo te podría enseñar una a dos cositas.
+SCOUT                            ¿L-lo estás diciendo en serio?
 MAPLE                            Claro.
 SCOUT                            ¡Merci!
 //
+SCOUT                            Oh, olvídalo, entonces.
+MAPLE                            Me da.
 
 SCOUT                            Hé, euh... Maple?
 SCOUT                            Puis-je poser une question?
@@ -1898,6 +2485,13 @@ SCOUT                            Merci!
 SCOUT                            Oh, laisse faire.
 MAPLE                            D'accord.
 
+AARON                            Okay, escuchame.
+AARON                            Tienes esa herramienta para
+AARON                            hacer búnkers como este con
+AARON                            facilidad, ¿no? Podemos hacer-
+AARON                            ¡Una carrera subterránea!
+SCOUT                            Eso estaria padrisimo!
+SCOUT                            ¡Me encantaría intentarlo!
 
 AARON                            Écoute-moi une minute.
 AARON                            Tu as un outil pour
@@ -1907,6 +2501,8 @@ AARON                            Une course sous-terrain!
 SCOUT                            Oh, C'est une super idée!
 SCOUT                            Je vais voir ce que je peux faire!
 
+(Bueno, llegó el momento. Quieren que les dé mis muestras.)
+(Espero que no me corran.)
 
 (Well, le moment est venu. Ils veulent que je montre mes échantillons.)
 (Avec espoir, je vais garder mon travaille.)
@@ -1917,6 +2513,17 @@ SCOUT                            Je vais voir ce que je peux faire!
 (Beaucoup de plantes et de terres dans des bocaux.)
 (Tu ne comprends pas vraiment, mais cela semble inoffensif.)
 
+MAPLE                            Oye mira, mas cosas raras.
+SCOUT                            ¡Excusez-moi, mademoiselle!
+SCOUT                            ¡Son los Time Raiders!
+MAPLE                            ¿Time... Raiders?
+SCOUT                            ¡Sí! ¡Las aventuras de
+SCOUT                            Jahn-Jahn Gazebo y sus
+SCOUT                            complices, Nexus y Ninjette!
+MAPLE                            Todo eso suena demasiado...
+MAPLE                            ¿Alguna vez has salido con alguien?
+SCOUT                            No, las chicas me decían raro.
+MAPLE                            Las chicas lo siguen diciendo.
 
 MAPLE                            Hé, regarde, un autre truc de nerds.
 SCOUT                            Excusez-moi, mademoiselle!
@@ -1929,6 +2536,14 @@ MAPLE                            As-tu déjà été en couple?
 SCOUT                            Non, les filles me prenaient pour un nerd.
 MAPLE                            Crois-moi, elles le pensent encore.
 
+ENOKI                            ¡Oh! ¿Son los Time Raiders?
+SCOUT                            ¿Conoces a los Time Raiders?
+ENOKI                            '¡Lo conseguí, Jahn-Jahn!'
+SCOUT                            ¡Al fin alguien más!
+ENOKI                            Sí, Aaron me lo enseñó.
+ENOKI                            Me gusta el estilo de dibujo.
+ENOKI                            ¿Me lo prestarias después?
+SCOUT                            ¡Claro! Casi lo he terminado.
 
 ENOKI                            Ah! C'est Time Raiders?
 SCOUT                            Tu connais Time Raiders?
@@ -1939,6 +2554,16 @@ ENOKI                            J'aime le style de dessin.
 ENOKI                            Veux-tu me le prêter?
 SCOUT                            Bien sûr! J'ai presque fini.
 
+AARON                            Oye, ¿Esos no son los Time Raiders?
+SCOUT                            ¡Si que si!
+AARON                            ¡Qué chido! ¿Ya viste lo nuevo?
+SCOUT                            No, todavia no.
+SCOUT                            Algo que aprenderás de tu nueva
+SCOUT                            'Vida Isleña', es que conseguir
+SCOUT                            cosas nuevas puede ser difícil.
+SCOUT                            Podría usar mi computadora,
+SCOUT                            pero no es la misma experiencia.
+AARON                            Estoy totalmente de acuerdo.
 
 AARON                            Hé, c'est pas Time Raiders?
 SCOUT                            Oh que oui!
@@ -1949,14 +2574,33 @@ SCOUT                            'Island Life', c'est que s'est difficile d'obte
 SCOUT                            Je pourrais continuer à lire sur le PC, mais ce n'est pas du tout pareil.
 AARON                            Je comprends.
 
+(Debo terminar con esto para así dárselo a Enoki.)
+(Pero la fórmula que prometí...  Estoy muy cerca de lograrla.)
+(Tal vez pueda lograrlo si no duermo unos días.)
+(Un poco más y al fin podré      tenerlo listo.)
 
 (Je dois finir pour pouvoir l'offrir à Enoki.)
 (Mais la formule que j'ai promise... Je suis si proche.)
 (Je vais devoir faire d'autres nuits blanches.)
 (Encore un peu de temps et je vais réussir.)
 
+SCOUT                            Oye, a ti te gusta
+SCOUT                            leer mucho, ¿verdad?
 MAPLE                            Claro.
+SCOUT                            ¿Crees que podrías prestarme
+SCOUT                            algunos de tus libros?
+MAPLE                            No te gustarían.
+SCOUT                            Al menos quisiera intentarlo.
+MAPLE                            ¿Te gusta la literatura romántica? O los de época?
+MAPLE                            ¿Las relaciones complicadas?
+SCOUT                            Ya veo… algo más? O es todo?
+MAPLE                            No, eso es lo que me gusta.
+MAPLE                            ¿Acaso te hace sentir incómodo?
+SCOUT                            ... Quizá un poco.
+MAPLE                            Mejor sigue leyendo tus cómics.
 //
+SCOUT                            Podrían empezar a gustarme.
+MAPLE                            Por favor..
 
 SCOUT                            Hé, tu aimes vraiment lire des livres?
 MAPLE                            Oh que oui.
@@ -1972,6 +2616,29 @@ MAPLE                            Es tu mal à l'aise?
 SCOUT                            ... Un peu.
 MAPLE                            Continue à lire des bandes dessinées.
 
+SCOUT                            Oye, ¿Enoki?
+ENOKI                            ¿Sí?
+SCOUT                            ¿Podemos hablar de Maple?
+ENOKI                            Oooh, ¿qué ocurre con ella?
+ENOKI                            TE GUSTA Maple, ¿no es así?
+SCOUT                            ¿Qué dices de gustar?
+ENOKI                            Ya lo sabemos todos, jeje.
+SCOUT                            Neta, ¿tan obvio es?.
+ENOKI                            Pero ella es complicada.
+ENOKI                            Una vez le presenté a un chico.
+SCOUT                            ¿Le presentaste a un chico?
+ENOKI                            Y salieron durante un tiempo.
+ENOKI                            Aunque se hartó y la dejó.
+ENOKI                            Debes ser perfecto para ella.
+SCOUT                            Y yo no lo soy.
+ENOKI                            No sé quién podría serlo.
+SCOUT                            Bueno, un hombre puede soñar.
+ENOKI                            Pero no cambies.
+ENOKI                            Sólo se la mejor versión de 'tú mismo'.
+SCOUT                            Supongo que tienes razón.
+ENOKI                            Ya la chica correcta llegara.
+SCOUT                            Está bien. Merci, Enoki.
+ENOKI                            ¡De rien!
 
 SCOUT                            Hé, Enoki?
 ENOKI                            Oui?
@@ -1997,6 +2664,31 @@ ENOKI                            Tu trouveras la bonne.
 SCOUT                            Ok. Merci, Enoki.
 ENOKI                            De rien!
 
+SCOUT                            Oye y.. ¿Como le preguntaste
+SCOUT                            a Enoki si quería salir?
+AARON                            Sólo le invité a tomar café.
+SCOUT                            Café, café... okay.
+SCOUT                            No tenemos, hmm... Café...
+AARON                            ¿Quieres invitar a Maple a salir?
+SCOUT                            Bueno, yo... Sí, me gustaría.
+AARON                            Te diria que no lo intentes, pero aya tu.
+AARON                            Ningún chico es
+AARON                            bueno para ella.
+SCOUT                            Quizá sea inútil intentarlo.
+AARON                            Es imposible complacerla.
+AARON                            Créeme, la conozco bien.
+SCOUT                            ¿A qué te refieres?
+AARON                            Su tipo son los que se creen
+AARON                            muy aca, como mejores de lo
+AARON                            que son. Aunque a decir
+AARON                            verdad. También le he visto
+AARON                            salir con otro tipo de
+AARON                            bobos. ¿sabes? Quizá sólo tengas
+AARON                            que esforzarte un poco en
+AARON                            tener algo más de confianza
+AARON                            en ti mismo.
+SCOUT                            Bueno, eso un buen comienzo.
+AARON                            Buena suerte con ella.
 SCOUT                            Merci.
 
 SCOUT                            Ehm... comment es-tu sorti avec
@@ -2018,11 +2710,26 @@ SCOUT                            Eh bien, c'est un bon début.
 AARON                            Bonne chance avec elle.
 SCOUT                            Merci.
 
+(A lo mejor puedo convencer a Maple de leer unos cómics.)
+(Entonces así podríamos tener algo   en común.)
+(...Pero eso no pasará ni en mil años.)
 
 (Si je peux convaincre Maple de donner une chance à ces bandes dessinées.)
 (Alors nous pourrions avoir quelque chose en commun.)
 (.....ça arrivera jamais.)
 
+GUY                              ¿Te gustan los Time Raiders?
+SCOUT                            Sí, un poco.
+GUY                              ¿Cada cuando consigues los nuevos?
+SCOUT                            Diana los manda a traer cada semana.
+GUY                              Que bueno, pense que ya no los podría
+GUY                              leer después que me mude aquí.
+SCOUT                            Aunque sí que hay una lista larga de espera.
+SCOUT                            Tendrás que esperar a que Enoki
+SCOUT                            los termine, a ella le gustan también.
+GUY                              Nah, yo los voy a agarrar primero.
+SCOUT                            Eyy, eso tomalo con ella.
+GUY                              Eso haré.
 
 GUY                              Aimes-tu Time Raiders?
 SCOUT                            Oui, un peu.
@@ -2035,6 +2742,8 @@ GUY                              Et si je veux les lire en premier?
 SCOUT                            Tu devras lui en parler.
 GUY                              Je vais le faire.
 
+(Los cómics del mes pasado       siguen tirados en el suelo.)
+(Lentamente acumulando polvo.)
 
 (Les bandes dessinées du mois dernier traînent toujours sur le sol.)
 (Elle collecte la poussière.)
@@ -2045,6 +2754,7 @@ SCOUT                            Penses-tu que je pourrais emprunter
 SCOUT                            certain de tes livres?
 MAPLE                            T'aimerais pas ça.
 SCOUT                            Au moins, je veux essayer.
+MAPLE                            Aimes-tu la romance? // Aimes-tu le vintage?
 MAPLE                            Des relations compliquées?
 SCOUT                            Eh... Tu en à pas d'autres?
 MAPLE                            Non, c'est ce que j'aime.
@@ -2053,6 +2763,8 @@ SCOUT                            ... Un peu.
 MAPLE                            Continue à lire des bandes dessinées.
 
 //
+SCOUT                            Je pourrais commencer à les aimer.
+MAPLE                            Je pense pas non.
 
 SCOUT                            Hé, Enoki?
 ENOKI                            Oui?
@@ -2078,6 +2790,13 @@ ENOKI                            Tu trouveras la bonne.
 SCOUT                            Ok. Merci, Enoki.
 ENOKI                            De rien!
 
+SCOUT                            Oye, ten mucho cuidado con
+SCOUT                            mi computadora, es cara.
+MAPLE                            No la iba a tocar. Aunque
+MAPLE                            Ahora me da tentacion...
+SCOUT                            ¡No, para por favor!
+MAPLE                            ¡Cálmate, no la iba a tocar!
+MAPLE                            Estos raros y sus juguetes…
 
 SCOUT                            Hé, fais très attention avec mon PC, ..ça coute un bras.
 MAPLE                            Je n'allais pas y toucher. Mais
@@ -2086,6 +2805,14 @@ SCOUT                            Attend, n'y touche pas!
 MAPLE                            Je ne vais pas y toucher!
 MAPLE                            Les nerds et leurs machines...
 
+ENOKI                            Oye Scout, ¿tienes página web?
+SCOUT                            ¡Sí! Pero no es tan buena.
+ENOKI                            ¿Me dejas verla?
+SCOUT                            Ahorita no, esque… no la he terminado.
+ENOKI                            Chales, okay.
+ENOKI                            Quisiera tener también una página web.
+ENOKI                            Se ve muy divertido.
+SCOUT                            ¡Te aseguro que lo es!
 
 ENOKI                            Hé Scout, tu as un site Web?
 SCOUT                            Oui! Mais il n'est pas très beau.
@@ -2096,6 +2823,20 @@ ENOKI                            J'aimerais avoir mon propre site web.
 ENOKI                            ..ça semble amusant.
 SCOUT                            Oh que oui!
 
+AARON                            ¿Has oído hablar del efecto 2000?
+SCOUT                            Por supuesto.
+AARON                            ¿A ti te ocurrió algo?
+SCOUT                            si, pero nada de lo ordinario.
+SCOUT                            Hubo una falla bien
+SCOUT                            rara en uno de los programas.
+SCOUT                            Tenía un programa para organizar
+SCOUT                            compras y añadió muchos
+SCOUT                            abrillantadores a la lista, y serian para
+SCOUT                            la fecha 5 de Marzo, 192000.
+AARON                            Es un poco la espera.
+SCOUT                            Error en la fecha? entiendo.
+SCOUT                            Pero extra cosas? Quisiera evitar.
+SCOUT                            Estas fallas son realmente extrañas.
 
 AARON                            As-tu entendu parler du bug de l'an 2000?
 SCOUT                            Bien sûr.
@@ -2107,6 +2848,11 @@ SCOUT                            ..ça dois arriver le 5 mars 192000.
 AARON                            C'est un peu long, hein?
 SCOUT                            J'arriverais jamais à comprendre les bugs informatiques.
 
+(Me gradué como el mejor de la clase con un promedio de 8.9.)
+(Ahora soy un científico viviendo de una donación corporativa.)
+(Tengo un Computadora Castor 5000 de última generación.)
+(Que no puedo utilizar porque    olvidé mi propia contraseña.)
+(Me cuesta dormir por las        noches pensando en ello...)
 
 (J'ai obtenu mon diplôme en tête de ma classe avec un GPA de 3,99.)
 (Je suis maintenant un scientifique vivant d'une subvention d'entreprise.)
@@ -2114,7 +2860,16 @@ SCOUT                            J'arriverais jamais à comprendre les bugs info
 (Que je ne peux pas utiliser, car j'ai oublié mon propre mot de passe.)
 (J'ai du mal à dormir la nuit en y pensant...)
 
+(Esto parece muy caro...)
+(No debería de tocarlo.)
+(..ça a l'air très cher...)
+(Je ne devrais pas y toucher.)
 
+(Esta fórmula verde hace que las plantas crezcan enormes.)
+(Me pregunto qué pasaría si la   usara yo...)
+(Tal vez podría tener poderes...)
+(O tal vez me muera.)
+(Pero definitivamente podría valer la pena intentarlo...)
 
 (Cette formule verte rend les plantes énormes.)
 (Je me demande ce qui arriverait si j'en avalais...)
@@ -2130,13 +2885,23 @@ SCOUT                            Attention!
 SCOUT                            Beaucoup de ces choses sont
 SCOUT                            SUPER TOXIQUE!
 
+SCOUT                            ¡Bonjour! ¿Eres Olivier?
+OLIVIER                          ¡Oui! ¿Y tú eres Scout, no?
+SCOUT                            En efecto, soy yo. ¡Bienvenido!
+OLIVIER                          ¡Todo este lugar es increíble!
 SCOUT                            He sido sincero en el anuncio.
+OLIVIER                          ¿Eres un científico?
 SCOUT                            Podría decir que lo soy.
 SCOUT                            Aunque hago un poco de todo.
+OLIVIER                          ¿Y vives bajo tierra?
 SCOUT                            Tengo una máquina que excava
 SCOUT                            búnkers con mucha facilidad.
 SCOUT                            Podría seguir excavando
 SCOUT                            todo lo que quisiera.
+OLIVIER                          ¡Que padre! Oye, ¿vas a venir
+OLIVIER                          a cenar a la casa de Trembley?
+SCOUT                            ¡Por supuesto!
+OLIVIER                          ¡Okay! Nos vemos ahí entonces.
 
 SCOUT                            Bonjour! Es tu Olivier?
 OLIVIER                          Oui! Et tu es Scout, non?
@@ -2154,14 +2919,24 @@ SCOUT                            Oh que oui!
 OLIVIER                          Cool! On se voit là-bas alors.
 
 *****
+ELEANOR                          ¡Bonjour, monsieur!
+SCOUT                            ¡Bonjour! ¿Eres Eleanor?
+ELEANOR                          ¡Oui! Encantada de conocerte.
+ELEANOR                          ¡Este lugar esta padrisimo!
 SCOUT                            He sido sincero en el anuncio.
+ELEANOR                          ¿Eres un mago?
 SCOUT                            Podría decir que lo soy.
 SCOUT                            Aunque hago un poco de todo.
+ELEANOR                          ¿Y vives bajo tierra?
 SCOUT                            Tengo una máquina que excava
 SCOUT                            búnkers con mucha facilidad.
 SCOUT                            Podría seguir excavando
 SCOUT                            todo lo que quisiera.
+ELEANOR                          ¡Qué fascinante!
+SCOUT                            Aw, ¡merci!
+ELEANOR                          ¿Te veo luego en la cena?
 SCOUT                            ¡Claro!
+ELEANOR                          ¡Maravilloso!
 
 ELEANOR                          Bonjour, monsieur!
 SCOUT                            Bonjour! Es-tu Eleanor?
@@ -2180,14 +2955,24 @@ ELEANOR                          On se voit plus tard au dîner?
 SCOUT                            Bien sûr!
 ELEANOR                          Merveilleux!
 
+DIANA                            ¡Bonjour! Hola, ¿eres Scout?
+SCOUT                            ¡Bonjour! ¿eres Diana?
+DIANA                            ¡Oui! ¡Es un placer conocerte!
+DIANA                            Wow, este lugar es fascinante.
 SCOUT                            He sido sincero en el anuncio.
+DIANA                            ¿Eres científico o algo así?
 SCOUT                            Podría decir que lo soy.
 SCOUT                            Aunque hago un poco de todo.
+DIANA                            ¿Y vives bajo tierra?
 SCOUT                            Tengo una máquina que excava
+SCOUT                            búnkers con suma facilidad.
 SCOUT                            Podría seguir excavando
 SCOUT                            todo lo que quisiera.
+DIANA                            ¡Qué padre!
 SCOUT                            ¡Merci!
+DIANA                            ¿Vienes a cenar?
 SCOUT                            ¡Claro!
+DIANA                            ¡Genial!
 
 DIANA                            Bonjour! Hey, tu es Scout?
 SCOUT                            Bonjour! Tu es Diana?
@@ -2206,6 +2991,11 @@ DIANA                            Tu viens au dîner?
 SCOUT                            Bien sûr!
 DIANA                            Génial!
 
+(Ojalá pudiera hacer algo que me hiciera feliz.)
+(Después de pasar tanto tiempo   estudiando, aquí estoy...)
+(Y no sé. Paso de una cosa a     otra.)
+(No puedo hacer algo sin querer  dejarlo a medias en el camino.)
+(Por esta vez, quisiera ser feliz donde estoy ahora.)
 
 (J'aimerais pouvoir obtenir quelque chose qui me rendrait heureux.)
 (Après avoir passé tant de temps à étudier, me voilà...)
@@ -2216,6 +3006,8 @@ DIANA                            Génial!
 SCOUT                            ¡Cuidado!
 SCOUT                            ¡Muchas de estas cosas son
 SCOUT                            MORTALMENTE TÓXICAS!
+SCOUT                            Aunque bueno, tú ya sabías eso.
+SCOUT                            O al menos, eso espero.
 
 SCOUT                            Attention!
 SCOUT                            Beaucoup de ces choses sont
@@ -2223,6 +3015,20 @@ SCOUT                            TOXIQUE MORTEL!
 SCOUT                            Eh bien, vous le saviez déjà.
 SCOUT                            OU du moins, je l'espère.
 
+SCOUT                            ¡Bonjour! Eres Guy, ¿no es así?
+GUY                              Oui. Y tú eres, Scout. ¿Cierto?
+SCOUT                            ¡Bienvenu! ¿Te gusta tu cabaña?
+GUY                              No bromeabas con eso que dijiste
+GUY                              acerca de la cocina, ¿eh?
+SCOUT                            ¡En absoluto!
+GUY                              Parece que no hay muchas personas
+GUY                              por aquí, y sabes que no voy
+GUY                              a poder cocinar mucha comida
+GUY                              si no tengo clientes.
+GUY                              ¿Cuánto tiempo crees que va pasar
+GUY                              hasta que se llene esto de gente?
+SCOUT                            No debería pasar tanto tiempo.
+GUY                              ¿Y puedo confiar en eso?
 SCOUT                            Sans doute.
 GUY                              Tres bien alors.
 
@@ -2238,6 +3044,18 @@ GUY                              Tu es sur?
 SCOUT                            Sans doute.
 GUY                              Très bien alors.
 
+ENOKI                            ¿Salut? Scout, ¿estás aquí abajo?
+SCOUT                            ¡Sí! ¡Estoy aquí! ¿Dónde se ha   metido Aaron?
+ENOKI                            Ha salido para ver cómo están    los demás.
+SCOUT                            Menos mal. Hey, Maple. ¿Te sientes bien?
+SCOUT                            Te vez cansada.
+MAPLE                            ¿Qué tal si cierras el pico?     ¿Cómo no voy a estarlo?
+MAPLE                            Después de TODO lo que ha pasado esta mañana.
+SCOUT                            Oh- Está bien...
+SCOUT                            Hey Enoki, ¿cómo luce todo por   aquí?
+ENOKI                            Bien, es sólo que... Hay un      ruido extraño y fuerte.
+ENOKI                            Aaron se asustó y quiso que nos  mantuviéramos a salvo.
+SCOUT                            Confio en su intuición.
 
 ENOKI                            Bonjour? Scout, es-tu là?
 SCOUT                            Oui! Je suis ici! Où ést Aaron?
@@ -2252,6 +3070,37 @@ ENOKI                            C'est bien, c'est juste... Il y a un bruit étr
 ENOKI                            Aaron a eu peur et voulait que nous allions en sécuritée.
 SCOUT                            Je lui fais confiance sur ça.
 
+AARON                            ¿Qué diablos está pasando ahí    fuera?
+SCOUT                            Es Rufus. Creo que se comió algo raro.
+ENOKI                            Jeje, también me pasa después de comer la comida de Guy.
+SCOUT                            No, puede ser algo serio. Tiene  que ver con mi investigación.
+AARON                            Oh, ¿así que el científico va a  revelarnos lo que ha estado
+AARON                            haciendo en ese misterioso búnker durante los últimos meses?
+SCOUT                            Soy un científico de la tierra…  Pero también
+SCOUT                            investigó las plantas.
+ENOKI                            ¡No me digas!
+OLIVIER                          ¿Y por qué no me lo dijiste?
+SCOUT                            No podía, es confidencial.
+SCOUT                            Verás, resulta que esta planta. . . crece nativamente en estas
+SCOUT                            islas, y muchas personas dicen que es mágica. Puede
+SCOUT                            hacerte tener visiones.
+ENOKI                            ¿Como los hongos alucinógenos?
+SCOUT                            Los hongos hacen que las personas tengan distintas visiones. Pero
+SCOUT                            esta flor hace que todos tengan la misma. Por eso la estamos
+SCOUT                            investigando. No es nada más el viaje que ves, sino
+SCOUT                            es algo más que pasa.
+SCOUT                            Aunque todos vean lo mismo, cada uno reacciona diferente pero no es debido
+SCOUT                            a un desequilibrio químico.      Sus visiones son tan
+SCOUT                            preocupantes y devastadoras, que provocan que
+SCOUT                            aquellos que la toman, regresen como una persona diferente .
+ELEANOR                          ¿Y qué es lo que ven?
+SCOUT                            No se sabe. Los afectados prefieren guardar silencio.
+SCOUT                            Las personas que la consumen     muestran una aureola de color azul en los
+SCOUT                            ojos. No parecen durar por       siempre, pero son notorios
+SCOUT                            por un tiempo. Estuve mirando    las grabaciones de Rufus,
+SCOUT                            y como suponía... padece los     efectos de las aureolas azules.
+AARON                            ¿Entonces se ha convertido en    supervillano o algo así?
+SCOUT                            No lo sé. Rufus no es muy...     grande, ¿sabes? Puede que-
 
 AARON                            Qu'est-ce qui se passe dehors?
 SCOUT                            C'est Rufus. Je pense qu'il a une indigestion alimentaire.
@@ -2274,6 +3123,17 @@ SCOUT                            J'ai regardé la vidéo de Rufus et bien sûr, 
 AARON                            Donc il est devenu un super-vilain ou quoi?
 SCOUT                            Je sais pas. Rufus n'est pas très... grand., tu sais? Peut-être-
 
+SCOUT                            Uhh.... Creo que hay algo en la  puerta.
+AARON                            Tengo mi hacha.
+SCOUT                            Oigan, les diré algo. ¿Saben acerca de la excavadora
+SCOUT                            de búnkers que tengo?
+AARON                            ¿Sí...?
+SCOUT                            Les diré qué podemos hacer. ¿Y si excavamos un túnel que nos
+SCOUT                            lleve fuera de la isla? De       todas formas ya planeaba hacer
+SCOUT                            uno hasta la orilla.
+SCOUT                            (Quería guardarme esto para la   Scout Expo, pero, uh...)
+SCOUT                            (No es como si tuviéramos muchas opciones ahorita.)
+ELEANOR                          ¿Es seguro?
 
 SCOUT                            Euh... Je pense qu'il y a quelqu'un à la porte.
 AARON                            J'ai ma hache à portée de main.
@@ -2284,19 +3144,27 @@ SCOUT                            (Je souhaitais garder ça pour l'Expo Scout, ma
 SCOUT                            (Mais j'ai plus de choix maintenant.)
 ELEANOR                          C'est sécuritaire?
 
+SCOUT                            Saben ya vámonos.
+ENOKI                            ¿Allons-y?
 
 SCOUT                            Allons-y.
 ENOKI                            Allons-y!
 
+Observas la obra de arte.
+Y por lo tanto....
+La obra de arte te observa a ti.
+El arte es extraño.
 
 Vous regardez l'œuvre d'art.
 Et par conséquent....
 L'œuvre d'art vous observe.
 L'art c'est étrange.
 
+- MÁS CASAS POR ESTE CAMINO -
 
 - PLUS DE MAISONS PLUS LOIN -
 
+MAPLE                            Tal vez debería ir a lo de Scout.
 
 MAPLE                            Je devrais peut-être aller chez Scout.
 
@@ -2959,6 +3827,10 @@ GUY                              I'll take your suggestion into   account, we'll
 
 AARON                            Huh.. No one seems to be home.
 
+ - LA PRESA DE LOS DESEOS -      NO FUNCIONA PERO LA PUEDES USAR SI QUIERES
+Las rocas en el camino no te dejan ver la vista asombrosa.
+Si pudieras subir las rocas,     podrías lanzar una moneda para   pedir un deseo.
+Se podría haber planeado mejor   lo de la presa.
 
 - PUITS À SOUHAIT -               NE FONCTIONNE PAS MAIS N'HÉSITEZ PAS À L'UTILISER SI VOUS LE VOULEZ
 Les rochers devant vous ne permette même pas de prendre la vue.
@@ -2968,20 +3840,48 @@ L'étang aurait pu être mieux aménagée.
  - LE MAISON DE LANDRY -
 
  - DIANA -
+No sabría decir si ese es el     nombre de la dueña o de la casa.
 
  - LA MAISON DE LANDRY -
 
 - DIANA -
 C'est le nom de la maison ou du propriétaire?
 
+- CASA DE ALGUIEN -
+Como puedes ver, por ahora está deshabitada.
 - LA MAISON DE QUELQU'UN -
 C'est inhabité.
 
+- CASA DE GUY -
+Alguien con el nombre guy se a movido.
 - MAISON DE GUY -
 La maison d'un certain Guy.
 
 ~ JARGINS NOIRS ~
 
+MAPLE                            Oh, hey. ¿Eres Eleanor?
+ELEANOR                          ¡Oui! Enchante de faire votre    connaissance.
+MAPLE                            Egalement. No querría ofenderte, pero pareces...
+MAPLE                            ¿Un poco anticuada?
+ELEANOR                          Oh, es a lo que acostumbramos.
+ELEANOR                          Se siente genial volver a
+ELEANOR                          estar alejada de la gran ciudad. Olvidé la
+ELEANOR                          nostalgia que tengo por los árboles.
+MAPLE                            Ya veo. Y tú eres su esposo,   ¿j'suppose?
+OLIVIER                          Oui, soy Olivier.
+ELEANOR                          Aunque sea muy reservado, es alguien muy atento.
+ELEANOR                          Lo conocí en un jardín y me      enseñó a leer.
+OLIVIER                          Ella es muy especial para mí.    Prácticamente salvó mi vida.
+MAPLE                            Oh, ¿cómo fue eso?
+OLIVIER                          No es algo importante-
+ELEANOR                          Por mi madre.
+MAPLE                            Ah, ya tengo la idea, je.
+ELEANOR                          ¿En serio? Iba a drenar toda su  sangre para un ritual.
+MAPLE                            Yo... Hmm, bueno, vaya.          Eso... no era lo que esperaba.
+MAPLE                            ¿Supongo? Encantada de conocerlos,
+ELEANOR                          ¡Bien sur! Estoy horneando un pay para ustedes como 'merci'.
+MAPLE                            C'est bon, nada más sin ingredientes raros. Jaja.
+MAPLE                            (¡¿En qué pensaba Scout invitando a estos raritos?!)
 
 MAPLE                            Oh, hé. Tu es Eleanor?
 ELEANOR                          Oui! Enchanté de faire votre connaissance.
@@ -3005,8 +3905,21 @@ ELEANOR                          Bien sur! Je vais préparer une tarte pour toi 
 MAPLE                            C'est bon, je demanderai juste de pas utiliser d'ingrédients bizarres.
 MAPLE                            (À quoi pensait Scout en invitant ces cinglés?!)
 
+ENOKI                            ¡Sed bienvenue! ¡Je suis Enoki!  Ravie de vous autres rencontrer.
+ELEANOR                          ¡Bonjour! Enchanté de faire votre connaissance.
 OLIVIER                          ¡Bonjour!
+ELEANOR                          Soy Eleanor, y él es mi esposo Olivier.
+ENOKI                            ¡Tu vestido es hermoso!     ¿Dónde lo compraste?
+ELEANOR                          ¡Oh! Yo lo hice. ¡También  me gusta mucho el tuyo!
+ENOKI                            ¡Que padre!
+ENOKI                            Creo que somos de la misma talla,¡podríamos hacer cambios!
+OLIVIER                          Scout dijo que eres de la realeza.
+ENOKI                            ¡Oh, sí! Este es nuestro pequeño reino, pero no somos déspotas.
+ENOKI                            Soy la reina más tranquila y     amigable que hayas conocido.
+ENOKI                            ¿Quisieran ser duque y duquesa?
+ELEANOR                          Yo... no, gracias. Ni siquiera sé lo que esos títulos significan.
 OLIVIER                          Merci, en tout cas.
+ENOKI                            ¡Bien sur! ¡N'importe quand!
 ENOKI                            Soyez les bienvenus! Je m'appelle Enoki! Ravie de vous rencontrez.
 ELEANOR                          Bonjour! Enchantée de faire votre connaissance.
 OLIVIER                          Bonjour!
@@ -3023,7 +3936,26 @@ ELEANOR                          Je... non, merci. Je ne sais même pas ce que v
 OLIVIER                          Merci, en tout cas.
 ENOKI                            Bien sur! N'importe quand!
 
+AARON                            ¡Bienvenu! ¿Olivier y Eleanor, verdad?
+ELEANOR                          ¡Oui oui!
+OLIVIER                          ¿Es usted el 'rey' de esta isla?
+AARON                            ¿Scout te dijo eso? Supongo que  podría decir que sí lo soy.
+AARON                            Nunca me gradué de la prepa, así que no estoy hecho para otra
+AARON                            cosa que no sea el trabajo como  este, pero no quería pasar la
+AARON                            vida en una fábrica. Mi esposa, Enoki, y yo, tuvimos la idea de
+AARON                            adquirir tierras para vivir como se nos plazca. Lo de la 'realeza'
+AARON                            fue idea suya. Estaba tan adorable cuando lo mencionamos que le dije que sí.
+AARON                            Seguramente ella ya les ofreció un rol de aristocrates.
+OLIVIER                          Oh, Aaron, ¿no es así? Gracias hacer espacio para el
+OLIVIER                          invernadero. Ahora podré compartir lo que plante ahí.
+ELEANOR                          ¡Y me encanta esta cabaña! De cierta manera me recuerda a casa.
+ELEANOR                          Vee y yo estábamos emocionados de escuchar sobre la isla.
+AARON                            ¡Pues a nosotros nos alegra mucho que hayan venido!
+AARON                            Si mi hermana pequeña los hace    pasar un mal rato...
+AARON                            Les prometo que ella es así y     no lo hace a propósito.
+AARON                            Pasen por el remolque por la noche, tendré comida preparada.
 OLIVIER                          Encore une fois, je vous remerciesincerement.
+AARON                            Ahora somos una familia, esta es su casa.
 
 AARON                            Bienvenue! Olivier et Eleanor, je suppose?
 ELEANOR Oui oui!
@@ -3041,7 +3973,69 @@ AARON                            Vous pouvez passer ce soir pour dîner ensemble
 OLIVIER                          Encore une fois, je vous remercie sincèrement.
 AARON                            Nous sommes une famille maintenant, tu peur dire tu.
 
+SCOUT                            ¡Hola todos! Soy Scout, ¿de internet?
+OLIVIER                          ¡Ah! Enchanté de faire votre     connaissance.
+ELEANOR                          Oh... Pero la foto que tienes en tu perfil, pensé que tu eras...
+SCOUT                            ¿Que yo era qué?
+ELEANOR                          Pensé que eras un esqueleto.
+SCOUT                            Oh, esa sólo es una foto de un   personaje que me gusta.
+SCOUT                            Es un esqueleto de un cómic      llamado Seemore.
+SCOUT                            Tiene poderes mágicos, tal vez   pueda prestarte el cómic.
+SCOUT                            Te aseguro que es muy divertido  e interesante.
+ELEANOR                          ¿Qué es un cómic?
+SCOUT                            Yo... Nunca pensé que tendría    que responder a una pregunta
+SCOUT                            como esa. Son como los libros    pero tienen imágenes y-
+ELEANOR                          ¡Eso suena genial!
+OLIVIER                          Eleanor se crió en una secta,    por lo que no sabe mucho del
+OLIVIER                          mundo exterior. Esa es una de    las razones por las qué quisimos
+OLIVIER                          mudarnos aquí, para descansar un poco de su familia.
+SCOUT                            Dios mio. Bueno pues bienvenida a la isla.
+SCOUT                            La reina Enoki sigue de leer el último Time Raiders,
+SCOUT                            pero cuando termine de leerlo, te lo prestaré para que lo leas.
+ELEANOR                          ¡¡Merci!!
+SCOUT                            Salut tout le monde! Je suis Scout,Je vous ai parlé sur Internet?
+OLIVIER                          Ah! Enchanté de faire votre connaissance.
+ELEANOR                          Oh... Mais quand j'ai vu ta photo sur internet j'ai cru que tu étais...
+SCOUT                            J'étais quoi?
+ELEANOR                          Je pensais que tu étais un squelette.
+SCOUT                            Oh, c'est juste une photo d'un personnage que j'aime bien.
+SCOUT                            C'est un squelette d'une bande dessinée appelée Seemore.
+SCOUT                            Il ades pouvoirs magiques, je peux peut-être vous prêter la bande dessinée.
+SCOUT                            Je vous assure que c'est très amusant et intéressant.
+ELEANOR                          C'est quoi un bande dessinée?
+SCOUT                            Je... J'ai jamais pensé devoir répondre à cette. C'est comme des livres mais ils ont des images et-
+ELEANOR                          ..ça sonne bien!
+OLIVIER                          Eleanor a grandi dans une secte, elle connaît pas grand-chose au monde extérieur. C'est l'une des raisons pour lesquelles nous voulions
+OLIVIER                          déménager ici, pour avoir une petite pause de sa famille élargie.
+SCOUT                            Ah. Eh bien. Je vous souhaite la bienvenu sur l'île, je suppose.
+SCOUT                            Reine Enoki a mon dernier numéro de Time Raiders, mais quand elle auras finit, je vous laisserai le regarder.
+ELEANOR                          Merci!
 *****
+OLIVIER                          Eleanor, ¿por qué prendiste la estufa? ¿que no íbamos a comer con
+OLIVIER                          los Tremblay esta noche?
+ELEANOR                          Oh, si si, pero no pude evitarlo.
+ELEANOR                          No he visto algo así desde que   era muy pequeña.
+ELEANOR                          Así que quería hacer unas tostadas.
+OLIVIER                          ¿Qué opinas de este lugar?
+OLIVIER                          No hay muchas personas, ¿no vas  a sentirte un poco sola?
+ELEANOR                          ¿Y tú? ¿Crees que vas a sentirte solo aquí?
+OLIVIER                          Me gustaría que mi abuelo nos pudiera ver ahora.
+OLIVIER                          Creo que él estaría muy orgulloso de ti.
+ELEANOR                          Puede que nos vea desde el cielo junto a mi madre.
+ELEANOR                          Quizá ella ha cambiado allí y    ahora piense bien de ti.
+OLIVIER                          Supongo que no lo podremos saber pero no estoy solo ahora.
+OLIVIER                          No me he sentido solo desde que tú estás conmigo.
+ELEANOR                          Vee, espero que nunca dejemos de sentirnos así.
+ELEANOR                          He visto cómo son mis padres ahora y siento que me hago
+ELEANOR                          mayor. Sé que cuando tengamos nuestros hijos...
+OLIVIER                          ¿Cómo está tu hermana?
+ELEANOR                          Está siempre cansada. Bromea sobre sus canas, pero creo
+ELEANOR                          que le gusta tener el pelo blanco. Es diferente a los demás.
+ELEANOR                          Las cosas que le molestaban, ya no tienen sentido.
+OLIVIER                          A lo mejor va a pasar lo mismo con nosotros. Haber que nos espera el futuro.
+ELEANOR                          Será extraño tener amigos de nuestra edad casados. ¿No crees que
+ELEANOR                          Diana podría ponerse celosa?
+OLIVIER                          Creo que ella se lo pasará bien  aquí. S'il te plait detends-toi!
 ELEANOR                          Je suppose que tu as raison, Vee.
 
 OLIVIER                          Eleanor, pourquoi as-tu allumé la cuisinière? Nous n'allions pas dîner avec les Tremblay ce soir?
@@ -3068,6 +4062,22 @@ ELEANOR                          Diana sera jalouse?
 OLIVIER                          Je pense qu'elle va s'amuser ici. S'il te plait relax!
 ELEANOR                          Je suppose que tu as raison, Vee.
 
+DIANA                            Aw, ¡genial! Me encanta este lugar, es muy acogedor.
+DIANA                            Espero que no les importe que     quiera pasar mucho tiempo aquí.
+ELEANOR                          ¡Por supuesto que no! Mientras   no te importe ayudarnos a veces.
+OLIVIER                          Recuerda, vivir así significa    que tendremos que trabajar duro.
+OLIVIER                          Es probable que tenga que dedicar mucho tiempo a cortar leña, o a
+OLIVIER                          trabajar en el jardín regando y  quitando las malas hierbas.
+ELEANOR                          ¿No te interesaba trabajar       para el capitán del barco?
+DIANA                            Oh, sí. De hecho hoy pasaré por el muelle.
+DIANA                            ¡Seré capitana del barco antes  de que se den cuenta!
+ELEANOR                          ¡Sé que podrás con todo lo que   te propongas, Diana!
+OLIVIER                          Esto no es lo que pensabas que   harías a tus 22 años, ¿eh?
+DIANA                            Bueno, tampoco es como si supiera que hubiera hecho.
+DIANA                            Mudarse a una isla es algo       inesperado para todos. ¿No?
+OLIVIER                          Yo pensé que pasaría el resto de mi vida trabajando en el jardín.
+ELEANOR                          Pues yo sigo viva y Vee está con      nosotros, no puedo pedir más.
+DIANA                            Sí... Espero que las cosas sigan así de bien por mucho tiempo.
 
 DIANA                            Oh super! J'adore cet endroit, c'est très cosy.
 DIANA                            J'espère que vous dérange pas que je passe tous mon temps ici.
@@ -3085,6 +4095,28 @@ OLIVIER                          Je pensais passer le reste de ma vie à jardine
 ELEANOR                          Je suis toujours en vie et Vee est avec nous, je ne peux pas en demander plus.
 DIANA                            Oui... J'espère que les choses resteront aussi bonnes pendant longtemps.
 
+MAPLE                            Salut, chicos.
+ELEANOR                          ¡Salut, Maple! ¿Quieres un poco  de guisado? Acaba de salir.
+MAPLE                            ¡Eso suena muy bien! Claro que   quiero, tu guiso es fantástico.
+OLIVIER                          Diana nos ha traído un juego de mesa nuevo.
+OLIVIER                          ¿Te gustaría invitar a los demás?
+MAPLE                            ¿Y ami que? Nah, no pasa nada, haha.
+MAPLE                            Hey, um... Siento mucho lo del juego de mesa de la semana pasada.
+ELEANOR                          No te preocupes, Maple. Es fácil enojarse cuando estamos jugando.
+MAPLE                            Aunque tu cabaña ya ha dejado de oler a humo.
+ELEANOR                          ¿Has probado el nuevo gumbo isleño?
+MAPLE                            ¿Me preguntas que si me asusta? Nah, no mucho.
+MAPLE                            Sea como sea, no es nada que el tabasco extra no pueda arreglar.
+MAPLE                            Sé que no los veo todo el tiempo...
+MAPLE                            Pero les quiero dar las gracias por los ingredientes. Son unos santos.
+OLIVIER                          Gracias por tu duro trabajo.    No tenía todas mis esperanzas
+OLIVIER                          puestas en que todo esto de la   isla iba a funcionar.
+OLIVIER                          Es casi como si tuvieras un      amuleto de la buena suerte.
+MAPLE                            Sí... Lo que Enoki quiera es lo que conseguirá.
+MAPLE                            Es sólo cuestión de tiempo que algo le salga mal, no logre
+MAPLE                            lo que quiere y se ponga berrinchuda, ya que.
+OLIVIER                          Ya veo. Bueno, si necesitas algo déjanos saber.
+MAPLE                            ¡Igual!.
 
 MAPLE                            Bonjour, les gars.
 ELEANOR                          Bonjour, Maple! Veux tu du ragoût? Il est frais.
@@ -3107,7 +4139,21 @@ MAPLE                            Ce n'est qu'une question de temps avant que que
 OLIVIER                          Je vois. Eh bien, si tu as besoin de quelque chose de notre part, tu n'as qu'à demander.
 MAPLE                            Pareil!
 
+ENOKI                            ¡¡Salut!! ¿Como les va hoy?
+ELEANOR                          ¡Estamos muy bien! ¿Quieres      algo de guiso?
+ENOKI                            Mentiría si diría que no, jeje.
+OLIVIER                          ¿Vendrás a jugar esta noche?
+ENOKI                            ¡No me lo perdería por nada del  mundo!
+ELEANOR                          ¿Has conocido ya al nuevo isleño?
+ENOKI                            No le digas nada a Maple...
+ENOKI                            pero creo que su gumbo es mejor que el de ella.
+ENOKI                            Prometeme que no le diras a Maple.
+ELEANOR                          Mis labios están sellados.
+ENOKI                            Oye, ¿Ustedes no tendrán una maquina de coser?
 ELEANOR                          Oui.
+ENOKI                            Mencionaste que tu hacias tu propia ropa, ¿oui? Tú, eh...
+ENOKI                            ¿No te importaría enseñarme a    hacer lo mismo que tú?
+ELEANOR                          Pas du tout! Sería un placer     para mí enseñarte lo que sé.
 
 ENOKI                            Salut!! Comment vas-tu aujourd'hui?
 ELEANOR                          Nous allons très bien! Veux-tu du ragoût?
@@ -3125,6 +4171,27 @@ ENOKI                            Tu as dit que tu fabriques tes propres vêtemen
 ENOKI                            ..ça te dérangerait-il de me donner des leçons?
 ELEANOR                          Pas du tout! C'est avec plaisir que je t'enseignerai.
 
+AARON                            ¡Salut! Escuché algo de noche de juegos?.
+ELEANOR                          ¡Oui! Nos gustaría organizarlo afuera debajo de un árbol.
+ELEANOR                          Hice una colcha suficientemente  grande para que todos quepan.
+AARON                            ¿Será afuera por sí Maple se enoja otra vez?
+OLIVIER                          Oui, jaja.
+ELEANOR                          También hicimos un guisado, por si quieres comer un poco.
+AARON                            Acabo de comer lo que sobró del gumbo de Maple, ¡pero merci!
+AARON                            Hablando de comida. Aunque sea tímido, Guy es buena onda.
+AARON                            Me encanta que más personas lleguen a la isla.
+OLIVIER                          Poco a poco esto se convierte    en un auténtico pueblo.
+AARON                            Sí, estaba pensando lo mismo.
+OLIVIER                          ¿Te encuentras bien, Aaron? Te ves palido.
+AARON                            Sí, Sólo pensaba que Maple y yo no nos llevamos bien.
+OLIVIER                          ¿A qué te refieres?
+AARON                            Ella no quiere mudarse, pero va  a tener que hacerlo.
+OLIVIER                          ¿Y por qué no hablas con ella?   ¿No eres el rey o algo así?
+AARON                            Podría. Más bien, debería. Pero  es difícil lidiar con ella.
+AARON                            No para de decir que es independiente pero al siguiente dia,
+AARON                            parece una garrapata.
+OLIVIER                          Eso suena como algo que deberías hablar con ella, no nosotros.
+AARON                            Es cierto, gracias.
 
 AARON                            Bonjour! J'ai entendu parler de jeux de société ce soir.
 ELEANOR                          Oui! Nous aimerions l'installer à l'extérieur sous un arbre.
@@ -3147,7 +4214,23 @@ AARON                            Elle n'arrête pas de changer entre vouloir êt
 OLIVIER                          Tu devrais discuter ça avec elle, pas avec nous.
 AARON                            Oui tu as raison.
 
+SCOUT                            ¡Hola a todos! ¡Scout ha llegado!
+ELEANOR                          ¡Salut! ¿Quieres guisado?
+SCOUT                            Merci, pero comí hace... Espera. ¿Cuándo fue la última vez?
+SCOUT                            Cielos, no he comido en todo el día. ¡Claro que quiero guisado!
+ELEANOR                          Jeje, no hay problema, sírvete   lo que quieras.
+SCOUT                            ¿Has visto el reporte de      Scout TV esta mañana?
+ELEANOR                          Oh, no tenemos una televisión.
+SCOUT                            Es verdad... Lo lamento, olvidalo.
+SCOUT                            De todos modos mi transmisión fue hackeada.
+OLIVIER                          ¿Hackeada? ¿Por quién?
+SCOUT                            Ni idea. Los Tremblay no parecen muy preocupados de todas formas.
+ELEANOR                          ¿Vas a venir a jugar con nosotros esta noche?
+SCOUT                            Trataré de hacerlo, todavía tengo cosas que hacer del trabajo.
+SCOUT                            Les dejo saber luego si hire.
+OLIVIER                          Sin problema, te guardaremos un lugar por si vienes.
 SCOUT                            ¡Merci!
+ELEANOR                          ¡De rien!
 
 SCOUT                            Salut tout le monde! Scout est arrivé!
 ELEANOR                          Bonjour! Veux-tu du ragoût?
@@ -3167,9 +4250,22 @@ OLIVIER                          Pas de problème, on vous garde une place.
 SCOUT                            Merci!
 ELEANOR                          De rien!
 
+OLIVIER                          Así que será tu cumpleaños en una  semana...
+ELEANOR                          ¿Oui?
+OLIVIER                          Quisiera darte una sorpresa, pero no quiero decepcionarte con-
 ELEANOR                          ...
+OLIVIER                          ... ¿Quieres que te dé una sorpresa?
 OLIVIER                          ...
+OLIVIER                          ¿Todavía piensas en la ceremonia?
+ELEANOR                          Esa fue una noche que no podré   olvidar jamás.
+ELEANOR                          No sabría decirte si me sentiría bien o mal.
+ELEANOR                          Ya me has dado todo lo que quisiera por toda mi vida.
+OLIVIER                          Pero no te quejarías si te compro una nueva máquina de coser.
 ELEANOR                          ...
+OLIVIER                          No es como si fuera algo que te compraría...pero
+ELEANOR                          Acaso no tienes que arreglar las verduras? Necesito empezar
+ELEANOR                          a enlatarlas para el invierno.
+OLIVIER                          Okay, Okay, es sólo que-...      Bueno, no importa.
 
 OLIVIER                          Alors ton anniversaire c'est dans une semaine...
 ELEANOR                          Oui?
@@ -3188,6 +4284,23 @@ ELEANOR                          Tu n'as pas des légumes à coupé? je dois com
 ELEANOR                          pour les mettre en conserve pour l'hiver.
 OLIVIER                          D'accord, d'accord, c'est juste... Eh bien, tant pis.
 
+DIANA                            Chicos, tenemos que hablar.
+OLIVIER                          ¿Qué ocurre?
+DIANA                            Alguien ha hackeado el canal    de Scout esta mañana.
+DIANA                            Creo que ha sido un Mons d'Plonj,es una amenaza para la isla.
+ELEANOR                          O-Oh.. Oh no.. No tendrá nada    que ver con las brujas, ¿no?
+ELEANOR                          Vee, ¿no, nos han encontrado, verdad?
+DIANA                            No, sólo parecía un imbécil.     ¿Parece que Maple lo conoce?
+DIANA                            Los Tremblay no están            preocupados.
+ELEANOR                          Oh... Menos mal...
+DIANA                            ¿Aunque conoces a ese tal César?¿El chico del norte?
+DIANA                            Aunque parece sospechoso, Enoki  confía en él. Tiene una
+DIANA                            tienda o algo así. Y el otro     chico, Guy, cocina muy bien.
+OLIVIER                          Hey, El, cálmate, te va a dar un ataque.
+ELEANOR                          Lo siento... Lo siento...
+DIANA                            Oye, Eleanor, todo va a estar bien. ¿Quieres venir conmigo?
+DIANA                            Podemos relajarnos y comer los snacks que importe.
+DIANA                            Uuu, eso suena genial.         Merci.
 
 DIANA                            Les gars, nous devons parler.
 OLIVIER                          Il y a un problème?
@@ -3206,6 +4319,19 @@ DIANA                            Hé, Eleanor, ça va aller. Veux tu venir chez 
 DIANA                            Nous pouvons nous détendre et manger des collations importées.
 DIANA                            Ouais, ça a l'air amusant. Merci.
 
+ELEANOR                          ¡Bonjour! Tú debes ser Guy.
+GUY                              Oui. Soy Guy. Guy Pizza.
+ELEANOR                          ¿Guy... Pizza?
+GUY                              El nombre era más chistoso cuando trabajaba en la pizzería.
+OLIVIER                          Bueno, de todos modos, ¡bienvenido a la isla!
+GUY                              Encantado de conocerlos. Bueno, tengo que regresar para arreglar mis cosas.
+GUY                              Siempre he querido una cocina grande y voy a hacer
+GUY                              buen uso de ella, ya verás.
+ELEANOR                          Vamos a jugar a un juego de mesa esta noche.
+ELEANOR                          ¿Te gustaría venir con nosotros?
+GUY                              Me encantaría, pero ahorita estoy muy emocionado por la cosina.
+ELEANOR                          Ya veo... Espero que te          diviertas con tu cocina.
+GUY                              Oh, lo haré. Lo haré.
 
 ELEANOR                          Bonjour! Vous devez être Guy.
 GUY                              Oui. Je suis Guy. Guy Pizza.
@@ -3220,6 +4346,12 @@ GUY                              J'adorerais, mais en ce moment, je suis préocc
 ELEANOR                          Je vois... J'espère que tous ira bien avec ta cuisine.
 GUY                              Oh, j'espère. J'espère.
 
+ELEANOR                          ¿Qué está pasando aya fuera?
+AARON                            No lo sé, pero sígueme, vamos al búnker de Scout a esperar
+AARON                            hasta que las cosas se calmen.
+AARON                            ¿Dónde está Diana?
+OLIVIER                          Salió a navegar con Guy y no regresaran hasta más tarde.
+AARON                            Gracias a Dios. Seguime, vamos  a salir de aquí.
 
 ELEANOR                          Que se passe-t-il dehors?
 AARON                            Je sais pas, mais suivez-moi, on va au bunker de Scout etpour attendre que les choses se calment.
@@ -3227,13 +4359,39 @@ AARON                            Où est Diana?
 OLIVIER                          Elle est partie naviguer avec Guy et ne reviendra que plus tard.
 AARON                            Dieu merci. Suivez-moi, sortons d'ici.
 
+    Esta es la biblioteca de     Eleanor.
 
+    La puerta está cerrada.
+    No deberías fisgonear en     los lugares de otras personas.
 
     C'est la bibliothèque d'Eleanor.
 
     La porte est fermée.
     Vous ne devriez pas fouiner chez les autres.
 
+MAPLE                            ¡Hey! ¿Eres Diana, verdad?
+DIANA                            ¡Hiya! ¡Al fin! ¡Otro pelirrojo!
+MAPLE                            Oh, mi pelo no es rojo, más bien es rubio miel.
+MAPLE                            Soy una elfa, así que a veces se me pone algo anaranjado.
+DIANA                            Oh, ¿lo eres? Entonces...
+MAPLE                            ¿Vas a preguntarme por qué mis     orejas son redondeadas?
+DIANA                            Me daba cosa preguntarte, no quisiera incomodarte.
+MAPLE                            Está bien. Fueron cortadas       cuando era un bebé.
+MAPLE                            Mi nombre es Maple, por cierto.  Maple Tremblay.
+DIANA                            ¡Heureux de te rencontrer!
+DIANA                            ¡Estas cabañas son maravillosas! ¿Las hace tu hermano mayor?
+MAPLE                            Mayormente sí. Yo a veces salgo  a buscar piedras preciosas en las cuevas.
+MAPLE                            Sacamos lo suficiente como para  vivir bien aquí.
+DIANA                            ¿Vives en la casa rodante?
+MAPLE                            Sí. Suelo quedarme en el sofá.
+DIANA                            ¿Y no quieres una cabaña? Una de ellas parece estar vacía.
+MAPLE                            Verás, Aaron y Enoki quieren     hacer un castillo.
+MAPLE                            Así que pienso quedarme con esta     casa cuando eso ocurra.
+DIANA                            Así que... Este lugar, ¿es de verdad un pais?
+MAPLE                            Si actuamos como que lo es,      entonces lo es. ¿No?
+DIANA                            ¿Es así de fácil crear un país?
+MAPLE                            Hasta que tengamos que pelear una guerra? Ya veremos, fue un placer conocerte.
+DIANA                            Ehm, sí, ¡también es un placer   conocerte!
 
 MAPLE                            Hé! Tu es Diana?
 DIANA                            Salut! Cool une autre rousse!
@@ -3260,6 +4418,19 @@ MAPLE                            On verra s'il y a une guerre, en passant ravit 
 DIANA                            Ehm, oui, ravie de te rencontrer aussi!
 aisé
 
+ENOKI                            ¡Hey! ¿Eres Diana?               ¡Soy Enoki Tremblay!
+DIANA                            ¡Enchante de faire votre         connaissance!
+ENOKI                            ¿Esta todo bien para ti hasta ahora?
+DIANA                            Es una locura, no sabría decir si estoy soñando o no.
+DIANA                            Todo es como demasiado increíble como para ser real.
+ENOKI                            Soy una chica con suerte, asi que cuando quiero algo...
+ENOKI                            Las cosas suelen salir bien, y  yo quería que esto funcionara.
+ENOKI                            ¿Escuché que traes algo con el capitán Nicholas?
+DIANA                            ¡Sí! Está buscando a alguien que se haga cargo de esta área.
+DIANA                            Eventualmente, conduciré el      barco por todo el Superieur.
+ENOKI                            ¡Suena divertido! Nos tienes que dar una vuelta cuando pase eso.
+ENOKI                            Si necesitas cualquier cosa no dudes en decirnos.
+DIANA                            ¡D'accord!
 
 ENOKI                            Hé! Tu es Diana? Je suis Enoki Tremblay!
 DIANA                            Enchantée de faire ta connaissance!
@@ -3275,6 +4446,16 @@ ENOKI                            ..ça a l'air amusant! Tu devras nous laisser v
 ENOKI                            Si tu as besoin de quoi que ce soit, dit le nous.
 DIANA                            D'accord!
 
+DIANA                            ¡Bienvenue! Eres Tremblay, ¿oui?
+AARON                            ¡Bienvenu! ¿Cómo te va con la cabaña? ¿todo bien?
+DIANA                            ¡Es genial! Demasiado genial     como para ser real.
+DIANA                            Hoy tendré mi primera lección conduciendo el barco.
+DIANA                            ¿Conoces al capitán Nicholas?
+AARON                            La verdad es que pasé la mayoría del tiempo cortando leña.
+AARON                            Pero parece ser buena persona por lo que tengo entendido.
+AARON                            No me quedaré mucho, sólo pasé para ver cómo estabas.
+AARON                            Dejame saber si necesitas algo,   ¿está bien?
+DIANA                            ¡Por supuesto! ¡Muchas gracias!
 
 DIANA                            Bienvenu! Tu es Aaron Tremblay, non?
 AARON                            Bienvenue! Comment ça vas dans ta cabine?
@@ -3287,6 +4468,22 @@ AARON                            Je resterai pas longtemps, je suis juste venu v
 AARON                            Dis-moi si tu as besoin de quoi que ce soit, d'accord?
 DIANA                            Bien sûr! Merci beaucoup!
 
+SCOUT                            ¡Hey! Soy yo, Scout. Sólo quería presentarme.
+DIANA                            ¡Ah, encantada! Sigo sin estar segura de que esto sea real...
+DIANA                            Me alegra no haber... Bueno...   Sido asesinada o algo así.
+SCOUT                            Admito que yo también tengo poco tiempo aquí.
+SCOUT                            Me mudé aquí desde una isla cerca de aqui.
+SCOUT                            Pero entonces conocí a los       Tremblay y decidí unirme.
+SCOUT                            No fué tan fácil abrir un nuevo  búnker, aunque valió la
+SCOUT                            pena. Me siento a gusto aquí.
+DIANA                            Bueno, parece que te va bien.    ¿Eres científico?
+SCOUT                            Sí, es curioso. Porque además    una compañía me envió aquí
+SCOUT                            para hacer algunos experimentos  en la isla. No sé por qué.
+DIANA                            ¿Y encontraste lo que buscabas?
+SCOUT                            He creado este dispositivo que   hace los búnkers rapido.
+SCOUT                            No sé para qué más lo voy a usar,pero tiene potencial.
+DIANA                            Hey, si te parece, ¿me harías   un búnker en cualquier momento?
+SCOUT                            ¡Claro, me encantaría!
 
 SCOUT                            Hé! C'est moi, Scout. Je voulais juste me présenter.
 DIANA                            Oh, ravie! Je sais toujours pas si c'est réel...
@@ -3303,6 +4500,19 @@ SCOUT                            Je sais pas quoi faire d'autre avec, mais ça a
 DIANA                            Hé, si tu en as envie, pourrais-tu me construire un bunker aussi?
 SCOUT                            Bien sûr, j'adorerais!
 
+DIANA                            ¡Hey, Vee! ¡Me alegra verte en mi/nueva cabaña/!
+OLIVIER                          Sólo te tomó como lo de un  día para hacerla lucir como
+OLIVIER                          tu vieja casa, ¿eh?
+DIANA                            Si todo va bien, esta cabaña     será como mi antigua casa.
+OLIVIER                          Todo dependerá si podemos     confiar en estas personas.
+OLIVIER                          Tienes algo para defenderte si   las cosas se voltean, ¿no?
+DIANA                            Sí, llevo encima una pistola de  bengalas.
+DIANA                            Aunque espero no tener que       utilizarla.
+OLIVIER                          Espero que no sea necesario.     Parecen gente agradable.
+OLIVIER                          O al menos parece que no tengan  interés en sacrificarnos.
+DIANA                            Jeje, ya te digo. Si aparece     alguien de la familia de El,
+DIANA                            Llámame inmediatamente, okay?
+OLIVIER                          Claro, por supuesto.
 
 DIANA                            Hé, Vee! Contente de te voir dans ma /nouvelle cabine/!
 OLIVIER                          Il ne t'a pris qu'une journée pour la remodeler comme
@@ -3318,6 +4528,26 @@ DIANA                            Hehe, je te le dis. Si quelqu'un de la famille 
 DIANA                            Appelle-moi tout de suite, d'accord?
 OLIVIER                          Bien sûr, bien sûr.
 
+ELEANOR                          ¡Se parece a tu viejo cuarto!
+DIANA                            Claro, ¿acaso esperabas otra cosa de mí? Jeje.
+ELEANOR                          Me encanta cómo la has dejado,   es muy acogedora.
+ELEANOR                          Avísame si necesitas cualquier   cosa,
+ELEANOR                          Decoré mi habitación, y tenemos otra preparada para la bola
+ELEANOR                          de cristal. Aún sigo practicando la invocación.
+DIANA                            ¿Y no crees que usar magia    podría causar que... ehm...
+DIANA                            las brujas sepan dónde estás?
+ELEANOR                          Me mantengo positiva. Si esto    sale bien,
+ELEANOR                          podríamos incluso invitar a mi familia. Me encantaría
+ELEANOR                          enseñarles este lugar. Es un lugar relajante.
+DIANA                            No es como que hayamos tenido una vida tranquila hasta ahora.
+DIANA                            Por cierto, ¿Has hablado ya con  los Tremblay?
+DIANA                            Parece que podríamos llevarnos   bien con ellos.
+DIANA                            Hay una chica pelirroja y una    pareja de... ¿granjeros?
+DIANA                            Esa tal Enoki es linda, ¡pero tú  lo eres aún más!
+ELEANOR                          Aw, ¡Merci!
+DIANA                            No puedo evitar sentirme un poco inquieta, pero creo que
+DIANA                            estaremos bien aquí.
+ELEANOR                          Yo pienso lo mismo.
 
 ELEANOR                          ..ça ressemble à ton ancienne chambre!
 DIANA                            Bien sûr, tu me prend pour qui, hi hi.
@@ -3335,6 +4565,29 @@ ELEANOR                          Ah, merci!
 DIANA                            Je ne peux pas m'empêcher d'être sur mes gardes, mais je pense que tout ira bien ici.
 ELEANOR                          Je pense la même chose.
 
+MAPLE                            ¡Diana! ¡Hey!
+DIANA                            ¡Hey, Maple!                     ¿Qué tal, corazón?
+MAPLE                            Bien, aunque un poco aburrida.
+DIANA                            ¿Viste la transmisión de esta    mañana?
+MAPLE                            ¿La que Rufus hackeo? Es un     idiota, estaremos bien.
+MAPLE                            Igual ahora piensa que es un     super villano o algo así.
+DIANA                            Los chicos así me hacen reír a   carcajadas, en serio. ¡Jajaja!
+MAPLE                            Dilo. Pero hazme saber si lo ves por ahí.
+MAPLE                            El caimán frito es una delicia   durante esta época del año.
+DIANA                            Lo haré.
+DIANA                            ¿Qué te cuentas?
+MAPLE                            ¿Has visto a Scout? Ese pobre chico siente algo por mí.
+MAPLE                            Es un chico dulce, pero tengo que dejarle claro que
+MAPLE                            no es mi tipo.
+DIANA                            Chica, no envidio tu situación,  jajaa. ¿Cuál es tu tipo?
+MAPLE                            Me gustaría alguien alocado y    que me haga sentir emoción.
+MAPLE                            Todos los chicos actúan como si  fuera una diosa y todo termina
+MAPLE                            siempre igual. Podría hacer una  barbacoa con ellos si quisiera.
+DIANA                            Je, tal vez todos te traten así  porque terminas asustandolos.
+MAPLE                            Igual todo se solucionaría si encontrara otro elfo de fuego.
+DIANA                            Estamos bien lejos en el sureste,no vas a encontrarlos por aquí.
+MAPLE                            Ya, seguiré buscando pero, pues, esta isla es pequeña.
+DIANA                            Buena suerte, jaja. Cuídate      mucho, Maple.
 
 MAPLE                            Diana! Hé!
 DIANA                            Hé, Maple! Comment tu vas?
@@ -3358,6 +4611,24 @@ DIANA                            Nous sommes loin dans le sud-est, il en a pas b
 MAPLE                            Ouais, je vais continuer à chercher, même si cette île est petite.
 DIANA                            Bonne chance, ha ha. Prends bien soin de toi, Maple.
 
+ENOKI                            ¡Hey, chica!
+DIANA                            Enoki, ¡ma cherie! ¿Quieres algo de snacks?
+ENOKI                            Siempre quiero snacks.
+DIANA                            Jaja, así me gusta. ¿Cómo te fue tu día?
+ENOKI                            Bien, bien, aunque estoy un poco preocupada.
+DIANA                            Aw, ¿y eso?
+ENOKI                            Bueno, Aaron y Maple se han peleado hoy.
+DIANA                            ¡Chin! ¿Y paso algo?
+ENOKI                            Bueno Aaron siempre reprime lo   que quiere decir.
+ENOKI                            Y Maple lo dice todo a la cara   sin pensar en tus sentimientos.
+DIANA                            Esa es una terrible combinación.
+ENOKI                            Ocurre todo el tiempo pero me    pone triste cada vez que pasa.
+DIANA                            No tengo hermanos pero... ¿No es algo que siempre ocurre?
+ENOKI                            ¿Tú también eres hija única? Me  habría gustado tener una hermana.
+DIANA                            Tengo un hermano pequeño, aunque no solemos tener mucho drama.
+ENOKI                            Entiendo, entiendo.
+DIANA                            Mantenme al tanto, ¿si?
+ENOKI                            Okay.
 
 ENOKI                            Hé fille!
 DIANA                            Enoki, ma chérie! Veux-tu une collation?
@@ -3378,6 +4649,13 @@ ENOKI                            Je vois, je vois.
 DIANA                            Tiens-moi au courant, d'accord?
 ENOKI                            D'accord.
 
+DIANA                            ¡Hey, Aaron!                     ¿En qué puedo ayudarte?
+AARON                            ¿Te has enterado de lo del juego de mesa esta noche, no?
+DIANA                            ¡Sí! Allí estaré. ¿Has visto la  transmisión?
+AARON                            Hablé con Maple, y parece conocer a ese chico Plonj.
+AARON                            A ella no le apura.
+DIANA                            Oh, me alegra oír eso.           ¿Te veo en la noche?
+AARON                            ¡Por supuesto!
 
 DIANA                            Hé, Aaron! En quoi je peux t'aider?
 AARON                            Tu as entendu parler du jeu de société ce soir?
@@ -3387,6 +4665,22 @@ AARON                            Elle ne parait pas dérangée.
 DIANA                            Oh, je suis contente d'entendre ça. On se voit ce soir?
 AARON                            Bien sûr!
 
+SCOUT                            ¡Hey! Soy yo, Scout.
+DIANA                            ¡Hey Scout! ¿Qué cuentas?
+SCOUT                            Parece que el Scout TV de este mes ya se acabo.
+SCOUT                            Ahora sólo tengo que preocuparme por la próxima Scout Expo.
+DIANA                            Hablas mucho de eso pero,     ¿qué es exactamente?
+SCOUT                            Oh, es un lugar en el que saco   mis nuevos inventos y
+SCOUT                            los enseño. Normalmente lo grabó todo en vídeo y lo subo
+SCOUT                            a internet, ¡pero ahora he       conseguido amigos a los que
+SCOUT                            se los puedo enseñar!
+DIANA                            ¡Parece muy divertido! ¿Y qué tienes de ejemplo?
+SCOUT                            ¡No seas aguafiestas! Espera a la Scout Expo y podrás verlos.
+DIANA                            Está bien... Sólo tenía          curiosidad.
+SCOUT                            ... Bueno, pues he creado este   dispositivo-
+DIANA                            ¿Pero no acabas de decirme que me tenia que esperar?
+SCOUT                            Pero Yo- Y... hmm... ya. Me costará trabajo esperar también.
+DIANA                            Jaja, sabría que te costaría trabajo también.
 
 SCOUT                            Hé! C'est moi, Scout.
 DIANA                            Hé Scout! Quoi de neuf?
@@ -3403,7 +4697,19 @@ SCOUT                            Mais je- Et... hmm... J'avoue, j'ai de la misè
 DIANA                            Heh, je le savais.
 
 *****
+DIANA                            ¡Hey, Vee! ¿Cómo has andado?
 OLIVIER                          Bien, bien.
+DIANA                            ¿Has venido para preguntarme si puedo organizar el juego de la noche, verdad?
+OLIVIER                          ¡Qué va! En absoluto...          Vamos a jugar afuera.
+OLIVIER                          Y si todo sale bien espero que la  isla no se quede en llamas.
+OLIVIER                          ¿Cómo están todos por la orilla?
+DIANA                            ¡De maravilla! A mis padres les  gustaría venir alguna vez.
+DIANA                            Aunque mi casa está es un desastre. ¿Me prestas la tuya?
+OLIVIER                          Sigue soñando, jajaja.
+OLIVIER                          Debería invitar a Eleanor y a mi familia a venir algún día.
+DIANA                            Oh, les encantará este sitio.
+DIANA                            Espero que nada salga mal.
+OLIVIER                          Esperemos que no jajaja.
 
 DIANA                            Hé, Vee! Comment ça va?
 OLIVIER                          Bien, bien.
@@ -3419,6 +4725,26 @@ DIANA                            Oh, ils aimeront l'île.
 DIANA                            J'espère que tout iras bien.
 OLIVIER                          Espérons que oui. Haha.
 
+ELEANOR                          ¡Bonjour!
+DIANA                            ¡Salut, ma charie! ¿Quoi de neuf?
+ELEANOR                          Oh, ¿Qué es ese olor? ¿Masa fermentada?
+DIANA                            Qué va, jeje. Aunque debo recoger mi habitación...
+DIANA                            ¿Cómo has estado?                ¿Alguna novedad?
+ELEANOR                          No mucho, he estado cosiendo una nueva colcha.
+DIANA                            Fantástico. ¿De qué la estás haciendo?
+ELEANOR                          Traje toda la ropa de mi pueblo  natal a la isla.
+ELEANOR                          Ya estan viejitas pero me da pena deshacerme de ella.
+ELEANOR                          Han estado siempre conmigo así   que haré una colcha con ellas.
+DIANA                            Aw, te quedará genial.
+DIANA                            ¿Has vuelto a dibujar?
+ELEANOR                          ¡Un poco! Hay muchos paisajes    bellos por aquí.
+DIANA                            Podría tocar la guitarra junto al océano el resto de mi vida.
+DIANA                            Bueno, cuando digo océano me     refiero también al lago.
+DIANA                            Pero es lo mismo.
+ELEANOR                          Eso suena como una vida divertida.
+DIANA                            Arrrrrrrg, ¡es la hora pirata!
+DIANA                            No te preocupes, pasaré de visita aunque siempre esté navegando
+ELEANOR                          ¡S'il vous plait!
 
 ELEANOR                          Bonjour!
 DIANA                            Bonjour ma chérie! What's up?
@@ -3441,6 +4767,26 @@ DIANA                            Arrrrrrrg, je vais être une pirates!
 DIANA                            Ne t'inquiète pas, je viendrais faire des visites tous le tempes
 ELEANOR                          S'il te plait!
 
+DIANA                            ¡Hey! ¿Eras Guy, no? Eres tu verdad?
+GUY                              ¡Ese soy yo! ¿Este es tu casa?
+DIANA                            Es humilde pero es mi nuevo      hogar. ¿Te gusta?
+GUY                              Desde muy pequeño soñaba con     tener mi propia cocina de
+GUY                              tamaño industrial, haci me levantaría todos los días hacia ella.
+DIANA                            Eso es un sueño muy detallado, pero lo entiendo.
+GUY                              Ni siquiera tienes cocina, ¿cierto?
+DIANA                            Tenemos un horno y una mini nevera, jaja.
+DIANA                            Traigo productos importados así  que como mucha comida en lata
+GUY                              Sabes que la comida enlatada no  es muy saludable, ¿verdad?
+DIANA                            Sí, bueno, ya tendré tiempo para preocuparme por esas cosas.
+DIANA                            Todo el mundo engorda y envejece algún día.
+GUY                              Yo no. Seré un anciano sano y delgado.
+DIANA                            Ya veremos quién está mejor cuando lleguemos a los 50.
+GUY                              Más bien ya verás tú,            llegado el momento.
+DIANA                            Vamos a jugar a un juego de mesa esta noche. ¿vas a venir?
+GUY                              Nah, estaré ocupado con mi cocina toda la noche.
+DIANA                            Ah... ya, lo entiendo.         ¡Pásalo guay!
+DIANA                            Ya me dirás qué tal.
+GUY                              ¡Claro!.
 
 DIANA                            Salut! Tu es Guy, n'est-ce pas?
 GUY                              C'est moi! Tu vis ici?
@@ -3464,7 +4810,11 @@ GUY                              Bien sûr!
 
 OLIVIER                          ¡O-Oh! Disculpe, señora.         ¿De dónde viene?
 GRAND-MÈRE CORINNE               Este invernadero es una maravilla. ¿Lo han traído de algún lado?
+OLIVIER                          Oh, me dijeron que lo habían traído de fuera.
+GRAND-MÈRE CORINNE               Verás joven, este invernadero era mio antes.
+GRAND-MÈRE CORINNE               Creo que no tiene sentido        ocultarlo, soy un fantasma.
 OLIVIER                          ¿¿¿Un fantasma???
+GRAND-MÈRE CORINNE               Parece que estoy condenada a estar en este invernadero por siempre.
 OLIVIER                          Mis disculpas... Eso parece un   terrible destino...
 GRAND-MÈRE CORINNE               ¿Consideras que este es un lugar terrible para pasar una eternidad?
 OLIVIER                          Pensándolo bien... Supongo que   no está tan mal.
@@ -3527,27 +4877,43 @@ GRAND-MÈRE CORINNE               Un bel avenir attend les gens patient.
 GRAND-MÈRE CORINNE               Ce fut un plaisir de te rencontrer. Prends soin de toi!
 
 INSTRUCTIONS:
-You'll find things around the    island to build your Trembloon   count. If you get 100, you get   to progress to the next chapter! Bonne chance!
-Try to catch all the rabbits and toss them out of the garden as   soon as possible. Pick them up & throw them with the A button.    Bonne chance!
-Try to find the gem and avoid thebats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!
-Use the A button to chop the     wooden pegs. Make sure you don't swing out of line or miss any, oryou'll lose points!              Bonne chance!
-There are new villagers to the   northwest! There are new ways to earn Trembloons, but you'll have to figure out how yourself.      Bonne chance!
-Try to get the highest sequence  of button combinations in a row, and you can magically summon an  item! L and R are the triggers.  Bonne chance!
-Pilot the boat to avoid the      rocks! Use up to accelerate, leftand right to steer, and down to  stop the boat.                   Bonne chance!
-You can find the customer's orderin the upper right corner.       Remember to press R if you need  to peek at the cookbook.         Bonne chance!
+● You'll find things around the    island to build your Trembloon   count. If you get 100, you get   to progress to the next chapter! Bonne chance!
+● Try to catch all the rabbits and toss them out of the garden as   soon as possible. Pick them up & throw them with the A button.    Bonne chance!
+● Try to find the gem and avoid thebats. If you're touched, the gem moves to a new place. Shoot fire at the bats to earn bonus points.Bonne chance!
+● Use the A button to chop the     wooden pegs. Make sure you don't swing out of line or miss any, oryou'll lose points!              Bonne chance!
+● There are new villagers to the   northwest! There are new ways to earn Trembloons, but you'll have to figure out how yourself.      Bonne chance!
+● Try to get the highest sequence  of button combinations in a row, and you can magically summon an  item! L and R are the triggers.  Bonne chance!
+● Pilot the boat to avoid the      rocks! Use up to accelerate, leftand right to steer, and down to  stop the boat.                   Bonne chance!
+● You can find the customer's orderin the upper right corner.       Remember to press R if you need  to peek at the cookbook.         Bonne chance!
 
 DES INSTRUCTIONS:
-Vous trouverez des choses autour de l'île pour construire votre Trembloon. Si vous en obtenez 100, vous pouvez passer au chapitre suivant! Bonne chance!
-Essayez d'attraper tous les lapins et de les jeter hors du jardin dès que possible. Ramassez-les et jetez-les avec le bouton A. Bonne chance!
-Essayez de trouver la gemme et évitez les chauves-souris. Si vous êtes touché, la gemme se déplace vers un nouvel endroit. Tirez sur les chauves-souris pour gagner des points bonus. Bonne chance!
-Utilisez le bouton A pour couper le bois. Assurez-vous de ne pas sortir de la ligne ou d'en manquer, sinon vous perdrez des points! Bonne chance!
-Il y a de nouveaux villageois au nord-ouest! Il existe de nouvelles façons de gagner des Trembloons, mais vous devrez découvrir comment vous-même. Bonne chance!
-Essayez d'obtenir la plus grande séquence de combinaisons de boutons d'affilée et vous pourrez invoquer un objet comme par magie! L et R sont les boutons. Bonne chance!
-Pilotez le bateau pour éviter les rochers! Utilisez haut pour accélérer, gauche et droite pour diriger et bas pour arrêter le bateau. Bonne chance!
-Vous pouvez trouver la commande du client dans le coin supérieur droit. N'oubliez pas d'appuyer sur R si vous avez besoin de jeter un coup d'œil au livre de cuisine. Bonne chance!
+● Vous trouverez des choses autour de l'île pour construire votre Trembloon. Si vous en obtenez 100, vous pouvez passer au chapitre suivant! Bonne chance!
+● Essayez d'attraper tous les lapins et de les jeter hors du jardin dès que possible. Ramassez-les et jetez-les avec le bouton A. Bonne chance!
+● Essayez de trouver la gemme et évitez les chauves-souris. Si vous êtes touché, la gemme se déplace vers un nouvel endroit. Tirez sur les chauves-souris pour gagner des points bonus. Bonne chance!
+● Utilisez le bouton A pour couper le bois. Assurez-vous de ne pas sortir de la ligne ou d'en manquer, sinon vous perdrez des points! Bonne chance!
+● Il y a de nouveaux villageois au nord-ouest! Il existe de nouvelles façons de gagner des Trembloons, mais vous devrez découvrir comment vous-même. Bonne chance!
+● Essayez d'obtenir la plus grande séquence de combinaisons de boutons d'affilée et vous pourrez invoquer un objet comme par magie! L et R sont les boutons. Bonne chance!
+● Pilotez le bateau pour éviter les rochers! Utilisez haut pour accélérer, gauche et droite pour diriger et bas pour arrêter le bateau. Bonne chance!
+● Vous pouvez trouver la commande du client dans le coin supérieur droit. N'oubliez pas d'appuyer sur R si vous avez besoin de jeter un coup d'œil au livre de cuisine. Bonne chance!
 
 LE BIZAAR D'CESAR                'NOUS AVONS SEULEMENT DEUX ARTICLES, DEAL WITH IT'
 
+MAPLE                            Así que... Guy, uhg...  ¿Le pusiste jitomate en la Jambalaya?
+GUY                              Así lo quiso Dios, nuestro señor.
+MAPLE                            ¿C-cómo que así lo quiso Dios?
+MAPLE                            ... Me estás tomando el pelo,    ¿verdad?
+GUY                              ¿También eres una de esas a las  que les gusta su roux quemada?
+MAPLE                            Explica 'quemada'.
+GUY                              Tan quemado que pierde tanto el  color y no puedes saborearlo.
+MAPLE                            ¿A qué te refieres con eso del   sabor? ¡A mí me gusta así!
+GUY                              Sí, porque le pones un montón de especies al azar.
+MAPLE                            Mi elección de especies NO son al azar.
+GUY                              No tengo más que decir, si me    disculpas, aver si barro
+GUY                              el piso para sazonar una buena Jambajaya.
+MAPLE                            Ustedes los Creoles son psicópatas.
+GUY                              No tanto como ustedes los Cajun, preciosa. Te digo algo.
+GUY                              Una competencia de Gumbo, y les dejamos la votación a todos los demás. Trato?
+MAPLE                            Trato hecho. Facilisimo.
 
 MAPLE                            Alors... Guy, uhg... Tu met de la tomate sur le Jambalaya?
 GUY                              Comme Dieu le voulais.
@@ -3566,6 +4932,16 @@ GUY                              Pas autant que les acadiens, ma fille, tu sais 
 GUY                              Organisons un concours de gombos et laissons les autres juger, hein?
 MAPLE                            Parfait. C'est de la tarte.
 
+ENOKI                            Ooooooh... ¡Me encanta tu cocina!¡Es bien grande!
+GUY                              Merci. Me encanta levantarme para hacer un pan de maíz.
+ENOKI                            Me encantaría hacer eso también, jeje.
+GUY                              Por cierto, uh. Esa tal Maple... ¿Qué tal su Gumbo comparado con el mio?
+ENOKI                            ¿Estás compitiendo contra ella?     Si es así, no quiero opinar.
+ENOKI                            No quiero elegir lados, apenas te moviste aquí.
+ENOKI                            Pero tienes que saber que Maple y yo somos mejores amigas.
+GUY                              Tal vez te pueda cocinar algo para que reconsideres.
+ENOKI                            Lo veo complicado. A mi no me gusta mucho /este/ la comida.
+GUY                              Pero... Ah, qué más dá.          Cuídate, cheri.
 
 ENOKI                            Ooooooh... j'adore ta cuisine, elle est immense!
 GUY                              Merci. Je peux même rouler de mon lit pour prendre du pain de maïs.
@@ -3578,6 +4954,22 @@ GUY                              Peut-être que je peux te cuisiner un gombo qui
 ENOKI                             ..ça vas être compliqué. Je n'aime pas vraiment manger /tant/ que ça.
 GUY                              Mais... Ah, anyway. Prends soin de toi, chérie.
 
+AARON                            ¡Huele muy bien aquí!
+GUY                              Oui, como tiene que.
+AARON                            Oye, ¿escuché que viniste aquí   en busca de clientes?
+GUY                              Eso es cierto.
+AARON                            Bueno, eh... Como puedes comprobar, no somos muchos por aquí.
+AARON                            Y pues trato de que esta isla sea un buen hogar para todos.
+GUY                              ¿A dónde quieres llegar?
+AARON                            Solo espero que sepas que no     somos lo bastante grandes como
+AARON                            para tener nuestra propia moneda,algunos apenas tienen dinero.
+GUY                              Sólo cobro 5 dólares, es         accesible y espero clientes.
+AARON                            ¿Sabes qué? ¿Cuánto cuesta esta  cabaña? ¿10 o 20 mil dólares?
+AARON                            No sé hacer cálculos, nunca me   gradué en la prepa.
+AARON                            Enoki no está aquí pero ella sabe hacer cuentas.
+AARON                            ¿Qué tal comida gratis para todos? Por un año entero?
+AARON                            Entonces eso pagará por la cabaña. ¿C'est bon?
+GUY                              ...Lo pensaré.
 
 AARON                            ..ça sent bon ici!
 GUY                              Oui, c'est comme ça que ça doit être.
@@ -3630,7 +5022,21 @@ GRAND-MÈRE CORINNE               Un bel avenir attend les gens patient.
 GRAND-MÈRE CORINNE               Ce fut un plaisir de te rencontrer. Prends soin de toi!
 
 OLIVIER                          ¡Bonjour!
+GUY                              Oui. ¿J'suppose que eres el jardinero?
+GUY                              ¿Cultivas apio, cebolla y chiles pimientos?
+OLIVIER                          ¡Por supuesto!
+GUY                              Te digo algo, si me surtes de verduras frescas.
+GUY                              Te cocinare Gumbo gratis.
+OLIVIER                          ¿Y qué hay de mi esposa?
+GUY                              ¿Es la que tiene el atuendo y el cabello de Wendy?
+OLIVIER                          ...Es la que tiene el pelo cafe.
+GUY                              Sale, Dave.
 OLIVIER                          ...Olivier. Olivier Landry.
+OLIVIER                          ¿Que no te llamas Guy?
+GUY                              Correcto.
+OLIVIER                          ¿Pero no era 'Guy Pizza'?
+GUY                              Eso era una broma, pero no se lo digas a nadie. ¿si?
+OLIVIER                          Entendido.
 
 OLIVIER                          Bonjour!
 GUY                              Oui. J'suppose que tu es le jardinier?
@@ -3649,6 +5055,19 @@ OLIVIER                          'Guy Pizza'?
 GUY                              C'était une blague, mais ne le dis à personne. Compris?
 OLIVIER                          Compris.
 
+ELEANOR                          ¡Bonjour! ¿Comment allez-vous?
+GUY                              C'est bon, ¿y tú cómo estás?
+ELEANOR                          Este lugar me hace tener mucha hambre, ¡y huele genial!
+GUY                              ¿En serio?
+ELEANOR                          Me gusta más hornear que cocinar,¡pero esta cocina es estupenda!
+GUY                              ¿Qué te gusta hacer en el horno?
+ELEANOR                          Lo que más me gusta es el pay de limon, aunque necesito
+ELEANOR                          hacer un montón de praliné de nuez. ¿Te gusta el praliné?
+GUY                              ¿Que si me gusta el praliné?
+GUY                              ¿QUE SI ME GUSTA EL PRALINÉ?
+GUY                              Claro, es muy rico.
+GUY                              Consígueme praliné y te daré     comida gratis. ¿Te parece bien?
+ELEANOR                          ¡Trato hecho!
 
 ELEANOR                          Bonjour! Comment allez-vous?
 GUY                              C'est bon, et comment vas-tu?
@@ -3663,6 +5082,22 @@ GUY                              C'est délicieux.
 GUY                              Tu m'apporte des pralines et je t'offre des repas gratuits, d'accord?
 ELEANOR                          Affaire conclue!
 
+DIANA                            ¡Hey! Tu nombre era Guy Pizza    si mal no recuerdo, ¿cierto?
+GUY                              Guy Pizza, el unico.
+DIANA                            Puedo ver por qué, jajaja.  ¿Eres italiano?
+GUY                              Nah, soy de Donaldsonville.      Nuevo nombre, nueva vida.
+DIANA                            ¿Y por qué 'pizza'?
+GUY                              La gente lleva años llamándome   'pizza guy' y mi nombre es Guy.
+GUY                              Ya me acostumbre. Además hago que le de hambre a la gente.
+DIANA                            Claro, a cualquiera le gusta la pizza. ¿Las haces a menudo?
+GUY                              La verdad, no a menudo.
+DIANA                            Sabes? No es tarde para cambiar de parecer.
+GUY                              ¿Tienes alguna sugerencia?
+DIANA                            Guy... el Misterioso. Se escucha misterioso.
+GUY                              Pero no soy un mago...
+DIANA                            Tampoco eres una pizza.
+GUY                              Touché.
+GUY                              Lo tendré en mente.
 
 DIANA                            Salut! Tu es Guy Pizza si je me souviens bien?
 GUY                              Guy Pizza, the one and only.
@@ -3681,6 +5116,7 @@ DIANA                            Tu n'es pas une pizza non plus.
 GUY                              Touche.
 GUY                              Je vais me rappeler d ça.
 
+AARON                            Parece que no hay nadie en casa.
 
 AARON                            On dirait qu'il n'y a personne à la maison.
 Chapter 2 intro
@@ -3708,6 +5144,15 @@ AARON                            What a strange broadcast.
 ENOKI                            I'm gonna get a soda.
 
 . . .
+SCOUT                            ¡Hola a todos! ¡Scout ha llegado! ¡Es tiempo de esa hora!
+                                 ¡Scout TV es algo regular!      Como pueden ver, ¡me siento un verdadero reportero!
+                                 Todos hemos estado en la isla durante tres meses. ¡No sabría decir si llevamos un día o un millón   de años!
+                                 Bueno. Ha pasado un tiempo desde la última vez, ¡Pero parece que  se nos han unido dos personas    más!
+                                 Primero tenemos a César de la    Cruz, un invitado especial de    nuestra Reina Enoki.
+                                 Aparentemente, fue un famoso     abogado que ahora busca un nuevo comienzo.
+                                 También tenemos a un nuevo chico que se está mudando. ¡Su nombre  es Guy y es cocinero!
+                                 ¡Ya no puedo esperar a ver su comida!   ¡Dicen que su Jabalaya es genial!
+                                 Además nos estamos acercando a   la Scout Expo, ¡y sólo es  cuestión de tiempo tenerla       preparada!
                                  También ordene un montón de copias de los últimos volúmenes de Time Raiders porque sé que algunos
 isleños ya se han vuelto a-
 
@@ -3723,8 +5168,15 @@ SCOUT                            Salut tout le monde! Scout est là! C'est le mo
                                  J'ai aussi commandé un tas de numéros de Time Raiders parce que je sais que certains insulaires se sont mis à...
 
                                  . . . .
+RUFUS                            Yo, er- hmm.. sí, buenas noches, vecinos de la isla. Soy Rufus    Thibodeaux, y si no me conocen   ahora, lo harán más tarde.
+                                 Interrumpo esta transmisión para dar un ultimátum. ¡O me entregan la isla o tendré que-!
                                  . . . .
 
+                                 ¡-Y eso es todo, amigos!         ¡Nos vemos para la próxima!
+ENOKI                            Aw, me perdí el final de Scout TV... La esperaba con ansias...
+MAPLE                            Oye, ¿que ese menso no es el sobrino de Del? Estuvo aquí en la isla por unos meses, creo.
+AARON                            Qué transmisión tan extraña.
+ENOKI                            Voy a por un refresco.
 
 . . .
 RUFUS                            Moi, euh- hmm.. oui, bonsoir, voisins de l'île. Je suis Rufus Thibodeaux, et si vous ne me connaissez pas, vous allez le découvir.
@@ -3757,6 +5209,21 @@ ENOKI                            Can we just be happy now and talkabout these th
 AARON                            I guess so. Goodnight, Noke.
 ENOKI                            Goodnight, Aire.
 . . .
+ENOKI                            Oye, ¿Aaron?
+AARON                            *Awn* ¿Sí?
+ENOKI                            ¿Eres feliz aquí?
+AARON                            Claro que lo soy, Noke.
+ENOKI                            Aver espera, no ¿Enserio eres feliz con todo esto? Me preocupo por ti.
+AARON                            Supongo que estoy algo melancólico, pero eso es todo.
+ENOKI                            ¿A qué te refieres?
+AARON                            Ya saber. Maple tenía razón, la única razón por la que estamos aquí es porque te ganaste ese dinero.
+AARON                            Lo hemos dado todo por este lugar y si algo sale mal, No tendremos absolutamente nada.
+ENOKI                            Ya me conoces, tengo la suerte de mi lado. Además te tengo a mi lado, eso es todo lo que necesito.
+AARON                            Puede que dejes de sentirte así  cuando pases hambre. No sabes lo que es tener hambre.
+ENOKI                            No quiero pensar en ello...      Si lo hago, no podré dormir.
+ENOKI                            Qué te parece si por ahora somos felices y después nos apuramos de eso?
+AARON                            Supongo que sí. Buenas noches,   Noke.
+ENOKI                            Buenas noches, Aire.
 . . .
 . . .
 ENOKI                            Hé, Aaron?
@@ -3789,9 +5256,17 @@ CESAR                            Oh! Hey, nice to meet you!       You must be on
                                  If any angry former clients of   mine decide to stop by, just let me know so I can.. er.. hide.    Merci!
                                  Anyway, what might I interest youin today?
 
+CESAR                            ¡Oh! ¡Encantado de conocerte!    Debes ser uno de los locales.    Puedes llamarme César.
+                                 Lo creas o no, era un abogado. Aunque no era uno bueno.
 
+                                 Y pues al decir la verdad no tenía un título, pero ahí yo estaba ganando los casos uno por uno.
+                                 ¿Y por qué te cuento todo esto, si ni siquiera te conozco?
                                  ...
                                  ...
+                                 Es mejor si todos nos conocemos  un poco. ¿No crees?
+                                 Me gusta mantenerme ocupado y estoy cumpliendo mi sueño de tener una tienda en un lugar tranquilo.
+                                 Si ves a algún cliente extraño que esté enfadado conmigo, avísame para poder... ehm. Esconderme. ¡Merci!
+                                 De todas formas, ¿En que te podría ayudar hoy?
 
 CÉSAR                            Ah! Heureux de vous rencontrer! Vous devez être l'un des habitants. Vous pouvez m'appeler César.
                                  Croyez-le ou non, j'étais avocat, mais je n'était pas vraiment un bon avocat.
@@ -3816,9 +5291,16 @@ When you walk into the store (Enoki)
                                  It's been a childhood dream of   mine to be a shopkeep in some    little village, and I don't have a lot to sell,
                                  But I'll do my best! Anyway, how can I help you today?
                                  . . . .
+                                 ¡Enoki Ramirez! Er... Ahora      Tremblay, ¿no? Muchas gracias por dejarme venir aquí.
+                                 Prometo que no causaré problemas aquí, aunque esos últimos clientes míos...
 
+                                 Mira, no fue MI culpa que pudiera fingir ser un buen abogado, ¿sabes?
 
+                                 Sé que me entiendes. Sólo avísame si aparecen buscándome para poder esconderme a tiempo. ¿Okay?
+                                 Mi sueño desde nino es tener mi tienda en un pueblo chiquito, aunque no tenga muchas cosas que vender.
+                                 Ahora que tengo la oportunidad,  ¡daré lo mejor de mí!      ¿Cómo puedo ayudarte hoy?
                                  . . . .
+. . . .
                                  Enoki Ramirez! Euh... Maintenant Tremblay, non? Merci beaucoup de m'avoir permis de venir ici.
                                  Je promets que je ne causerait aucun problème ici, bien que mes derniers clients...
 
@@ -3855,7 +5337,16 @@ MAPLE                            Excusez-moi, I can take care     of-
 AARON                            You go to the bunker and get     some more sleep.
 MAPLE                            Hey, no need to be               passive-aggressive about it.
 
+RUFUS                            Buenas tardes a todos. Parece que mi amenaza no fue suficiente clara y al parecer nadie
+RUFUS                            ha mostrado ni el más mínimo indicio de miedo durante el último mes. Han cometido un grave error, ya que
+RUFUS                            planeo tomar la isla a la fuerza si es necesario.
+MAPLE                            ...Ugggh, cállate, Rufus, Intento dormir.
+RUFUS                            He desarrollado un-
+ENOKI                            No recuerdo haber prendido la tele esta mañana, ¿Maple tú la prendiste?
 MAPLE                            ...
+AARON                            Tal vez le apreté en accidente. ¿La apagó?
+MAPLE                            ...mmmrff... tele... apagada...  sábado...
+RUFUS                            En menos de treinta segundos     liberaré mi-
 
 RUFUS                            Bonjour à tous. Il semble que mon avertissement précédent n'était pas suffisant et personne n'a montré le moindre
 RUFUS                            soupçon de peur au cours du mois dernier. vous avez fait une grave erreur, car je prévois prendre l'île par la force si nécessaire.
@@ -3867,7 +5358,18 @@ AARON                            J'ai peut-être heurté quelque chose par accid
 MAPLE                            ...mmmrff... TV... off... Samedi...
 RUFUS                            Dans moins de trente secondes, je lâcherai mon-
 
+AARON                            Okay, se acabó.
+ENOKI                            ¿De qué iba todo eso?
+AARON                            Ni idea, Noke.
 MAPLE                            ...
+ENOKI                            Oye, ¿qué es ese ruido?
+AARON                            No me gusta cómo suena eso...    Maple, quizá deberías levantarte.
+MAPLE                            ... Grr, Voy a matar a ese caiman...
+ENOKI                            Pero qué- oh no...
+AARON                            Enoki, tú y Maple corran hacia el búnker de Scout, yo iré al oeste para ver si los demás están bien.
+MAPLE                            Excusez-moi, puedo cuidar de mi-
+AARON                            Vas a ir al búnker, además allí  podrías seguir durmiendo.
+MAPLE                            Hey, no hay necesidad de ser tan agresivo conmigo.
 
 AARON                            D'accord, c'est fini.
 ENOKI                            C'étais quoi?
@@ -3952,6 +5454,13 @@ MAPLE                            NOT NOW CESAR, I'M MESSING WITH ALITTLE MEGALOM
 RUFUS                            N-No seriously, you, er, uh..    Oh dear..
 MAPLE                            WHAT?!
 
+MAPLE                            Dime la verdad, ¿oui?            ¿Tú hiciste todo este lugar?
+SCOUT                            ¡Imposible! Aunque me habría     gustado conseguirlo por mí mismo.
+SCOUT                            ¡MAPLE, CUIDADO!
+MAPLE                            ... Scout, ¿te encuentras bien?
+RUFUS                            Ow. Aunque me golpeé un poco la  espalda. Creo que estaré bien.
+MAPLE                            ¿Qué hace toda esta gasolina aqui?
+SCOUT                            Por nuestro bien, más te vale    tener cuidado con tus poderes.
 
 MAPLE                            Dis-moi la vérité, C'est toi qui a construit cet endroit?
 SCOUT                            Oh que non! Bien que j'aurais aimé le faire.
@@ -3962,6 +5471,65 @@ MAPLE                            Qu'est-ce que toute cette gasoline fait ici?
 SCOUT                            Pour notre bien, vous feriez mieux d'être prudent avec vos pouvoirs.
 
 MAPLE                            ...
+MAPLE                            Qué... ¿Qué demonios estoy viendo ahora mismo?
+RUFUS                            Ichabod Williams y Maple Tremblay, ¡Qué sorpresa!   Me alegra verlos por aquí.
+RUFUS                            Al fin hemos podido reunirnos todos.
+SCOUT                            RUFUS QU-, ¿QUÉ ESTÁS HACIENDO?
+MAPLE                            ¡DÉJAME EN PAZ, IMBÉCIL!
+RUFUS                            Será mejor que te ponga una      pulsera anti-magia para evitar   que te dé una de esas...         Chispas de inspiración
+RUFUS                            Muy bien, ahora que tenemos a    todos los Tremblay  reunidos en un mismo  lugar...                ¡Podemos comenzar!
+RUFUS                            En primer lugar, hagamos una     breve introducción. Soy Monsieur Rufus Thibodeaux, y hoy seré su profesor.
+RUFUS                            Presten atención.  Nadie parece  hacerme caso, así que            haremos un examen al final       de la sesión.
+RUFUS                            Lección número uno. Repitan conmigo, 'Rufus no es bajo. Sólo tiene huesos pequeños.'
+MAPLE                            ..... ¿Estás bromeando?
+RUFUS                            Eso no se parece mucho a la frase que tienes que decir ahora,      ¿no, Maple?
+RUFUS                            Parece que todos están fallado   esta lección. Así que pasemos a  la siguiente... Hablemos de la flor Apres. Una compañía
+RUFUS                            me contrató para estudiarla. Al  igual que Ichabod... o 'Scout',  un chico nativo y conocido por   todos los de la isla.
+RUFUS                            Las 'propiedades metafísicas' de las flor son bien padres, así que a pesar de que las instrucciones decían
+RUFUS                            que no debía hacerlo. Un día me  aburrí y decidí darle unas mordiditas. ¿Y saben lo que   pasó después de eso?
+RUFUS                            Me encontré viajando a través del multiverso. Exploré todo tipo de mundos diferentes, algunos       similares a este
+RUFUS                            y otros completamente alejados de esta realidad. ¿Pero saben lo   que descubrí en casi cada uno de ellos?
+RUFUS                            Había una extraña tendencia de   mujeres muy  atractivas que luchaban contra el mal.
+RUFUS                            Junto a hombres extravagantes  que servían como burla o como incompetentes villanos.
+RUFUS                            Al final todos ellos eran        reemplazados por villanas más aptas e incomprendidas que eran malvadas porque
+RUFUS                            un hombre las hizo así.   ¿Quieren saber qué es lo que pensé de eso?
+MAPLE                            Aver,Aver, espera.
+MAPLE                            ¿De verdad me estas diciendo que te has vuelto malvado por el     simple hecho de que una flor     te dijo
+MAPLE                            que eres el 'chico malo'?
+RUFUS                            Creo que con un ataque preventivo, puedo mantener intactos tanto mi imagen como mi libertad. Sí.
+RUFUS                            Desde mi punto de vista y habiendo estudiado sus atributos, Maple  parece ser el 'personaje principal' y este fue mi mejor plan.
+ENOKI                            Monsieur Rufus, ¿puedo ir al baño?
+RUFUS                            Podrás ir después de la lección. Casi ya termina.
+RUFUS                            A ver, ¿por dónde iba...?
+AARON                            Rufus, tenemos que hablar.
+AARON                            En primer lugar. Me sorprende    que no supieras que mi esposa es maga. Y pues se le hace fácil salir de lugares apretados.
+AARON                            Y en segundo lugar. Me da igual lo que esa flor te hizo ver, asustaste a todos mis amigos. Chico malo.
+AARON                            Eso es totalmente inaceptable.   No puedes secuestrar a la gente y mantenerla como rehenes.
+AARON                            Suéltanos a todos y déjanos en paz,      ¿c'est bon? ¿Lo captas o no?
+RUFUS                            Espera un momento, Aaron.
+RUFUS                            Hay algo que deberías saber. Las puertas de esta habitación están totalmente selladas.
+RUFUS                            Si una bomba estallara aya afuera     apenas nos daríamos cuenta aquí  dentro. Pero el momento que alguien pruebe esta flor,
+RUFUS                            abriré las puertas. Aquí les va un desafío. Hay que tener una pelea y si ustedes ganan, me iré de esta isla en paz.
+RUFUS                            Si yo gano, me convertiré en su nuevo rey. Aunque de todos modos tienen que probar la flor. ¿Oui?
+RUFUS                            Una vez que vean todo lo que yo vi, no dirán que estoy loco.
+RUFUS                            Ya veremos qué ocurre...
+RUFUS                            Bueno, bueno, bueno...
+RUFUS                            ¡HA! ¡Parece que soy el ganador! ¡Es hora de la flor Apres!
+RUFUS                            Así que... ¿Quién la probará?    ¿Aaron? ¿Qué te parece si le das una probadita?
+MAPLE                            ¿Sabes qué? Ni en tus sueños, pinche mocoso.
+RUFUS                            ¿A-a quién le dices mocoso?
+MAPLE                            Incluso tus pequeñas piernas     robóticas se mantienen sobre las puntas de sus pies.
+MAPLE                            No sé por qué piensas que el mundo es como tu sueno enfermo que te dejó esa tal flor.
+MAPLE                            Pero la vida es difícil, ¿sabes? Y ya bastante tenemos con nuestros propios problemas. Me da igual  lo que viste en tus sueños,
+MAPLE                            no hubieras venido a molestarnos en nuestra propia isla. Ni siquiera sabíamos quién eras.
+MAPLE                            Así que volveré a amenazarte de  nuevo como amenazó a todos los   demás. Cualquier otra cosa y..
+RUFUS                            L-lo sé, lo sé, ya lo dijiste, me quemaras la cara.
+RUFUS                            Aunque, uh, te cuidado con ese fuego. Hay muchas cosas inflamables aquí abajo.
+MAPLE                            ¿CUIDADO? ¿Dices que tenga cuidado después de SECUESTRARNOS? Al final te lo has buscado, ¡tu  cara va a salir ardiendo!
+CESAR                            Oye, ¿Maple?
+MAPLE                            AHORA NO CÉSAR, ¡DEBO OCUPARME   DE ESTE pequeño MEGALÓMANO!
+RUFUS                            N-No en serio, tú, er, uh...     Madre mía...
+MAPLE                            ¡¿QUÉ?!
 
 MAPLE                            ...
 MAPLE                            Quoi... Quesque je regarde en ce moment?
@@ -4118,14 +5686,66 @@ AARON                            Whatever adventure it turns out  to be like, I'
 MAPLE                            Happy 2001, y'all.
 ENOKI                            Happy 2001.
 
+GUY                              Se siente bien aquí fuera.
+DIANA                            Y que lo digas. Si navegar no    fuese tan caro lo haría todo     el tiempo.
+GUY                              ¿Crees que vendrán más turistas  a la isla?
+DIANA                            Deberías relajarte un poquito    con todo el tema de tu           restaurante.
+DIANA                            Aprende a tomar un descanso y    relajarte de vez en cuando, ¿oui?
+GUY                              Supongo que debería. Pero la     cocina es como si fuera mi bebé, no puedo evitarlo.
+DIANA                            ¿Y si algo le pasara? ¿Y si      un día estallara de repente?
 GUY                              ...
 DIANA                            ...
+GUY                              Santo... Cielo...
 
+RUFUS                            Pero qué...
 RUFUS                            ...
+MAPLE                            Yo... Y-Yo...
+AARON                            Maple, Yo-
+MAPLE                            ...Yo-Estoy...
+ENOKI                            ¡Maple, ven aquí!
 MAPLE                            ...
+AARON                            Maple, levántate.
 MAPLE                            ...
+AARON                            Maple, tenemos que hablar.       Ahora mismo.
+ENOKI                            Maple, es-
+AARON                            Maria, te amo, pero Maple y yo   tenemos que hablar.
 ENOKI                            Maria...
+ENOKI                            O-kay, iré a ver cómo están los demás.
+AARON                            Maple. Ya teníamos que haber hablado sobre esto, y ya no puedo esperar    más.
+AARON                            Creo que sabes de qué se trata.
+MAPLE                            N-no quisiera hablar ahorita.
+AARON                            Quiero disculparme contigo.
+AARON                            Me he estado quejando de ti a tu espaldas con los demás.
+AARON                            Aunque al final has hecho un     montón de cosas que hacen que me sienta orgulloso de ser tu       hermano mayor.
+AARON                            Tienes esa ira que está todo el  tiempo dentro de ti, una ira que proyectas hacia todo lo que ves  mal de este mundo.
+AARON                            La ira no es algo malo, pero     ahora entiendo que te ves reflejada en todo aquello que te hace enojar.
+AARON                            Gracias por todo, agradezco que me hayas defendido.
+MAPLE                            Cállate.
+AARON                            No me voy a callar.
+AARON                            Tómate tu tiempo para calmarte,  pero tendrás que aprender a      controlar tu ira. O no podré     seguir apoyándote.
 MAPLE                            ...Oui.
+AARON                            Me alegra que lo entiendas.      Rufus, Creo que también tenemos que hablar de algo.
+ENOKI                            A-Aar.. AARON, ¡UN MOMENTO!
+AARON                            Necesitamos abrir esas puertas.
+RUFUS                            Oye, estoy seguro de que puedo   encontrar una forma de desactivar el seguro. Creo que no tienes por qué-
+AARON                            Yo lo haré.
+                                 N-No... No puedo perderte...
+                                 ¿A-Aaron?                        ¿Por qué me miras de esa forma?
+                                 Di algo...                       Me estás asustando...
+AARON                            Pagué la isla en efectivo.       Deberíamos tener lo suficiente   como para conseguir una casa   en Louisiana.
+AARON                            De todas formas, un cajún nunca  encontrará un mejor hogar fuera  de Louisiana , ¿oui?
+AARON                            Creo que tengo suficiente dinero para pagarles a todos unos meses de renta hasta que puedan     volver a sus vidas normales.
+AARON                            Quiero decir que para mí ha sido un orgullo ser su rey       durante este tiempo. Gracias a   todos por estar ahí.
+OLIVIER                          También queremos darte las       gracias. No sé qué haremos yo y  Eleanor, pero... Ya pensaremos   en algo.
+OLIVIER                          Vinimos aquí porque no           teníamos recursos. Así que haberlos conocido fue una bendición.
+CESAR                            Y no hay duda de que Enoki me    salvó el trasero.
+RUFUS                            P-puedo ayudar si alguno me    necesita o le hace falta un lugar donde quedarse. Lamento mucho lo de su isla...
+RUFUS                            En realidad nunca quise causar   tantos problemas, sólo estaba     aquí para hacer un poco de antagonista, yo...
+RUFUS                            Oye, tengo cobijas y cosas así    por si necesitan algo para pasar la noche.
+AARON                            ...Gracias, Rufus.
+AARON                            Todos necesitaremos un tiempo    para procesar lo ocurrido. Aunque no vi el barco de Diana en las cámaras de la isla.
+AARON                            Todo el mundo parece estar bien. Y al fin y al cabo, eso es lo más importante.
+AARON                            Los quiero mucho a todos.
 
 GUY                              Je me sent bien ici.
 DIANA                            Si la c'était pas si chère, je le ferais tout le temps.
@@ -4188,11 +5808,43 @@ AARON                            Nous aurons tous besoin de temps pour assimiler
 AARON                            Tout le monde semble okay. Et à la fin, c'est la chose la plus importante de toutes.
 AARON                            Je vous aime tous.
 
+SCOUT                            Maple, ¿cómo te sientes?
 MAPLE                            ...
+MAPLE                            ... No te atrevas a darme lástima. ¿okay?
+SCOUT                            S-sí, está bien, Es sólo que... Perdoname por-
+MAPLE                            ¿Perdonarte de que?
+SCOUT                            Déjame terminar.
+MAPLE                            Está bien. Continúa.
+SCOUT                            Perdona por ser atrevido, pero   por favor, deja de culparte      tanto. Estoy de tu lado, ¿sabes?
+MAPLE                            Qué, ¿me vas a invitar a salir   o algo?
+SCOUT                            No, Y-yo... bueno, no, no iba    a... Mira, tan sólo no me        gustaría perderte.
+SCOUT                            No estamos enfadados contigo,    y... oye, tampoco me gustaría    echar a perder nuestra amistad
+SCOUT                            sólo porque estés enojada, ¿ok? Eres más importante que la isla. Y yo...
+SCOUT                            Quiero que me prometas que no    irás a ningún lado ni harás nada estúpido por lo que ha ocurrido.
 MAPLE                            ...
+MAPLE                            ... No lo haré, Scout. No tienes que preocuparte tanto por mí.
 
 ...
 
+ENOKI                            ¡Hey, Maple! ¿Ya regresaste?
+MAPLE                            Si. La entrevista salió bien. El ejército será un enfado, pero… los beneficios están bien.
+AARON                            Sé que te irá genial, Maple.
+MAPLE                            ¿Eso piensas?
+AARON                            Apuesto a que serás la única     elfa del equipo. Y eso estara a tu favor.
+MAPLE                            Sí, eso creo. He hablado con     Scout sobre esto. Dice que está  feliz pero que me echará         de menos.
+ENOKI                            Nosotros también te extrañaremos.
+ENOKI                            Bueno, Aaron y yo también        tenemos una noticia que darte.
+MAPLE                            Vaya, ¿qué noticia?
+ENOKI                            Parece que pronto... Uh...       Que pronto habrá un nuevo        Tremblay entre nosotros.
+MAPLE                            Espera, ¿No me digas que-?
+ENOKI                            ¡Ahá!
+MAPLE                            Estás... ¿EMBARAZADA?
+AARON                            Así es, señorita.
+MAPLE                            No puede ser, Voy...             Voy a ser tía. ¿Qué clase de     persona saldrá de una mezcla como Aaron y Enoki?
+ENOKI                            el 2000 ha sido un año increíble,¡y estoy segura de que el 2001   será aún mejor!
+AARON                            Sea cual sea la aventura que nos aguarde, me alegro de que estés a mi lado para vivirla.
+MAPLE                            ¡Feliz 2001, chicos!
+ENOKI                            ¡Happy 2001!
 
 SCOUT                            Maple, comment ça va?
 MAPLE                            ...
@@ -4271,6 +5923,7 @@ Credits:
 
 Créditos:
 
+Crédits:
 
                         MAPLE TREMBLAY
                         Natalie Anderson
@@ -4284,76 +5937,26 @@ Créditos:
                         RUFUS THIBODEAUX
                         Patrick Williams
                         - - - -
+                        Creado con Butano
                         github.com/GValiente/butano
                         - - - -
+                        Fondo de escritorio de Scout:
                         @yae.ruu (Instagram)
                         - - - -
+                        Basado en los personajes
+                        De 'Vous Voila' por
                         Ethan Hill
+                        Creado por
                         Ethan Hill
                         - - - -
                         - - - -
+                        AGRADECIMIENTOS ESPECIALES:
                         - - - -
+                        A mis amigos y familia
                         r/cajunfrench
                         LETU Game Design Club
+                        ¡Gracias por jugar!
                         Merci d'avoir joue!
                         - LA FIN -
                         - - - -
 
-
-"""
-
-def f_remove_accents(old):
-    """
-    Removes common accent characters, lower form.
-    Uses: regex.
-    """
-    new = old
-    new = re.sub(r'[àáâãäå]', 'a', new)
-    new = re.sub(r'[èéêë]', 'e', new)
-    new = re.sub(r'[ìíîï]', 'i', new)
-    new = re.sub(r'[òóôõö]', 'o', new)
-    new = re.sub(r'[ùúûü]', 'u', new)
-    new = re.sub(r'[ÀÁÂÃÄÅ]', 'a', new)
-    new = re.sub(r'[ÈÉÊË]', 'e', new)
-    new = re.sub(r'[ÌÍÎÏ]', 'i', new)
-    new = re.sub(r'[ÒÓÔÕÖ]', 'o', new)
-    new = re.sub(r'[ÙÚÛÜ]', 'u', new)
-    new = new.replace('¿', '{') # question mark
-    new = new.replace('¡', '}')
-    new = new.replace('ñ', '[')
-    new = new.replace('ç', ']')
-    new = new.replace('…', '...')
-    return new
-
-with open('diff-out.txt', 'w') as f:
-    out_lines = []
-    for line in lines.split("\n"):
-
-        o_line = line
-        print(line)
-        line = f_remove_accents(line)
-        meat = ""
-        t_pos = 33
-
-        if (len(line) > 33):
-            meat = line[33:]
-            if sum([1 for t in line[:33] if t == ' ']) > 16:
-                t_pos = 66
-
-        print(meat)
-        l_copy = meat.split(' ')
-        print([l_copy])
-        l_copy.reverse()
-        fin = line[:min([33, len(line)])]
-
-        while (len(l_copy) > 0):
-            d = l_copy.pop()
-            if len(fin) + len(d) > t_pos:
-                fin += ''.join([' ' for t in range(t_pos - len(fin))])
-                t_pos += 33
-            fin += d + (" " if len(fin) + len(d) != t_pos else "")
-        
-        out_lines.append(fin + '\n')
-        print("\n")
-
-    f.writelines(out_lines)
