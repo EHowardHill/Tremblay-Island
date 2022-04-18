@@ -572,6 +572,8 @@ Guy     7
 
 #include "bn_sprite_items_flags.h"
 
+#include "flashsaves.h"
+
 // 0 = saving enabled
 // 1 = saving disabled
 
@@ -662,6 +664,7 @@ void flash_reset()
 	{
 		globals = new global_data();
 		bn::sram::write(globals->all_save);
+		write_sram_to_flash();
 	}
 }
 
@@ -670,6 +673,7 @@ void flash_write()
 	if (DEVICE_TYPE == 0)
 	{
 		bn::sram::write(globals->all_save);
+		write_sram_to_flash();
 	}
 }
 
@@ -20722,8 +20726,9 @@ int checkpoint(int level)
 
 int main()
 {
+	flash_init();
+	
 	bn::core::init(); // Initialize Butano libraries
-	// int f = flash_init(FLASH_SIZE_AUTO);
 
 	// 'new' allows me to store this in the heap instead of the stack
 	globals = new global_data();
