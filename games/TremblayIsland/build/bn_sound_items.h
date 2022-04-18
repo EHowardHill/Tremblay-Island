@@ -41,19 +41,19 @@ namespace bn::sound_items
     constexpr inline sound_item maple_hey_01(45);
     constexpr inline sound_item maple_ugh_01(46);
     constexpr inline sound_item maple_ugh_02(47);
-    constexpr inline sound_item pc_boot(53);
-    constexpr inline sound_item pc_whir(54);
-    constexpr inline sound_item pop(55);
-    constexpr inline sound_item rufus_01(56);
-    constexpr inline sound_item rufus_02(57);
-    constexpr inline sound_item scout_hey_01(58);
-    constexpr inline sound_item scout_nice_01(59);
-    constexpr inline sound_item squeak(60);
-    constexpr inline sound_item start(61);
-    constexpr inline sound_item ui_sfx01(70);
-    constexpr inline sound_item ui_sfx02(71);
-    constexpr inline sound_item vee_alright_01(80);
-    constexpr inline sound_item vee_hey_01(81);
+    constexpr inline sound_item pc_boot(69);
+    constexpr inline sound_item pc_whir(70);
+    constexpr inline sound_item pop(71);
+    constexpr inline sound_item rufus_01(72);
+    constexpr inline sound_item rufus_02(73);
+    constexpr inline sound_item scout_hey_01(74);
+    constexpr inline sound_item scout_nice_01(75);
+    constexpr inline sound_item squeak(76);
+    constexpr inline sound_item start(77);
+    constexpr inline sound_item ui_sfx01(84);
+    constexpr inline sound_item ui_sfx02(85);
+    constexpr inline sound_item vee_alright_01(94);
+    constexpr inline sound_item vee_hey_01(95);
 }
 
 #endif

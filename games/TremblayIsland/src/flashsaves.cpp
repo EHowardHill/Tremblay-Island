@@ -281,7 +281,6 @@ void flash_init() {
 	
 }
 
-
 #include "bn_core.h"
 #include "bn_timer.h"
 #include "bn_timers.h"
