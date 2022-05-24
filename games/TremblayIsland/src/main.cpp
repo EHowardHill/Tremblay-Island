@@ -10433,10 +10433,10 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 				case 2:
 				{
 					line lc[10] = {
-						{true, true, 00, "MAPLE                            What the.."},
-						{true, true, 00, "MAPLE                            What the heck?"},
-						{true, true, 00, "SCOUT                            Peut-etre devrais-je calibrer monoutil..."},
-						{true, true, 00, "MAPLE                            Repare le! Je ne veux pas mourir!"},
+						{true, true, 00, "MAPLE                            Qu.."},
+						{true, true, 00, "MAPLE                            Quoi?"},
+						{true, true, 00, "SCOUT                            Je devrais recalibrer mon outil.."},
+						{true, true, 00, "MAPLE                            Repare le! Je veux pas mourir!"},
 						{true, true, 00, "COM: Endscene"} };
 					dialogue_page_lite(lc);
 					break;
@@ -10444,12 +10444,12 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 				case 3:
 				{
 					line lc[32] = {
-						{true, true, 00, "ELEANOR                          Vee, qu'est-cde que c'est?"},
+						{true, true, 00, "ELEANOR                          Vee, c'est quoi ca?"},
 						{true, true, 00, "OLIVIER                          Je ne sais pas..."},
-						{true, true, 00, "SCOUT                            Je vais aller de l'avant et      verifier."},
-						{true, true, 00, "MAPLE                            Pas par tu-meme. Je viens avec."},
-						{true, true, 00, "AARON                            Bonne chance."},
-						{true, true, 00, "MAPLE                            Euh, we'll be fine."},
+						{true, true, 00, "SCOUT                            Je vais avancer et verifier."},
+						{true, true, 00, "MAPLE                            Pas tous seul. Je viens avec toi."},
+						{true, true, 00, "AARON                            Soyez prudent."},
+						{true, true, 00, "MAPLE                            Eh, we'll be fine."},
 						{true, true, 00, "COM: Endscene"} };
 					dialogue_page_lite(lc);
 					break;
@@ -10464,12 +10464,12 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 				case 5:
 				{
 					line lc[10] = {
-						{true, true, 00, "OLIVIER                          Is that gasoline?"},
-						{true, true, 00, "SCOUT                            It, uh.. seems like.."},
-						{true, true, 00, "AARON                            Seems like what?"},
-						{true, true, 00, "SCOUT                            It, er- someone might have"},
-						{true, true, 00, "SCOUT                            already been here."},
-						{true, true, 00, "MAPLE                            Oh I don't like that."},
+						{true, true, 00, "OLIVIER                          C'es tu de la gasoline?"},
+						{true, true, 00, "SCOUT                            Je, crois que.."},
+						{true, true, 00, "AARON                            Crois que?"},
+						{true, true, 00, "SCOUT                            Que quelqu'un.."},
+						{true, true, 00, "SCOUT                            Est passe par ici."},
+						{true, true, 00, "MAPLE                            Oh, ca sense pas bon."},
 						{true, true, 00, "COM: Endscene"} };
 					dialogue_page_lite(lc);
 					break;
@@ -10478,7 +10478,7 @@ dungeon_return rufus_dungeon(dungeon_return& dt)
 				{
 					if (current_room.chari.at(current_room.follow_id).identity != 3) {
 						line lc[10] = {
-							{true, true, 00, "SCOUT                            He- Je peux gerer ca."},
+							{true, true, 00, "SCOUT                            He- je peux gerer ca."},
 							{true, true, 00, "COM: Endscene"} };
 						dialogue_page_lite(lc);
 					}
