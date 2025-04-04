@@ -1,3 +1,0 @@
-graphics/enoki11.bmp
-2150
-1639993553.16

@@ -1,3 +1,0 @@
-graphics/aaron_victory_anim.bmp
-65650
-1635921206.07

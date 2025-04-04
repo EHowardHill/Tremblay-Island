@@ -1,3 +1,0 @@
-graphics/enoki10.json
-44
-1629764745.87

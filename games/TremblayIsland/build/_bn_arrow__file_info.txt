@@ -1,3 +1,0 @@
-graphics/arrow.bmp
-582
-1631003758.9

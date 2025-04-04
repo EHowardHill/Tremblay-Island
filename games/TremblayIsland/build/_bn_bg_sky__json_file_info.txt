@@ -1,3 +1,0 @@
-graphics/bg_sky.json
-44
-1638501314.27

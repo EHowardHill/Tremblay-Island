@@ -1,3 +1,0 @@
-graphics/bg_crystal_ball.bmp
-32886
-1638362056.74

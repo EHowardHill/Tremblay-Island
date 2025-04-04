@@ -1,3 +1,0 @@
-graphics/enoki_victory_anim.json
-44
-1633316839.81

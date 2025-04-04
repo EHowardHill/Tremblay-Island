@@ -1,5 +1,1 @@
-/games/TremblayIsland/build/*
-games/vv2k/build/main.d
-games/vv2k/build/main.o
-games/vv2k/build/vv2k.map
-games/TremblayIsland/build/*
+source/build

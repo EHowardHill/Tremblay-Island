@@ -1,3 +1,0 @@
-graphics/enoki_walking_spring.bmp
-8310
-1635760603.09

@@ -1,3 +1,0 @@
-graphics/guy_walking_spring.bmp
-8298
-1642987634.38

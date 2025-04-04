@@ -1,3 +1,0 @@
-graphics/bg_static.bmp
-32882
-1638929526.12

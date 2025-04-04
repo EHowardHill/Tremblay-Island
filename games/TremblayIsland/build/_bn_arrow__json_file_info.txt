@@ -1,3 +1,0 @@
-graphics/arrow.json
-44
-1631003776.16

@@ -1,3 +1,0 @@
-graphics/pc_background.bmp
-32882
-1637640305.18

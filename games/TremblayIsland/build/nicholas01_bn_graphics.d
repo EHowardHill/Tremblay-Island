@@ -1,1 +1,0 @@
-nicholas01_bn_graphics.o: nicholas01_bn_graphics.s

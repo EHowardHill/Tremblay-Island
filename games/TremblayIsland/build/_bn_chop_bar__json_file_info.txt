@@ -1,3 +1,0 @@
-graphics/chop_bar.json
-44
-1631960507.47

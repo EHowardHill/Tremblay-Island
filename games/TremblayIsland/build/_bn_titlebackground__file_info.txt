@@ -1,3 +1,0 @@
-graphics/titlebackground.bmp
-32886
-1648446953.14

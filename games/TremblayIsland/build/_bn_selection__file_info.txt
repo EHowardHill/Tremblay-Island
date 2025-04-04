@@ -1,3 +1,0 @@
-graphics/selection.bmp
-198
-1631426986.41

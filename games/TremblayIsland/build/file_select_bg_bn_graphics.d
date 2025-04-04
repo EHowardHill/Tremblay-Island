@@ -1,1 +1,0 @@
-file_select_bg_bn_graphics.o: file_select_bg_bn_graphics.s

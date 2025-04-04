@@ -1,3 +1,0 @@
-graphics/velvet.bmp
-32834
-1632806647.11

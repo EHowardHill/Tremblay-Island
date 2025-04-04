@@ -1,3 +1,0 @@
-graphics/a_button.bmp
-12406
-1648966858.78

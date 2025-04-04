@@ -1,3 +1,0 @@
-graphics/horizontal_bar.json
-43
-1631957954.44

@@ -1,3 +1,0 @@
-graphics/diana_walking_spring.bmp
-8298
-1642987315.56

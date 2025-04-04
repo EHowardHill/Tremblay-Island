@@ -23,6 +23,7 @@
         "unordered_map": "cpp",
         "stop_token": "cpp",
         "fstream": "cpp",
-        "cmath": "cpp"
+        "cmath": "cpp",
+        "list": "cpp"
     }
 }

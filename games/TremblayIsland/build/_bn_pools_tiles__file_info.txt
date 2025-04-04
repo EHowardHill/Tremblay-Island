@@ -1,3 +1,0 @@
-graphics/pools_tiles.bmp
-32882
-1638089246.33

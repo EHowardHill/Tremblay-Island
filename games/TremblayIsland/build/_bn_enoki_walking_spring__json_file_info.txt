@@ -1,3 +1,0 @@
-graphics/enoki_walking_spring.json
-44
-1629764745.89

@@ -1,3 +1,0 @@
-graphics/common_variable_8x8_font.bmp
-3638
-1627711510.95

@@ -1,1 +1,0 @@
-funny_items_bn_graphics.o: funny_items_bn_graphics.s

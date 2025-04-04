@@ -1,3 +1,0 @@
-graphics/day_castle.bmp
-32886
-1644392472.06

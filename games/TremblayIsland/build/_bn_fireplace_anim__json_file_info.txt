@@ -1,3 +1,0 @@
-graphics/fireplace_anim.json
-44
-1630919765.38

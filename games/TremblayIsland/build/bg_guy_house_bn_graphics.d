@@ -1,1 +1,0 @@
-bg_guy_house_bn_graphics.o: bg_guy_house_bn_graphics.s

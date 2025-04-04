@@ -1,3 +1,0 @@
-graphics/day_castle.json
-32
-1629764745.89

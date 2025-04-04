@@ -1,3 +1,0 @@
-graphics/environment_stone.json
-44
-1634970970.19

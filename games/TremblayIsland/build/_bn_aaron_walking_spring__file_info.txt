@@ -1,3 +1,0 @@
-graphics/aaron_walking_spring.bmp
-8310
-1647835312.28

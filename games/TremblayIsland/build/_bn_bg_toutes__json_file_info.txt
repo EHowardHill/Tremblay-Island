@@ -1,3 +1,0 @@
-graphics/bg_toutes.json
-32
-1629764745.87

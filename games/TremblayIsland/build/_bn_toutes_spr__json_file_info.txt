@@ -1,3 +1,0 @@
-graphics/toutes_spr.json
-44
-1638927613.8

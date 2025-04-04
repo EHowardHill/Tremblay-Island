@@ -1,1 +1,0 @@
-pc_cursor_bn_graphics.o: pc_cursor_bn_graphics.s
