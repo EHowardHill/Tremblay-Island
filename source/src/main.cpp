@@ -596,7 +596,7 @@ char *my_strncpy(char *dest, const char *src, size_t n)
 	return dest;
 }
 
-const float PI = 3.14159265358979323846f;
+const fixed_t PI = 3.14159265358979323846;
 
 float sinf(float x)
 {
